@@ -1,0 +1,36 @@
+<ion-view view-title="รายการแผนดำเนินงาน">
+  <ion-content>
+    <div class="bar bar-header item-input-inset">
+      <label class="item-input-wrapper">
+        <i class="icon ion-ios-search placeholder-icon"></i>
+        <input type="search" placeholder="Search" ng-model="txtcustomer">
+      </label>
+      <md-button class="md-raised button-clear md-warn" aria-label="description" md-ripple-size="auto">&nbsp;ยกเลิก&nbsp;</md-button>
+    </div>
+    <div class="card">
+      <div class="item item-text-wrap">
+        <md-list>
+          <md-list-item class="md-3-line" ng-repeat="item in todos|filter:txtcustomer">
+             <img src="img/d05.png" class="md-avatar" alt="testt" />
+             <div class="md-list-item-text" layout="column">
+               <h3>{{ item.who }}</h3>
+               <p>{{ item.territory }}</p>
+             </div>
+             <i class="md-secondary ion-ios-arrow-forward"></i>
+             <md-divider></md-divider>
+         </md-list-item>
+        </md-list>
+      </div>
+    </div>
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" href="#/app/calendarlist">
+      <i class="icon ion-android-calendar"></i>
+      วางแผน
+    </a>
+    <a class="tab-item">
+      <i class="icon ion-android-mail"></i>
+      ส่งแผน
+    </a>
+  </div>
+</ion-view>

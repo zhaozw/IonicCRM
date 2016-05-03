@@ -1,0 +1,36 @@
+.button-info{
+  background-color: #95A5A6;
+}
+.button-success{
+  background-color: #7A942E;
+}
+.button-primary{
+  background-color: #2ABB9B;
+}
+.button-warring{
+  background-color: #FFA400;
+}
+.button-error{
+  background-color: #CF000F;
+}
+.padding-div-left{
+  padding-left: 10px;
+}
+.info{
+  color: #95A5A6;
+}
+.success{
+  color: #5B8930;
+}
+.primary{
+  color: #2ABB9B;
+}
+.warring{
+  color: #FFA400;
+}
+.error{
+  color: #CF000F;
+}
+.text-h1{
+  font-size: 30px;
+}

@@ -1,0 +1,39 @@
+<ion-view view-title="ข้อมูลลูกค้า">
+  <ion-content>
+    <div class="row">
+      <div class="col">
+        <label class="item-input item-floating-label">
+          <span class="input-label">ชื่อลูกค้า</span>
+          <input type="text" placeholder="ชื่อลูกค้า" ng-model="txtcustomer">
+        </label>
+        <label class="item-input item-floating-label">
+          <span class="input-label">เลือกวันที่ต้องการเข้าพบ</span>
+          <input type="date" placeholder="เลือกวันที่ต้องการเข้าพบ">
+        </label>
+        <hr class="divider"/>
+        <div class="row">
+          <div class="col col-50">
+            <!-- <label class="item-input item-floating-label">
+              <span class="input-label">เริ่ม</span>
+              <input type="text" placeholder="ชื่อลูกค้า" ng-model="txtcustomer">
+            </label> -->
+            <md-input-container>
+              <label>เริ่ม</label>
+              <md-select ng-model="mStart">
+                  <md-option ng-value="opt" ng-repeat="opt in options">{{ opt }}</md-option>
+              </md-select>
+            </md-input-container>
+          </div>
+          <div class="col col-50">
+            <md-input-container>
+              <label>สิ้นสุด</label>
+              <md-select ng-model="mStart">
+                  <md-option ng-value="opt" ng-repeat="opt in options">{{ opt }}</md-option>
+              </md-select>
+            </md-input-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

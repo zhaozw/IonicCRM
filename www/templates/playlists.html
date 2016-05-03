@@ -1,0 +1,14 @@
+<ion-view view-title="Playlists">
+  <ion-content>
+    <md-button class="md-raised md-warn">Disabled</md-button>
+    <md-input-container>
+      <label>Username</label>
+      <input type="text" ng-model="user.name" md-maxlength="50">
+    </md-input-container>
+    <ion-list>
+      <ion-item ng-repeat="playlist in playlists" href="#/app/playlists/{{playlist.id}}">
+        {{playlist.title}}
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
