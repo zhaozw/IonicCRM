@@ -380,5 +380,52 @@ angular.module('starter.controllers', [])
     window.history.go(-1);
   }
 })
+.controller('PlanApproveSupCtrl',function($scope, $stateParams,$cookies,Data){
+  $scope.Data = Data;
+  Data.mastertype = $stateParams.mastertype;
+  $scope.vCheckAll = 0;
+  if(Data.mastertype == 1 || Data.mastertype == '1'){
+    Data.supsale = false;
+    Data.dirsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2'){
+    Data.supsale = true;
+    Data.dirsale = false;
+  }else{
+    Data.supsale = false;
+    Data.dirsale = true;
+  }
+})
+.controller('PlanListApproveCtrl',function($scope, $stateParams,$cookies,Data){
+  $scope.Data = Data;
+  Data.mastertype = $stateParams.mastertype;
+  $scope.vCheckAll = 0;
+  if(Data.mastertype == 1 || Data.mastertype == '1'){
+    Data.supsale = false;
+    Data.dirsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2'){
+    Data.supsale = true;
+    Data.dirsale = false;
+  }else{
+    Data.supsale = false;
+    Data.dirsale = true;
+  }
+})
 ////////////////// End //////////////////////
+/////////////////// Planned ///////////////////
+.controller('PlanedCtrl',function($scope, $stateParams,$cookies,Data){
+  $scope.Data = Data;
+  Data.mastertype = $stateParams.mastertype;
+  $scope.vCheckAll = 0;
+  if(Data.mastertype == 1 || Data.mastertype == '1'){
+    Data.supsale = false;
+    Data.dirsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2'){
+    Data.supsale = true;
+    Data.dirsale = false;
+  }else{
+    Data.supsale = false;
+    Data.dirsale = true;
+  }
+})
+///////////////////  End //////////////////////
 ;

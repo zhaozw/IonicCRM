@@ -126,9 +126,36 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
       }
     }
   })
-
+  .state('app.approveplanning', {
+    url: '/approveplanning/:mastertype',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/planning/approveplanning.html',
+        controller:'PlanApproveSupCtrl'
+      }
+    }
+  })
+  .state('app.listapprove', {
+    url: '/listapprove/:mastertype',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/planning/listapprove.html',
+        controller:'PlanListApproveCtrl'
+      }
+    }
+  })
 ///////////////// End /////////////////////////////////////
-
+//////////////// planned /////////////////////////////////
+.state('app.resultplan', {
+  url: '/resultplan/:mastertype/:sterritory',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/planned/resultplan.html',
+      controller:'PlanedCtrl'
+    }
+  }
+})
+////////////////// End ///////////////////////////////////
 
   .state('app.browse', {
       url: '/browse',

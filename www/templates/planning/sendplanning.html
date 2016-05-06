@@ -1,0 +1,31 @@
+<ion-view view-title="ส่งแผนดำเนินงาน">
+  <ion-content>
+    <div class="card">
+      <div class="item item-text-wrap">
+        <md-list>
+          <md-list-item class="md-3-line">
+            <img src="img/d05.png" class="md-avatar" alt="testt" />
+             <div class="md-list-item-text" layout="column">
+               <h3>Mr.ddd</h3>
+             </div>
+             <a class="md-secondary ion-trash-a text-h1 text-bold error"></a>
+         </md-list-item>
+        </md-list>
+      </div>
+    </div>
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item primary" ng-click="reloaddata()">
+      <i class="icon ion-refresh"></i>
+      เรียกข้อมูลใหม่
+    </a>
+    <a class="tab-item success" ng-click="confirmcopy()">
+      <i class="icon ion-checkmark"></i>
+      ยืนยัน
+    </a>
+    <a class="tab-item error" ng-click="cancelcp()">
+      <i class="icon ion-close"></i>
+      ยกเลิก
+    </a>
+  </div>
+</ion-view>
