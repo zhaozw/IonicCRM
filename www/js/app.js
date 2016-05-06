@@ -27,8 +27,10 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     dirsale:false,
     mastertype:0,
     sterritory:'',
-    termas:'8C791CA7-D5E1-E511-80E1-005056A71F87',
-    masname:'U01'
+    nterritory:'',
+    termas:'BC1C0346-06E5-E511-80E1-005056A71F87',
+    masname:'U01',
+    Empid:'EXAMPLE'
   }
 })
 
@@ -44,7 +46,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
 
   ///////////////// Calendar /////////////////////////
   .state('app.search', {
-    url: '/search/:mastertype/:sterritory',
+    url: '/search/:mastertype/:sterritory/:nterritory',
     views: {
       'menuContent': {
         templateUrl: 'templates/planning/search.html',

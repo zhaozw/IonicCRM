@@ -7,7 +7,7 @@
       </label>
       <md-button class="md-raised button-clear md-warn" aria-label="description" md-ripple-size="auto">&nbsp;ยกเลิก&nbsp;</md-button>
     </div>
-    <div class="card">
+    <div class="card" ng-hide="dvTodos">
       <div class="item item-text-wrap">
         <md-list>
           <md-list-item class="md-3-line" ng-repeat="item in todos|filter:txtcustomer">

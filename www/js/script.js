@@ -78,7 +78,7 @@ function GetAvailablefromtime(callback){
 	  },function(err){MsgBox(er);},null);
 }
 
-function gettername(tername,ter,callback){
+function gettername(tername,callback){
   try{
     var n = new MobileCRM.FetchXml.Entity('ivz_territorymaster');
 				n.addAttribute('ivz_territorymasterid');//0
@@ -141,8 +141,8 @@ function GetAppointStatus(ivz_leftterritory,ist,callback){
       n.addAttribute('ivz_visitactivities');//21
       n.addAttribute('ivz_visitsuggest');//22
       n.addAttribute('ivz_planningstatus');//23
-      // n.filter = new MobileCRM.FetchXml.Filter();
-      // n.filter.where('ivz_territoryid','eq',ivz_leftterritory);
+      n.filter = new MobileCRM.FetchXml.Filter();
+      n.filter.where('ivz_territoryid','eq',ivz_leftterritory);
     var m = n.addLink('account','accountid','ivz_customer','outer');
         m.addAttribute('ivz_addressprovince');//24
         m.addAttribute('ivz_addressdistrict');//25

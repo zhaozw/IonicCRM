@@ -68,13 +68,15 @@ angular.module('starter.controllers', [])
   $scope.Data = Data;
   Data.mastertype = $stateParams.mastertype;
   Data.sterritory = $stateParams.sterritory;
+  Data.nterritory = $stateParams.nterritory;
   if(Data.sterritory == '0' || Data.sterritory == 0){
     Data.sterritory = '6C791CA7-D5E1-E511-80E1-005056A71F87';
+    Data.masname = 'D09';
   }
-  if(Data.mastertype == 0 || Data.mastertype == '0'){
+  if(Data.mastertype == 1 || Data.mastertype == '1'){
     Data.supsale = false;
     Data.dirsale = false;
-  }else if(Data.mastertype == 1 || Data.mastertype == '1'){
+  }else if(Data.mastertype == 2 || Data.mastertype == '2'){
     Data.supsale = true;
     Data.dirsale = false;
   }else{
@@ -85,9 +87,15 @@ angular.module('starter.controllers', [])
       Data.latitude = res.latitude;
       Data.longitude = res.longitude;
   });
-  console.log($cookies.username);
-  GetAppointStatus('ivz_leftterritory',1,function(data){
-    $scope.todos = data;
+  //console.log($cookies.username);
+  $scope.dvTodos = true;
+  GetAppointStatus(Data.sterritory,0,function(data){
+    if(data){
+      $scope.dvTodos = false;
+      $scope.todos = data;
+    }else{
+      $scope.dvTodos = true;
+    }
   });
 })
 .controller('PlanCalendarCtrl', function($scope, $stateParams,$cookies,Data) {
@@ -230,7 +238,7 @@ angular.module('starter.controllers', [])
                ins.properties.ivz_visitbilling = parseInt($scope.user.vBilling);
                ins.properties.ivz_visitsuggest = parseInt($scope.user.vSuggust);
                ins.properties.ivz_visitactivities = bActivi.toString();
-               ins.properties.ivz_empid = 'EXAMP';
+               ins.properties.ivz_empid = Data.Empid;
                ins.properties.location = latitude,longitude;
                ins.properties.ivz_latilong = latitude,longitude;
                ins.properties.ivz_state =  new MobileCRM.Reference('ivz_addressprovince',proviceid);
@@ -239,13 +247,13 @@ angular.module('starter.controllers', [])
                ins.save(function(err){
                  if(err){
                    $scope.txerr = err;
-                   insertcodeex('เกิดข้อผิดพลาด exappointment','controller.js PlanAccuntDetailCtrl scope.cbnAppoint','บันทึกข้อมูล appointment account:'+accountname,'243',err,Data.Tername,1,function(data){
+                   insertcodeex('เกิดข้อผิดพลาด exappointment','controller.js PlanAccuntDetailCtrl scope.cbnAppoint','บันทึกข้อมูล appointment account:'+accountname,'243',err,Data.masname,1,function(data){
                      if(data){
                        alert("exappointment "+err);
                      }
                    });
                  }else{
-                   insertcodeex('บันทึกข้อมูล exappointment','controller.js PlanAccuntDetailCtrl scope.cbnAppoint','บันทึกข้อมูล appointment account:'+accountname,'243','ไม่พบข้อผิดพลาด',Data.Tername,0,function(data){
+                   insertcodeex('บันทึกข้อมูล exappointment','controller.js PlanAccuntDetailCtrl scope.cbnAppoint','บันทึกข้อมูล appointment account:'+accountname,'243','ไม่พบข้อผิดพลาด',Data.masname,0,function(data){
                      if(data){
                        alert("บันทึกข้อมูลเสร็จแล้ว");
                        window.history.go(-1);
@@ -254,7 +262,7 @@ angular.module('starter.controllers', [])
                  }
              });
           }else{
-            insertcodeex('เกิดข้อผิดพลาดไม่พบ GUID','controller.js PlanAccuntDetailCtrl scope.cbnAppoint','บันทึกข้อมูล appointment account:'+accountname,'252',$scope.txerr,Data.Tername,1,function(data){
+            insertcodeex('เกิดข้อผิดพลาดไม่พบ GUID','controller.js PlanAccuntDetailCtrl scope.cbnAppoint','บันทึกข้อมูล appointment account:'+accountname,'252',$scope.txerr,Data.masname,1,function(data){
               if(data){
                   alert('เกิดข้อผิดพลาดไม่พบ GUID กรุณาปิดแอพและเข้าสู่ระบบใหม่ครับ');
               }
@@ -270,10 +278,10 @@ angular.module('starter.controllers', [])
 .controller('PlanSupCtrl', function($scope, $stateParams,$cookies,Data) {
   $scope.Data = Data;
   Data.mastertype = $stateParams.mastertype;
-  if(Data.mastertype == 0 || Data.mastertype == '0'){
+  if(Data.mastertype == 1 || Data.mastertype == '1'){
     Data.supsale = false;
     Data.dirsale = false;
-  }else if(Data.mastertype == 1 || Data.mastertype == '1'){
+  }else if(Data.mastertype == 2 || Data.mastertype == '2'){
     Data.supsale = true;
     Data.dirsale = false;
   }else{
@@ -284,7 +292,7 @@ angular.module('starter.controllers', [])
       Data.latitude = res.latitude;
       Data.longitude = res.longitude;
   });
-  gettername(Data.termas,Data.masname,function(data){
+  gettername(Data.masname,function(data){
     if(data){
       $scope.listmaster = data;
     }
