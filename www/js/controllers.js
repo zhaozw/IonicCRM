@@ -298,5 +298,87 @@ angular.module('starter.controllers', [])
     }
   });
 })
+.controller('PlanSendPlanCtrl',function($scope, $stateParams,$cookies,Data){
+  $scope.Data = Data;
+  Data.mastertype = $stateParams.mastertype;
+  if(Data.mastertype == 1 || Data.mastertype == '1'){
+    Data.supsale = false;
+    Data.dirsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2'){
+    Data.supsale = true;
+    Data.dirsale = false;
+  }else{
+    Data.supsale = false;
+    Data.dirsale = true;
+  }
+})
+.controller('PlanListMasterCtrl',function($scope, $stateParams,$cookies,Data){
+  $scope.Data = Data;
+  Data.mastertype = $stateParams.mastertype;
+  if(Data.mastertype == 1 || Data.mastertype == '1'){
+    Data.supsale = false;
+    Data.dirsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2'){
+    Data.supsale = true;
+    Data.dirsale = false;
+  }else{
+    Data.supsale = false;
+    Data.dirsale = true;
+  }
+})
+.controller('PlanListDetailCtrl',function($scope, $stateParams,$cookies,Data){
+  $scope.Data = Data;
+  Data.mastertype = $stateParams.mastertype;
+  $scope.vCheckAll = 0;
+  if(Data.mastertype == 1 || Data.mastertype == '1'){
+    Data.supsale = false;
+    Data.dirsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2'){
+    Data.supsale = true;
+    Data.dirsale = false;
+  }else{
+    Data.supsale = false;
+    Data.dirsale = true;
+  }
+  $scope.exprchk = function(ethis){
+    console.log(ethis);
+  }
+  $scope.reloaddata = function (){
+
+  }
+  $scope.confirmcopy = function (){
+    window.history.go(-1);
+  }
+  $scope.cancelcp = function (){
+    window.history.go(-1);
+  }
+})
+.controller('PlanSendSupCtrl',function($scope, $stateParams,$cookies,Data){
+  $scope.Data = Data;
+  Data.mastertype = $stateParams.mastertype;
+  $scope.vCheckAll = 0;
+  if(Data.mastertype == 1 || Data.mastertype == '1'){
+    Data.supsale = false;
+    Data.dirsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2'){
+    Data.supsale = true;
+    Data.dirsale = false;
+  }else{
+    Data.supsale = false;
+    Data.dirsale = true;
+  }
+  $scope.exprchk = function(ethis){
+    console.log(ethis);
+  }
+  $scope.reloaddata = function (){
+
+  }
+  $scope.confirmcopy = function (){
+    window.history.go(-1);
+  }
+  $scope.cancelcp = function (){
+    window.history.go(-1);
+  }
+})
 ////////////////// End //////////////////////
 ;

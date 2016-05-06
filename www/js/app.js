@@ -21,7 +21,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     scollecttion:0,
     latitude:'',
     longitude:'',
-    salestype:1,
+    salestype:2,
     Tername:'A01',
     supsale:false,
     dirsale:false,
@@ -90,6 +90,43 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
       }
     }
   })
+  .state('app.sendplan', {
+    url: '/sendplan/:territory/:typeapp',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/planning/sendplan.html',
+        controller:'PlanSendPlanCtrl'
+      }
+    }
+  })
+  .state('app.listtersup', {
+    url: '/listtersup/:mastertype',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/planning/listtersup.html',
+        controller:'PlanListMasterCtrl'
+      }
+    }
+  })
+  .state('app.listplaning', {
+    url: '/listplaning/:mastertype',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/planning/listplaning.html',
+        controller:'PlanListDetailCtrl'
+      }
+    }
+  })
+  .state('app.sendplanning', {
+    url: '/sendplanning/:mastertype',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/planning/sendplanning.html',
+        controller:'PlanSendSupCtrl'
+      }
+    }
+  })
+
 ///////////////// End /////////////////////////////////////
 
 
