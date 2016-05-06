@@ -1,38 +1,113 @@
-<ion-view view-title="ข้อมูลลูกค้า">
+<ion-view view-title="ข้อมูลลูกค้า {{txtcustomer}}">
   <ion-content>
     <div class="row">
       <div class="col">
-        <label class="item-input item-floating-label">
-          <span class="input-label">ชื่อลูกค้า</span>
-          <input type="text" placeholder="ชื่อลูกค้า" ng-model="txtcustomer">
-        </label>
-        <label class="item-input item-floating-label">
-          <span class="input-label">เลือกวันที่ต้องการเข้าพบ</span>
-          <input type="date" placeholder="เลือกวันที่ต้องการเข้าพบ">
-        </label>
-        <hr class="divider"/>
         <div class="row">
-          <div class="col col-50">
-            <!-- <label class="item-input item-floating-label">
-              <span class="input-label">เริ่ม</span>
-              <input type="text" placeholder="ชื่อลูกค้า" ng-model="txtcustomer">
-            </label> -->
-            <md-input-container>
-              <label>เริ่ม</label>
-              <md-select ng-model="mStart">
-                  <md-option ng-value="opt" ng-repeat="opt in options">{{ opt }}</md-option>
-              </md-select>
-            </md-input-container>
-          </div>
-          <div class="col col-50">
-            <md-input-container>
-              <label>สิ้นสุด</label>
-              <md-select ng-model="mStart">
-                  <md-option ng-value="opt" ng-repeat="opt in options">{{ opt }}</md-option>
-              </md-select>
-            </md-input-container>
+          <div class="col">
+            <md-list ng-cloak>
+              <md-subheader class="error" ng-hide="infoDate">*เลือกวันที่ต้องการเข้าพบด้วย</md-subheader>
+              <md-list-item>
+                <h5>เลือกวันที่ต้องการเข้าพบ</h5>
+                <md-datepicker  class="md-secondary text-bold" ng-model="user.submissionDate" md-placeholder="เลือกวันที่">
+              </md-list-item>
+              <md-subheader class="error" ng-hide="infoTime">*เลือกเวลาที่ต้องการเข้าพบด้วย</md-subheader>
+              <md-list-item>
+                <h5>เริ่มเวลาเข้าพบ</h5>
+                <md-input-container class="md-secondary">
+                  <md-select ng-model="user.mStart">
+                      <md-option ng-value="opt.val" ng-repeat="opt in listtime">{{ opt.name }}</md-option>
+                  </md-select>
+                </md-input-container>
+              </md-list-item>
+              <md-list-item>
+                <h5>สิ้นสุดเวลาเข้าพบ</h5>
+                <md-input-container class="md-secondary">
+                  <md-select ng-model="user.mEnd">
+                      <md-option ng-value="opt.val" ng-repeat="opt in listtime">{{ opt.name }}</md-option>
+                  </md-select>
+                </md-input-container>
+              </md-list-item>
+              </md-list>
+              <md-list ng-cloak>
+                <md-list-item>
+                  <h5>เลือกกิจกรรม</h5>
+                  <md-switch class="md-secondary" ng-model="swActivities" ng-true-value="1" ng-false-value="0" id="swToggleActivities"></md-switch>
+                </md-list-item>
+                <md-divider></md-divider>
+              </md-list>
+            <md-list ng-cloak ng-show="swActivities">
+              <md-list-item>
+                <h5>เปิดบัญชีลูกค้าใหม่</h5>
+                <md-checkbox class="md-secondary" md-no-ink ng-true-value="1" ng-false-value="0" ng-model="user.vOpenAccount" name="string" ng-change="expr"></md-checkbox>
+              </md-list-item>
+              <md-list-item>
+                <h5>ปรับปรุงข้อมูล</h5>
+                <md-checkbox class="md-secondary" md-no-ink ng-true-value="1" ng-false-value="0" ng-model="user.vAdjustment" name="string" ng-change="expr"></md-checkbox>
+              </md-list-item>
+              <md-list-item>
+                <h5>เปิดใบสั่งขาย</h5>
+                <md-checkbox class="md-secondary" md-no-ink ng-true-value="1" ng-false-value="0" ng-model="user.vOpenOrder" name="string" ng-change="expr"></md-checkbox>
+              </md-list-item>
+              <md-list-item>
+                <h5>รับเคลมสินค้า</h5>
+                <md-checkbox class="md-secondary" md-no-ink ng-true-value="1" ng-false-value="0" ng-model="user.vOpenClaim" name="string" ng-change="expr"></md-checkbox>
+              </md-list-item>
+              <md-list-item>
+                <h5>บันทึกลูกค้าค้าดหวัง</h5>
+                <md-checkbox class="md-secondary" md-no-ink ng-true-value="1" ng-false-value="0" ng-model="user.vPostpect" name="string" ng-change="expr"></md-checkbox>
+              </md-list-item>
+              <md-list-item>
+                <h5>บันทึกสถาพการตลาด</h5>
+                <md-checkbox class="md-secondary" md-no-ink ng-true-value="1" ng-false-value="0" ng-model="user.vComputitor" name="string" ng-change="expr"></md-checkbox>
+              </md-list-item>
+              <md-list-item>
+                <h5>บันทึกคู่แข่ง</h5>
+                <md-checkbox class="md-secondary" md-no-ink ng-true-value="1" ng-false-value="0" ng-model="user.vMarketSumu" name="string" ng-change="expr"></md-checkbox>
+              </md-list-item>
+              <md-list-item>
+                <h5>เก็บเงิน</h5>
+                <md-checkbox class="md-secondary" md-no-ink ng-true-value="1" ng-false-value="0" ng-model="user.vConllecttion" name="string" ng-change="expr"></md-checkbox>
+              </md-list-item>
+              <md-list-item>
+                <h5>วางบิล</h5>
+                <md-checkbox class="md-secondary" md-no-ink ng-true-value="1" ng-false-value="0" ng-model="user.vBilling" name="string" ng-change="expr"></md-checkbox>
+              </md-list-item>
+              <md-list-item>
+                <h5>นำเสนอสินค้า</h5>
+                <md-checkbox class="md-secondary" md-no-ink ng-true-value="1" ng-false-value="0" ng-model="user.vSuggust" name="string" ng-change="expr"></md-checkbox>
+              </md-list-item>
+              <md-list-item>
+                <h5>Product Recall</h5>
+                <md-checkbox class="md-secondary" md-no-ink ng-true-value="1" ng-false-value="0" ng-model="user.vProductRecall" name="string" ng-change="expr"></md-checkbox>
+              </md-list-item>
+              <md-divider></md-divider>
+            </md-list>
+            <md-list ng-cloak>
+              <md-subheader class="error" ng-hide="infoActivities">*เลือกกิจกรรมที่่ต้องการเข้าพบด้วย</md-subheader>
+              <md-list-item>
+                <h5>เลือกกิจกรรมบังคับ</h5>
+                <md-switch class="md-secondary" ng-model="swActivitiesSpe" ng-true-value="1" ng-false-value="0" id="swToggleActivities"></md-switch>
+              </md-list-item>
+              <md-divider></md-divider>
+            </md-list>
+            <md-list ng-cloak ng-show="swActivitiesSpe">
+                <md-list-item ng-repeat="n in activities">
+                  <h5>{{n.ivz_name}}</h5>
+                  <md-checkbox class="md-secondary" md-no-ink ng-true-value="1" ng-false-value="0" ng-model="variable" name="string" ng-change="exActivities(n.ivz_name,this)"></md-checkbox>
+                </md-list-item>
+            <md-divider></md-divider>
+          </md-list>
           </div>
         </div>
+        <br />
+        <div class="row">
+            <div class="col"></div>
+            <div class="col">
+              <button class="button button-block button-positive" type="button" ng-click="cbnAppoint(accountid,accountname,accountype,proviceid,districtid,territoryid,Data.latitude,Data.longitude)"><i class="ion-checkmark"></i>&nbsp;บันทึกข้อมูล</button>
+              <!-- <md-button class="md-raised md-success" aria-label="description"  md-ripple-size="full" ng-click="cbnAppoint(accountid,accountname,accountype,proviceid,districtid,territoryid)"><i class="ion-checkmark"></i>&nbsp;บันทึกข้อมูล</md-button> -->
+            </div>
+            <div class="col"></div>
+          </div>
       </div>
     </div>
   </ion-content>

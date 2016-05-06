@@ -1,10 +1,4 @@
-// Ionic Starter App
-
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
-// 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers','ngMaterial'])
+angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookies'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -21,6 +15,22 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial'])
     }
   });
 })
+.factory('Data',function(){
+  return {
+    sBilling:0,
+    scollecttion:0,
+    latitude:'',
+    longitude:'',
+    salestype:1,
+    Tername:'A01',
+    supsale:false,
+    dirsale:false,
+    mastertype:0,
+    sterritory:'',
+    termas:'8C791CA7-D5E1-E511-80E1-005056A71F87',
+    masname:'U01'
+  }
+})
 
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
@@ -34,7 +44,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial'])
 
   ///////////////// Calendar /////////////////////////
   .state('app.search', {
-    url: '/search',
+    url: '/search/:mastertype/:sterritory',
     views: {
       'menuContent': {
         templateUrl: 'templates/planning/search.html',
@@ -47,25 +57,34 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial'])
     views: {
       'menuContent': {
         templateUrl: 'templates/planning/calendarlist.html',
-        controller:'PlanCtrl'
+        controller:'PlanCalendarCtrl'
       }
     }
   })
   .state('app.listaccount', {
-    url: '/listaccount/:listtype',
+    url: '/listaccount/:accountype',
     views: {
       'menuContent': {
         templateUrl: 'templates/planning/accountlist.html',
-        controller:'PlanCtrl'
+        controller:'PlanListAccountCtrl'
       }
     }
   })
   .state('app.accountid', {
-    url: '/accountid/:accountid/:accountname',
+    url: '/accountid/:accountid/:accountname/:accountype/:proviceid/:districtid/:territoryid',
     views: {
       'menuContent': {
         templateUrl: 'templates/planning/accountid.html',
-        controller:'PlanCtrl'
+        controller:'PlanAccuntDetailCtrl'
+      }
+    }
+  })
+  .state('app.searchsup', {
+    url: '/searchsup/:mastertype',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/planning/searchsup.html',
+        controller:'PlanSupCtrl'
       }
     }
   })

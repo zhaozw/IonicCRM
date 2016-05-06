@@ -34,3 +34,10 @@
 .text-h1{
   font-size: 30px;
 }
+.text-bold{
+  font-weight: bold;
+}
+a.md-button.md-default-theme.md-success.md-raised, a.md-button.md-success.md-raised, a.md-button.md-default-theme.md-success.md-fab, a.md-button.md-success.md-fab, .md-button.md-default-theme.md-success.md-raised, .md-button.md-success.md-raised, .md-button.md-default-theme.md-success.md-fab, .md-button.md-success.md-fab {
+  color: rgba(255,255,255,0.87);
+  background-color: #006442;
+}

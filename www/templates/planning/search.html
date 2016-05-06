@@ -13,8 +13,8 @@
           <md-list-item class="md-3-line" ng-repeat="item in todos|filter:txtcustomer">
              <img src="img/d05.png" class="md-avatar" alt="testt" />
              <div class="md-list-item-text" layout="column">
-               <h3>{{ item.who }}</h3>
-               <p>{{ item.territory }}</p>
+               <h3>{{ item.ivz_customer.primaryName }}</h3>
+               <p>{{ item.territoryid.primaryName }}</p>
              </div>
              <i class="md-secondary ion-ios-arrow-forward"></i>
              <md-divider></md-divider>
@@ -28,7 +28,15 @@
       <i class="icon ion-android-calendar"></i>
       วางแผน
     </a>
-    <a class="tab-item">
+    <a class="tab-item" href="#/app/calendarlist" ng-show = 'Data.supsale'>
+      <i class="icon ion-android-calendar"></i>
+      อนุมัติแผน sup
+    </a>
+    <a class="tab-item" href="#/app/calendarlist" ng-show = 'Data.dirsale'>
+      <i class="icon ion-android-calendar"></i>
+      อนุมัติแผน direct
+    </a>
+    <a class="tab-item" ng-hide = 'Data.dirsale'>
       <i class="icon ion-android-mail"></i>
       ส่งแผน
     </a>
