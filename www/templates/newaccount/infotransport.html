@@ -1,0 +1,33 @@
+<ion-view view-title="ข้อมูลขนส่ง">
+  <ion-content>
+    <div class="card">
+      <div class="item item-text-wrap">
+        <h2>ข้อมูลการขนส่ง</h2>
+        <hr class="divider"/>
+        <!-- <md-checkbox ng-model="InfoTransport.transportyss" ng-click="checktransport(this)">รถ YSS</md-checkbox> -->
+        <md-input-container>
+          <label>ชื่อขนส่ง</label>
+          <input type="text" ng-model="InfoTransport.txtTransport" md-maxlength="50" maxlength="50" value="รถ YSS">
+          <span class="text text-danger" ng-hide="chk.infomattxtTransport">* กรุณาระบุชื่อขนส่ง ด้วย</span>
+        </md-input-container>
+        <md-input-container>
+          <label>หมายเลขโทรศัพท์การขนส่ง</label>
+          <input type="text" md-maxlength="10" maxlength="10" ng-model="InfoTransport.telTransport" value="027638600">
+          <span class="text text-danger" ng-hide="chk.infomattelTransport">* กรุณาระบุหมายเลขโทรศัพท์การขนส่ง ด้วย</span>
+        </md-input-container>
+        <md-checkbox ng-model="InfoTransport.billvat">ต้องการ Bill Vat</md-checkbox>
+        <md-input-container>
+          <label>Remark</label>
+          <input type="text"  ng-model="InfoTransport.txtRemarkTransport" maxlength="100" md-maxlength="100">
+        </md-input-container>
+      </div>
+    </div>
+    <br />
+    <div class="row">
+      <div class="col">
+        <md-button class="md-raised md-warn" md-ripple-size="full"><i class="icon ion-android-arrow-back"></i>&nbsp;ย้อนกลับ</md-button>
+        <md-button class="md-raised md-success" md-ripple-size="full" ng-click="insertaccount()">ถัดไป&nbsp;<i class="icon ion-android-arrow-forward"></i></md-button>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

@@ -463,7 +463,7 @@ setTimeout(function(){
     Data.dirsale = true;
   }
   $scope.insertaccount = function(){
-    window.location.href="#/app/accountcontact/Data.dataguid";
+    window.location.href="#/app/accountcontact/"+Data.dataguid;
   }
 })
 .controller('AccountContactCtrl',function($scope, $stateParams,$cookies,Data){
@@ -474,6 +474,87 @@ setTimeout(function(){
     Data.dirsale = false;
   }else if(Data.mastertype == 2 || Data.mastertype == '2' || Data.mastertype == 3 || Data.mastertype == '3'){
     Data.dirsale = true;
+  }
+  $scope.insertaccount = function(){
+    window.location.href="#/app/accountmeetting/"+Data.dataguid;
+  }
+})
+.controller('AccountMeetingCtrl',function($scope, $stateParams,$cookies,Data){
+  $scope.Data = Data;
+  Data.dataguid = $stateParams.getguid;
+  $scope.vCheckAll = 0;
+  if(Data.mastertype == 1 || Data.mastertype == '1'){
+    Data.dirsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2' || Data.mastertype == 3 || Data.mastertype == '3'){
+    Data.dirsale = true;
+  }
+  $scope.insertaccount = function(){
+    window.location.href="#/app/addresstran/"+Data.dataguid;
+  }
+})
+.controller('AccountAddressCtrl',function($scope, $stateParams,$cookies,Data){
+  $scope.Data = Data;
+  Data.dataguid = $stateParams.getguid;
+  $scope.vCheckAll = 0;
+  if(Data.mastertype == 1 || Data.mastertype == '1'){
+    Data.dirsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2' || Data.mastertype == 3 || Data.mastertype == '3'){
+    Data.dirsale = true;
+  }
+  $scope.insertaccount = function(){
+    window.location.href="#/app/addressinvoice/"+Data.dataguid;
+  }
+})
+.controller('AccountAddressInvoiceCtrl',function($scope, $stateParams,$cookies,Data){
+  $scope.Data = Data;
+  Data.dataguid = $stateParams.getguid;
+  $scope.vCheckAll = 0;
+  if(Data.mastertype == 1 || Data.mastertype == '1'){
+    Data.dirsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2' || Data.mastertype == 3 || Data.mastertype == '3'){
+    Data.dirsale = true;
+  }
+  $scope.insertaccount = function(){
+    window.location.href="#/app/addressother/"+Data.dataguid;
+  }
+})
+.controller('AccountAddressOtherCtrl',function($scope, $stateParams,$cookies,Data){
+  $scope.Data = Data;
+  Data.dataguid = $stateParams.getguid;
+  $scope.vCheckAll = 0;
+  if(Data.mastertype == 1 || Data.mastertype == '1'){
+    Data.dirsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2' || Data.mastertype == 3 || Data.mastertype == '3'){
+    Data.dirsale = true;
+  }
+  $scope.insertaccount = function(){
+    window.location.href="#/app/infotransport/"+Data.dataguid;
+  }
+})
+.controller('AccountTransportCtrl',function($scope, $stateParams,$cookies,Data){
+  $scope.Data = Data;
+  Data.dataguid = $stateParams.getguid;
+  $scope.vCheckAll = 0;
+  if(Data.mastertype == 1 || Data.mastertype == '1'){
+    Data.dirsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2' || Data.mastertype == 3 || Data.mastertype == '3'){
+    Data.dirsale = true;
+  }
+  $scope.insertaccount = function(){
+    window.location.href="#/app/document/"+Data.dataguid;
+  }
+})
+.controller('AccountDocumentCtrl',function($scope, $stateParams,$cookies,Data){
+  $scope.Data = Data;
+  Data.dataguid = $stateParams.getguid;
+  $scope.vCheckAll = 0;
+  if(Data.mastertype == 1 || Data.mastertype == '1'){
+    Data.dirsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2' || Data.mastertype == 3 || Data.mastertype == '3'){
+    Data.dirsale = true;
+  }
+  $scope.insertaccount = function(){
+    window.location.href="#/app/document/"+Data.dataguid;
   }
 })
 ////////////////////// end /////////////////

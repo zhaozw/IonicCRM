@@ -1,3 +1,60 @@
+//////////////////////////// call doc ///////////////////////////
+function calldoc(cClick,ethis){
+		$('#'+cClick).trigger('click');
+	}
+function GetAtt(idAttact,idimg,canvasid,callback){
+var MAX_HEIGHT = 800;
+input = $(idAttact)[0];
+                try {
+                    if (input.files && input.files[0]) {
+                        var FR = new FileReader();
+                        FR.onload = function (e){
+                        	var imgElem = $(idimg); // document.getElementById("imgId");
+	                            imgElem.attr("style", "display=block"); //imgElem.style.display = "block";
+	                            imgElem.attr("src", e.target.result); //imgElem.setAttribute("src", e.target.result);
+	                            imgElem.attr("width", "100");
+	                            imgElem.attr("heigth", "100");
+							var image = new Image();
+								image.onload = function(){
+								var canvas = document.getElementById(canvasid);
+									if(image.height > MAX_HEIGHT) {
+										image.width *= MAX_HEIGHT / image.height;
+										image.height = MAX_HEIGHT;
+									}
+									var ctx = canvas.getContext("2d");
+									ctx.clearRect(0, 0, canvas.width, canvas.height);
+									canvas.width = image.width;
+									canvas.height = image.height;
+									ctx.drawImage(image, 0, 0, image.width, image.height);
+									sizeKB = input.files[0].size / 1024;
+                            		fileName = input.files[0].name;
+                            		fileType = input.files[0].type;
+									var dataURL = canvas.toDataURL();
+									var fullQuality = canvas.toDataURL("image/jpeg", 1.0);
+									var mediumQuality = canvas.toDataURL("image/jpeg", 0.5);
+									var lowQuality = canvas.toDataURL("image/jpeg", 0.1);
+									var idbase64 = Getstringbase64(canvas.toDataURL("image/jpeg", 0.5));
+									callback(idbase64);
+									//alert('Original sizeKB:'+sizeKB+'\n fileName:'+fileName+'\n fileType:'+fileType);
+								};
+								image.src = e.target.result;
+                        };
+                        FR.readAsDataURL(input.files[0]);
+                    }
+                }
+                catch (ex) {
+                    MsgBox('Base64:'+er);
+                }
+}
+function Getstringbase64(data) {
+                if (data === undefined || data.length <= 0) {
+                    return;
+                }
+                var index = data.indexOf(',');
+                if (index > 1) {
+                    return data.substring(index + 1, data.length);
+                }
+          }
 ////////////////////// change status appointment ////////////////
 function changestappoint(id,ids,stt,callback){
   try{

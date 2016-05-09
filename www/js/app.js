@@ -196,6 +196,60 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   }
 })
+.state('app.addresstran', {
+  url: '/addresstran/:getguid',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/newaccount/addresstran.html',
+      controller:'AccountAddressCtrl'
+    }
+  }
+})
+.state('app.accountmeetting', {
+  url: '/accountmeetting/:getguid',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/newaccount/accountmeetting.html',
+      controller:'AccountMeetingCtrl'
+    }
+  }
+})
+.state('app.addressinvoice', {
+  url: '/addressinvoice/:getguid',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/newaccount/addressinvoice.html',
+      controller:'AccountAddressInvoiceCtrl'
+    }
+  }
+})
+.state('app.addressother', {
+  url: '/addressother/:getguid',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/newaccount/addressother.html',
+      controller:'AccountAddressOtherCtrl'
+    }
+  }
+})
+.state('app.infotransport', {
+  url: '/infotransport/:getguid',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/newaccount/infotransport.html',
+      controller:'AccountTransportCtrl'
+    }
+  }
+})
+.state('app.document', {
+  url: '/document/:getguid',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/newaccount/document.html',
+      controller:'AccountDocumentCtrl'
+    }
+  }
+})
 ///////////////////// end ///////////////////////////////
 //////////////////  account list //////////////////////////
 .state('app.accountlist', {

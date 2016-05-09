@@ -1,0 +1,77 @@
+<ion-view view-title="ข้อมูลเอกสารเปิดบัญชี">
+  <ion-content>
+    <div class="card">
+      <div class="item item-text-wrap">
+        <h2>เอกสารประกอบการเปิดบัญชี</h2>
+				<hr class="divider"/>
+				<span class="text text-danger" ng-hide="chkdoc.docStatus">* กรุณาระบุประเภทบุคคลด้วย</span>
+				<md-list>
+					<md-list-item>
+						<h3>นิติบุคคล</h3>
+						<md-switch  onchange="domdoc(this)" class="md-secondary PriToggle"></md-switch>
+					</md-list-item>
+          <md-list-item>
+						<h3>บุคคลธรรมดา</h3>
+            <md-switch  onchange="domsecound(this)" class="md-secondary peoToggle"></md-switch>
+					</md-list-item>
+				</md-list>
+				<span class="text text-danger" ng-hide="chkdoc.doc001">* กรุณาเพิ่มเอกสารตามด้านล่างนี้ด้วย</span>
+        <hr />
+				<div class="publicdoc">
+					<br />
+					<!-- <paper-radio-button onclick="showtoastdoc(this,'rowdoc001')"><h5>สำเนาหนังสือรับรองการจดทะเบียนพาณิชย์</h5></paper-radio-button> -->
+          <h3>สำเนาหนังสือรับรองการจดทะเบียนพาณิชย์</h3>
+						<div>
+							<br />
+							<img data-src="holder.js/150x150?text=กดที่นี้เพื่ออัพรูปใหม่" class="thumbnail" id="idcImg01" onclick="calldoc('doc001',this)">
+							<span class="text text-danger" ng-hide="false">* กดที่รูปภาพเพื่อเปลี่ยนรูปใหม่</span>
+							<canvas id="canvas01" width="578" height="400" ng-hide="true"></canvas>
+							<input type="file" id="doc001" ng-hide="true"/>
+						</div>
+					<br />
+					<!-- <paper-radio-button onclick="showtoastdoc(this,'rowdoc002')"><h5>ทะเบียนภาษีมูลค่าเพิ่ม( ภพ. 20)</h5></paper-radio-button> -->
+          <h3>ทะเบียนภาษีมูลค่าเพิ่ม( ภพ. 20)</h3>
+						<div>
+							<br />
+							<img data-src="holder.js/150x150?text=กดที่นี้เพื่ออัพรูปใหม่" class="thumbnail" id="idcImg02" onclick="calldoc('doc002',this)">
+							<canvas id="canvas02" width="578" height="400" ng-hide="true"></canvas>
+							<span class="text text-danger" ng-hide="false">* กดที่รูปภาพเพื่อเปลี่ยนรูปใหม่</span>
+							<input type="file" id="doc002" ng-hide="true"/>
+						</div>
+					<br />
+					<!-- <paper-radio-button onclick="showtoastdoc(this,'rowdoc003')"><h5>หนังสือรับรองบริษัท</h5></paper-radio-button> -->
+          <h3>หนังสือรับรองบริษัท</h3>
+						<div>
+							<br />
+							<img data-src="holder.js/150x150?text=กดที่นี้เพื่ออัพรูปใหม่" class="thumbnail" id="idcImg03" onclick="calldoc('doc003',this)">
+							<canvas id="canvas03" width="578" height="400" ng-hide="true"></canvas>
+							<span class="text text-danger" ng-hide="false">* กดที่รูปภาพเพื่อเปลี่ยนรูปใหม่</span>
+							<input type="file" id="doc003" ng-hide="true"/>
+						</div>
+				</div>
+				<br />
+				<div class="rowdoc0067">
+          <h3>สำเนาทะเบียนบ้าน(ต้องมี)</h3>
+					<span class="text text-danger" ng-hide="chkdoc.doc004">* กรุณาเพิ่มสำเนาสำเนาทะเบียนบ้านด้วย</span>
+					<div>
+							<br />
+							<img data-src="holder.js/150x150?text=กดที่นี้เพื่ออัพรูปใหม่" class="thumbnail" id="idcImg04" onclick="calldoc('doc004',this)">
+							<canvas id="canvas04" width="578" height="400" ng-hide="true"></canvas>
+							<span class="text text-danger" ng-hide="false">* กดที่รูปภาพเพื่อเปลี่ยนรูปใหม่</span>
+							<input type="file" id="doc004" ng-hide="true"/>
+					</div>
+					<br />
+          <h3>สำเนาประจำตัวบัตรประชาชน(ต้องมี)</h3>
+					<span class="text text-danger" ng-hide="chkdoc.doc005">* กรุณาเพิ่มสำเนาสำเนาประจำตัวบัตรประชาชนด้วย</span>
+					<div>
+							<br />
+							<img data-src="holder.js/150x150?text=กดที่นี้เพื่ออัพรูปใหม่" class="thumbnail" id="idcImg05" onclick="calldoc('doc005',this)">
+							<canvas id="canvas05" width="578" height="400" ng-hide="true"></canvas>
+							<span class="text text-danger" ng-hide="false">* กดที่รูปภาพเพื่อเปลี่ยนรูปใหม่</span>
+							<input type="file" id="doc005" ng-hide="true"/>
+					</div>
+				</div>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
