@@ -1,4 +1,4 @@
-angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookies'])
+angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookies','ngMessages'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -31,7 +31,9 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     termas:'BC1C0346-06E5-E511-80E1-005056A71F87',
     masname:'U01',
     Empid:'EXAMPLE',
-    mailtomail:'test@gmail.com,leader@gmail.com,ccmail@gmail.com'
+    mailtomail:'test@gmail.com;leader@gmail.com;ccmail@gmail.com',
+    getguid:guid(),
+    dataguid:''
   }
 })
 
@@ -156,7 +158,83 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   }
 })
+.state('app.listplanned', {
+  url: '/listplanned/:mastertype',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/planned/listplan.html',
+      controller:'PlanedListCtrl'
+    }
+  }
+})
+.state('app.planneddetail', {
+  url: '/planneddetail/:mastertype',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/planned/planneddetail.html',
+      controller:'PlanedDetailCtrl'
+    }
+  }
+})
 ////////////////// End ///////////////////////////////////
+////////////////// new account //////////////////////////
+.state('app.openaccount', {
+  url: '/openaccount/:territoryid/:mastertype/:getguid',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/newaccount/openaccount.html',
+      controller:'OpenAccountCtrl'
+    }
+  }
+})
+.state('app.accountcontact', {
+  url: '/accountcontact/:getguid',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/newaccount/accountcontact.html',
+      controller:'AccountContactCtrl'
+    }
+  }
+})
+///////////////////// end ///////////////////////////////
+//////////////////  account list //////////////////////////
+.state('app.accountlist', {
+  url: '/accountlist/:terriid/:mastertype',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/account/accountlist.html',
+      controller:'AccountListCtrl'
+    }
+  }
+})
+.state('app.accountdetail', {
+  url: '/accountdetail/:accountid/:mastertype',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/account/accountdetail.html',
+      controller:'AccountDetailCtrl'
+    }
+  }
+})
+.state('app.accountinvoice', {
+  url: '/accountinvoice/:accountid/:mastertype',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/account/accountinvoice.html',
+      controller:'AccountInvoiceCtrl'
+    }
+  }
+})
+.state('app.accountbilling', {
+  url: '/accountbilling/:accountid/:mastertype',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/account/accountbilling.html',
+      controller:'AccountBillingCtrl'
+    }
+  }
+})
+///////////////////// end ///////////////////////////////
 
   .state('app.browse', {
       url: '/browse',

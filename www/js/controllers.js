@@ -12,7 +12,7 @@ angular.module('starter.controllers', [])
 
 setTimeout(function(){
   $ionicLoading.hide();
-},10000);
+},3000);
 
  $scope.showLoadingProperTimes();
 
@@ -430,5 +430,93 @@ setTimeout(function(){
     Data.dirsale = true;
   }
 })
+.controller('PlanedListCtrl',function($scope, $stateParams,$cookies,Data){
+  $scope.Data = Data;
+  Data.mastertype = $stateParams.mastertype;
+  $scope.vCheckAll = 0;
+  if(Data.mastertype == 1 || Data.mastertype == '1'){
+    Data.dirsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2' || Data.mastertype == 3 || Data.mastertype == '3'){
+    Data.dirsale = true;
+  }
+})
+.controller('PlanedDetailCtrl',function($scope, $stateParams,$cookies,Data){
+  $scope.Data = Data;
+  Data.mastertype = $stateParams.mastertype;
+  $scope.vCheckAll = 0;
+  if(Data.mastertype == 1 || Data.mastertype == '1'){
+    Data.dirsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2' || Data.mastertype == 3 || Data.mastertype == '3'){
+    Data.dirsale = true;
+  }
+})
 ///////////////////  End //////////////////////
+/////////////////// Open Account //////////////
+.controller('OpenAccountCtrl',function($scope, $stateParams,$cookies,Data){
+  $scope.Data = Data;
+  Data.mastertype = $stateParams.mastertype;
+  Data.dataguid = $stateParams.getguid;
+  $scope.vCheckAll = 0;
+  if(Data.mastertype == 1 || Data.mastertype == '1'){
+    Data.dirsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2' || Data.mastertype == 3 || Data.mastertype == '3'){
+    Data.dirsale = true;
+  }
+  $scope.insertaccount = function(){
+    window.location.href="#/app/accountcontact/Data.dataguid";
+  }
+})
+.controller('AccountContactCtrl',function($scope, $stateParams,$cookies,Data){
+  $scope.Data = Data;
+  Data.dataguid = $stateParams.getguid;
+  $scope.vCheckAll = 0;
+  if(Data.mastertype == 1 || Data.mastertype == '1'){
+    Data.dirsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2' || Data.mastertype == 3 || Data.mastertype == '3'){
+    Data.dirsale = true;
+  }
+})
+////////////////////// end /////////////////
+/////////////////// Account List //////////////
+.controller('AccountListCtrl',function($scope, $stateParams,$cookies,Data){
+  $scope.Data = Data;
+  Data.mastertype = $stateParams.mastertype;
+  $scope.vCheckAll = 0;
+  if(Data.mastertype == 1 || Data.mastertype == '1'){
+    Data.dirsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2' || Data.mastertype == 3 || Data.mastertype == '3'){
+    Data.dirsale = true;
+  }
+})
+.controller('AccountDetailCtrl',function($scope, $stateParams,$cookies,Data){
+  $scope.Data = Data;
+  Data.mastertype = $stateParams.mastertype;
+  $scope.vCheckAll = 0;
+  if(Data.mastertype == 1 || Data.mastertype == '1'){
+    Data.dirsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2' || Data.mastertype == 3 || Data.mastertype == '3'){
+    Data.dirsale = true;
+  }
+})
+.controller('AccountInvoiceCtrl',function($scope, $stateParams,$cookies,Data){
+  $scope.Data = Data;
+  Data.mastertype = $stateParams.mastertype;
+  $scope.vCheckAll = 0;
+  if(Data.mastertype == 1 || Data.mastertype == '1'){
+    Data.dirsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2' || Data.mastertype == 3 || Data.mastertype == '3'){
+    Data.dirsale = true;
+  }
+})
+.controller('AccountBillingCtrl',function($scope, $stateParams,$cookies,Data){
+  $scope.Data = Data;
+  Data.mastertype = $stateParams.mastertype;
+  $scope.vCheckAll = 0;
+  if(Data.mastertype == 1 || Data.mastertype == '1'){
+    Data.dirsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2' || Data.mastertype == 3 || Data.mastertype == '3'){
+    Data.dirsale = true;
+  }
+})
+////////////////////// end /////////////////
 ;

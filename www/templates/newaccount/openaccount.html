@@ -1,0 +1,54 @@
+<ion-view view-title="ข้อมูลลูกค้า">
+  <ion-content>
+    <div class="card">
+      <div class="item item-text-wrap">
+        <div class="row">
+          <div class="col col-10"></div>
+          <div class="col">
+            <h4>ข้อมูลทั่วไป</h4>
+    				<hr />
+    				<md-input-container ng-hide="teritype">
+    					<label>เลือกเขตการขาย</label>
+    					<md-select ng-model="user.optionTerritory">
+    						<md-option ng-value="opt.ivz_leftterritory.id" ng-repeat="opt in listtername">{{ opt.ivz_leftterritory.primaryName }}</md-option>
+    					</md-select>
+    				</md-input-container>
+    				<md-input-container class="md-block" flex-gt-sm>
+              <label>ระบุเลขที่บัตรประชาชน หรือ เลขที่ผู้เสียภาษี</label>
+              <input md-maxlength="13" required ng-model="user.txtid"  maxlength="13"/>
+    					<span class="text error" ng-hide="chk.infomat">* กรุณาระบุเลขที่บัตรประชาชน หรือ เลขที่ผู้เสียภาษีด้วย</span>
+            </md-input-container>
+    				<md-input-container class="md-block" flex-gt-sm>
+              <label>ระบุชื่อลูกค้า/ชื่อร้านค้า/ชื่อบริษัท</label>
+              <input md-maxlength="50" required  ng-model="user.txtname"/>
+    					<span class="text error" ng-hide="chk.infomattxtname">* กรุณาระบุชื่อลูกค้า/ชื่อร้านค้า/ชื่อบริษัทด้วย</span>
+            </md-input-container>
+    				<hr class="divider"/>
+            <br />
+    				<h4>สาขาร้านค้า/บริษัท</h4>
+    				<md-radio-group ng-model="user.branchselect">
+    						<md-radio-button value="0"><h5>สำนักงานใหญ่</h5></md-radio-button>
+    						<md-radio-button value="1"><h5>สาขาย่อย</h5></md-radio-button>
+    				</md-radio-group>
+    				<div ng-hide="user.branchselect == '0' || user.branchselect == ''">
+    						<md-input-container class="md-block" flex-gt-sm>
+    		          <label>สาขาสำนักงาน</label>
+    		          <input md-maxlength="50" required  ng-model="user.txtbrancher"/>
+    							<span class="text error" ng-if="user.branchselect == '1'">* กรุณาระบุสาขาย่อยด้วย</span>
+    		        </md-input-container>
+    				</div>
+          </div>
+          <div class="col col-10"></div>
+        </div>
+      </div>
+    </div>
+    <br />
+    <div class="row">
+      <div class="col"></div>
+      <div class="col"></div>
+      <div class="col">
+        <md-button class="md-raised md-success" md-ripple-size="full" ng-click="insertaccount()">ถัดไป&nbsp;<i class="icon ion-android-arrow-forward"></i></md-button>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

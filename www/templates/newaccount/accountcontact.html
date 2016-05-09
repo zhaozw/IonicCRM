@@ -1,0 +1,67 @@
+<ion-view view-title="ข้อมูลผู้ติดต่อ">
+  <ion-content>
+    <div class="card">
+      <div class="item item-text-wrap">
+        <h4>ข้อมูลผู้ติดต่อ</h4>
+				<hr />
+        <div class="row">
+          <div class="col">
+            <md-input-container class="md-block" flex-gt-sm>
+							<label>ระบุชื่อเจ้าของ</label>
+							<input md-maxlength="50" required  ng-model="user.firstname"/>
+							<span class="text text-danger" ng-hide="chk.infomatfirstname">* กรุณาระบุชื่อเจ้าของด้วย</span>
+						</md-input-container>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <md-input-container class="md-block" flex-gt-sm>
+							<label>ระบุนามสกุลเจ้าของ</label>
+							<input md-maxlength="50" required  ng-model="user.lastname"/>
+							<span class="text text-danger" ng-hide="chk.infomatlastname">* กรุณาระบุนามสกุลเจ้าของด้วย</span>
+						</md-input-container>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+						<md-input-container class="md-block" flex-gt-sm>
+							<label>โทรศัพท์บ้าน/ร้าน</label>
+							<input md-maxlength="10" required  ng-model="user.telhome" maxlength="10"/>
+							<span class="text text-danger" ng-hide="chk.infomattelhome">* กรุณาระบุโทรศัพท์บ้าน/ร้านด้วย</span>
+						</md-input-container>
+				  </div>
+					<div class="col">
+						<md-input-container class="md-block" flex-gt-sm>
+							<label>โทรศัพท์มือถือ</label>
+							<input md-maxlength="10" required  ng-model="user.mobile" maxlength="10"/>
+							<span class="text text-danger" ng-hide="chk.infomatmobile">* กรุณาระบุโทรศัพท์มือถือด้วย</span>
+						</md-input-container>
+				  </div>
+        </div>
+        <div class="row">
+          <div class="col">
+						<md-input-container class="md-block" flex-gt-sm>
+							<label>โทรสาร/fax</label>
+							<input md-maxlength="10" required  ng-model="user.fax" maxlength="10"/>
+							<span class="text text-danger" ng-hide="chk.infomatfax">* กรุณาระบุโทรสาร/fax ด้วย</span>
+						</md-input-container>
+				  </div>
+					<div class="col">
+						<md-input-container class="md-block" flex-gt-sm>
+							<label>อีเมล์</label>
+							<input md-maxlength="50" required  ng-model="user.emailname" maxlength="50"  />
+							<span class="text text-danger" ng-hide="chk.infomatemailname">* กรุณาระบุอีเมล์ ด้วย</span>
+						</md-input-container>
+				  </div>
+        </div>
+      </div>
+    </div>
+    <br />
+    <div class="row">
+      <div class="col">
+        <md-button class="md-raised md-success" md-ripple-size="full" ng-click="insertaccount()">ถัดไป&nbsp;<i class="icon ion-android-arrow-forward"></i></md-button>
+        <md-button class="md-raised md-success" md-ripple-size="full" ng-click="insertaccount()">ถัดไป&nbsp;<i class="icon ion-android-arrow-forward"></i></md-button>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
