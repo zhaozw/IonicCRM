@@ -10,10 +10,11 @@
     <div class="card" ng-hide="dvTodos">
       <div class="item item-text-wrap">
         <md-list>
-          <md-list-item class="md-3-line" ng-repeat="item in todos|filter:txtcustomer">
+          <md-list-item class="md-3-line" ng-repeat="item in todos|filter:txtcustomer" ng-if="item.ivz_employeeposition == Data.mastertype">
+            <!-- \filter data.mastertype -->
              <img src="img/d05.png" class="md-avatar" alt="testt" />
              <div class="md-list-item-text" layout="column">
-               <h3>{{ item.ivz_customer.primaryName }}</h3>
+               <h3>{{ item.filtername }}</h3>
                <p>{{ item.territoryid.primaryName }}</p>
              </div>
              <i class="md-secondary ion-ios-arrow-forward"></i>
@@ -28,7 +29,7 @@
       <i class="icon ion-android-calendar"></i>
       วางแผน
     </a>
-    <a class="tab-item" ng-hide = 'Data.dirsale'>
+    <a class="tab-item" ng-hide='Data.dirsale' ng-click="mailreport()">
       <i class="icon ion-android-mail"></i>
       ส่งแผน
     </a>

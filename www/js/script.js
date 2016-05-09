@@ -1,3 +1,26 @@
+////////////////////// change status appointment ////////////////
+function changestappoint(id,ids,stt,callback){
+  try{
+    var ins = new MobileCRM.DynamicEntity.createNew("ivz_contentex");
+       ins.properties.ivz_name = txtname;
+       ins.properties.ivz_filename = filename;
+       ins.properties.ivz_codename = codename;
+       ins.properties.ivz_line = txtline;
+       ins.properties.ivz_codeex = codeex;
+       ins.properties.ivz_territoryid = territoryid;
+       ins.properties.ivz_logtype = parseInt(typelog);
+       ins.save(function(err){
+         if(err){
+           alert("ex insert "+err);
+           callback('error ex insert '+err);
+         }else{
+           callback('success');
+         }
+     });
+  }catch(er){
+    alert(er);
+  }
+}
 ////////////////////// inser contenctex /////////////
 function insertcodeex(txtname,filename,codename,txtline,codeex,territoryid,typelog,callback){
   try{
@@ -20,6 +43,14 @@ function insertcodeex(txtname,filename,codename,txtline,codeex,territoryid,typel
   }catch(ex){
     alert('function ex '+ex);
   }
+}
+////////////////////// Send Mail /////////////////////
+function SendMail(mail,title,text){
+		try{
+      MobileCRM.Platform.email(mail,title,text,MobileCRM.bridge.alert,null);
+    }catch(er){
+      alert(er);
+    }
 }
 ///////////////////// return guid ///////////////////
 function guid() {
@@ -141,19 +172,20 @@ function GetAppointStatus(ivz_leftterritory,ist,callback){
       n.addAttribute('ivz_visitactivities');//21
       n.addAttribute('ivz_visitsuggest');//22
       n.addAttribute('ivz_planningstatus');//23
+      n.addAttribute('ivz_employeeposition');//24
       n.filter = new MobileCRM.FetchXml.Filter();
       n.filter.where('ivz_territoryid','eq',ivz_leftterritory);
     var m = n.addLink('account','accountid','ivz_customer','outer');
-        m.addAttribute('ivz_addressprovince');//24
-        m.addAttribute('ivz_addressdistrict');//25
-        m.addAttribute('territoryid');//26
-        m.addAttribute('accountnumber');//27
-        m.addAttribute('ivz_balancecredit');//28
+        m.addAttribute('ivz_addressprovince');//25
+        m.addAttribute('ivz_addressdistrict');//26
+        m.addAttribute('territoryid');//27
+        m.addAttribute('accountnumber');//28
+        m.addAttribute('ivz_balancecredit');//29
     var o = m.addLink('territory','territoryid','territoryid','outer');
-        o.addAttribute('ivz_emailcontact');//29
-        o.addAttribute('ivz_leadermail');//30
-        o.addAttribute('territoryid');//31
-        o.addAttribute('ivz_ccmail');//32
+        o.addAttribute('ivz_emailcontact');//30
+        o.addAttribute('ivz_leadermail');//31
+        o.addAttribute('territoryid');//32
+        o.addAttribute('ivz_ccmail');//33
     var fetch = new MobileCRM.FetchXml.Fetch(n,10000,1);
       fetch.execute('array',function(data){
         var b = [];
@@ -181,15 +213,18 @@ function GetAppointStatus(ivz_leftterritory,ist,callback){
                         ivz_visitproductrecall:CtoTrue(data[i][20]),
                         ivz_visitactivities:CtoTrue(data[i][21]),
                         ivz_visitsuggest:CtoTrue(data[i][22]),
-                        ivz_addressprovince:data[i][24],
-                        ivz_addressdistrict:data[i][25],
-                        territoryid:data[i][26],
-                        accountnumber:data[i][27],
-                        ivz_planningstatus:data[i][23],
-                        ivz_emailcontact:data[i][29],
-                        ivz_leadermail:data[i][30],
-                        ivz_ccmail:data[i][32],
-                        ivz_balancecredit:data[i][28]
+                        ivz_employeeposition:data[i][24],
+                        ivz_addressprovince:data[i][25],
+                        ivz_addressdistrict:data[i][26],
+                        territoryid:data[i][27],
+                        accountnumber:data[i][28],
+                        ivz_planningstatus:data[i][29],
+                        ivz_emailcontact:data[i][30],
+                        ivz_leadermail:data[i][31],
+                        ivz_ccmail:data[i][33],
+                        ivz_balancecredit:data[i][29],
+                        filtername:data[i][28]+'-'+data[i][1],
+                        mailtomail:data[i][30]+','+data[i][31]+','+data[i][33]
               });
               }
         }

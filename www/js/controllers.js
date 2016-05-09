@@ -1,7 +1,22 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout,$cookies,Data) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout,$cookies,Data,$ionicLoading) {
   $scope.Data = Data;
+
+  $scope.showLoadingProperTimes = function() {
+       $ionicLoading.show({
+           template:  '<ion-spinner icon="bubbles" class="spinner-energized"></ion-spinner>',
+           noBackdrop: true
+       });
+   };
+
+setTimeout(function(){
+  $ionicLoading.hide();
+},10000);
+
+ $scope.showLoadingProperTimes();
+
+
   GetGPSLocation(function(res){
       Data.latitude = res.latitude;
       Data.longitude = res.longitude;
@@ -70,17 +85,12 @@ angular.module('starter.controllers', [])
   Data.sterritory = $stateParams.sterritory;
   Data.nterritory = $stateParams.nterritory;
   if(Data.sterritory == '0' || Data.sterritory == 0){
-    Data.sterritory = '6C791CA7-D5E1-E511-80E1-005056A71F87';
-    Data.masname = 'D09';
+    Data.sterritory = '40791CA7-D5E1-E511-80E1-005056A71F87';
+    //Data.masname = 'A02';
   }
   if(Data.mastertype == 1 || Data.mastertype == '1'){
-    Data.supsale = false;
     Data.dirsale = false;
-  }else if(Data.mastertype == 2 || Data.mastertype == '2'){
-    Data.supsale = true;
-    Data.dirsale = false;
-  }else{
-    Data.supsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2' || Data.mastertype == 3 || Data.mastertype == '3'){
     Data.dirsale = true;
   }
   GetGPSLocation(function(res){
@@ -97,6 +107,24 @@ angular.module('starter.controllers', [])
       $scope.dvTodos = true;
     }
   });
+  $scope.mailreport = function(){
+    try{
+      var data = $scope.todos;
+      for(var i in data){
+        var ins = new MobileCRM.DynamicEntity('appointment',data[i].activityid);
+           ins.properties.ivz_planningstatus = parseInt(1);
+           ins.save(function(err){
+             if(err){
+               alert("ex insert "+err);
+             }
+         });
+      }
+    }catch(er){
+      alert(er);
+    }finally{
+      SendMail(Data.mailtomail,'text title','text body');
+    }
+  }
 })
 .controller('PlanCalendarCtrl', function($scope, $stateParams,$cookies,Data) {
   $scope.Data = Data;
@@ -277,15 +305,10 @@ angular.module('starter.controllers', [])
 })
 .controller('PlanSupCtrl', function($scope, $stateParams,$cookies,Data) {
   $scope.Data = Data;
-  Data.mastertype = $stateParams.mastertype;
+   Data.mastertype = $stateParams.mastertype;
   if(Data.mastertype == 1 || Data.mastertype == '1'){
-    Data.supsale = false;
     Data.dirsale = false;
-  }else if(Data.mastertype == 2 || Data.mastertype == '2'){
-    Data.supsale = true;
-    Data.dirsale = false;
-  }else{
-    Data.supsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2' || Data.mastertype == 3 || Data.mastertype == '3'){
     Data.dirsale = true;
   }
   GetGPSLocation(function(res){
@@ -302,13 +325,8 @@ angular.module('starter.controllers', [])
   $scope.Data = Data;
   Data.mastertype = $stateParams.mastertype;
   if(Data.mastertype == 1 || Data.mastertype == '1'){
-    Data.supsale = false;
     Data.dirsale = false;
-  }else if(Data.mastertype == 2 || Data.mastertype == '2'){
-    Data.supsale = true;
-    Data.dirsale = false;
-  }else{
-    Data.supsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2' || Data.mastertype == 3 || Data.mastertype == '3'){
     Data.dirsale = true;
   }
 })
@@ -316,37 +334,42 @@ angular.module('starter.controllers', [])
   $scope.Data = Data;
   Data.mastertype = $stateParams.mastertype;
   if(Data.mastertype == 1 || Data.mastertype == '1'){
-    Data.supsale = false;
     Data.dirsale = false;
-  }else if(Data.mastertype == 2 || Data.mastertype == '2'){
-    Data.supsale = true;
-    Data.dirsale = false;
-  }else{
-    Data.supsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2' || Data.mastertype == 3 || Data.mastertype == '3'){
     Data.dirsale = true;
   }
+  gettername(Data.masname,function(data){
+    if(data){
+      $scope.listmaster = data;
+    }
+  });
 })
 .controller('PlanListDetailCtrl',function($scope, $stateParams,$cookies,Data){
   $scope.Data = Data;
   Data.mastertype = $stateParams.mastertype;
   $scope.vCheckAll = 0;
   if(Data.mastertype == 1 || Data.mastertype == '1'){
-    Data.supsale = false;
     Data.dirsale = false;
-  }else if(Data.mastertype == 2 || Data.mastertype == '2'){
-    Data.supsale = true;
-    Data.dirsale = false;
-  }else{
-    Data.supsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2' || Data.mastertype == 3 || Data.mastertype == '3'){
     Data.dirsale = true;
+  }
+
+  GetAppointStatus($stateParams.territoryid,0,function(data){
+    $scope.listappointment = data;
+  });
+  $scope.copyplanning = function(id){
+    $scope.listappointment.slice(id,1);
   }
   $scope.exprchk = function(ethis){
     console.log(ethis);
   }
   $scope.reloaddata = function (){
-
+    GetAppointStatus($stateParams.territoryid,0,function(data){
+      $scope.listappointment = data;
+    });
   }
   $scope.confirmcopy = function (){
+    //SendMail($stateParams.mailtomail,'title','text');
     window.history.go(-1);
   }
   $scope.cancelcp = function (){
@@ -358,13 +381,8 @@ angular.module('starter.controllers', [])
   Data.mastertype = $stateParams.mastertype;
   $scope.vCheckAll = 0;
   if(Data.mastertype == 1 || Data.mastertype == '1'){
-    Data.supsale = false;
     Data.dirsale = false;
-  }else if(Data.mastertype == 2 || Data.mastertype == '2'){
-    Data.supsale = true;
-    Data.dirsale = false;
-  }else{
-    Data.supsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2' || Data.mastertype == 3 || Data.mastertype == '3'){
     Data.dirsale = true;
   }
   $scope.exprchk = function(ethis){
@@ -385,13 +403,8 @@ angular.module('starter.controllers', [])
   Data.mastertype = $stateParams.mastertype;
   $scope.vCheckAll = 0;
   if(Data.mastertype == 1 || Data.mastertype == '1'){
-    Data.supsale = false;
     Data.dirsale = false;
-  }else if(Data.mastertype == 2 || Data.mastertype == '2'){
-    Data.supsale = true;
-    Data.dirsale = false;
-  }else{
-    Data.supsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2' || Data.mastertype == 3 || Data.mastertype == '3'){
     Data.dirsale = true;
   }
 })
@@ -400,13 +413,8 @@ angular.module('starter.controllers', [])
   Data.mastertype = $stateParams.mastertype;
   $scope.vCheckAll = 0;
   if(Data.mastertype == 1 || Data.mastertype == '1'){
-    Data.supsale = false;
     Data.dirsale = false;
-  }else if(Data.mastertype == 2 || Data.mastertype == '2'){
-    Data.supsale = true;
-    Data.dirsale = false;
-  }else{
-    Data.supsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2' || Data.mastertype == 3 || Data.mastertype == '3'){
     Data.dirsale = true;
   }
 })
@@ -417,13 +425,8 @@ angular.module('starter.controllers', [])
   Data.mastertype = $stateParams.mastertype;
   $scope.vCheckAll = 0;
   if(Data.mastertype == 1 || Data.mastertype == '1'){
-    Data.supsale = false;
     Data.dirsale = false;
-  }else if(Data.mastertype == 2 || Data.mastertype == '2'){
-    Data.supsale = true;
-    Data.dirsale = false;
-  }else{
-    Data.supsale = false;
+  }else if(Data.mastertype == 2 || Data.mastertype == '2' || Data.mastertype == 3 || Data.mastertype == '3'){
     Data.dirsale = true;
   }
 })

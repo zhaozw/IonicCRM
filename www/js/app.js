@@ -25,12 +25,13 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     Tername:'A01',
     supsale:false,
     dirsale:false,
-    mastertype:0,
+    mastertype:2,
     sterritory:'',
     nterritory:'',
     termas:'BC1C0346-06E5-E511-80E1-005056A71F87',
     masname:'U01',
-    Empid:'EXAMPLE'
+    Empid:'EXAMPLE',
+    mailtomail:'test@gmail.com,leader@gmail.com,ccmail@gmail.com'
   }
 })
 
@@ -91,7 +92,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   })
   .state('app.sendplan', {
-    url: '/sendplan/:territory/:typeapp',
+    url: '/sendplan/:territory/:mastertype',
     views: {
       'menuContent': {
         templateUrl: 'templates/planning/sendplan.html',
@@ -109,7 +110,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   })
   .state('app.listplaning', {
-    url: '/listplaning/:mastertype',
+    url: '/listplaning/:mastertype/:territoryid',
     views: {
       'menuContent': {
         templateUrl: 'templates/planning/listplaning.html',

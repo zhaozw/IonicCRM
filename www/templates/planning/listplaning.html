@@ -3,38 +3,18 @@
     <div class="card">
       <div class="item item-text-wrap">
         <md-list>
-          <md-list-item class="md-3-line">
+          <md-list-item class="md-3-line" ng-repeat="n in listappointment" ng-if="n.ivz_employeeposition != '2' || n.ivz_employeeposition != '3'">
             <img src="img/d05.png" class="md-avatar" alt="testt" />
              <div class="md-list-item-text" layout="column">
-               <h3>Mr.D01</h3>
-               <p>Tername</p>
+               <h3>{{n.filtername}}</h3>
+               <p>{{n.territoryid.primaryName}}</p>
+               <p>
+                 <span ng-if="n.ivz_planningstatus == 0" style="color:red;">ยังไม่ได้ส่งแผน</span>
+                 <span ng-if="n.ivz_planningstatus == 1" style="color:yellow;">รอการอนุมัติ</span>
+               </p>
              </div>
-             <a class="md-secondary ion-trash-a text-h1 text-bold error" ng-click="copyplanning($event)"></a>
+             <a class="md-secondary ion-trash-a text-h1 text-bold error" ng-click="copyplanning($index)"></a>
          </md-list-item>
-         <md-list-item class="md-3-line">
-           <img src="img/d05.png" class="md-avatar" alt="testt" />
-            <div class="md-list-item-text" layout="column">
-              <h3>Mr.D02</h3>
-              <p>Tername</p>
-            </div>
-            <a class="md-secondary ion-trash-a text-h1 text-bold error" ng-click="copyplanning($event)"></a>
-        </md-list-item>
-        <md-list-item class="md-3-line">
-          <img src="img/d05.png" class="md-avatar" alt="testt" />
-           <div class="md-list-item-text" layout="column">
-             <h3>Mr.D03</h3>
-             <p>Tername</p>
-           </div>
-          <a class="md-secondary ion-trash-a text-h1 text-bold error" ng-click="copyplanning($event)"></a>
-       </md-list-item>
-         <md-list-item class="md-3-line">
-           <img src="img/d05.png" class="md-avatar" alt="testt" />
-            <div class="md-list-item-text" layout="column">
-              <h3>Mr.D04</h3>
-              <p>Tername</p>
-            </div>
-            <a class="md-secondary ion-trash-a text-h1 text-bold error" ng-click="copyplanning($event)"></a>
-        </md-list-item>
         </md-list>
       </div>
     </div>
