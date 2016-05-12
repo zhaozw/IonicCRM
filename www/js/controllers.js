@@ -731,6 +731,48 @@ angular.module('starter.controllers', [])
 .controller('PlanedDetailCtrl',function($scope, $stateParams,$cookies,Data){
   $scope.Data = Data;
   Data.mastertype = $stateParams.mastertype;
+  $scope.goop = function(idval){
+    var guidreg = guid();
+    var terriid = '6C791CA7-D5E1-E511-80E1-005056A71F87';
+    if(idval == 1 || idval == '1'){
+      //var ins = new MobileCRM.DynamicEntity.createNew('ivz_result');
+      console.log('insert visit openaccount');
+      window.location.href="#/app/openaccount/"+terriid+"/"+Data.mastertype+"/"+guidreg;
+    }else if(idval == 2 || idval == '2'){
+      //var ins = new MobileCRM.DynamicEntity.createNew('ivz_result');
+      console.log('insert visit adjustment');
+      window.location.href="#/app/adjustment/"+terriid+"/"+Data.mastertype;
+    }else if(idval == 3 || idval == '3'){
+      //var ins = new MobileCRM.DynamicEntity.createNew('ivz_result');
+      console.log('insert visit open order');
+    }else if(idval == 4 || idval == '4'){
+      //var ins = new MobileCRM.DynamicEntity.createNew('ivz_result');
+      console.log('insert visit open claim');
+    }else if(idval == 5 || idval == '5'){
+      //var ins = new MobileCRM.DynamicEntity.createNew('ivz_result');
+      console.log('insert visit open postpect');
+    }else if(idval == 6 || idval == '6'){
+      //var ins = new MobileCRM.DynamicEntity.createNew('ivz_result');
+      console.log('insert visit open marketting');
+    }else if(idval == 7 || idval == '7'){
+      //var ins = new MobileCRM.DynamicEntity.createNew('ivz_result');
+      console.log('insert visit open computitor');
+    }else if(idval == 8 || idval == '8'){
+      //var ins = new MobileCRM.DynamicEntity.createNew('ivz_result');
+      console.log('insert visit open billing');
+    }else if(idval == 9 || idval == '9'){
+      //var ins = new MobileCRM.DynamicEntity.createNew('ivz_result');
+      console.log('insert visit open product recall');
+    }else if(idval == 10 || idval == '10'){
+      //var ins = new MobileCRM.DynamicEntity.createNew('ivz_result');
+      console.log('insert visit 10');
+    }else if(idval == 11 || idval == '11'){
+      //var ins = new MobileCRM.DynamicEntity.createNew('ivz_result');
+      console.log('insert visit 11');
+    }else{
+      console.log('insert '+idval);
+    }
+  }
 })
 ///////////////////  End //////////////////////
 /////////////////// Open Account //////////////
@@ -970,4 +1012,10 @@ angular.module('starter.controllers', [])
   // }
 })
 ////////////////////// end /////////////////
+////////////////////// Adjustment ///////////////
+.controller('AdjustmentCtrl',function($scope, $stateParams,$cookies,Data){
+  $scope.Data = Data;
+  Data.mastertype = $stateParams.mastertype;
+})
+//////////////////////// End ////////////////////
 ;

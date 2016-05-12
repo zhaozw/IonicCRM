@@ -338,6 +338,17 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 ///////////////////// end ///////////////////////////////
+///////////////////// Adjustment ////////////////////////
+.state('app.adjustment', {
+  url: '/adjustment/:accountid/:mastertype',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/adjustment/option.html',
+      controller:'AdjustmentCtrl'
+    }
+  }
+})
+///////////////////// End ///////////////////////////////
 
   .state('app.browse', {
       url: '/browse',
