@@ -3,17 +3,19 @@
     <div class="card">
       <div class="item item-text-wrap">
         <md-list>
-          <md-list-item class="md-3-line" ng-repeat="n in listappointment" ng-if="n.ivz_employeeposition != '2' || n.ivz_employeeposition != '3'">
-            <img src="img/d05.png" class="md-avatar" alt="testt" />
+          <md-list-item class="md-3-line" ng-repeat="n in listappointment | filter:{ivz_employeeposition:1}">
+            <img src="img/d05.png" class="md-avatar"/>
              <div class="md-list-item-text" layout="column">
                <h3>{{n.filtername}}</h3>
                <p>{{n.territoryid.primaryName}}</p>
                <p>
-                 <span ng-if="n.ivz_planningstatus == 0" style="color:red;">ยังไม่ได้ส่งแผน</span>
-                 <span ng-if="n.ivz_planningstatus == 1" style="color:yellow;">รอการอนุมัติ</span>
+                 <b ng-if="n.ivz_planningstatus == 0" style="color:#E68364;">ยังไม่ได้ส่งแผน</b>
+                 <b ng-if="n.ivz_planningstatus == 1" style="color:#A17917;">รอการอนุมัติ</b>
+                 <b ng-if="n.ivz_planningstatus == 2" style="color:#006442;">อนุมัติแล้ว</b>
+                 <b ng-if="n.ivz_planningstatus == 3" style="color:#8F1D21;">ไม่อนุมัติ</b>
                </p>
              </div>
-             <a class="md-secondary ion-trash-a text-h1 text-bold error" ng-click="copyplanning($index)"></a>
+             <a class="md-secondary ion-trash-a text-h1 text-bold error" ng-click="removeplanning($index)"></a>
          </md-list-item>
         </md-list>
       </div>

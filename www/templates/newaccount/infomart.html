@@ -1,0 +1,132 @@
+<ion-view view-title="Browse">
+  <ion-content>
+    <div class="card">
+      <div class="item item-text-wrap">
+        <h2>ข้อมูลร้านค้า</h2>
+				<hr />
+        <br />
+				<div class="row">
+						<div class="col">
+							<h4>ประเภทการขาย</h4>
+							<hr class="divider"/>
+              <div class="row">
+                <div class="col">
+                  <span class="text text-danger" ng-hide="chkMiniMart.SalesPart1">* กรุณาระบุข้อมูลการขายด้วย</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <md-checkbox ng-model="MiniMart.SalePart1">มอเตอร์ไซต์</md-checkbox>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <md-checkbox ng-model="MiniMart.SalePart2">รถยนต์</md-checkbox>
+                </div>
+              </div>
+							<div class="row">
+							  <div class="col">
+							    <md-checkbox ng-model="MiniMart.SalePart3">BigBike</md-checkbox>
+							  </div>
+							</div>
+						</div>
+						<div class="col">
+              <h4>ประเภทกิจการ/ร้านค้า/บริษัท</h4>
+  						<hr class="divider"/>
+              <div class="row">
+                <div class="col">
+                  <span class="text text-danger" ng-hide="chkMiniMart.SalesPart2">* กรุณาระบุข้อมูลประเภทกิจการ/ร้านค้า/บริษัทด้วย</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <md-checkbox ng-model="MiniMart.SalePart4">ขายอะไหล่เดิม</md-checkbox>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <md-checkbox ng-model="MiniMart.SalePart5">ขายอะไหล่ตกแต่ง</md-checkbox>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <md-checkbox ng-model="MiniMart.SalePart6">ร้านซ่อม/อู่</md-checkbox>
+                </div>
+              </div>
+						</div>
+				</div>
+				<div>
+				<div>
+					<br />
+					<h4>รูปภาพเกี่ยวกับร้านค้า</h4>
+					<span class="text text-danger" ng-hide="chkMiniMart.doc006">* กรุณาเพิ่มรูปภาพเกี่ยวกับร้านค้าด้วย</span>
+					<hr class="divider"/>
+          <div class="row">
+            <div class="col">
+              <md-button class="md-raised md-warn" aria-label="description"  md-ripple-size="auto" onclick="calldoc('doc006',this)">UPLOAD</md-button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+  						<canvas id="canvas06" width="578" height="400" ng-hide="true"></canvas>
+  						<span class="text text-danger" ng-hide="false">* กดที่รูปภาพเพื่อลบออก</span>
+  						<input type="file" id="doc006" ng-hide="true"/>
+              <div class="row" id ="divspace"></div>
+            </div>
+          </div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col">
+            <h4>สถานะของที่ตั้ง</h4>
+            <hr class="divider"/>
+            <div class="row">
+              <div class="col">
+                <span class="text text-danger" ng-hide="chkMiniMart.PlaceStatus">* กรุณาเพิ่มสถานะของที่ตั้งด้วย</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <md-checkbox ng-model="MiniMart.PlaceStatus1">เซ้ง</md-checkbox>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <md-checkbox ng-model="MiniMart.PlaceStatus2">ซื้อ</md-checkbox>
+              </div>
+            </div>
+					</div>
+				</div>
+				<div class="row">
+						<div class="col">
+							<md-input-container>
+								<label>จำนวนคูหา</label>
+								<input type="number" ng-model="MiniMart.tatofactory" maxlength="10" md-maxlength="10">
+								<span class="text text-danger" ng-hide="chkMiniMart.tatofactory">* กรุณาระบุจำนวนคูหาด้วย</span>
+							</md-input-container>
+						</div>
+						<div class="col">
+							<md-input-container>
+								<label>จำนวนพนักงานทั้งสิ้น</label>
+								<input type="number" ng-model="MiniMart.tatolnumber" maxlength="10" md-maxlength="10">
+								<span class="text text-danger" ng-hide="chkMiniMart.tatolnumber">* กรุณาระบุจำนวนพนักงานด้วย</span>
+							</md-input-container>
+						</div>
+				</div>
+      </div>
+    </div>
+  </div>
+    <br />
+    <br />
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item error">
+      <i class="icon ion-android-arrow-back"></i>
+      ย้อนกลับ
+    </a>
+    <a class="tab-item success" ng-click="insertaccount()">
+      <i class="icon ion-android-arrow-forward"></i>
+      ถัดไป
+    </a>
+  </div>
+</ion-view>

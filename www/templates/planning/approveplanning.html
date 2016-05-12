@@ -3,30 +3,12 @@
     <div class="card">
       <div class="item item-text-wrap">
         <md-list>
-          <md-list-item class="md-3-line">
+          <md-list-item class="md-3-line" ng-repeat="n in listmaster" href="#/app/listapprove/{{n.ivz_leftterritory.id}}">
              <div class="md-list-item-text" layout="column">
-               <h3>D01</h3>
+               <h3>{{ n.ivz_leftterritory.primaryName }}</h3>
              </div>
-             <a class="md-secondary ion-chevron-right text-h1 text-bold error" href="#/app/listapprove/terid"></a>
+             <a class="md-secondary ion-chevron-right text-h1 text-bold error" href="#/app/listapprove/{{n.ivz_leftterritory.id}}"></a>
          </md-list-item>
-         <md-list-item class="md-3-line">
-            <div class="md-list-item-text" layout="column">
-              <h3>D02</h3>
-            </div>
-            <a class="md-secondary ion-chevron-right text-h1 text-bold error"  href="#/app/listapprove/terid"></a>
-        </md-list-item>
-        <md-list-item class="md-3-line">
-           <div class="md-list-item-text" layout="column">
-             <h3>D03</h3>
-           </div>
-           <a class="md-secondary ion-chevron-right text-h1 text-bold error"  href="#/app/listapprove/terid"></a>
-       </md-list-item>
-         <md-list-item class="md-3-line">
-            <div class="md-list-item-text" layout="column">
-              <h3>D04</h3>
-            </div>
-            <a class="md-secondary ion-chevron-right text-h1 text-bold error"  href="#/app/listapprove/terid"></a>
-        </md-list-item>
         </md-list>
       </div>
     </div>

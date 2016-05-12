@@ -1,3 +1,22 @@
+//////////////////////////// import script //////////////////////
+document.writeln('<script src="lib/ionic/js/ionic.bundle.js"></script>');
+document.writeln('<script src="js/jquery.js"></script>');
+document.writeln('<script src="js/JSBridge.js"></script>');
+document.writeln('<script src="js/alasql.min.js"></script>');
+document.writeln('<script src="lib/ionic/js/angular/angular-animate.min.js"></script>');
+document.writeln('<script src="lib/ionic/js/angular/angular-aria.min.js"></script>');
+document.writeln('<script src="lib/ionic/js/angular/angular-messages.min.js"></script>');
+document.writeln('<script src="lib/ionic/js/angular/angular-material.min.js"></script>');
+document.writeln('<script src="lib/ionic/js/angular/angular-cookies.min.js"></script>');
+document.writeln('<script src="lib/ionic/js/angular/ng-currency.js"></script>');
+document.writeln('<script src="js/app.js"></script>');
+document.writeln('<script src="js/controllers.js"></script>');
+document.writeln('<script src="js/event-inc.js"></script>');
+document.writeln('<script src="js/holder.min.js"></script>');
+
+function alerter(er){
+	alert(er);
+}
 //////////////////////////// call doc ///////////////////////////
 function calldoc(cClick,ethis){
 		$('#'+cClick).trigger('click');
@@ -203,7 +222,8 @@ function gettername(tername,callback){
   }
 }
 ///////////////// End Option /////////////////////////
-function GetAppointStatus(ivz_leftterritory,ist,callback){
+function GetAppointStatus(ivz_leftterritory,ist,typ,callback){
+	//alert('typ:'+ist+'--'+typ+'--'+ivz_leftterritory);
   var n = new MobileCRM.FetchXml.Entity('appointment');
       n.addAttribute('activityid');//0
       n.addAttribute('ivz_customer');//1
@@ -248,41 +268,45 @@ function GetAppointStatus(ivz_leftterritory,ist,callback){
         var b = [];
         for(var i in data){
               if(data[i][23] == ist){
-                b.push({
-                        activityid:data[i][0],
-                        ivz_customer:data[i][1],
-                        ivz_territoryid:data[i][2],
-                        ivz_empid:data[i][3],
-                        start:data[i][4],
-                        end:data[i][5],
-                        ivz_saleprospect:data[i][6],
-                        title:data[i][7],
-                        ivz_visit:CtoTrue(data[i][10]),
-                        ivz_visitbilling:CtoTrue(data[i][11]),
-                        ivz_visitclaimorder:CtoTrue(data[i][12]),
-                        ivz_visitcollection:CtoTrue(data[i][13]),
-                        ivz_visitopenaccount:CtoTrue(data[i][14]),
-                        ivz_visitorder:CtoTrue(data[i][15]),
-                        ivz_visitadjustment:CtoTrue(data[i][16]),
-                        ivz_visitcompetitors:CtoTrue(data[i][17]),
-                        ivz_visitmarket:CtoTrue(data[i][18]),
-                        ivz_visitpostpect:CtoTrue(data[i][19]),
-                        ivz_visitproductrecall:CtoTrue(data[i][20]),
-                        ivz_visitactivities:CtoTrue(data[i][21]),
-                        ivz_visitsuggest:CtoTrue(data[i][22]),
-                        ivz_employeeposition:data[i][24],
-                        ivz_addressprovince:data[i][25],
-                        ivz_addressdistrict:data[i][26],
-                        territoryid:data[i][27],
-                        accountnumber:data[i][28],
-                        ivz_planningstatus:data[i][29],
-                        ivz_emailcontact:data[i][30],
-                        ivz_leadermail:data[i][31],
-                        ivz_ccmail:data[i][33],
-                        ivz_balancecredit:data[i][29],
-                        filtername:data[i][28]+'-'+data[i][1],
-                        mailtomail:data[i][30]+','+data[i][31]+','+data[i][33]
-              });
+								if(data[i][24] == typ){
+									b.push({
+	                        activityid:data[i][0],
+	                        ivz_customer:data[i][1],
+	                        ivz_territoryid:data[i][2],
+	                        ivz_empid:data[i][3],
+	                        start:data[i][4],
+	                        end:data[i][5],
+	                        ivz_saleprospect:data[i][6],
+	                        title:data[i][7],
+	                        ivz_visit:CtoTrue(data[i][10]),
+	                        ivz_visitbilling:CtoTrue(data[i][11]),
+	                        ivz_visitclaimorder:CtoTrue(data[i][12]),
+	                        ivz_visitcollection:CtoTrue(data[i][13]),
+	                        ivz_visitopenaccount:CtoTrue(data[i][14]),
+	                        ivz_visitorder:CtoTrue(data[i][15]),
+	                        ivz_visitadjustment:CtoTrue(data[i][16]),
+	                        ivz_visitcompetitors:CtoTrue(data[i][17]),
+	                        ivz_visitmarket:CtoTrue(data[i][18]),
+	                        ivz_visitpostpect:CtoTrue(data[i][19]),
+	                        ivz_visitproductrecall:CtoTrue(data[i][20]),
+	                        ivz_visitactivities:data[i][21],
+	                        ivz_visitsuggest:CtoTrue(data[i][22]),
+	                        ivz_employeeposition:data[i][24],
+	                        ivz_addressprovince:data[i][25],
+	                        ivz_addressdistrict:data[i][26],
+	                        territoryid:data[i][27],
+	                        accountnumber:data[i][28],
+	                        ivz_planningstatus:data[i][23],
+	                        ivz_emailcontact:data[i][30],
+	                        ivz_leadermail:data[i][31],
+	                        ivz_ccmail:data[i][33],
+	                        ivz_balancecredit:data[i][29],
+	                        filtername:data[i][28]+'-'+data[i][1],
+	                        mailtomail:data[i][30]+','+data[i][31]+','+data[i][33],
+													ivz_scheduledstarttime:data[i][8],
+													ivz_scheduledendtime:data[i][9]
+	              });
+								}
               }
         }
         callback(b);

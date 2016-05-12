@@ -17,9 +17,10 @@
     </ion-header-bar>
     <ion-content>
       <ion-list>
-        <ion-item menu-close href="#/app/search/1/0/0" class="success"><i class="ion-android-calendar"></i>&nbsp;แผนการดำเนินงาน</ion-item>
-        <ion-item menu-close href="#/app/sendplan/{{Data.masname}}/{{Data.mastertype}}"  class="success"><i class="ion-android-calendar"></i>&nbsp;แผนการดำเนินงาน sup direct</ion-item>
+        <ion-item menu-close ui-sref="app.search({mastertype:1, sterritory:0,nterritory:0})" class="success" ng-click="setdmaster(1)"><i class="ion-android-calendar"></i>&nbsp;แผนการดำเนินงาน</ion-item>
+        <ion-item menu-close ui-sref="app.sendplan({territory:Data.masname,mastertype:2})"  class="success" ng-click="setdmaster(2)"><i class="ion-android-calendar"></i>&nbsp;แผนการดำเนินงาน sup direct</ion-item>
         <ion-item menu-close href="#/app/resultplan/0/{{Data.mastertype}}"  class="success"><i class="ion-android-calendar"></i>&nbsp;ผลการดำเนินงาน</ion-item>
+        <ion-item menu-close href="#/app/rejectplan/1234556/mrddd/D10"  class="success"><i class="ion-android-calendar"></i>&nbsp;Test Reject</ion-item>
         <ion-item menu-close href="#/app/openaccount/0/{{Data.mastertype}}/{{Data.getguid}}"  class="success"><i class="ion-android-calendar"></i>&nbsp;เปิดบัญชีลูกค้า</ion-item>
         <ion-item menu-close href="#/app/openaccount/0/{{Data.mastertype}}"  class="success"><i class="ion-android-calendar"></i>&nbsp;เปิดบัญชีลูกค้า Sup,Dir</ion-item>
         <ion-item menu-close href="#/app/accountlist/0/{{Data.mastertype}}"  class="success"><i class="ion-android-calendar"></i>&nbsp;รายการลูกค้า</ion-item>

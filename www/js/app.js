@@ -1,4 +1,4 @@
-angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookies','ngMessages'])
+angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookies','ngMessages','ng-currency'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -25,7 +25,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     Tername:'A01',
     supsale:false,
     dirsale:false,
-    mastertype:2,
+    mastertype:'',
     sterritory:'',
     nterritory:'',
     termas:'BC1C0346-06E5-E511-80E1-005056A71F87',
@@ -33,7 +33,11 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     Empid:'EXAMPLE',
     mailtomail:'test@gmail.com;leader@gmail.com;ccmail@gmail.com',
     getguid:guid(),
-    dataguid:''
+    dataguid:'',
+    emnot:'',
+    salename:'Mr.Test Saler',
+    tername:'D09',
+    DataList:''
   }
 })
 
@@ -53,6 +57,24 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     views: {
       'menuContent': {
         templateUrl: 'templates/planning/search.html',
+        controller:'PlanCtrl'
+      }
+    }
+  })
+  .state('app.search2', {
+    url: '/search/:mastertype/:sterritory/:nterritory',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/planning/search2.html',
+        controller:'Plan2Ctrl'
+      }
+    }
+  })
+  .state('app.searchplan', {
+    url: '/searchplan/:mastertype/:sterritory/:nterritory',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/planning/searchplan.html',
         controller:'PlanCtrl'
       }
     }
@@ -112,7 +134,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   })
   .state('app.listplaning', {
-    url: '/listplaning/:mastertype/:territoryid',
+    url: '/listplaning/:mastertype/:territoryid/:mailtomail',
     views: {
       'menuContent': {
         templateUrl: 'templates/planning/listplaning.html',
@@ -139,11 +161,20 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   })
   .state('app.listapprove', {
-    url: '/listapprove/:mastertype',
+    url: '/listapprove/:territoryid',
     views: {
       'menuContent': {
         templateUrl: 'templates/planning/listapprove.html',
         controller:'PlanListApproveCtrl'
+      }
+    }
+  })
+  .state('app.rejectplan', {
+    url: '/rejectplan/:territoryid/:salename/:tername',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/planning/rejectplan.html',
+        controller:'PlanRejectCtrl'
       }
     }
   })
@@ -247,6 +278,24 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     'menuContent': {
       templateUrl: 'templates/newaccount/document.html',
       controller:'AccountDocumentCtrl'
+    }
+  }
+})
+.state('app.accountcredit', {
+  url: '/accountcredit/:getguid',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/newaccount/accountcredit.html',
+      controller:'AccountCreditCtrl'
+    }
+  }
+})
+.state('app.infomart', {
+  url: '/infomart/:getguid',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/newaccount/infomart.html',
+      controller:'AccountInfoMartCtrl'
     }
   }
 })
