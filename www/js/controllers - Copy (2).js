@@ -1,5 +1,4 @@
 angular.module('starter.controllers', [])
-
 .controller('AppCtrl', function($scope, $ionicModal, $timeout,$cookies,Data,$ionicLoading) {
   $scope.Data = Data;
   $scope.showLoadingProperTimesReg = function() {
@@ -26,14 +25,6 @@ angular.module('starter.controllers', [])
                       noBackdrop: true
                   });
               };
-  $scope.showLoadDistrict = function() {
-                              $ionicLoading.show({
-                                  template:   '<ion-spinner icon="bubbles" class="spinner-energized"></ion-spinner><div class="row">'+
-                                              '<div class="col"><h4>โปรดรอสักครู่ กำลังโหลดข้อมูลอยู่อำเภอและจังหวัด</h4></div>'+
-                                              '</div>',
-                                  noBackdrop: true
-                              });
-                          };
   $scope.showLoadingProperTimesRegAll = function() {
             $ionicLoading.show({
                 template:   '<ion-spinner icon="bubbles" class="spinner-energized"></ion-spinner><div class="row">'+
@@ -97,29 +88,24 @@ angular.module('starter.controllers', [])
   		$('#'+cClick).trigger('click');
   }
   $scope.InAnnoteAttract = function(table,id,base64String,title,callback){
-      try{
-        var note = MobileCRM.DynamicEntity.createNew("annotation");
-                note.properties.objectid = new MobileCRM.Reference(table,id);
-                note.properties.notetext = title;
-                note.properties.subject = title;
-                note.properties.documentbody = base64String;
-                note.properties.mimetype = fileType;
-                note.properties.isdocument = true;
-                note.properties.filesize = parseInt(sizeKB);
-                note.properties.filename = fileName;
-                note.save(
-                      function(er){
-                        if(er){
-                          alert(title+'\n'+er);
-                          callback('null '+er);
-                        }else{
-                          alert('บันทึกไฟล์แนบ'+title);
-                          callback('บันทึกไฟล์แนบ'+title);
-                        }
-                      });
-      }catch(er){
-        alert('insert doc '+title+'\n'+er);
-      }
+      var note = MobileCRM.DynamicEntity.createNew("annotation");
+              note.properties.objectid = new MobileCRM.Reference(table,id);
+              note.properties.notetext = title;
+              note.properties.subject = title;
+              note.properties.documentbody = base64String;
+              note.properties.mimetype = fileType;
+              note.properties.isdocument = true;
+              note.properties.filesize = parseInt(sizeKB);
+              note.properties.filename = fileName;
+              note.save(
+                    function(er){
+                      if(er){
+                        alert('Att:'+er);
+                        callback('null '+er);
+                      }else{
+                        callback('บันทึกไฟล์แนบ'+title);
+                      }
+                    });
   }
 })
 .controller('PlaylistsCtrl', function($scope,Data) {
@@ -1366,6 +1352,7 @@ angular.module('starter.controllers', [])
   $scope.getdistricttranspot = function(darray){
     GetDistrictById(darray,function(data){
       $scope.DistrictlistTransport = data;
+      $scope.$apply();
     });
   }
   ///////// check null ///////////////
@@ -1463,7 +1450,6 @@ angular.module('starter.controllers', [])
     $ionicHistory.goBack(-1);
   }
 })
-/*------------------------- Address Invoice -----------------------------*/
 .controller('AccountAddressInvoiceCtrl',function($scope, $stateParams,$cookies,Data,$ionicHistory,$ionicLoading,Darray){
   $scope.Data = Data;
   //Data.dataguid = $stateParams.getguid;
@@ -1487,18 +1473,11 @@ angular.module('starter.controllers', [])
      $scope.$apply();
    });
   ////////// Get districtid
-  $scope.DistrictlistTransport = '';
-  GetDistrict(function(data){
-    if(data){
-      if(data.length > 0){
-        $scope.DistrictlistTransport = data;
-      }
-    }
-  });
-  $scope.listdistrict();
-  $scope.provinccename = '';
   $scope.getdistricttranspot = function(darray){
-    $scope.provinccename = darray;
+    GetDistrictById(darray,function(data){
+      $scope.DistrictlistTransport = data;
+      $scope.$apply();
+    });
   }
   ///////// check null ///////////////
   $scope.chknull = function(idval,txtname){
@@ -1830,35 +1809,35 @@ angular.module('starter.controllers', [])
           /// insert a
           if(a.length >= 1){
             setTimeout(function(){
-              $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs1,'สำเนาหนังสือรับรองการจดทะเบียนพาณิชย์ร้าน'+Data.businessname,null);
+              $scope.InAnnoteAttract('account',Data.dataguid,a,'สำเนาหนังสือรับรองการจดทะเบียนพาณิชย์ร้าน'+Data.businessname,null);
               console.log('insert a');
-            },6000);
+            },3000);
           }
           /// insert b
           if(b.length >= 1){
             setTimeout(function(){
-              $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs2,'ทะเบียนภาษีมูลค่าเพิ่ม( ภพ. 20)'+Data.businessname,null);
+              $scope.InAnnoteAttract('account',Data.dataguid,b,'ทะเบียนภาษีมูลค่าเพิ่ม( ภพ. 20)'+Data.businessname,null);
               console.log('insert b');
-            },9000);
+            },6000);
           }
           /// insert c
           if(c.length >= 1){
             setTimeout(function(){
-              $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs3,'หนังสือรับรองบริษัท'+Data.businessname,null);
+              $scope.InAnnoteAttract('account',Data.dataguid,b,'หนังสือรับรองบริษัท'+Data.businessname,null);
               console.log('insert c');
-            },12000);
+            },9000);
           }
           /// insert d
           if(d.length >= 1){
-            $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs4,'สำเนาทะเบียนบ้าน'+Data.businessname,null);
+            $scope.InAnnoteAttract('account',Data.dataguid,b,'สำเนาทะเบียนบ้าน'+Data.businessname,null);
             console.log('insert d');
           }
           /// insert e
           if(e.length >= 1){
             setTimeout(function(){
-              $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs5,'สำเนาประจำตัวบัตรประชาชน'+Data.businessname,null);
+              $scope.InAnnoteAttract('account',Data.dataguid,b,'สำเนาประจำตัวบัตรประชาชน'+Data.businessname,null);
               console.log('insert e');
-            },3000);
+            },1000);
           }
           setTimeout(function(){
             $ionicLoading.hide();
@@ -1900,7 +1879,7 @@ angular.module('starter.controllers', [])
     					alert("error668"+er);
     				}
             console.log('update people 2');
-          },15000);
+          },12000);
 
         }else{
           console.log('not update');
@@ -1921,13 +1900,13 @@ angular.module('starter.controllers', [])
           $scope.showLoadingProperTimesReg();
           /// insert d
           if(d.length >= 1){
-            $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs4,'สำเนาทะเบียนบ้าน'+ Data.businessname,null);
+            $scope.InAnnoteAttract('account',Data.dataguid,b,'สำเนาทะเบียนบ้าน'+Data.businessname,null);
             console.log('insert d');
           }
           /// insert e
           if(e.length >= 1){
             setTimeout(function(){
-              $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs5,'สำเนาประจำตัวบัตรประชาชน'+ Data.businessname,null);
+              $scope.InAnnoteAttract('account',Data.dataguid,b,'สำเนาประจำตัวบัตรประชาชน'+Data.businessname,null);
               console.log('insert e');
             },3000);
           }
@@ -2194,8 +2173,44 @@ angular.module('starter.controllers', [])
         $scope.chk.PlaceStatus == true ||
         $scope.chk.tatofactory == true ||
         $scope.chk.tatolnumber == true){
-          console.log('insert DB');
-          window.location.href="#/app/contactus/"+$stateParams.getguid;
+          $scope.showLoadingProperTimesRegAll();
+          try{
+    				var ins = new MobileCRM.DynamicEntity("account",Data.dataguid);
+    						ins.properties.ivz_locationlease = converttrue($scope.user.PlaceStatus1);
+    						ins.properties.ivz_locationbuy = converttrue($scope.user.PlaceStatus2);
+    						ins.properties.ivz_typemoto = converttrue($scope.user.SalePart1);
+    						ins.properties.ivz_typeauto = converttrue($scope.user.SalePart2;
+    						ins.properties.ivz_typebigbike = converttrue($scope.user.SalePart3);
+    						ins.properties.ivz_typeshoporiginal = converttrue($scope.user.SalePart4);
+    						ins.properties.ivz_typeshopaccessories = converttrue($scope.user.SalePart5);
+    						ins.properties.ivz_typeinstallservice = converttrue($scope.user.SalePart6);
+    						ins.properties.ivz_numberofplace = $scope.user.tatofactory;
+    		  			ins.properties.ivz_numberofemployee = $scope.user.tatolnumber;
+    						ins.save(function(er){
+    							if(er){
+    								alert('error ac 966 '+er);
+    							}
+    						});
+    			}catch(er){
+    				alert("error970"+er);
+    			}
+          setTimeout(function(){
+            var doc = $scope.user.doc;
+            if(doc){
+              if(doc.length > 0){
+                for(var i = 0;i<= (doc.length-1);i++){
+                  $scope.InAnnoteAttract('account',Data.dataguid,doc[i],'ข้อมูลเกี่ยวกับร้าน'+Data.businessname,null);
+                  if(i == data.length){
+                    $ionicLoading.hide();
+                    window.location.href="#/app/contactus/"+$stateParams.getguid;
+                    break;
+                  }
+                }
+              }
+            }
+          },2000);
+          console.log('insert DB mart info');
+          //window.location.href="#/app/contactus/"+$stateParams.getguid;
     }else{
       console.log('Not Update');
     }
@@ -2206,6 +2221,7 @@ angular.module('starter.controllers', [])
     $ionicHistory.goBack(-1);
   }
 })
+/* -----------------------------------insert Contact -------------------------------*/
 .controller('AccountContactUsCtrl',function($scope, $stateParams,$cookies,Data,arcontact,$compile,$ionicHistory,$ionicLoading){
   $scope.Data = Data;
   //Data.mastertype = $stateParams.getguid;

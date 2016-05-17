@@ -2,20 +2,12 @@
   <ion-content>
     <div class="card">
       <div class="item item-text-wrap">
-				<h2>เงือนไขการเข้าพบ</h2>
-				<hr />
-				<md-list>
-					<md-list-item>
-						<h3>มีข้อจำกัดการเข้าพบ</h3>
-            <md-switch onchange="domdick(this)" class="md-secondary"></md-switch>
-						<md-divider></md-divider>
-					</md-list-item>
-				</md-list>
-				<div class="row divFnMeet">
+        <ion-toggle ng-model="user.actionfn" toggle-class="toggle-default"><h2>มีข้อจำกัดการเข้าพบ</h2></ion-toggle>
+				<div class="row" ng-show="user.actionfn">
 					<div class="col">
 							<md-input-container>
 								<label>เก็บเช็ค/เก็บเงิน&nbsp;&nbsp;&nbsp;วัน</label>
-								<md-select ng-model="Meetting.optionDay">
+								<md-select ng-model="user.optionDay">
 									<md-option ng-value="opt.id" ng-repeat="opt in specialday">{{ opt.name }}</md-option>
 								</md-select>
 								<span class="text text-danger" ng-hide="chk.infomatoptionDay">* กรุณาระบุวันที่เก็บเช็ค/เก็บเงิน ด้วย</span>
@@ -24,7 +16,7 @@
 					<div class="col">
 						<md-input-container>
 								<label>ตั้งแต่เวลา</label>
-								<md-select ng-model="Meetting.optionStarttime">
+								<md-select ng-model="user.optionStarttime">
 									<md-option ng-value="opt.val" ng-repeat="opt in datetimer">{{ opt.name }}</md-option>
 								</md-select>
 							</md-input-container>
@@ -32,17 +24,17 @@
 					<div class="col">
 							<md-input-container>
 								<label>ถึงเวลา</label>
-								<md-select ng-model="Meetting.optionEndtime">
+								<md-select ng-model="user.optionEndtime">
 									<md-option ng-value="opt.val" ng-repeat="opt in datetimer">{{ opt.name }}</md-option>
 								</md-select>
 							</md-input-container>
 					</div>
 				</div>
-				<div class="row divFnMeet">
+				<div class="row" ng-show="user.actionfn">
 					<div class="col">
 						<md-input-container>
 							<label>วางบิล&nbsp;&nbsp;&nbsp;วัน</label>
-							<md-select ng-model="Meetting.optionBillingDay">
+							<md-select ng-model="user.optionBillingDay">
 								<md-option ng-value="opt.id" ng-repeat="opt in specialday">{{ opt.name }}</md-option>
 							</md-select>
 							<span class="text text-danger" ng-hide="chk.infomatoptionBillingDay">* กรุณาระบุวันที่วางบิล ด้วย</span>
@@ -51,7 +43,7 @@
 					<div class="col">
 							<md-input-container>
 								<label>ตั้งแต่เวลา</label>
-								<md-select ng-model="Meetting.optionStartBilltime">
+								<md-select ng-model="user.optionStartBilltime">
 									<md-option ng-value="opt.val" ng-repeat="opt in datetimer">{{ opt.name }}</md-option>
 								</md-select>
 							</md-input-container>
@@ -59,33 +51,34 @@
 					<div class="col">
 							<md-input-container>
 								<label>ถึงเวลา</label>
-								<md-select ng-model="Meetting.optionEndBilltime">
+								<md-select ng-model="user.optionEndBilltime">
 									<md-option ng-value="opt.val" ng-repeat="opt in datetimer">{{ opt.name }}</md-option>
 								</md-select>
 							</md-input-container>
 					</div>
 				</div>
-				<hr class="divider divFnormal"/>
-				<h3 class="divFnormal">วันที่สามารถเข้าพบลูกค้าได้</h3>
-				<br class="divFnormal"/>
-				<div class="row divFnormal">
+        <!-- Option  -->
+        <br />
+				<h2 class="divFnormal" ng-hide="user.actionfn">&nbsp;&nbsp;&nbsp;วันที่สามารถเข้าพบลูกค้าได้</h2>
+				<br class="divFnormal" ng-hide="user.actionfn"/>
+				<div class="row" ng-hide="user.actionfn">
 					<div class="col">
-						<md-checkbox ng-model="Meetting.dataMon"><h5>วันจันทร์</h5></md-checkbox>
-						<md-checkbox ng-model="Meetting.dataTue"><h5>วันอังคาร</h5></md-checkbox>
-						<md-checkbox ng-model="Meetting.dataWen"><h5>วันพุธ</h5></md-checkbox>
-						<md-checkbox ng-model="Meetting.dataThu"><h5>วันพฤหัส</h5></md-checkbox>
-						<md-checkbox ng-model="Meetting.dataFri"><h5>วันศุกร์</h5></md-checkbox>
-						<md-checkbox ng-model="Meetting.dataSat"><h5>วันเสาร์</h5></md-checkbox>
-						<md-checkbox ng-model="Meetting.dataSun"><h5>วันอาทิตย์</h5></md-checkbox>
+						<md-checkbox ng-model="user.dataMon"><h3>วันจันทร์</h3></md-checkbox>
+						<md-checkbox ng-model="user.dataTue"><h3>วันอังคาร</h3></md-checkbox>
+						<md-checkbox ng-model="user.dataWen"><h3>วันพุธ</h3></md-checkbox>
+						<md-checkbox ng-model="user.dataThu"><h3>วันพฤหัส</h3></md-checkbox>
+						<md-checkbox ng-model="user.dataFri"><h3>วันศุกร์</h3></md-checkbox>
+						<md-checkbox ng-model="user.dataSat"><h3>วันเสาร์</h3></md-checkbox>
+						<md-checkbox ng-model="user.dataSun"><h3>วันอาทิตย์</h3></md-checkbox>
 					</div>
 				</div>
-				<br class="divFnormal" />
-				<h3 class="divFnormal">เวลาที่สามารถเข้าพบลูกค้าได้</h3>
-				<div class="row divFnormal">
+				<br class="divFnormal"  ng-hide="user.actionfn"/>
+				<h2 class="divFnormal" ng-hide="user.actionfn">&nbsp;&nbsp;&nbsp;เวลาที่สามารถเข้าพบลูกค้าได้</h2>
+				<div class="row divFnormal" ng-hide="user.actionfn">
 					<div class="col">
 							<md-input-container>
 								<label>ตั้งแต่เวลา</label>
-								<md-select ng-model="Meetting.optionStartNormaltime">
+								<md-select ng-model="user.optionStartNormaltime">
 									<md-option ng-value="opt.val" ng-repeat="opt in datetimer">{{ opt.name }}</md-option>
 								</md-select>
 							</md-input-container>
@@ -93,19 +86,19 @@
 					<div class="col">
 							<md-input-container>
 								<label>ถึงเวลา</label>
-								<md-select ng-model="Meetting.optionEndNormaltime">
+								<md-select ng-model="user.optionEndNormaltime">
 									<md-option ng-value="opt.val" ng-repeat="opt in datetimer">{{ opt.name }}</md-option>
 								</md-select>
 							</md-input-container>
 					</div>
 				</div>
 				<br />
-				<h4>เวลาเปิดร้าน</h4>
+				<h2>&nbsp;&nbsp;&nbsp;เวลาเปิดร้าน</h2>
 				<div class="row">
 					 <div class="col">
 								<md-input-container>
 									<label>ตั้งแต่เวลา</label>
-									<md-select ng-model="Meetting.optionStarttimeAvailable">
+									<md-select ng-model="user.optionStarttimeAvailable">
 										<md-option ng-value="opt.val" ng-repeat="opt in datetimer">{{ opt.name }}</md-option>
 									</md-select>
 								</md-input-container>
@@ -113,7 +106,7 @@
 						<div class="col">
 								<md-input-container>
 									<label>ถึงเวลา</label>
-									<md-select ng-model="Meetting.optionEndtimeAvailable">
+									<md-select ng-model="user.optionEndtimeAvailable">
 										<md-option ng-value="opt.val" ng-repeat="opt in datetimer">{{ opt.name }}</md-option>
 									</md-select>
 								</md-input-container>
@@ -121,12 +114,15 @@
 				</div>
       </div>
     </div>
-    <br />
-    <div class="row">
-      <div class="col">
-        <md-button class="md-raised md-warn" md-ripple-size="full"><i class="icon ion-android-arrow-back"></i>&nbsp;ย้อนกลับ</md-button>
-        <md-button class="md-raised md-success" md-ripple-size="full" ng-click="insertaccount()">ถัดไป&nbsp;<i class="icon ion-android-arrow-forward"></i></md-button>
-      </div>
-    </div>
   </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item error" ng-click="goback()">
+      <i class="icon ion-android-arrow-back"></i>
+      ย้อนกลับ
+    </a>
+    <a class="tab-item success" ng-click="insertaccount()">
+      <i class="icon ion-android-arrow-forward"></i>
+      ถัดไป
+    </a>
+  </div>
 </ion-view>

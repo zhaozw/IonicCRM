@@ -1,56 +1,53 @@
-<ion-view view-title="Browse">
+<ion-view view-title="ข้อมูลร้านค้า">
   <ion-content>
     <div class="card">
       <div class="item item-text-wrap">
-        <h2>ข้อมูลร้านค้า</h2>
-				<hr />
-        <br />
 				<div class="row">
 						<div class="col">
-							<h4>ประเภทการขาย</h4>
+							<h2>ประเภทการขาย</h2>
 							<hr class="divider"/>
               <div class="row">
                 <div class="col">
-                  <span class="text text-danger" ng-hide="chkMiniMart.SalesPart1">* กรุณาระบุข้อมูลการขายด้วย</span>
+                  <span class="text text-danger" ng-hide="chk.SalesPart1">* กรุณาระบุข้อมูลการขายด้วย</span>
                 </div>
               </div>
               <div class="row">
                 <div class="col">
-                  <md-checkbox ng-model="MiniMart.SalePart1">มอเตอร์ไซต์</md-checkbox>
+                  <md-checkbox ng-model="user.SalePart1">มอเตอร์ไซต์</md-checkbox>
                 </div>
               </div>
               <div class="row">
                 <div class="col">
-                  <md-checkbox ng-model="MiniMart.SalePart2">รถยนต์</md-checkbox>
+                  <md-checkbox ng-model="user.SalePart2">รถยนต์</md-checkbox>
                 </div>
               </div>
 							<div class="row">
 							  <div class="col">
-							    <md-checkbox ng-model="MiniMart.SalePart3">BigBike</md-checkbox>
+							    <md-checkbox ng-model="user.SalePart3">BigBike</md-checkbox>
 							  </div>
 							</div>
 						</div>
 						<div class="col">
-              <h4>ประเภทกิจการ/ร้านค้า/บริษัท</h4>
+              <h2>ประเภทกิจการ/ร้านค้า/บริษัท</h2>
   						<hr class="divider"/>
               <div class="row">
                 <div class="col">
-                  <span class="text text-danger" ng-hide="chkMiniMart.SalesPart2">* กรุณาระบุข้อมูลประเภทกิจการ/ร้านค้า/บริษัทด้วย</span>
+                  <span class="text text-danger" ng-hide="chk.SalesPart2">* กรุณาระบุข้อมูลประเภทกิจการ/ร้านค้า/บริษัทด้วย</span>
                 </div>
               </div>
               <div class="row">
                 <div class="col">
-                  <md-checkbox ng-model="MiniMart.SalePart4">ขายอะไหล่เดิม</md-checkbox>
+                  <md-checkbox ng-model="user.SalePart4">ขายอะไหล่เดิม</md-checkbox>
                 </div>
               </div>
               <div class="row">
                 <div class="col">
-                  <md-checkbox ng-model="MiniMart.SalePart5">ขายอะไหล่ตกแต่ง</md-checkbox>
+                  <md-checkbox ng-model="user.SalePart5">ขายอะไหล่ตกแต่ง</md-checkbox>
                 </div>
               </div>
               <div class="row">
                 <div class="col">
-                  <md-checkbox ng-model="MiniMart.SalePart6">ร้านซ่อม/อู่</md-checkbox>
+                  <md-checkbox ng-model="user.SalePart6">ร้านซ่อม/อู่</md-checkbox>
                 </div>
               </div>
 						</div>
@@ -58,12 +55,12 @@
 				<div>
 				<div>
 					<br />
-					<h4>รูปภาพเกี่ยวกับร้านค้า</h4>
-					<span class="text text-danger" ng-hide="chkMiniMart.doc006">* กรุณาเพิ่มรูปภาพเกี่ยวกับร้านค้าด้วย</span>
+					<h2>รูปภาพเกี่ยวกับร้านค้า</h2>
+					<span class="text text-danger" ng-hide="chk.doc006">* กรุณาเพิ่มรูปภาพเกี่ยวกับร้านค้าด้วย</span>
 					<hr class="divider"/>
           <div class="row">
             <div class="col">
-              <md-button class="md-raised md-warn" aria-label="description"  md-ripple-size="auto" onclick="calldoc('doc006',this)">UPLOAD</md-button>
+              <md-button class="md-raised md-warn" aria-label="description"  md-ripple-size="auto" ng-click="calldoc('doc006',this)">UPLOAD</md-button>
             </div>
           </div>
           <div class="row">
@@ -78,21 +75,21 @@
 				<br />
 				<div class="row">
 					<div class="col">
-            <h4>สถานะของที่ตั้ง</h4>
+            <h2>สถานะของที่ตั้ง</h2>
             <hr class="divider"/>
             <div class="row">
               <div class="col">
-                <span class="text text-danger" ng-hide="chkMiniMart.PlaceStatus">* กรุณาเพิ่มสถานะของที่ตั้งด้วย</span>
+                <span class="text text-danger" ng-hide="chk.PlaceStatus">* กรุณาเพิ่มสถานะของที่ตั้งด้วย</span>
               </div>
             </div>
             <div class="row">
               <div class="col">
-                <md-checkbox ng-model="MiniMart.PlaceStatus1">เซ้ง</md-checkbox>
+                <md-checkbox ng-model="user.PlaceStatus1">เซ้ง</md-checkbox>
               </div>
             </div>
             <div class="row">
               <div class="col">
-                <md-checkbox ng-model="MiniMart.PlaceStatus2">ซื้อ</md-checkbox>
+                <md-checkbox ng-model="user.PlaceStatus2">ซื้อ</md-checkbox>
               </div>
             </div>
 					</div>
@@ -101,15 +98,15 @@
 						<div class="col">
 							<md-input-container>
 								<label>จำนวนคูหา</label>
-								<input type="number" ng-model="MiniMart.tatofactory" maxlength="10" md-maxlength="10">
-								<span class="text text-danger" ng-hide="chkMiniMart.tatofactory">* กรุณาระบุจำนวนคูหาด้วย</span>
+								<input type="text" ng-model="user.tatofactory" maxlength="10" md-maxlength="10" ng-change="chknull(1,user.tatofactory)">
+								<span class="text text-danger" ng-hide="chk.tatofactory">* กรุณาระบุจำนวนคูหาด้วย</span>
 							</md-input-container>
 						</div>
 						<div class="col">
 							<md-input-container>
 								<label>จำนวนพนักงานทั้งสิ้น</label>
-								<input type="number" ng-model="MiniMart.tatolnumber" maxlength="10" md-maxlength="10">
-								<span class="text text-danger" ng-hide="chkMiniMart.tatolnumber">* กรุณาระบุจำนวนพนักงานด้วย</span>
+								<input type="text" ng-model="user.tatolnumber" maxlength="10" md-maxlength="10" ng-change="chknull(2,user.tatolnumber)">
+								<span class="text text-danger" ng-hide="chk.tatolnumber">* กรุณาระบุจำนวนพนักงานด้วย</span>
 							</md-input-container>
 						</div>
 				</div>
@@ -120,7 +117,7 @@
     <br />
   </ion-content>
   <div class="tabs tabs-icon-top">
-    <a class="tab-item error">
+    <a class="tab-item error" ng-click="goback()">
       <i class="icon ion-android-arrow-back"></i>
       ย้อนกลับ
     </a>

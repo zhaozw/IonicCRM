@@ -28,7 +28,9 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     mastertype:'',
     sterritory:'',
     nterritory:'',
-    termas:'BC1C0346-06E5-E511-80E1-005056A71F87',
+    termas:'40791CA7-D5E1-E511-80E1-005056A71F87',
+    pricelevel:'0F6889BA-3D46-E511-80D1-005056A71F87',
+    transactioncurrency:'83008D3A-1A05-E511-80C7-005056A71F87',
     masname:'U01',
     Empid:'EXAMPLE',
     mailtomail:'test@gmail.com;leader@gmail.com;ccmail@gmail.com',
@@ -37,7 +39,52 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     emnot:'',
     salename:'Mr.Test Saler',
     tername:'D09',
-    DataList:''
+    DataList:'',
+    countserve:[10,20,30,40,50,60,70,80,90,100,110,120,130,140,150],
+    recivename:'',
+    businessname:''
+  }
+})
+.factory('Darray',function(){
+  return{
+    txtname:'',
+    txtaddress:'',
+    provinceid:'',
+    districtid:'',
+    zipcode:''
+  }
+})
+.factory('actype',function(){
+  return{
+    actype:''
+  }
+})
+.factory('arcontact',function(){
+  return {
+    contact:[],
+    company:[]
+  }
+})
+.service('rego',function(){
+  this.regoserv = function(){
+    window.history.back(-1);
+  },
+  this.reChkTxtId = function(txtid){
+    if(txtid){
+      if(txtid.length >= 13){
+        var a = new MobileCRM.FetchXml.Entity('account');
+      		  a.addAttribute('ivz_taxid');//0
+        var filter = new MobileCRM.FetchXml.Filter();
+            filter.where('ivz_taxid','eq',txtid);
+            a.filter = filter;
+      	var fetch = new MobileCRM.FetchXml.Fetch(a);
+      		  fetch.execute('array',function(data){
+            alert("data length:"+txtid+' == '+data.length);
+            return data.length;
+            $scope.$apply();
+      		},function(er){alert(er);},null);
+      }
+    }
   }
 })
 
@@ -210,11 +257,20 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
 ////////////////// End ///////////////////////////////////
 ////////////////// new account //////////////////////////
 .state('app.openaccount', {
-  url: '/openaccount/:territoryid/:mastertype/:getguid',
+  url: '/openaccount/:territoryid/:mastertype/:getguid/:pricelevel/:transactioncurrency',
   views: {
     'menuContent': {
       templateUrl: 'templates/newaccount/openaccount.html',
       controller:'OpenAccountCtrl'
+    }
+  }
+})
+.state('app.openaccountsup', {
+  url: '/openaccount/:territoryid/:mastertype/:getguid',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/newaccount/openaccountsup.html',
+      controller:'OpenAccountSupCtrl'
     }
   }
 })
@@ -299,6 +355,51 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   }
 })
+.state('app.contactus', {
+  url: '/contactus/:getguid',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/newaccount/contactus.html',
+      controller:'AccountContactUsCtrl'
+    }
+  }
+})
+.state('app.contactusadd', {
+  url: '/contactusadd/:getguid',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/newaccount/contactusadd.html',
+      controller:'AccountContactUsAddCtrl'
+    }
+  }
+})
+.state('app.companyus', {
+  url: '/companyus/:getguid',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/newaccount/companyus.html',
+      controller:'AccountCompanyCtrl'
+    }
+  }
+})
+.state('app.companyusadd', {
+  url: '/companyusadd/:getguid',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/newaccount/companyusadd.html',
+      controller:'AccountCompanyAddCtrl'
+    }
+  }
+})
+.state('app.confirmreg', {
+  url: '/confirmreg/:getguid',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/newaccount/confirmreg.html',
+      controller:'AccountConfirmCtrl'
+    }
+  }
+})
 ///////////////////// end ///////////////////////////////
 //////////////////  account list //////////////////////////
 .state('app.accountlist', {
@@ -345,6 +446,17 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     'menuContent': {
       templateUrl: 'templates/adjustment/option.html',
       controller:'AdjustmentCtrl'
+    }
+  }
+})
+///////////////////// End ///////////////////////////////
+///////////////////// Order ////////////////////////
+.state('app.order', {
+  url: '/order/:accountid/:mastertype',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/order/option.html',
+      controller:'OrderCtrl'
     }
   }
 })

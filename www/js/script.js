@@ -1,7 +1,7 @@
 //////////////////////////// import script //////////////////////
 document.writeln('<script src="lib/ionic/js/ionic.bundle.js"></script>');
 document.writeln('<script src="js/jquery.js"></script>');
-document.writeln('<script src="js/JSBridge.js"></script>');
+document.writeln('<script src="js/JSBridge.min.js"></script>');
 document.writeln('<script src="js/alasql.min.js"></script>');
 document.writeln('<script src="lib/ionic/js/angular/angular-animate.min.js"></script>');
 document.writeln('<script src="lib/ionic/js/angular/angular-aria.min.js"></script>');
@@ -11,8 +11,6 @@ document.writeln('<script src="lib/ionic/js/angular/angular-cookies.min.js"></sc
 document.writeln('<script src="lib/ionic/js/angular/ng-currency.js"></script>');
 document.writeln('<script src="js/app.js"></script>');
 document.writeln('<script src="js/controllers.js"></script>');
-document.writeln('<script src="js/event-inc.js"></script>');
-document.writeln('<script src="js/holder.min.js"></script>');
 
 function alerter(er){
 	alert(er);
@@ -62,7 +60,7 @@ input = $(idAttact)[0];
                     }
                 }
                 catch (ex) {
-                    MsgBox('Base64:'+er);
+                    alert('Base64:'+er);
                 }
 }
 function Getstringbase64(data) {
@@ -138,9 +136,9 @@ function guid() {
 
 ///////////////////// option ////////////////////
 function GetGPSLocation(callback){
-	// MobileCRM.Platform.getLocation(function(res){
-	// 	callback(res);
-	// },MobileCRM.bridge.alert);
+	MobileCRM.Platform.getLocation(function(res){
+		callback(res);
+	},MobileCRM.bridge.alert);
 }
 function getGPSCoords() {
 	var wait = MobileCRM.UI.EntityForm.showPleaseWait("Getting the GPS coordinates...");
@@ -174,6 +172,17 @@ function CtoNum(idval){
 	}
 	return(idreal);
 }
+
+function converttrue(idval){
+	var ids;
+	if(idval === "True" || idval === true){
+		ids = 1;
+	}else{
+		ids = 0;
+	}
+	return(ids);
+}
+
 function GetAvailablefromtime(callback){
 	MobileCRM.Metadata.getOptionSetValues("account","ivz_availablefromtime",function(optionSetValues){
 		var b = [];
@@ -182,7 +191,7 @@ function GetAvailablefromtime(callback){
 			b.push({'val':val,'name':name});
 		}
 	   callback(b);
-	  },function(err){MsgBox(er);},null);
+	  },function(err){alert(er);},null);
 }
 
 function gettername(tername,callback){
@@ -220,6 +229,54 @@ function gettername(tername,callback){
       }
     });
   }
+}
+function GetPayMentTerm(callback){
+	MobileCRM.Metadata.getOptionSetValues("account","paymenttermscode",function(optionSetValues){
+		var b = [];
+		for (var name in optionSetValues) {
+			 var val = optionSetValues[name];
+			b.push({
+				'val':val,'name':name
+			});
+		}
+	   callback(b);
+	  },function(err){alert(er);},null);
+}
+function GetPayMentOption(callback){
+	MobileCRM.Metadata.getOptionSetValues("account","ivz_paymentoption",function(optionSetValues){
+		var b = [];
+		for (var name in optionSetValues) {
+			 var val = optionSetValues[name];
+			b.push({
+				'val':val,'name':name
+			});
+		}
+	   callback(b);
+	  },function(err){alert(er);},null);
+}
+function GetBankName(callback){
+	MobileCRM.Metadata.getOptionSetValues("account","ivz_banknamecustomer",function(optionSetValues){
+		var b = [];
+		for (var name in optionSetValues) {
+			 var val = optionSetValues[name];
+			b.push({
+				'val':val,'name':name
+			});
+		}
+	   callback(b);
+	  },function(err){ alert(er);},null);
+}
+function GetBankNameYss(callback){
+	MobileCRM.Metadata.getOptionSetValues("account","ivz_banknameyss",function(optionSetValues){
+		var b = [];
+		for (var name in optionSetValues) {
+			 var val = optionSetValues[name];
+			b.push({
+				'val':val,'name':name
+			});
+		}
+	   callback(b);
+	  },function(err){ alert(er);},null);
 }
 ///////////////// End Option /////////////////////////
 function GetAppointStatus(ivz_leftterritory,ist,typ,callback){
@@ -527,3 +584,62 @@ function GetInvoice(terid,callback){
 			callback(b);
 		},function(er){alert(er);},null);
   }
+	/*----------------------------------Get Province ---------------------------------*/
+	function GetProvinceList(callback){
+	var n = new MobileCRM.FetchXml.Entity('ivz_addressprovince');
+		n.addAttribute('ivz_addressprovinceid');//0
+		n.addAttribute('ivz_name');//1
+		n.addAttribute('ivz_description');//2
+	var fetch = new MobileCRM.FetchXml.Fetch(n);
+		fetch.execute('array',function(data){
+      var b = [];
+      for(var i in data){
+        b.push({
+          ivz_addressprovinceid:data[i][0],
+      		ivz_name:data[i][1],
+      		ivz_description:data[i][2]
+        });
+      }
+			callback(b);
+		},function(er){alert(er);},null);
+}
+/*------------------------------------ Get District -----------------------------*/
+function GetDistrictById(id,callback){
+	var n = new MobileCRM.FetchXml.Entity('ivz_addressdistrict');
+			n.addAttribute('ivz_addressdistrictid');//0
+			n.addAttribute('ivz_name');//1
+			n.addAttribute('ivz_provinceid');//2
+	var filter = new MobileCRM.FetchXml.Filter();
+			filter.where('ivz_provinceid','eq',id);
+			n.filter = filter;
+	var fetch = new MobileCRM.FetchXml.Fetch(n);
+			fetch.execute('array',function(data){
+				var b = [];
+				for(var i in data){
+					b.push({
+						ivz_addressdistrictid:data[i][0],
+						ivz_name:data[i][1],
+						ivz_provinceid:data[i][2]
+					});
+				}
+				callback(b);
+		},function(er){alert(er);},null);
+}
+function GetDistrict(callback){
+	var n = new MobileCRM.FetchXml.Entity('ivz_addressdistrict');
+		n.addAttribute('ivz_addressdistrictid');//0
+		n.addAttribute('ivz_name');//1
+		n.addAttribute('ivz_provinceid');//2
+	var fetch = new MobileCRM.FetchXml.Fetch(n,1000,1);
+		fetch.execute('array',function(data){
+			var b = [];
+			for(var i in data){
+				b.push({
+					ivz_addressdistrictid:data[i][0],
+					ivz_name:data[i][1],
+					ivz_provinceid:data[i][2]
+				});
+			}
+			callback(b);
+		},function(er){alert(er);},null);
+}

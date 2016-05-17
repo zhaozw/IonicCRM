@@ -1,104 +1,96 @@
-<ion-view view-title="ข้อมูลเอกสารเปิดบัญชี">
+<ion-view view-title="ข้อมูลเอกสารประกอบการเปิดบัญชี">
   <ion-content>
     <div class="card">
       <div class="item item-text-wrap">
-        <h2>เอกสารประกอบการเปิดบัญชี</h2>
-				<hr class="divider"/>
-				<span class="text text-danger" ng-hide="chkdoc.docStatus">* กรุณาระบุประเภทบุคคลด้วย</span>
-				<md-list>
-					<md-list-item>
-						<h3>นิติบุคคล</h3>
-						<md-switch  onchange="domdoc(this)" class="md-secondary PriToggle"></md-switch>
-					</md-list-item>
-          <md-list-item>
-						<h3>บุคคลธรรมดา</h3>
-            <md-switch  onchange="domsecound(this)" class="md-secondary peoToggle"></md-switch>
-					</md-list-item>
-				</md-list>
-				<span class="text text-danger" ng-hide="chkdoc.doc001">* กรุณาเพิ่มเอกสารตามด้านล่างนี้ด้วย</span>
-        <hr />
-				<div class="publicdoc">
+				<span class="text text-danger" ng-hide="chk.docStatus">* กรุณาระบุประเภทบุคคลด้วย</span>
+        <ion-toggle ng-model="user.peoplela1" toggle-class="toggle-default" ng-change="chkswitch(1,user.peoplela1)"><h2>นิติบุคคล</h2></ion-toggle>
+        <ion-toggle ng-model="user.peoplela2" toggle-class="toggle-default" ng-change="chkswitch(2,user.peoplela2)"><h2>บุคคลธรรมดา</h2></ion-toggle>
+				<span class="text text-danger" ng-hide="chk.doc001">* กรุณาเพิ่มเอกสารตามด้านล่างนี้ด้วย</span>
+				<div class="publicdoc" ng-show="user.peoplela1">
 					<br />
-					<!-- <paper-radio-button onclick="showtoastdoc(this,'rowdoc001')"><h5>สำเนาหนังสือรับรองการจดทะเบียนพาณิชย์</h5></paper-radio-button> -->
-          <h3>สำเนาหนังสือรับรองการจดทะเบียนพาณิชย์</h3>
+          <h2>สำเนาหนังสือรับรองการจดทะเบียนพาณิชย์</h2>
 						<div>
 							<br />
-              <md-button class="md-raised md-warn" aria-label="description" md-ripple-size="auto" onclick="calldoc('doc001',this)">UPLOAD</md-button>
+              <md-button class="md-raised md-warn" aria-label="description" md-ripple-size="auto" ng-click="calldoc('doc001',this)">UPLOAD</md-button>
               <canvas id="canvas01" width="578" height="400" ng-hide="true"></canvas>
               <input type="file" id="doc001" ng-hide="true"/>
               <div class="row">
                 <div class="col col-75">
-                  <img  id="idcImg01" onclick="calldoc('doc001',this)">
+                  <img  id="idcImg01" ng-click="calldoc('doc001',this)">
                 </div>
               </div>
 						</div>
 					<br />
-					<!-- <paper-radio-button onclick="showtoastdoc(this,'rowdoc002')"><h5>ทะเบียนภาษีมูลค่าเพิ่ม( ภพ. 20)</h5></paper-radio-button> -->
-          <h3>ทะเบียนภาษีมูลค่าเพิ่ม( ภพ. 20)</h3>
+					<!-- <paper-radio-button ng-click="showtoastdoc(this,'rowdoc002')"><h5>ทะเบียนภาษีมูลค่าเพิ่ม( ภพ. 20)</h5></paper-radio-button> -->
+          <h2>ทะเบียนภาษีมูลค่าเพิ่ม( ภพ. 20)</h2>
 						<div>
 							<br />
-              <md-button class="md-raised md-warn" aria-label="description" md-ripple-size="auto" onclick="calldoc('doc002',this)">UPLOAD</md-button>
+              <md-button class="md-raised md-warn" aria-label="description" md-ripple-size="auto" ng-click="calldoc('doc002',this)">UPLOAD</md-button>
               <canvas id="canvas02" width="578" height="400" ng-hide="true"></canvas>
               <input type="file" id="doc002" ng-hide="true"/>
               <div class="row">
                 <div class="col col-75">
-                  <img  id="idcImg02" onclick="calldoc('doc002',this)">
+                  <img  id="idcImg02" ng-click="calldoc('doc002',this)">
                 </div>
               </div>
 						</div>
 					<br />
-					<!-- <paper-radio-button onclick="showtoastdoc(this,'rowdoc003')"><h5>หนังสือรับรองบริษัท</h5></paper-radio-button> -->
-          <h3>หนังสือรับรองบริษัท</h3>
+					<!-- <paper-radio-button ng-click="showtoastdoc(this,'rowdoc003')"><h5>หนังสือรับรองบริษัท</h5></paper-radio-button> -->
+          <h2>หนังสือรับรองบริษัท</h2>
 						<div>
 							<br />
-              <md-button class="md-raised md-warn" aria-label="description" md-ripple-size="auto" onclick="calldoc('doc003',this)">UPLOAD</md-button>
+              <md-button class="md-raised md-warn" aria-label="description" md-ripple-size="auto" ng-click="calldoc('doc003',this)">UPLOAD</md-button>
               <canvas id="canvas03" width="578" height="400" ng-hide="true"></canvas>
               <input type="file" id="doc003" ng-hide="true"/>
               <div class="row">
                 <div class="col col-75">
-                  <img  id="idcImg03" onclick="calldoc('doc003',this)">
+                  <img  id="idcImg03" ng-click="calldoc('doc003',this)">
                 </div>
               </div>
 						</div>
+            <hr />
 				</div>
 				<br />
 				<div class="rowdoc0067">
-          <h3>สำเนาทะเบียนบ้าน(ต้องมี)</h3>
-					<span class="text text-danger" ng-hide="chkdoc.doc004">* กรุณาเพิ่มสำเนาสำเนาทะเบียนบ้านด้วย</span>
+          <h2>สำเนาทะเบียนบ้าน(ต้องมี)</h2>
+					<span class="text text-danger" ng-hide="chk.doc004">* กรุณาเพิ่มสำเนาสำเนาทะเบียนบ้านด้วย</span>
 					<div>
 							<br />
-              <md-button class="md-raised md-warn" aria-label="description" md-ripple-size="auto" onclick="calldoc('doc004',this)">UPLOAD</md-button>
+              <md-button class="md-raised md-warn" aria-label="description" md-ripple-size="auto" ng-click="calldoc('doc004',this)">UPLOAD</md-button>
               <canvas id="canvas04" width="578" height="400" ng-hide="true"></canvas>
               <input type="file" id="doc004" ng-hide="true"/>
               <div class="row">
                 <div class="col col-75">
-                  <img  id="idcImg04" onclick="calldoc('doc004',this)">
+                  <img  id="idcImg04" ng-click="calldoc('doc004',this)">
                 </div>
               </div>
 					</div>
 					<br />
-          <h3>สำเนาประจำตัวบัตรประชาชน(ต้องมี)</h3>
-					<span class="text text-danger" ng-hide="chkdoc.doc005">* กรุณาเพิ่มสำเนาสำเนาประจำตัวบัตรประชาชนด้วย</span>
+          <h2>สำเนาประจำตัวบัตรประชาชน(ต้องมี)</h2>
+					<span class="text text-danger" ng-hide="chk.doc005">* กรุณาเพิ่มสำเนาสำเนาประจำตัวบัตรประชาชนด้วย</span>
 					<div>
 							<br />
-              <md-button class="md-raised md-warn" aria-label="description" md-ripple-size="auto" onclick="calldoc('doc005',this)">UPLOAD</md-button>
+              <md-button class="md-raised md-warn" aria-label="description" md-ripple-size="auto" ng-click="calldoc('doc005',this)">UPLOAD</md-button>
               <canvas id="canvas05" width="578" height="400" ng-hide="true"></canvas>
               <input type="file" id="doc005" ng-hide="true"/>
               <div class="row">
                 <div class="col col-75">
-                  <img  id="idcImg05" onclick="calldoc('doc005',this)">
+                  <img  id="idcImg05" ng-click="calldoc('doc005',this)">
                 </div>
               </div>
 					</div>
 				</div>
       </div>
     </div>
-    <br />
-    <div class="row">
-      <div class="col">
-        <md-button class="md-raised md-warn" md-ripple-size="full"><i class="icon ion-android-arrow-back"></i>&nbsp;ย้อนกลับ</md-button>
-        <md-button class="md-raised md-success" md-ripple-size="full" ng-click="insertaccount()">ถัดไป&nbsp;<i class="icon ion-android-arrow-forward"></i></md-button>
-      </div>
-    </div>
   </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item error" ng-click="goback()">
+      <i class="icon ion-android-arrow-back"></i>
+      ย้อนกลับ
+    </a>
+    <a class="tab-item success" ng-click="insertaccount()">
+      <i class="icon ion-android-arrow-forward"></i>
+      ถัดไป
+    </a>
+  </div>
 </ion-view>

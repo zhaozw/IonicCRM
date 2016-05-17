@@ -1,0 +1,48 @@
+<ion-view view-title="ข้อมูลผู้ติดต่อร้านค้า/คนสั่งของ">
+  <ion-content>
+    <div class="card">
+      <div class="item item-text-wrap">
+        <div class="row">
+          <div class="col">
+            <md-list>
+              <md-subheader><span class="text text-danger" ng-hide="chk.othercontact">* กรุณาเพิ่มข้อมูลผู้ติดต่อด้วย</span></md-subheader>
+              <!--You can use md-no-sticky class-->
+  						<md-list-item>
+  							<h2>เพิ่มผู้ติดต่อ</h2>
+                <a href="#/app/contactusadd/{{getguid}}" class="md-secondary error ">
+                  <i class="icon ion-android-add-circle text-h"></i>
+                </a>
+  							<md-divider></md-divider>
+  						</md-list-item>
+  					</md-list>
+  					<md-list>
+  						<md-list-item ng-repeat = "n in listcontact">
+  							<h2>
+                  ชื่อ-สกุล: <span class="label">{{n.firstname  +' '+ n.lastname}}</span>
+                  เบอร์โทรติดต่อ: <span class="label">{{n.tel}}</span>
+                  สถานะ: <span class="label">{{n.contacttype.name}}</span>
+                </h2>
+                <a ng-click="removecontact($index)" class="md-secondary error text-h1">
+                  <i class="icon ion-trash-a"></i>
+                </a>
+  							<md-divider></md-divider>
+  						</md-list-item>
+  					</md-list>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br />
+    <br />
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item error" ng-click="goback()">
+      <i class="icon ion-android-arrow-back"></i>
+      ย้อนกลับ
+    </a>
+    <a class="tab-item success" ng-click="insertaccount()">
+      <i class="icon ion-android-arrow-forward"></i>
+      ถัดไป
+    </a>
+  </div>
+</ion-view>

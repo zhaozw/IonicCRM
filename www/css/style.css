@@ -40,6 +40,9 @@
 .text-h1{
   font-size: 30px;
 }
+.text-h{
+  font-size: 50px;
+}
 .text-bold{
   font-weight: bold;
 }
@@ -91,4 +94,20 @@ md-input-container {
 	-moz-box-shadow: 0px 0px 8px #f0f0f0;
 	-webkit-box-shadow: 0px 0px 8px #f0f0f0;
 	box-shadow: 0px 0px 8px #f0f0f0;
+}
+md-progress-linear.md-default-theme .md-bar, md-progress-linear .md-bar {
+    background-color: rgb(234, 9, 74);
+}
+.label {
+    display: inline;
+    padding: .2em .6em .3em;
+    font-size: 75%;
+    font-weight: bold;
+    line-height: 1;
+    color: #F9F4F4;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+    background-color: rgb(221,44,0);
 }

@@ -2,29 +2,25 @@
   <ion-content>
     <div class="card">
       <div class="item item-text-wrap">
-				<h2>ข้อมูลเครดิต</h2>
-				<br />
-				<hr class="divider"/>
 				<div class="row">
 					<div class="col">
 						<md-input-container>
 							<label>เงื่อนไขการชำระเงิน</label>
-							<md-select ng-model="Credit.optionPayment">
+							<md-select ng-model="user.optionPayment">
 									<md-option ng-value="opt.val"
 									ng-repeat="opt in PaymentTermOptions|filter:{name:'SD-'}"
 									ng-click="checknullcredit(opt.val)">
 									{{ opt.name }}</md-option>
 							</md-select>
-							<span class="text text-danger" ng-hide="chkcredit.optionPayment">* กรุณาระบุเงื่อนไขการชำระเงินด้วย</span>
+							<span class="text text-danger" ng-hide="chk.optionPayment">* กรุณาระบุเงื่อนไขการชำระเงินด้วย</span>
 							</md-input-container>
 					</div>
 					<div class="col">
 							<md-input-container>
 								<label>จำนวนเครดิต</label>
-								<input  type="text" md-maxlength="8" maxlength="20" ng-model="Credit.txtCreditlimit"
-                 ng-disabled="diabledcredit" ng-currency currency-symbol="฿"
-                 min="0" fraction="0">
-								<span class="text text-danger" ng-hide="chkcredit.txtCreditlimit">* กรุณาระบุจำนวนเครดิตด้วย</span>
+								<input  type="text" md-maxlength="8" maxlength="8" ng-model="user.txtCreditlimit"
+                 ng-disabled="chk.diabledcredit" ng-change="chknull(user.txtCreditlimit)">
+								<span class="text text-danger" ng-hide="chk.txtCreditlimit">* กรุณาระบุจำนวนเครดิตด้วย</span>
 							</md-input-container>
 					</div>
 				</div>
@@ -32,10 +28,10 @@
 					<div class="col">
 						<md-input-container>
 							<label>วิธีการชำระเงิน</label>
-							<md-select ng-model="Credit.optionPaymentType">
+							<md-select ng-model="user.optionPaymentType">
 									<md-option ng-value="opt.val" ng-repeat="opt in PaymentOptions">{{ opt.name }}</md-option>
 							</md-select>
-							<span class="text text-danger" ng-hide="chkcredit.optionPaymentType">* กรุณาระบุวิธีการชำระเงินด้วย</span>
+							<span class="text text-danger" ng-hide="chk.optionPaymentType">* กรุณาระบุวิธีการชำระเงินด้วย</span>
 							</md-input-container>
 					</div>
 				</div>
@@ -44,7 +40,7 @@
 					<div class="col">
 						<md-input-container>
 								<label>ธนาคารของลูกค้า</label>
-								<md-select ng-model="Credit.optionPaymentBank">
+								<md-select ng-model="user.optionPaymentBank">
 										<md-option ng-value="opt.val" ng-repeat="opt in bankname">{{ opt.name }}</md-option>
 								</md-select>
 						</md-input-container>
@@ -52,7 +48,7 @@
 					<div class="col">
 						<md-input-container>
 								<label>หมายเลขบัญชีลูกค้า</label>
-								<input type="text" ng-model="Credit.txtBankBranch" maxlength="20" md-maxlength="20">
+								<input type="text" ng-model="user.txtBankBranch" maxlength="20" md-maxlength="20">
 						</md-input-container>
 					</div>
 				</div>
@@ -60,18 +56,18 @@
 					<div class="col">
 						<md-input-container>
 							<label>ธนาคารYSS</label>
-							<md-select ng-model="Credit.optionPaymentbnkYss">
+							<md-select ng-model="user.optionPaymentbnkYss">
 									<md-option ng-value="opt.name" ng-repeat="opt in banknameyss">{{ opt.name }}</md-option>
 							</md-select>
-							<span class="text text-danger" ng-hide="chkcredit.optionPaymentbnkYss">* กรุณาระบุธนาคาร YSS ด้วย</span>
-							</md-input-container>
+							<span class="text text-danger" ng-hide="chk.optionPaymentbnkYss">* กรุณาระบุธนาคาร YSS ด้วย</span>
+						</md-input-container>
 					</div>
 				</div>
       </div>
     </div>
   </ion-content>
   <div class="tabs tabs-icon-top">
-    <a class="tab-item error">
+    <a class="tab-item error" ng-click="goback()">
       <i class="icon ion-android-arrow-back"></i>
       ย้อนกลับ
     </a>

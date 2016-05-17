@@ -1,0 +1,65 @@
+<ion-view view-title="เพิ่มข้อมูลผู้ติดต่อ">
+  <ion-content>
+    <div class="card">
+      <div class="item item-text-wrap">
+        <div class="row">
+            <div class="col">
+    					<md-input-container>
+    						<label>ชื่อผู้ติดต่อร้านค้า/คนสั่งของ</label>
+    						<input type="text" ng-model="user.firstname" maxlength="50" md-maxlength="50">
+    					</md-input-container>
+    				</div>
+    				<div class="col">
+    					<md-input-container>
+    						<label>สกุลผู้ติดต่อร้านค้า/คนสั่งของ</label>
+    						<input type="text" ng-model="user.lastname" maxlength="50" md-maxlength="50">
+    					</md-input-container>
+    				</div>
+  				</div>
+  				<div class="row">
+            <div class="col">
+    					<md-input-container>
+    						<label>เบอร์โทรติดต่อ</label>
+    						<input type="text" ng-model="user.tel" maxlength="10" md-maxlength="10">
+    					</md-input-container>
+    				</div>
+    				<div class="col">
+    					<md-input-container>
+    						<label>สถานะของผู้ติดต่อ</label>
+    						<md-select ng-model="user.type">
+    							<md-option ng-value="opt" ng-repeat="opt in contacttype">{{ opt.name }}</md-option>
+    						</md-select>
+    					</md-input-container>
+    				</div>
+  				</div>
+          <div class="row">
+            <div class="col">
+              <br />
+              <h2>รูปภาพผู้ติดต่อร้านค้า/คนสั่งของ</h2>
+              <hr class="divider"/>
+                <md-button class="md-raised md-warn" aria-label="description"  md-ripple-size="auto" ng-click="calldoc('doc081',this)">UPLOAD</md-button>
+                <canvas id="canvas081" width="578" height="400" ng-hide="true"></canvas>
+                <input type="file" id="doc081" ng-hide="true">
+                <div class="row">
+                  <div class="col col-75">
+                    <img  id="idcImg081" ng-click="remove('doc081',this)">
+                  </div>
+                </div>
+            </div>
+  		  </div>
+      </div>
+    </div>
+    <br />
+    <br />
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item error" href="#/app/contactus/{{getguid}}">
+      <i class="icon ion-android-arrow-back"></i>
+      ย้อนกลับ
+    </a>
+    <a class="tab-item success" ng-click="addcontact()">
+      <i class="icon ion-android-done"></i>
+      บันทึก
+    </a>
+  </div>
+</ion-view>

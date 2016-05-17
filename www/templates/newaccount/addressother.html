@@ -2,23 +2,19 @@
   <ion-content>
     <div class="card">
       <div class="item item-text-wrap">
-				<h2>ที่อยู่อื่นๆ</h2>
-				<hr />
 				<md-input-container>
 					<label>ชื่อผู้รับ</label>
-					<input type="text" is="iron-input" ng-model="AddrTrans.txtConName" md-maxlength="50" maxlength="50">
-					<span class="text text-danger" ng-hide="chk.infomattxtConName">* กรุณาระบุชื่อผู้รับด้วย</span>
+					<input type="text" is="iron-input" ng-model="user.txtConName" md-maxlength="50" maxlength="50">
 				</md-input-container>
 				<md-input-container>
 					<label>ที่อยู่เลขที่-ถนน-แขวง/ตำบล</label>
-					<input type="text" is="iron-input" ng-model="AddrTrans.txtAddressProduct" md-maxlength="50" maxlength="50">
-					<span class="text text-danger" ng-hide="chk.infomattxtAddressProduct">* กรุณาระบุที่อยู่เลขที่-ถนน-แขวง/ตำบล ด้วย</span>
+					<input type="text" is="iron-input" ng-model="user.txtAddressProduct" md-maxlength="50" maxlength="50">
 				</md-input-container>
 				<div class="row">
 					<div class="col">
 						<md-input-container>
 							<label>จังหวัด</label>
-							<md-select ng-model="AddrTrans.optionProvince">
+							<md-select ng-model="user.optionProvince">
 								<md-option
 									ng-value="opt.ivz_addressprovinceid"
 									ng-repeat="opt in ProvinceDataList"
@@ -26,36 +22,36 @@
 									{{ opt.ivz_description }}
 								</md-option>
 							</md-select>
-							<span class="text text-danger" ng-hide="chk.infomatoptionProvince">* กรุณาระบุจังหวัด ด้วย</span>
 						</md-input-container>
 					</div>
 					<div class="col">
 							<md-input-container>
 								<label>เขต/อำเภอ</label>
-								<md-select ng-model="AddrTrans.optionDistrict">
+								<md-select ng-model="user.optionDistrict">
 									<md-option ng-value="opt.ivz_addressdistrictid"
 									ng-repeat="opt in DistrictlistTransport">
 									{{ opt.ivz_name }}</md-option>
 								</md-select>
-								<span class="text text-danger" ng-hide="chk.infomatoptionDistrict">* กรุณาระบุเขต/อำเภอ ด้วย</span>
 							</md-input-container>
 					</div>
 					<div class="col">
 						<md-input-container>
 							<label>รหัสไปรษณี</label>
-							<input type="text" ng-model="AddrTrans.txtPostCode" maxlength="5" md-maxlength="5">
-							<span class="text text-danger" ng-hide="chk.infomattxtPostCode">* กรุณาระบุรหัสไปรษณี ด้วย</span>
+							<input type="text" ng-model="user.txtPostCode" maxlength="5" md-maxlength="5">
 						</md-input-container>
 					</div>
 				</div>
       </div>
     </div>
-    <br />
-    <div class="row">
-      <div class="col">
-        <md-button class="md-raised md-warn" md-ripple-size="full"><i class="icon ion-android-arrow-back"></i>&nbsp;ย้อนกลับ</md-button>
-        <md-button class="md-raised md-success" md-ripple-size="full" ng-click="insertaccount()">ถัดไป&nbsp;<i class="icon ion-android-arrow-forward"></i></md-button>
-      </div>
-    </div>
   </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item error" ng-click="goback()">
+      <i class="icon ion-android-arrow-back"></i>
+      ย้อนกลับ
+    </a>
+    <a class="tab-item success" ng-click="insertaccount()">
+      <i class="icon ion-android-arrow-forward"></i>
+      ถัดไป
+    </a>
+  </div>
 </ion-view>

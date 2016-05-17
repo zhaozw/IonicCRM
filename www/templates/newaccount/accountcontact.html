@@ -2,13 +2,11 @@
   <ion-content>
     <div class="card">
       <div class="item item-text-wrap">
-        <h2>ข้อมูลผู้ติดต่อ</h2>
-				<hr />
         <div class="row">
           <div class="col">
             <md-input-container class="md-block" flex-gt-sm>
 							<label>ระบุชื่อเจ้าของ</label>
-							<input md-maxlength="50" required  ng-model="user.firstname"/>
+							<input md-maxlength="50" required  ng-model="user.firstname" ng-change="chknull(1,user.firstname)"/>
 							<span class="text text-danger" ng-hide="chk.infomatfirstname">* กรุณาระบุชื่อเจ้าของด้วย</span>
 						</md-input-container>
           </div>
@@ -17,7 +15,7 @@
           <div class="col">
             <md-input-container class="md-block" flex-gt-sm>
 							<label>ระบุนามสกุลเจ้าของ</label>
-							<input md-maxlength="50" required  ng-model="user.lastname"/>
+							<input md-maxlength="50" required  ng-model="user.lastname" ng-change="chknull(2,user.lastname)"/>
 							<span class="text text-danger" ng-hide="chk.infomatlastname">* กรุณาระบุนามสกุลเจ้าของด้วย</span>
 						</md-input-container>
           </div>
@@ -33,8 +31,9 @@
 					<div class="col">
 						<md-input-container class="md-block" flex-gt-sm>
 							<label>โทรศัพท์มือถือ</label>
-							<input md-maxlength="10" required  ng-model="user.mobile" maxlength="10"/>
+							<input md-maxlength="10" required  ng-model="user.mobile" maxlength="10" ng-change="chknull(3,user.mobile)"/>
 							<span class="text text-danger" ng-hide="chk.infomatmobile">* กรุณาระบุโทรศัพท์มือถือด้วย</span>
+              <span class="text text-danger" ng-hide="chk.infomatmobilenum">* กรุณาระบุรูปแบบโทรศัพท์มือถือให้ถูกต้องด้วย</span>
 						</md-input-container>
 				  </div>
         </div>
@@ -56,12 +55,15 @@
         </div>
       </div>
     </div>
-    <br />
-    <div class="row">
-      <div class="col">
-        <md-button class="md-raised md-warn" md-ripple-size="full"><i class="icon ion-android-arrow-back"></i>&nbsp;ย้อนกลับ</md-button>
-        <md-button class="md-raised md-success" md-ripple-size="full" ng-click="insertaccount()">ถัดไป&nbsp;<i class="icon ion-android-arrow-forward"></i></md-button>
-      </div>
-    </div>
   </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item error" ng-click="goback()">
+      <i class="icon ion-android-arrow-back"></i>
+      ย้อนกลับ
+    </a>
+    <a class="tab-item success" ng-click="insertaccount()">
+      <i class="icon ion-android-arrow-forward"></i>
+      ถัดไป
+    </a>
+  </div>
 </ion-view>

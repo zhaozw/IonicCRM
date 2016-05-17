@@ -1,0 +1,56 @@
+<ion-view view-title="เพิ่มข้อมูล">
+  <ion-content>
+    <div class="card">
+      <div class="item item-text-wrap">
+        <div class="row">
+            <div class="col">
+    					<md-input-container>
+    						<label>ชื่อร้านค้า</label>
+    						<input type="text" ng-model="user.companyname" maxlength="100" md-maxlength="100">
+    					</md-input-container>
+    				</div>
+    				<div class="col">
+    					<md-input-container>
+    						<label>ชื่อ-สกุลผู้ติดต่อ</label>
+    						<input type="text" ng-model="user.firstlastname" maxlength="100" md-maxlength="100">
+    					</md-input-container>
+    				</div>
+  				</div>
+          <div class="row">
+            <div class="col">
+    					<md-input-container>
+    						<label>ยอดสั่งซื้อ</label>
+    						<input type="text" ng-model="user.orderper" maxlength="6" md-maxlength="6">
+    					</md-input-container>
+    				</div>
+            <div class="col">
+    					<md-input-container>
+    						<label>เบอร์โทรติดต่อ</label>
+    						<input type="text" ng-model="user.tel" maxlength="10" md-maxlength="10">
+    					</md-input-container>
+    				</div>
+          </div>
+  				<div class="row">
+            <div class="col">
+    					<md-input-container>
+    						<label>ประเภทสินค้า</label>
+    						<input type="text" ng-model="user.itemtype" maxlength="50" md-maxlength="50">
+    					</md-input-container>
+    				</div>
+  				</div>
+      </div>
+    </div>
+    <br />
+    <br />
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item error" href="#/app/companyus/{{getguid}}">
+      <i class="icon ion-android-arrow-back"></i>
+      ย้อนกลับ
+    </a>
+    <a class="tab-item success" ng-click="addcompany()">
+      <i class="icon ion-android-done"></i>
+      บันทึก
+    </a>
+  </div>
+</ion-view>

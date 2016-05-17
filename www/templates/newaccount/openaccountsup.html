@@ -1,26 +1,32 @@
-<ion-view view-title="ข้อมูลทั่วไป">
+<ion-view view-title="ข้อมูลลูกค้า">
   <ion-content>
-    <!-- <div class="row">
+    <div class="row">
        <div class="col">
-         <md-progress-linear  value="100" ng-value="chk.determinateValue"></md-progress-linear>
+         <md-progress-linear  value="100" ng-value="vm.determinateValue"></md-progress-linear>
        </div>
-    </div> -->
+    </div>
     <div class="card">
       <div class="item item-text-wrap">
         <div class="row">
           <div class="col col-10"></div>
           <div class="col">
-            <span class="text error" ng-show="chk.infocheck">* เลขที่บัตรประชาชน หรือ เลขที่ผู้เสียภาษีมีการเปิดบัญชีไปแล้ว</span>
+            <h2>ข้อมูลทั่วไป</h2>
+    				<hr />
+            <md-input-container>
+    					<label>เลือกเขตการขาย</label>
+    					<md-select ng-model="user.optionTerritory">
+    						<md-option ng-value="opt.ivz_leftterritory.id" ng-repeat="opt in listtername">{{ opt.ivz_leftterritory.primaryName }}</md-option>
+    					</md-select>
+    				</md-input-container>
     				<md-input-container class="md-block" flex-gt-sm>
               <label>ระบุเลขที่บัตรประชาชน หรือ เลขที่ผู้เสียภาษี</label>
-              <input md-maxlength="13" type="text" required ng-model="user.txtid"  maxlength="13" ng-change="checktxt(user.txtid)"/>
+              <input md-maxlength="13" required ng-model="user.txtid"  maxlength="13"/>
     					<span class="text error" ng-hide="chk.infomat">* กรุณาระบุเลขที่บัตรประชาชน หรือ เลขที่ผู้เสียภาษีด้วย</span>
-              <span class="text error" ng-show="chk.txtid">* กรุณาระบุเลขที่บัตรประชาชน หรือ เลขที่ผู้เสียภาษีให้ครบ 13 หลักด้วย</span>
             </md-input-container>
     				<md-input-container class="md-block" flex-gt-sm>
               <label>ระบุชื่อลูกค้า/ชื่อร้านค้า/ชื่อบริษัท</label>
-              <input md-maxlength="50" required  ng-model="user.txtname" ng-change="checkname(user.txtname)"/>
-    					<span class="text error" ng-show="chk.infomattxtname">* กรุณาระบุชื่อลูกค้า/ชื่อร้านค้า/ชื่อบริษัทด้วย</span>
+              <input md-maxlength="50" required  ng-model="user.txtname"/>
+    					<span class="text error" ng-hide="chk.infomattxtname">* กรุณาระบุชื่อลูกค้า/ชื่อร้านค้า/ชื่อบริษัทด้วย</span>
             </md-input-container>
     				<hr class="divider"/>
             <br />
@@ -33,10 +39,9 @@
     						<md-input-container class="md-block" flex-gt-sm>
     		          <label>สาขาสำนักงาน</label>
     		          <input md-maxlength="50" required  ng-model="user.txtbrancher"/>
-    							<!-- <span class="text error" ng-if="user.branchselect == '1'">* กรุณาระบุสาขาย่อยด้วย</span> -->
+    							<span class="text error" ng-if="user.branchselect == '1'">* กรุณาระบุสาขาย่อยด้วย</span>
     		        </md-input-container>
     				</div>
-            <md-progress-linear value="140" ng-value="chk.buffervalue" ng-show="chk.buffervalue"></md-progress-linear>
           </div>
           <div class="col col-10"></div>
         </div>
