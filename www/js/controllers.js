@@ -1948,7 +1948,7 @@ angular.module('starter.controllers', [])
             $ionicLoading.hide();
             try{
     					var ins = new MobileCRM.DynamicEntity("account",Data.dataguid);
-    							ins.properties.ivz_statustype = parseInt(2);
+    							ins.properties.ivz_statustype = parseInt(1);
                   ins.properties.ivz_doc01 = parseInt(0);
                   ins.properties.ivz_doc02 = parseInt(0);
                   ins.properties.ivz_doc03 = parseInt(0);
@@ -2229,21 +2229,20 @@ angular.module('starter.controllers', [])
     				alert("error970"+er);
     			}
           setTimeout(function(){
-            var datapush = $scope.user.doc;
-            //alert(datapush.length);
-            if(datapush){
-              for(var h = 0;h <= (datapush.length - 1);h++){
-                $scope.InAnnoteAttract('account',Data.dataguid,datapush[h],'ข้อมูลเกี่ยวกับร้าน'+Data.businessname+' รูปที่ '+h+' ',function(er){
+            $.each($scope.user.doc,function(i,data){
+              alert(i);
+              $scope.InAnnoteAttract('account',Data.dataguid,data,'ข้อมูลเกี่ยวกับร้าน'+Data.businessname+' รูปที่ '+i+' ',function(er){
                   if(er){
-                    alert('for:'+h);
-                    if(h <= (datapush.length - 1)){
-                      window.location.href="#/app/contactus/"+$stateParams.getguid;
-                    }
+
                   }
                 });
-              }
-            }
+            });
           },3000);
+          var datapush = $scope.user.doc;
+          var l = parseInt(datapush.length)+999;
+          setTimeout(function(){
+            window.location.href="#/app/contactus/"+$stateParams.getguid;
+          },l);
           console.log('insert DB mart info');
           //window.location.href="#/app/contactus/"+$stateParams.getguid;
     }else{
