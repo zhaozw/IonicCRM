@@ -5,7 +5,7 @@ angular.module('starter.controllers', [])
   $scope.showLoadingProperTimesReg = function(txtname) {
          $ionicLoading.show({
              template:   '<ion-spinner icon="bubbles" class="spinner-energized"></ion-spinner><div class="row">'+
-                         '<div class="col"><h4>กรุณารอสักครู่กำลังบันทึกข้อมูลเอกสาร'+txtname+'อาจใช้เวลา 1-2 นาทีในการบันทึก</h4></div>'+
+                         '<div class="col"><h4>กรุณารอสักครู่กำลังบันทึกข้อมูลเอกสาร '+txtname+' อาจใช้เวลา 1-2 นาทีในการบันทึก</h4></div>'+
                          '</div>',
              noBackdrop: true
          });
@@ -21,7 +21,7 @@ angular.module('starter.controllers', [])
   $scope.showLoadGPS = function() {
                   $ionicLoading.show({
                       template:   '<ion-spinner icon="bubbles" class="spinner-energized"></ion-spinner><div class="row">'+
-                                  '<div class="col"><h4>โปรดรอสักครู่ กำลังโหลดข้อมูล GPS อยู่</h4></div>'+
+                                  '<div class="col"><h4>โปรดรอสักครู่ กำลังโหลดข้อมูล GPS อยู่อาจใช้เวลา 1-2 ในการโหลดข้อมูล</h4></div>'+
                                   '</div>',
                       noBackdrop: true
                   });
@@ -106,7 +106,6 @@ angular.module('starter.controllers', [])
                           alert(title+'\n'+er);
                           callback('null '+er);
                         }else{
-                          //$ionicLoading.hide();
                           callback('บันทึกไฟล์แนบ'+title);
                         }
                       });
@@ -1816,7 +1815,7 @@ angular.module('starter.controllers', [])
           /// insert a
           if(a.length >= 1){
             setTimeout(function(){
-              $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs1,'สำเนาหนังสือรับรองการจดทะเบียนพาณิชย์ร้าน'+Data.businessname,function(ert){
+              $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs1,'สำเนาหนังสือรับรองการจดทะเบียนพาณิชย์ร้านของร้าน'+ Data.businessname+' ',function(ert){
               if(ert){
                 //alert(ert);
               }
@@ -1827,7 +1826,7 @@ angular.module('starter.controllers', [])
           /// insert b
           if(b.length >= 1){
             setTimeout(function(){
-              $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs2,'ทะเบียนภาษีมูลค่าเพิ่ม( ภพ. 20)'+Data.businessname,function(ert){
+              $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs2,'ทะเบียนภาษีมูลค่าเพิ่ม( ภพ. 20)ของร้าน'+ Data.businessname+' ',function(ert){
               if(ert){
                 //alert(ert);
               }
@@ -1838,7 +1837,7 @@ angular.module('starter.controllers', [])
           /// insert c
           if(c.length >= 1){
             setTimeout(function(){
-              $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs3,'หนังสือรับรองบริษัท'+Data.businessname,function(ert){
+              $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs3,'หนังสือรับรองบริษัทของร้าน'+ Data.businessname+' ',function(ert){
               if(ert){
                 //alert(ert);
               }
@@ -1848,7 +1847,7 @@ angular.module('starter.controllers', [])
           }
           /// insert d
           if(d.length >= 1){
-            $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs4,'สำเนาทะเบียนบ้าน'+Data.businessname,function(ert){
+            $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs4,'สำเนาทะเบียนบ้านของร้าน'+ Data.businessname+' ',function(ert){
             if(ert){
               //alert(ert);
             }
@@ -1858,7 +1857,7 @@ angular.module('starter.controllers', [])
           /// insert e
           if(e.length >= 1){
             setTimeout(function(){
-              $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs5,'สำเนาประจำตัวบัตรประชาชน'+Data.businessname,function(ert){
+              $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs5,'สำเนาประจำตัวบัตรประชาชนของร้าน'+ Data.businessname+' ',function(ert){
               if(ert){
                 //alert(ert);
               }
@@ -1927,7 +1926,7 @@ angular.module('starter.controllers', [])
           $scope.showLoadingProperTimesReg();
           /// insert d
           if(d.length >= 1){
-            $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs4,'สำเนาทะเบียนบ้าน'+ Data.businessname,function(ert){
+            $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs4,'สำเนาทะเบียนบ้านของร้าน'+ Data.businessname+' ',function(ert){
             if(ert){
               //alert(ert);
             }
@@ -1937,7 +1936,7 @@ angular.module('starter.controllers', [])
           /// insert e
           if(e.length >= 1){
             setTimeout(function(){
-              $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs5,'สำเนาประจำตัวบัตรประชาชน'+ Data.businessname,function(ert){
+              $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs5,'สำเนาประจำตัวบัตรประชาชนร้าน'+ Data.businessname+' ',function(ert){
               if(ert){
               //  alert(ert);
               }
@@ -2088,6 +2087,7 @@ angular.module('starter.controllers', [])
     $ionicHistory.goBack(-1);
   }
 })
+/*------------------------------- info mar----------------------------*/
 .controller('AccountInfoMartCtrl',function($scope, $stateParams,$cookies,Data,$compile,$ionicHistory,$ionicLoading){
   $scope.Data = Data;
   //Data.mastertype = $stateParams.getguid;
@@ -2202,14 +2202,18 @@ angular.module('starter.controllers', [])
       $scope.chk.tatolnumber = false;
     }
 
-    if($scope.chk.SalesPart1 == true && $scope.chk.SalesPart2 == true && $scope.chk.doc006 == true &&
-        $scope.chk.PlaceStatus == true && $scope.chk.tatofactory == true && $scope.chk.tatolnumber == true){
+    if($scope.chk.SalesPart1 == true &&
+        $scope.chk.SalesPart2 == true &&
+        $scope.chk.doc006 == true &&
+        $scope.chk.PlaceStatus == true &&
+        $scope.chk.tatofactory == true &&
+        $scope.chk.tatolnumber == true){
           try{
     				var ins = new MobileCRM.DynamicEntity("account",Data.dataguid);
     						ins.properties.ivz_locationlease = converttrue($scope.user.PlaceStatus1);
     						ins.properties.ivz_locationbuy = converttrue($scope.user.PlaceStatus2);
     						ins.properties.ivz_typemoto = converttrue($scope.user.SalePart1);
-    						ins.properties.ivz_typeauto = converttrue($scope.user.SalePart2;
+    						ins.properties.ivz_typeauto = converttrue($scope.user.SalePart2);
     						ins.properties.ivz_typebigbike = converttrue($scope.user.SalePart3);
     						ins.properties.ivz_typeshoporiginal = converttrue($scope.user.SalePart4);
     						ins.properties.ivz_typeshopaccessories = converttrue($scope.user.SalePart5);
@@ -2218,35 +2222,35 @@ angular.module('starter.controllers', [])
     		  			ins.properties.ivz_numberofemployee = $scope.user.tatolnumber;
     						ins.save(function(er){
     							if(er){
-    								alert('error mini info 2225 '+er);
+    								alert('error ac 966 '+er);
     							}
     						});
     			}catch(er){
-    				alert("error mini info 2229 "+er);
+    				alert("error970"+er);
     			}
-          console.log('insert DB market');
-          // setTimeout(function(){
-          //   var docatr = $scope.user.doc;
-          //   if(docatr){
-          //     if(docatr.length > 1){
-          //       for(var i = 0;i <= docatr.length;i++){
-          //         alert('รูปที่:'+i+'::'+docatr.length);
-          //         $scope.InAnnoteAttract('account',Data.dataguid,docatr[i],'รูปเกี่ยวกับร้านค้าของร้าน '+ Data.businessname+' รูปที่ '+i,function(ert){
-          //           if(ert){
-          //           }
-          //         });
-          //       }
-          //     }else if(docatr.length == 1){
-          //       $scope.InAnnoteAttract('account',Data.dataguid,docatr[0],'รูปเกี่ยวกับร้านค้าของร้าน '+ Data.businessname+' รูปที่ 1',function(ert){
-          //         alert('รูปที่:0::'+docatr.length);
-          //         if(ert){
-          //           window.location.href="#/app/contactus/"+$stateParams.getguid;
-          //         }
-          //       });
-          //     }
-          //   }
-          // },3000);
+          setTimeout(function(){
+            var datapush = $scope.user.doc;
+            //alert(datapush.length);
+            if(datapush){
+              for(var h = 0;h <= (datapush.length - 1);h++){
+                $scope.InAnnoteAttract('account',Data.dataguid,datapush[h],'ข้อมูลเกี่ยวกับร้าน'+Data.businessname+' รูปที่ '+h+' ',function(er){
+                  if(er){
+                    alert('for:'+h);
+                    if(h <= (datapush.length - 1)){
+                      window.location.href="#/app/contactus/"+$stateParams.getguid;
+                    }
+                  }
+                });
+              }
+            }
+          },3000);
+          console.log('insert DB mart info');
+          //window.location.href="#/app/contactus/"+$stateParams.getguid;
+    }else{
+      console.log('Not Update');
     }
+
+    //window.location.href="#/app/accountcredit/"+Data.dataguid;
   }
   $scope.goback = function(){
     $ionicHistory.goBack(-1);

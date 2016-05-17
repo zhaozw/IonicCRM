@@ -1,4 +1,4 @@
-angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookies','ngMessages','ng-currency'])
+angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookies','ngMessages'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
