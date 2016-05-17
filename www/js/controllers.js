@@ -2230,32 +2230,43 @@ angular.module('starter.controllers', [])
     			}
           setTimeout(function(){
             $.each($scope.user.doc,function(i,data){
-              alert(i);
-              $scope.InAnnoteAttract('account',Data.dataguid,data,'ข้อมูลเกี่ยวกับร้าน'+Data.businessname+' รูปที่ '+i+' ',function(er){
-                  if(er){
-
+                  try{
+                    var note = MobileCRM.DynamicEntity.createNew("annotation");
+                            note.properties.objectid = new MobileCRM.Reference('account',Data.dataguid);
+                            note.properties.notetext = 'ข้อมูลเกี่ยวกับร้าน'+Data.businessname+' รูปที่ '+i;
+                            note.properties.subject = 'ข้อมูลเกี่ยวกับร้าน'+Data.businessname+' รูปที่ '+i;
+                            note.properties.documentbody = data;
+                            note.properties.mimetype = fileType;
+                            note.properties.isdocument = true;
+                            note.properties.filesize = parseInt(sizeKB);
+                            note.properties.filename = fileName;
+                            note.save(
+                                  function(er){
+                                    if(er){
+                                      alert(title+'\n'+er);
+                                    }
+                                  });
+                  }catch(er){
+                    alert('insert doc '+Data.businessname+' รูปที่ '+i+'\n'+er);
                   }
-                });
+                $scope.gonext(i);
             });
           },3000);
-          var datapush = $scope.user.doc;
-          var l = parseInt(datapush.length)+999;
-          setTimeout(function(){
-            window.location.href="#/app/contactus/"+$stateParams.getguid;
-          },l);
-          console.log('insert DB mart info');
-          //window.location.href="#/app/contactus/"+$stateParams.getguid;
-    }else{
-      console.log('Not Update');
     }
-
-    //window.location.href="#/app/accountcredit/"+Data.dataguid;
+  }
+  $scope.gonext = function(txtid){
+    var datapush = $scope.user.doc;
+    if(parseInt(txtid) == datapush.length){
+      alert(txtid +'=='+ datapush.length);
+      window.location.href="#/app/contactus/"+$stateParams.getguid;
+    }
   }
   $scope.goback = function(){
     $ionicHistory.goBack(-1);
   }
 })
-.controller('AccountContactUsCtrl',function($scope, $stateParams,$cookies,Data,arcontact,$compile,$ionicHistory,$ionicLoading){
+/*----------------------- contact us ---------------------------*/
+.controller('AccountContactUsCtrl',function($scope, $stateParams,$cookies,Data,arcontact,$compile,$ionicHistory,$ionicLoading,Darray){
   $scope.Data = Data;
   //Data.mastertype = $stateParams.getguid;
   console.log('load :'+$stateParams.getguid);
@@ -2271,11 +2282,58 @@ angular.module('starter.controllers', [])
     $scope.listcontact.splice(index,1);
   }
   $scope.insertaccount = function(){
-    var j = $scope.listcontact;
-    if(j.length > 0){
+    $scope.showLoadingProperTimesRegAll();
+    var contact = $scope.listcontact;
+    if(contact.length > 0){
       $scope.chk.othercontact = true;
+      for(var i in contact){
+				if(contact[i].firstname){
+            try{
+              var note = MobileCRM.DynamicEntity.createNew("annotation");
+                      note.properties.objectid = new MobileCRM.Reference('account',Data.dataguid);
+                      note.properties.notetext = 'Master '+contact[i].firstname+'ผู้ติดต่อร้าน'+Data.businessname+' รูปที่ '+i;
+                      note.properties.subject = 'Master '+contact[i].firstname+'ผู้ติดต่อร้าน'+Data.businessname+' รูปที่ '+i;
+                      note.properties.documentbody = contact[i].doc;
+                      note.properties.mimetype = fileType;
+                      note.properties.isdocument = true;
+                      note.properties.filesize = parseInt(sizeKB);
+                      note.properties.filename = fileName;
+                      note.save(
+                            function(er){
+                              if(er){
+                                alert(Data.businessname+'\n'+er);
+                              }
+                            });
+            }catch(er){
+              alert('insert doc '+Data.businessname+' รูปที่ '+i+'\n'+er);
+            }
+					try{
+						var ins = MobileCRM.DynamicEntity.createNew("contact");
+							ins.properties.parentcustomerid = new MobileCRM.Reference('account',Data.dataguid);
+							ins.properties.firstname = contact[i].firstname;
+							ins.properties.lastname = contact[i].lastname;
+							ins.properties.telephone1 = contact[i].tel;
+							ins.properties.address1_line1 = Darray.txtaddress;
+							ins.properties.ivz_addressprovince = new MobileCRM.Reference('ivz_addressprovince',Darray.provinceid);
+							ins.properties.ivz_addressdistrict = new MobileCRM.Reference('ivz_addressdistrict',Darray.districtid);
+							ins.properties.address1_postalcode = Darray.zipcode;
+							ins.properties.statuscode = parseInt(917970001);
+							ins.properties.ivz_contacttype = parseInt(contact[i].type.val);
+							ins.save(function(er){
+								if(er){
+									alert("ER1085CODE:"+er);
+								}
+							});
+			  	}catch(er){
+			  		alert("insert contact 488:"+er);
+			  	}
+				}
+			}
       console.log('insert contact');
-      window.location.href = "#/app/companyus/"+$stateParams.getguid;
+      setTimeout(function(){
+        $ionicLoading.hide();
+        window.location.href = "#/app/companyus/"+$stateParams.getguid;
+      },3000);
     }else{
       $scope.chk.othercontact = false;
       console.log('Not insert');
@@ -2297,18 +2355,15 @@ angular.module('starter.controllers', [])
     contact:[],
     doc:[]
   };
-  var j = ['Sale','Boss','Marketting','Delivery','Assi.','F','G','H','I','J','K','L','M','N',
-          'O','P','Q','R','S','T','U','V','W','X','Y','Z'];
-  $scope.contacttype = [];
-  for(var i = 0;i <= 5;i++){
-    $scope.contacttype.push({
-      val:i,
-      name:j[i],
-    });
-  }
+  $scope.attrat = '';
+  GetOptionContact(function(data){
+    $scope.contacttype = data;
+    $scope.$apply();
+  });
 
   $('#doc081').change(function() {
     GetAtt('#doc081','#idcImg081','canvas081',function(data){
+      $scope.attrat = data;
       $scope.user.doc.push({name:$scope.user.firstname+' '+$scope.user.lastname,doc64:data});
       $ionicLoading.hide();
     });
@@ -2321,12 +2376,10 @@ angular.module('starter.controllers', [])
       firstname:$scope.user.firstname,
       lastname:$scope.user.lastname,
       tel:$scope.user.tel,
-      contacttype:$scope.user.type
+      contacttype:$scope.user.type,
+      doc:$scope.attrat
     });
     this.goback2();
-  }
-  $scope.insertaccount = function(){
-
   }
   $scope.goback2 = function(){
     $scope.user.firstname = '';
@@ -2334,12 +2387,6 @@ angular.module('starter.controllers', [])
     $scope.user.tel = '';
     $scope.user.type = '';
     $('#idcImg081').attr('src','');
-    var h = $scope.user.doc;
-    console.log(h.length);
-    var g = $scope.user.contact;
-    for(var i in g){
-      console.log(g[i].type.val);
-    }
     $scope.listcontact = $scope.user.contact;
     window.location.href="#/app/contactus/"+$stateParams.getguid;
   }
@@ -2358,8 +2405,29 @@ angular.module('starter.controllers', [])
     $scope.listcompany.splice(index,1);
   }
   $scope.insertcompany = function(){
-    var j = $scope.listcompany;
-    if(j.length > 0){
+    var cota= $scope.listcompany;
+    if(cota.length > 0){
+  		if(cota.length != 0){
+  			for(var i in cota){
+  				if(cota[i].name){
+  					console.log("insert cota");
+  					var ins = MobileCRM.DynamicEntity.createNew("ivz_custconnectiontable");
+  							ins.properties.ivz_historycusttable = new MobileCRM.Reference('account',Data.dataguid);
+  							ins.properties.ivz_name = cota[i].companyname;
+  							ins.properties.ivz_ownername = cota[i].firstlastname;
+  							ins.properties.ivz_phonemobile = cota[i].tel;
+  							ins.properties.ivz_phonenumber = cota[i].tel;
+  							ins.properties.ivz_salepoduct = cota[i].itemtype;
+  							ins.save(
+  										function(er){
+  													if(er){
+  																alert('error2424 '+er);
+  																}
+  											 });
+  				}
+  			}
+  			$scope.chk.txtprogess = 100;
+  		}
       console.log('insert DB');
       var l = parseInt(j.length+999);
       setTimeout(function(){
@@ -2423,8 +2491,23 @@ angular.module('starter.controllers', [])
     }
   },4000);
   $scope.confirmnew = function(){
+    try{
+      var ins = new MobileCRM.DynamicEntity("account",Data.dataguid);
+          ins.properties.statuscode = parseInt(917970000);
+          ins.properties.ivz_statuscomplete = parseInt(1);
+          ins.save(function(er){
+            if(er){
+              alert('error ac 966 '+er);
+            }
+          });
+    }catch(er){
+      alert("error970"+er);
+    }
+    SendMail(Data.mailtomail,'text title','text body');
+    setTimeout(function(){
+      window.location.href="#/app/accountlist/0/"+Data.mastertype;
+    },3000);
     console.log('update guid sendmail'+ $scope.chk.infomat);
-    window.location.href="#/app/accountlist/0/"+Data.mastertype;
     //$ionicHistory.goBack(-9);
   }
   $scope.goback = function(){

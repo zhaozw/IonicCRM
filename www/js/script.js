@@ -229,6 +229,18 @@ function gettername(tername,callback){
     });
   }
 }
+function GetOptionContact(callback){
+	MobileCRM.Metadata.getOptionSetValues("contact","ivz_contacttype",function(optionSetValues){
+		var b = [];
+		for (var name in optionSetValues) {
+			 var val = optionSetValues[name];
+			b.push({
+				'val':val,'name':name
+			});
+		}
+	   callback(b);
+	 },function(err){ alert(er);},null);
+}
 function GetPayMentTerm(callback){
 	MobileCRM.Metadata.getOptionSetValues("account","paymenttermscode",function(optionSetValues){
 		var b = [];
