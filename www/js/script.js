@@ -8,7 +8,6 @@ document.writeln('<script src="lib/ionic/js/angular/angular-aria.min.js"></scrip
 document.writeln('<script src="lib/ionic/js/angular/angular-messages.min.js"></script>');
 document.writeln('<script src="lib/ionic/js/angular/angular-material.min.js"></script>');
 document.writeln('<script src="lib/ionic/js/angular/angular-cookies.min.js"></script>');
-document.writeln('<script src="lib/ionic/js/angular/ng-currency.js"></script>');
 document.writeln('<script src="js/app.js"></script>');
 document.writeln('<script src="js/controllers.js"></script>');
 

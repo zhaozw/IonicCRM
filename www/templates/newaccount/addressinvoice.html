@@ -4,12 +4,12 @@
       <div class="item item-text-wrap">
 				<md-input-container>
 					<label>ชื่อผู้รับ</label>
-					<input type="text" is="iron-input" ng-model="user.txtConName" md-maxlength="50" maxlength="50">
+					<input type="text" required ng-model="user.txtConName" md-maxlength="50" maxlength="50">
 					<span class="text text-danger" ng-hide="chk.infomattxtConName">* กรุณาระบุชื่อผู้รับด้วย</span>
 				</md-input-container>
 				<md-input-container>
 					<label>ที่อยู่เลขที่-ถนน-แขวง/ตำบล</label>
-					<input type="text" is="iron-input" ng-model="user.txtAddressProduct" md-maxlength="50" maxlength="50">
+					<input type="text" required ng-model="user.txtAddressProduct" md-maxlength="50" maxlength="50">
 					<span class="text text-danger" ng-hide="chk.infomattxtAddressProduct">* กรุณาระบุที่อยู่เลขที่-ถนน-แขวง/ตำบล ด้วย</span>
 				</md-input-container>
 				<div class="row">
@@ -32,7 +32,7 @@
 								<label>เขต/อำเภอ</label>
 								<md-select ng-model="user.optionDistrict">
 									<md-option ng-value="opt.ivz_addressdistrictid"
-									ng-repeat="opt in DistrictlistTransport"   ng-if="opt.ivz_provinceid = provinccename">
+									ng-repeat="opt in DistrictlistTransport">
 									{{ opt.ivz_name }}</md-option>
 								</md-select>
 								<span class="text text-danger" ng-hide="chk.infomatoptionDistrict">* กรุณาระบุเขต/อำเภอ ด้วย</span>
@@ -41,7 +41,7 @@
 					<div class="col">
 						<md-input-container>
 							<label>รหัสไปรษณี</label>
-							<input type="text" ng-model="user.txtPostCode" maxlength="5" md-maxlength="5">
+							<input type="text" ng-model="user.txtPostCode" maxlength="5" md-maxlength="5" required>
 							<span class="text text-danger" ng-hide="chk.infomattxtPostCode">* กรุณาระบุรหัสไปรษณี ด้วย</span>
 						</md-input-container>
 					</div>
