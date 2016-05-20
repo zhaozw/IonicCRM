@@ -135,9 +135,9 @@ function guid() {
 
 ///////////////////// option ////////////////////
 function GetGPSLocation(callback){
-	MobileCRM.Platform.getLocation(function(res){
-		callback(res);
-	},MobileCRM.bridge.alert);
+	// MobileCRM.Platform.getLocation(function(res){
+	// 	callback(res);
+	// },MobileCRM.bridge.alert);
 }
 function getGPSCoords() {
 	var wait = MobileCRM.UI.EntityForm.showPleaseWait("Getting the GPS coordinates...");
@@ -164,14 +164,22 @@ function CtoTrue(idval){
 }
 function CtoNum(idval){
 	var idreal;
-	if(idval === "True"){
+	if(idval === "True" || idval === true){
 		idreal = 1;
 	}else{
 		idreal = 0;
 	}
 	return(idreal);
 }
-
+function CtoType(idval){
+	var idreal;
+	if(idval === "1" || idval === 1){
+		idreal = 'บุคคลธรรมดา';
+	}else{
+		idreal = 'นิติบุคคล';
+	}
+	return(idreal);
+}
 function converttrue(idval){
 	var ids;
 	if(idval === "True" || idval === true){
@@ -383,20 +391,31 @@ function GetAppointStatus(ivz_leftterritory,ist,typ,callback){
 
 function GetAccount(ivz_leftterritory,stype,callback){
         var a = new MobileCRM.FetchXml.Entity('account');
-      				a.addAttribute('accountid');//0
-      				a.addAttribute('name');//1
-      				a.addAttribute('ivz_addresscountry');//2
-      				a.addAttribute('ivz_addressprovince');//3
-      				a.addAttribute('ivz_addressdistrict');//4
-      				a.addAttribute('ivz_availablefromtime');//5
-      				a.addAttribute('ivz_availabletotime');//6
-      				a.addAttribute('territoryid');//7
-      				a.addAttribute('customertypecode');//8
-      				a.addAttribute('statuscode');//9
-      				a.addAttribute('accountnumber');//10
-              a.filter = new MobileCRM.FetchXml.Filter();
-              a.filter.where('territoryid','eq',ivz_leftterritory);
-         var fetch = new MobileCRM.FetchXml.Fetch(a,5000,1);
+      			a.addAttribute('accountid');//0
+      			a.addAttribute('name');//1
+      			a.addAttribute('ivz_addresscountry');//2
+      			a.addAttribute('ivz_addressprovince');//3
+      			a.addAttribute('ivz_addressdistrict');//4
+      			a.addAttribute('ivz_availablefromtime');//5
+      			a.addAttribute('ivz_availabletotime');//6
+      			a.addAttribute('territoryid');//7
+      			a.addAttribute('customertypecode');//8
+      			a.addAttribute('statuscode');//9
+      			a.addAttribute('accountnumber');//10
+						a.addAttribute('ivz_statuscomplete');//11
+						a.addAttribute('ivz_remarkreject');//12
+						a.addAttribute('ivz_taxid');//13
+						a.addAttribute('customertypecode');//14
+						a.addAttribute('ivz_statustype');//15
+						a.addAttribute('ivz_doc01');//16
+						a.addAttribute('ivz_doc02');//17
+						a.addAttribute('ivz_doc03');//18
+						a.addAttribute('ivz_dochouseholdregis');//19
+						a.addAttribute('ivz_docidcard');//20
+        var filter = new MobileCRM.FetchXml.Filter();
+      		  filter.where('territoryid','eq',ivz_leftterritory);
+						a.filter = filter;
+         var fetch = new MobileCRM.FetchXml.Fetch(a,100000,1);
         		 fetch.execute('array',function(data){
                 var b = [];
       					for(var i in data){
@@ -414,11 +433,71 @@ function GetAccount(ivz_leftterritory,stype,callback){
                       accountnumber:data[i][10],
                       filtername:data[i][10]+'-'+data[i][1],
                       ivz_customer:data[i][1],
-                      accountype:stype
+                      accountype:stype,
+											ivz_statuscomplete:data[i][11],
+											remarkreject:data[i][12],
+											ivz_taxid:data[i][13],
+											customertypecode:data[i][14],
+											statustype:CtoType(data[i][15]),
+					            ivz_doc01:CtoNum(data[i][16]),
+					            ivz_doc02:CtoNum(data[i][17]),
+					            ivz_doc03:CtoNum(data[i][18]),
+					            ivz_dochouseholdregis:CtoNum(data[i][19]),
+					            ivz_docidcard:CtoNum(data[i][20]),
+											matchtype:CtoChkDoc(data[i][15],CtoNum(data[i][16]),CtoNum(data[i][17]),CtoNum(data[i][18]),CtoNum(data[i][19]),CtoNum(data[i][20]))
       							});
       					}
       					callback(b);
-        		},function(er){alert("GetOrderPedding:"+er);},null);
+        		},function(er){alert(er);},null);
+}
+function CtoChkDoc(t1,t2,t3,t4,t5,t6){
+	if(t1 === '1' || t1 === 1){
+		if(t5 == 1 && t6 == 1){
+			return 1;
+		}else{
+			return 0;
+		}
+	}else{
+		if((t2 == 1 || t3 == 1 || t4 == 1) && (t5 == 1 && t6 == 1)){
+			return 1;
+		}else{
+			return 0;
+		}
+	}
+}
+
+function getTerEmp(txtid,callback){
+	var n = new MobileCRM.FetchXml.Entity('territory');
+			n.addAttribute('territoryid');//0
+			n.addAttribute('name');//1
+			n.addAttribute('ivz_ccmail');//2
+			n.addAttribute('ivz_emailcontact');//3
+			n.addAttribute('ivz_empid');//4
+			n.addAttribute('ivz_empname');//5
+			n.addAttribute('ivz_leadermail');//6
+			n.addAttribute('ivz_statusempid');//7
+	var filter = new MobileCRM.FetchXml.Filter();
+			filter.where('territoryid','eq',txtid);
+			n.filter = filter;
+	var fetch = new MobileCRM.FetchXml.Fetch(n);
+		fetch.execute('array',function(data){
+			var b = [];
+			for(var i in data){
+					b.push({
+						territoryid:data[i][0],
+						name:data[i][1],
+						ivz_ccmail:data[i][2],
+						ivz_emailcontact:data[i][3],
+						ivz_empid:data[i][4],
+						ivz_empname:data[i][5],
+						ivz_leadermail:data[i][6],
+						ivz_statusempid:data[i][7]
+					});
+			}
+			callback(b);
+		},function(er){
+			alert(er);
+		},null);
 }
 function GetActivities(callback){
 	var n = new MobileCRM.FetchXml.Entity('ivz_activities');

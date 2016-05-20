@@ -1,18 +1,45 @@
 <ion-view view-title="เลือกลูกค้า">
   <ion-content>
+    <div class="bar bar-header item-input-inset">
+      <label class="item-input-wrapper">
+        <i class="icon ion-ios-search placeholder-icon"></i>
+        <input type="search" placeholder="Search" ng-model="filtertxt">
+      </label>
+      <md-button class="md-raised button-clear md-warn" aria-label="description" md-ripple-size="auto">&nbsp;ยกเลิก&nbsp;</md-button>
+    </div>
     <div class="card">
       <div class="item item-text-wrap">
         <md-list>
-          <md-list-item class="md-3-line">
+          <md-list-item class="md-3-line" ng-repeat="n in listaccount | filter:{filtername:filtertxt}">
             <img src="img/d05.png" class="md-avatar" alt="testt" />
              <div class="md-list-item-text" layout="column">
-               <h3>Mr.Deera</h3>
-               <p>Tername </p>
+               <h3>{{n.filtername}}</h3>
+               <p>{{n.territoryid.primaryName}}</p>
+               <p>สถานะ:<span style="color:#264348;">Actived</span></p>
              </div>
-             <a class="md-secondary ion-chevron-right text-h1 text-bold error" href="#/app/planneddetail/{{Data.mastertype}}"></a>
+             <a class="md-secondary ion-chevron-right text-h1 text-bold error"
+             href="#/app/planneddetail/{{Data.mastertype}}/{{n.accountid}}/{{n.name}}/{{n.territoryid.id}}/{{n.ivz_addressprovince.id}}/{{n.ivz_addressdistrict.id}}/{{n.ivz_taxid}}"></a>
          </md-list-item>
         </md-list>
       </div>
     </div>
   </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="reloaddata()">
+      <i class="icon ion-ios-reload primary"></i>
+      เรียกข้อมูลใหม่
+    </a>
+    <a class="tab-item" ng-click="openaccount()">
+      <i class="icon ion-android-person-add primary"></i>
+      ลูกค้าค้างชำระ
+    </a>
+    <a class="tab-item" ng-click="setfilter(917970002)">
+      <i class="icon ion-android-cancel error"></i>
+      ลูกค้าปกติ
+    </a>
+    <a class="tab-item" ng-click="setfilterPendding(917970003,917970000)">
+      <i class="icon ion-android-contact warning"></i>
+      ลูกค้าเป้าหมาย
+    </a>
+  </div>
 </ion-view>

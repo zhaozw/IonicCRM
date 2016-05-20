@@ -10,14 +10,14 @@ angular.module('starter.controllers', [])
              noBackdrop: true
          });
      };
-  $scope.showLoadingProperTimesRegter = function() {
-            $ionicLoading.show({
-                template:   '<ion-spinner icon="bubbles" class="spinner-energized"></ion-spinner><div class="row">'+
-                            '<div class="col"><h4>กรุณารอสักครู่กำลังบันทึกข้อมูลอาจใช้เวลา 1-2 นาทีในการบันทึก</h4></div>'+
-                            '</div>',
-                noBackdrop: true
-            });
-        };
+  $scope.showLoadingProperTimesRegter = function(txt) {
+               $ionicLoading.show({
+                   template:   '<ion-spinner icon="bubbles" class="spinner-energized"></ion-spinner><div class="row">'+
+                               '<div class="col"><h4>กรุณารอสักครู่ '+ txt +'</h4></div>'+
+                               '</div>',
+                   noBackdrop: true
+               });
+           };
   $scope.showLoadGPS = function() {
                   $ionicLoading.show({
                       template:   '<ion-spinner icon="bubbles" class="spinner-energized"></ion-spinner><div class="row">'+
@@ -778,22 +778,113 @@ angular.module('starter.controllers', [])
 .controller('PlanedCtrl',function($scope, $stateParams,$cookies,Data){
   $scope.Data = Data;
   Data.mastertype = $stateParams.mastertype;
-  $scope.vCheckAll = 0;
+  //$stateParams.accountid;
 })
 .controller('PlanedListCtrl',function($scope, $stateParams,$cookies,Data){
   $scope.Data = Data;
   Data.mastertype = $stateParams.mastertype;
+  $scope.territoryid = '40791CA7-D5E1-E511-80E1-005056A71F87';
+  //$ionicHistory.removeBackView();
+  $scope.filtertxt = '';
+  $scope.listaccount = [];
+  GetAccount($scope.territoryid,1,function(data){
+    for(var i in data){
+      if(data[i].statuscode == 1 || data[i].statuscode == '1'){
+        $scope.listaccount.push({
+          accountid:data[i].accountid,
+          name:data[i].name,
+          ivz_addresscountry:data[i].ivz_addresscountry,
+          ivz_addressprovince:data[i].ivz_addressprovince,
+          ivz_addressdistrict:data[i].ivz_addressdistrict,
+          ivz_availablefromtime:data[i].ivz_availablefromtime,
+          ivz_availabletotime:data[i].ivz_availabletotime,
+          territoryid:data[i].territoryid,
+          customertypecode:data[i].customertypecode,
+          statuscode:data[i].statuscode,
+          accountnumber:data[i].accountnumber,
+          filtername:data[i].filtername,
+          ivz_customer:data[i].ivz_customer,
+          accountype:data[i].accountype,
+          ivz_statuscomplete:data[i].ivz_statuscomplete,
+          remarkreject:data[i].remarkreject,
+          ivz_taxid:data[i].ivz_taxid,
+          customertypecode:data[i].customertypecode
+        });
+      }
+    }
+  });
 })
-.controller('PlanedDetailCtrl',function($scope, $stateParams,$cookies,Data){
+.controller('PlanedDetailCtrl',function($scope,$stateParams,$cookies,Data,$ionicHistory,$ionicLoading,$state){
   $scope.Data = Data;
   Data.mastertype = $stateParams.mastertype;
+  Data.getparaaccount = $stateParams.accountid;
+  Data.getparaname = $stateParams.accountname;
+  Data.gettxtid = $stateParams.txtid;
+  var tct = $stateParams.txtid+'\n'+
+      $stateParams.terid+'\n'+
+      $stateParams.distid+'\n'+
+      $stateParams.province;
+  console.log(tct);
+  var getduig = guid();
+    function insertactivities(type,statc,stata,typearr,callback){
+      try{
+        var ins = MobileCRM.DynamicEntity.createNew("ivz_resultappoint");
+            ins.properties.ivz_resultappointid = getduig;
+            ins.properties.ivz_resultname = $stateParams.accountname;
+            ins.properties.ivz_customer = new MobileCRM.Reference('account',$stateParams.accountid);
+            ins.properties.ivz_visit = parseInt(1);
+            if(type == 1 || type == '1'){
+              ins.properties.ivz_visitopenaccount = parseInt(1);
+            }else if(type == 2 || type == '2'){
+              ins.properties.ivz_visitadjustment = parseInt(1);
+            }else if(type == 3 || type == '3'){
+              ins.properties.ivz_visitorder = parseInt(1);
+            }else if(type == 4 || type == '4'){
+              ins.properties.ivz_visitclaimorder = parseInt(1);
+            }else if(type == 5 || type == '5'){
+              ins.properties.ivz_visitpostpect = parseInt(1);
+            }else if(type == 6 || type == '6'){
+              ins.properties.ivz_visitmarket = parseInt(1);
+            }else if(type == 7 || type == '7'){
+              ins.properties.ivz_visitcompetitor = parseInt(1);
+            }else if(type == 8 || type == '8'){
+              ins.properties.ivz_visitbilling = parseInt(1);
+            }else if(type == 9 || type == '9'){
+              ins.properties.ivz_visitproductrecall = parseInt(1);
+            }else if(type == 10 || type == '10'){
+              ins.properties.ivz_visitactivities = typearr.toString();
+            }
+            ins.properties.ivz_latitude = Data.latitude;
+            ins.properties.ivz_longtitude = Data.langtitude;
+            ins.properties.ivz_shedulestart = new Date();
+            ins.properties.ivz_sheduleend = new Date();
+            ins.properties.ivz_resultstatus = parseInt(statc);
+            ins.properties.ivz_statuscomplete = parseInt(stata);
+            ins.properties.ivz_territory = new MobileCRM.Reference('territory',$stateParams.terid);
+            ins.properties.ivz_addressdistrict = new MobileCRM.Reference('ivz_addressdistrict',$stateParams.distid);
+            ins.properties.ivz_addressprovince = new MobileCRM.Reference('ivz_addressprovince',$stateParams.province);
+            ins.properties.ivz_empid = Data.Empid;
+            ins.save(function(er){
+              if(er){
+                alert(er);
+              }else{
+                callback();
+              }
+            });
+        }catch(er){
+          alert('error 846 '+er);
+        }
+    }
+
   $scope.goop = function(idval){
     var guidreg = guid();
     var terriid = '6C791CA7-D5E1-E511-80E1-005056A71F87';
     if(idval == 1 || idval == '1'){
-      //var ins = new MobileCRM.DynamicEntity.createNew('ivz_result');
       console.log('insert visit openaccount');
-      window.location.href="#/app/openaccount/"+terriid+"/"+Data.mastertype+"/"+guidreg;
+      insertactivities(1,0,2,null,function(){
+        $state.go('app.openaccount',{territoryid:Data.termas,mastertype:1,
+          getguid:$stateParams.accountid,pricelevel:Data.pricelevel,transactioncurrency:Data.transactioncurrency});
+      });
     }else if(idval == 2 || idval == '2'){
       //var ins = new MobileCRM.DynamicEntity.createNew('ivz_result');
       console.log('insert visit adjustment');
@@ -837,6 +928,12 @@ angular.module('starter.controllers', [])
   $scope.Data = Data;
   Data.mastertype = $stateParams.mastertype;
   Data.dataguid = $stateParams.getguid;
+  // Data.getparaaccount
+  // Data.getparaname
+  // var acid = Data.getparaaccount;
+  if(Data.getparaaccount){
+    Data.getguid = Data.getparaaccount;
+  }
   //$stateParams.pricelevel;
   //$stateParams.transactioncurrency;
   //$stateParams.territoryid
@@ -851,15 +948,15 @@ angular.module('starter.controllers', [])
   };
   $scope.user = {
     branchselect:0,
-    txtid:'',
-    txtname:'',
+    txtid:Data.gettxtid,
+    txtname:Data.getparaname,
     txtbrancher:''
   };
   GetGPSLocation(function(res){
       if(res){
         //alert(res.latitude);
-        $scope.latitude = res.latitude;
-        $scope.longitude = res.longitude;
+        Data.latitude = res.latitude;
+        Data.longitude = res.longitude;
       }
       $scope.$apply();
   });
@@ -931,12 +1028,12 @@ angular.module('starter.controllers', [])
         var a = new MobileCRM.FetchXml.Entity('account');
             a.addAttribute('accountid');//0
         var filter = new MobileCRM.FetchXml.Filter();
-            filter.where('accountid','eq',$stateParams.getguid);
+            filter.where('accountid','eq',Data.getguid);
             a.filter = filter;
         var fetch = new MobileCRM.FetchXml.Fetch(a);
             fetch.execute('array',function(data){
             if(data.length > 0){
-              var ins = new MobileCRM.DynamicEntity("account",$stateParams.getguid);
+              var ins = new MobileCRM.DynamicEntity("account",Data.getguid);
                   ins.properties.ivz_taxid = $scope.user.txtid;
                   ins.properties.name = $scope.user.txtname;
                   ins.properties.ivz_branch = parseInt($scope.user.branchselect);
@@ -952,39 +1049,21 @@ angular.module('starter.controllers', [])
                   ins.properties.territoryid = new MobileCRM.Reference('territory',$stateParams.territoryid);//A02
                   ins.properties.transactioncurrencyid = new MobileCRM.Reference('transactioncurrency',$stateParams.transactioncurrency);//บาท
                   ins.properties.defaultpricelevelid = new MobileCRM.Reference('pricelevel',$stateParams.pricelevel);//บาท
+                  ins.properties.ivz_addresscountry  = new MobileCRM.Reference('ivz_addresscountry',Data.countrymaster);//th
                   ins.properties.customertypecode = parseInt(2);
                   ins.properties.accountcategorycode = parseInt(100000001);
                   ins.properties.statuscode = parseInt(917970003);
+                  ins.properties.ivz_statuscomplete = parseInt(0);
                   ins.save(function(er){
                     if(er){
                       alert('error ac 902 '+er);
                     }else{
-                      $scope.showLoadGPS();
-                      //////////////////////////// watch //////////////////////////////////
-                      $scope.listwatch = setInterval(function(){
-                        if($scope.latitude){
-                          //alert('Found GPS :'+$scope.latitude+'::'+$stateParams.getguid);
-                          $ionicLoading.hide();
-                          var ins = new MobileCRM.DynamicEntity("account",$stateParams.getguid);
-                              ins.properties.address1_latitude = $scope.latitude;
-                              ins.properties.address1_longitude = $scope.longitude;
-                              ins.save(function(er){
-                                if(er){
-                                  alert('error ac location 902 '+er);
-                                }else{
-                                  window.location.href="#/app/accountcontact/"+$stateParams.getguid;
-                                }
-                              });
-                          clearInterval($scope.listwatch);
-                        }
-                      },3000);
-                      //////////////////////////// end ////////////////////////////////////
-                      //window.location.href="#/app/accountcontact/"+$stateParams.getguid;
+                      window.location.href="#/app/accountcontact/"+$stateParams.getguid;
                     }
                   });
             }else{
               var ins = new MobileCRM.DynamicEntity.createNew("account");
-                  ins.properties.accountid = $stateParams.getguid;
+                  ins.properties.accountid = Data.getguid;
                   ins.properties.ivz_taxid = $scope.user.txtid;
                   ins.properties.name = $scope.user.txtname;
                   ins.properties.ivz_branch = parseInt($scope.user.branchselect);
@@ -1000,6 +1079,7 @@ angular.module('starter.controllers', [])
                   ins.properties.territoryid = new MobileCRM.Reference('territory',$stateParams.territoryid);//A02
                   ins.properties.transactioncurrencyid = new MobileCRM.Reference('transactioncurrency',$stateParams.transactioncurrency);//บาท
                   ins.properties.defaultpricelevelid = new MobileCRM.Reference('pricelevel',$stateParams.pricelevel);//บาท
+                  ins.properties.ivz_addresscountry  = new MobileCRM.Reference('ivz_addresscountry',Data.countrymaster);//th
                   ins.properties.customertypecode = parseInt(2);
                   ins.properties.accountcategorycode = parseInt(100000001);
                   ins.properties.statuscode = parseInt(917970003);
@@ -1008,27 +1088,7 @@ angular.module('starter.controllers', [])
                     if(er){
                       alert('error ac 903 '+er);
                     }else{
-                      $scope.showLoadGPS();
-                      //////////////////////////// watch //////////////////////////////////
-                      $scope.listwatch = setInterval(function(){
-                        if($scope.latitude){
-                          //alert('Found GPS :'+$scope.latitude+'::'+$stateParams.getguid);
-                          $ionicLoading.hide();
-                          var ins = new MobileCRM.DynamicEntity("account",$stateParams.getguid);
-                              ins.properties.address1_latitude = $scope.latitude;
-                              ins.properties.address1_longitude = $scope.longitude;
-                              ins.save(function(er){
-                                if(er){
-                                  alert('error ac location 902 '+er);
-                                }else{
-                                  window.location.href="#/app/accountcontact/"+$stateParams.getguid;
-                                }
-                              });
-                          clearInterval($scope.listwatch);
-                        }
-                      },3000);
-                      //////////////////////////// end ////////////////////////////////////
-                      //window.location.href="#/app/accountcontact/"+$stateParams.getguid;
+                      window.location.href="#/app/accountcontact/"+Data.getguid;
                     }
                   });
             };
@@ -1156,7 +1216,7 @@ angular.module('starter.controllers', [])
       console.log('update db :'+$stateParams.getguid);
       $scope.showLoadingProperTimes();
       $scope.genguid = guid();
-      alert($stateParams.getguid+'::::'+$scope.genguid);
+      //alert($stateParams.getguid+'::::'+$scope.genguid);
       try{
         var a = new MobileCRM.FetchXml.Entity('contact');
             a.addAttribute('contactid');//0
@@ -2208,7 +2268,9 @@ angular.module('starter.controllers', [])
         $scope.chk.PlaceStatus == true &&
         $scope.chk.tatofactory == true &&
         $scope.chk.tatolnumber == true){
+
           try{
+            $scope.showLoadingProperTimesRegter('กำลังบันทึกข้อมูลเกี่ยวกับร้าน'+Data.businessname);
     				var ins = new MobileCRM.DynamicEntity("account",Data.dataguid);
     						ins.properties.ivz_locationlease = converttrue($scope.user.PlaceStatus1);
     						ins.properties.ivz_locationbuy = converttrue($scope.user.PlaceStatus2);
@@ -2228,37 +2290,35 @@ angular.module('starter.controllers', [])
     			}catch(er){
     				alert("error970"+er);
     			}
-          setTimeout(function(){
-            $.each($scope.user.doc,function(i,data){
-                  try{
-                    var note = MobileCRM.DynamicEntity.createNew("annotation");
-                            note.properties.objectid = new MobileCRM.Reference('account',Data.dataguid);
-                            note.properties.notetext = 'ข้อมูลเกี่ยวกับร้าน'+Data.businessname+' รูปที่ '+i;
-                            note.properties.subject = 'ข้อมูลเกี่ยวกับร้าน'+Data.businessname+' รูปที่ '+i;
-                            note.properties.documentbody = data;
-                            note.properties.mimetype = fileType;
-                            note.properties.isdocument = true;
-                            note.properties.filesize = parseInt(sizeKB);
-                            note.properties.filename = fileName;
-                            note.save(
-                                  function(er){
-                                    if(er){
-                                      alert(title+'\n'+er);
-                                    }
-                                  });
-                  }catch(er){
-                    alert('insert doc '+Data.businessname+' รูปที่ '+i+'\n'+er);
-                  }
-                $scope.gonext(i);
-            });
-          },3000);
-    }
-  }
-  $scope.gonext = function(txtid){
-    var datapush = $scope.user.doc;
-    if(parseInt(txtid) == datapush.length){
-      alert(txtid +'=='+ datapush.length);
-      window.location.href="#/app/contactus/"+$stateParams.getguid;
+          var datapush = $scope.user.doc;
+          for(var j in datapush){
+            try{
+              $scope.showLoadingProperTimesRegter('กำลังบันทึกข้อมูลเกี่ยวกับร้าน'+Data.businessname+' รูปที่ '+j);
+              var note = MobileCRM.DynamicEntity.createNew("annotation");
+                      note.properties.objectid = new MobileCRM.Reference('account',Data.dataguid);
+                      note.properties.notetext = 'ข้อมูลเกี่ยวกับร้าน'+Data.businessname+' รูปที่ '+j;
+                      note.properties.subject = 'ข้อมูลเกี่ยวกับร้าน'+Data.businessname+' รูปที่ '+j;
+                      note.properties.documentbody = datapush[j];
+                      note.properties.mimetype = fileType;
+                      note.properties.isdocument = true;
+                      note.properties.filesize = parseInt(sizeKB);
+                      note.properties.filename = fileName;
+                      note.save(
+                            function(er){
+                              if(er){
+                                alert(Data.businessname+'\n'+er);
+                              }
+                            });
+            }catch(er){
+              alert('insert doc '+Data.businessname+' รูปที่ '+j+'\n'+er);
+            }
+          }
+          $scope.insertset = setTimeout(function(){
+            $ionicLoading.hide();
+            window.location.href="#/app/contactus/"+$stateParams.getguid;
+            clearTimeout($scope.insertset);
+          },6000);
+          $scope.insertset();
     }
   }
   $scope.goback = function(){
@@ -2266,7 +2326,7 @@ angular.module('starter.controllers', [])
   }
 })
 /*----------------------- contact us ---------------------------*/
-.controller('AccountContactUsCtrl',function($scope, $stateParams,$cookies,Data,arcontact,$compile,$ionicHistory,$ionicLoading,Darray){
+.controller('AccountContactUsCtrl',function($scope,Darray, $stateParams,$cookies,Data,arcontact,$compile,$ionicHistory,$ionicLoading){
   $scope.Data = Data;
   //Data.mastertype = $stateParams.getguid;
   console.log('load :'+$stateParams.getguid);
@@ -2282,58 +2342,69 @@ angular.module('starter.controllers', [])
     $scope.listcontact.splice(index,1);
   }
   $scope.insertaccount = function(){
-    $scope.showLoadingProperTimesRegAll();
     var contact = $scope.listcontact;
+    console.log('click '+contact.length);
     if(contact.length > 0){
       $scope.chk.othercontact = true;
-      for(var i in contact){
-				if(contact[i].firstname){
-            try{
-              var note = MobileCRM.DynamicEntity.createNew("annotation");
-                      note.properties.objectid = new MobileCRM.Reference('account',Data.dataguid);
-                      note.properties.notetext = 'Master '+contact[i].firstname+'ผู้ติดต่อร้าน'+Data.businessname+' รูปที่ '+i;
-                      note.properties.subject = 'Master '+contact[i].firstname+'ผู้ติดต่อร้าน'+Data.businessname+' รูปที่ '+i;
-                      note.properties.documentbody = contact[i].doc;
-                      note.properties.mimetype = fileType;
-                      note.properties.isdocument = true;
-                      note.properties.filesize = parseInt(sizeKB);
-                      note.properties.filename = fileName;
-                      note.save(
-                            function(er){
-                              if(er){
-                                alert(Data.businessname+'\n'+er);
-                              }
-                            });
-            }catch(er){
-              alert('insert doc '+Data.businessname+' รูปที่ '+i+'\n'+er);
+      var x = 0;
+      var loopArray = function(arr){
+        customInsert(x,function(diug){
+          customAttract(x,diug,function(){
+            x++;
+            if(x < arr.length) {
+              loopArray(arr);
+            }else{
+              //alert('Complete');
+              $ionicLoading.hide();
+              window.location.href = "#/app/companyus/"+$stateParams.getguid;
             }
-					try{
-						var ins = MobileCRM.DynamicEntity.createNew("contact");
-							ins.properties.parentcustomerid = new MobileCRM.Reference('account',Data.dataguid);
-							ins.properties.firstname = contact[i].firstname;
-							ins.properties.lastname = contact[i].lastname;
-							ins.properties.telephone1 = contact[i].tel;
-							ins.properties.address1_line1 = Darray.txtaddress;
-							ins.properties.ivz_addressprovince = new MobileCRM.Reference('ivz_addressprovince',Darray.provinceid);
-							ins.properties.ivz_addressdistrict = new MobileCRM.Reference('ivz_addressdistrict',Darray.districtid);
-							ins.properties.address1_postalcode = Darray.zipcode;
-							ins.properties.statuscode = parseInt(917970001);
-							ins.properties.ivz_contacttype = parseInt(contact[i].type.val);
-							ins.save(function(er){
-								if(er){
-									alert("ER1085CODE:"+er);
-								}
-							});
-			  	}catch(er){
-			  		alert("insert contact 488:"+er);
-			  	}
-				}
-			}
+          });
+        });
+      }
+      loopArray(contact);
+      function customInsert(msg,callback) {
+        //alert('customInsert:'+contact[msg].firstname);
+        try{
+          $scope.showLoadingProperTimesRegter('กำลังบันทึกข้อมูลผู้ติดต่อ '+contact[msg].firstname+' '+contact[msg].lastname);
+          var cuid = guid();
+          var ins = MobileCRM.DynamicEntity.createNew("contact");
+              ins.properties.contactid = cuid;
+          		ins.properties.parentcustomerid = new MobileCRM.Reference('account',Data.dataguid);
+          		ins.properties.firstname = contact[msg].firstname;
+          		ins.properties.lastname = contact[msg].lastname;
+          		ins.properties.telephone1 = contact[msg].tel;
+          		ins.properties.address1_line1 = Darray.txtaddress;
+          		ins.properties.ivz_addressprovince = new MobileCRM.Reference('ivz_addressprovince',Darray.provinceid);
+          		ins.properties.ivz_addressdistrict = new MobileCRM.Reference('ivz_addressdistrict',Darray.districtid);
+          		ins.properties.address1_postalcode = Darray.zipcode;
+          		ins.properties.statuscode = parseInt(917970001);
+          		ins.properties.ivz_contacttype = parseInt(contact[msg].contacttype.val);
+          		ins.save(function(er){
+          				if(er){
+          						alert("error 2329 "+er);
+          				}else{
+                    setTimeout(function(){
+                      callback(cuid);
+                    },1000);
+                  }
+          		});
+        }catch(er){
+          alert('error 2351 '+er);
+        }
+      }
+      function customAttract(msg,diug,callback) {
+        var docl = contact[msg].doc;
+        //alert('customAttract:'+contact[msg].firstname+'::'+docl.length);
+        var title = contact[msg].firstname+' '+contact[msg].lastname+' ผู้ติดต่อร้าน '+Data.businessname;
+        $scope.InAnnoteAttract('contact',diug,contact[msg].doc,title,function(er){
+          if(er){
+            setTimeout(function(){
+              callback();
+            },2000);
+          }
+        });
+      }
       console.log('insert contact');
-      setTimeout(function(){
-        $ionicLoading.hide();
-        window.location.href = "#/app/companyus/"+$stateParams.getguid;
-      },3000);
     }else{
       $scope.chk.othercontact = false;
       console.log('Not insert');
@@ -2353,18 +2424,15 @@ angular.module('starter.controllers', [])
     tel:'',
     type:'',
     contact:[],
-    doc:[]
+    doc:''
   };
-  $scope.attrat = '';
   GetOptionContact(function(data){
     $scope.contacttype = data;
-    $scope.$apply();
   });
 
   $('#doc081').change(function() {
     GetAtt('#doc081','#idcImg081','canvas081',function(data){
-      $scope.attrat = data;
-      $scope.user.doc.push({name:$scope.user.firstname+' '+$scope.user.lastname,doc64:data});
+      $scope.user.doc = data;
       $ionicLoading.hide();
     });
   });
@@ -2377,15 +2445,19 @@ angular.module('starter.controllers', [])
       lastname:$scope.user.lastname,
       tel:$scope.user.tel,
       contacttype:$scope.user.type,
-      doc:$scope.attrat
+      doc:$scope.user.doc
     });
     this.goback2();
+  }
+  $scope.insertaccount = function(){
+
   }
   $scope.goback2 = function(){
     $scope.user.firstname = '';
     $scope.user.lastname = '';
     $scope.user.tel = '';
     $scope.user.type = '';
+    $scope.user.doc = '';
     $('#idcImg081').attr('src','');
     $scope.listcontact = $scope.user.contact;
     window.location.href="#/app/contactus/"+$stateParams.getguid;
@@ -2394,6 +2466,7 @@ angular.module('starter.controllers', [])
     $ionicHistory.goBack(-1);
   }
 })
+
 .controller('AccountCompanyCtrl',function($scope, $stateParams,$cookies,Data,$compile,$ionicHistory,$ionicLoading,arcontact){
   $scope.Data = Data;
   $scope.getguid = $stateParams.getguid;
@@ -2405,34 +2478,50 @@ angular.module('starter.controllers', [])
     $scope.listcompany.splice(index,1);
   }
   $scope.insertcompany = function(){
-    var cota= $scope.listcompany;
+    //alert('Click');
+    var cota = $scope.listcompany;
     if(cota.length > 0){
-  		if(cota.length != 0){
-  			for(var i in cota){
-  				if(cota[i].name){
+        var x = 0;
+        var loopArray = function(arr){
+          insertdocu(x,function(){
+            //alert('Inser company:'+x);
+            x++;
+            if(x < arr.length){
+              loopArray(arr);
+            }else{
+              $ionicLoading.hide();
+              window.location.href="#/app/confirmreg/"+$stateParams.getguid;
+            }
+          });
+        }
+        loopArray($scope.listcompany);
+
+        function insertdocu(i,callback){
+          if(cota[i].companyname){
+            $scope.showLoadingProperTimesRegter('กำลังบันทึกข้อมูลติดต่อกับร้านค้า '+cota[i].companyname);
   					console.log("insert cota");
-  					var ins = MobileCRM.DynamicEntity.createNew("ivz_custconnectiontable");
-  							ins.properties.ivz_historycusttable = new MobileCRM.Reference('account',Data.dataguid);
-  							ins.properties.ivz_name = cota[i].companyname;
-  							ins.properties.ivz_ownername = cota[i].firstlastname;
-  							ins.properties.ivz_phonemobile = cota[i].tel;
-  							ins.properties.ivz_phonenumber = cota[i].tel;
-  							ins.properties.ivz_salepoduct = cota[i].itemtype;
-  							ins.save(
-  										function(er){
-  													if(er){
-  																alert('error2424 '+er);
-  																}
-  											 });
+  					try{
+              var ins = MobileCRM.DynamicEntity.createNew("ivz_custconnectiontable");
+    							ins.properties.ivz_historycusttable = new MobileCRM.Reference('account',Data.dataguid);
+    							ins.properties.ivz_name = cota[i].companyname;
+    							ins.properties.ivz_ownername = cota[i].firstlastname;
+    							ins.properties.ivz_phonemobile = cota[i].tel;
+    							ins.properties.ivz_phonenumber = cota[i].tel;
+    							ins.properties.ivz_salepoduct = cota[i].itemtype;
+    							ins.save(
+    										function(er){
+    													if(er){
+    																alert('error2424 '+er);
+    													}else{
+                                callback();
+                              }
+    											 });
+            }catch(er){
+              alert('error 2431 '+er);
+            }
   				}
-  			}
-  			$scope.chk.txtprogess = 100;
-  		}
+        }
       console.log('insert DB');
-      var l = parseInt(j.length+999);
-      setTimeout(function(){
-        window.location.href="#/app/confirmreg/"+$stateParams.getguid;
-      },l);
     }else{
       console.log('not update');
       window.location.href="#/app/confirmreg/"+$stateParams.getguid;
@@ -2471,7 +2560,8 @@ angular.module('starter.controllers', [])
     window.location.href="#/app/companyus/"+$stateParams.getguid;
   };
 })
-.controller('AccountConfirmCtrl',function($scope, $stateParams,$cookies,Data,$compile,$ionicHistory,$ionicLoading,$ionicViewService){
+/*------------------------- Confirm Account -------------------------*/
+.controller('AccountConfirmCtrl',function($scope, $state,$stateParams,$cookies,Data,$compile,$ionicHistory,$ionicLoading,$ionicViewService){
   $scope.Data = Data;
   $scope.getguid = $stateParams.getguid;
 
@@ -2479,36 +2569,59 @@ angular.module('starter.controllers', [])
     infomat:''
   };
   var tol = [10,20,30,40,50,60,70,80,90,100,110,120,130];
-  var i = 0;
-  var id = setInterval(function(){
-    $scope.showLoadingProperTimesRegter();
-    $scope.chk.infomat = parseInt(tol[i++]);
-    console.log(tol[i++]);
-    if(tol[i++] >= 100){
-      console.log('Break');
-      clearInterval(id);
-      $ionicLoading.hide();
-    }
-  },4000);
+  var tltxt = ['กำลังทำการบันทึกข้อมูลทั่วไป','กำลังทำการบันทึกข้อมูลเงื่อนไขการเข้าพบ','กำลังทำการบันทึกข้อมูลที่อยู่ส่งของ'
+            ,'กำลังทำการบันทึกข้อมูลที่อยู่ Invoice','กำลังทำการบันทึกที่อยู่อื่นๆ'
+            ,'กำลังทำการบันทึกข้อมูลที่อยู่ขนส่ง','กำลังทำการบันทึกข้อมูลเอกสารประกอบการเปิดบัญชี'
+            ,'กำลังทำการบันทึกข้อมูลเครดิต','กำลังทำการบันทึกข้อมูลร้านค้า'
+            ,'กำลังทำการบันทึกข้อมูลผู้ติดต่อข้อมูลร้านค้าที่ติดต่อ','กำลังทำการบันทึกยืนยันการเปิดบัญชี'
+            ,'โปรดรอสักครู่','บันทึกข้อมูลเสร็จแล้ว'];
+
+  var x = 0;
+  var loopArray = function(arr){
+    updatecomfirm(x,function(){
+      x++;
+      if(x < arr.length){
+        loopArray(arr);
+      }else{
+          $ionicLoading.hide();
+          SendMail(Data.mailtomail,'text title','text body');
+          setTimeout(function(){
+            $ionicHistory.nextViewOptions({
+              disableBack: true
+            });
+            $scope.confirmnew();
+          },2000);
+      }
+    });
+  }
+  loopArray(tltxt);
+  /*-------------------- updatecomfirm -------------------------*/
+  function updatecomfirm(i,callback){
+    $scope.showLoadingProperTimesRegter(tltxt[i]);
+    $scope.chk.infomat = parseInt(tol[i]);
+    setTimeout(function(){
+      callback();
+    },2000);
+  }
+
   $scope.confirmnew = function(){
     try{
       var ins = new MobileCRM.DynamicEntity("account",Data.dataguid);
           ins.properties.statuscode = parseInt(917970000);
-          ins.properties.ivz_statuscomplete = parseInt(1);
+          ins.properties.ivz_statuscomplete = parseInt(2);
+          ins.properties.address1_latitude = Data.latitude;
+          ins.properties.address1_longitude = Data.longitude;
           ins.save(function(er){
             if(er){
               alert('error ac 966 '+er);
+            }else{
+              $state.go('app.accountlist',{terriid:0102,mastertype:Data.mastertype});
             }
           });
     }catch(er){
       alert("error970"+er);
     }
-    SendMail(Data.mailtomail,'text title','text body');
-    setTimeout(function(){
-      window.location.href="#/app/accountlist/0/"+Data.mastertype;
-    },3000);
     console.log('update guid sendmail'+ $scope.chk.infomat);
-    //$ionicHistory.goBack(-9);
   }
   $scope.goback = function(){
     $ionicHistory.goBack(-1);
@@ -2518,20 +2631,326 @@ angular.module('starter.controllers', [])
 
 
 /////////////////// Account List //////////////
-.controller('AccountListCtrl',function($scope, $stateParams,$cookies,Data,$ionicLoading,$ionicHistory){
+.controller('AccountListCtrl',function($scope,$state, $stateParams,$cookies,Data,$ionicLoading,$ionicHistory){
   $scope.Data = Data;
   $ionicHistory.clearHistory();
-  $ionicHistory.removeBackView();
+  $scope.territoryid = '40791CA7-D5E1-E511-80E1-005056A71F87';
+  //$ionicHistory.removeBackView();
+  $scope.filtertxt = '';
+  $scope.listaccount = [];
+  GetAccount($scope.territoryid,1,function(data){
+    for(var i in data){
+      if(data[i].statuscode == 1 || data[i].statuscode == '1'){
+        $scope.listaccount.push({
+          accountid:data[i].accountid,
+          name:data[i].name,
+          ivz_addresscountry:data[i].ivz_addresscountry,
+          ivz_addressprovince:data[i].ivz_addressprovince,
+          ivz_addressdistrict:data[i].ivz_addressdistrict,
+          ivz_availablefromtime:data[i].ivz_availablefromtime,
+          ivz_availabletotime:data[i].ivz_availabletotime,
+          territoryid:data[i].territoryid,
+          customertypecode:data[i].customertypecode,
+          statuscode:data[i].statuscode,
+          accountnumber:data[i].accountnumber,
+          filtername:data[i].filtername,
+          ivz_customer:data[i].ivz_customer,
+          accountype:data[i].accountype,
+          ivz_statuscomplete:data[i].ivz_statuscomplete,
+          remarkreject:data[i].remarkreject,
+          ivz_taxid:data[i].ivz_taxid,
+          customertypecode:data[i].customertypecode
+        });
+      }
+    }
+  });
+  $scope.openaccount = function(){
+    $state.go('app.openaccount',{territoryid:Data.termas,mastertype:1,getguid:Data.getguid,pricelevel:Data.pricelevel,transactioncurrency:Data.transactioncurrency});
+  };
+  $scope.reloaddata = function(){
+    $scope.showLoadingProperTimes();
+    $scope.listaccount = [];
+    GetAccount($scope.territoryid,1,function(data){
+      $ionicLoading.hide();
+      for(var i in data){
+        if(data[i].statuscode == 1 || data[i].statuscode == '1'){
+          $scope.listaccount.push({
+            accountid:data[i].accountid,
+            name:data[i].name,
+            ivz_addresscountry:data[i].ivz_addresscountry,
+            ivz_addressprovince:data[i].ivz_addressprovince,
+            ivz_addressdistrict:data[i].ivz_addressdistrict,
+            ivz_availablefromtime:data[i].ivz_availablefromtime,
+            ivz_availabletotime:data[i].ivz_availabletotime,
+            territoryid:data[i].territoryid,
+            customertypecode:data[i].customertypecode,
+            statuscode:data[i].statuscode,
+            accountnumber:data[i].accountnumber,
+            filtername:data[i].filtername,
+            ivz_customer:data[i].ivz_customer,
+            accountype:data[i].accountype,
+            ivz_statuscomplete:data[i].ivz_statuscomplete,
+            remarkreject:data[i].remarkreject,
+            ivz_taxid:data[i].ivz_taxid,
+            customertypecode:data[i].customertypecode
+          });
+        }
+      }
+      $scope.$apply();
+    });
+  }
+  //$scope.filtertype = 0 = no,1=complete,2=wait,3=reject,4=yes
+  $scope.filtertype = '';
+  $scope.setfilter = function(txtfilter){
+    //alert(txtfilter);
+    $scope.showLoadingProperTimes();
+    $scope.listaccount = [];
+    GetAccount($scope.territoryid,1,function(data){
+      $ionicLoading.hide();
+      for(var i in data){
+        if(data[i].statuscode == txtfilter){
+          $scope.listaccount.push({
+            accountid:data[i].accountid,
+            name:data[i].name,
+            ivz_addresscountry:data[i].ivz_addresscountry,
+            ivz_addressprovince:data[i].ivz_addressprovince,
+            ivz_addressdistrict:data[i].ivz_addressdistrict,
+            ivz_availablefromtime:data[i].ivz_availablefromtime,
+            ivz_availabletotime:data[i].ivz_availabletotime,
+            territoryid:data[i].territoryid,
+            customertypecode:data[i].customertypecode,
+            statuscode:data[i].statuscode,
+            accountnumber:data[i].accountnumber,
+            filtername:data[i].filtername,
+            ivz_customer:data[i].ivz_customer,
+            accountype:data[i].accountype,
+            ivz_statuscomplete:data[i].ivz_statuscomplete,
+            remarkreject:data[i].remarkreject,
+            ivz_taxid:data[i].ivz_taxid,
+            customertypecode:data[i].customertypecode
+          });
+        }
+      }
+      $scope.$apply();
+    });
+  }
+  $scope.setfilterPendding = function(txtfilter,txtfilter2){
+    //alert(txtfilter);
+    $scope.showLoadingProperTimes();
+    $scope.listaccount = [];
+    GetAccount($scope.territoryid,1,function(data){
+      $ionicLoading.hide();
+      for(var i in data){
+        if(data[i].statuscode == txtfilter || data[i].statuscode == txtfilter2){
+          $scope.listaccount.push({
+            accountid:data[i].accountid,
+            name:data[i].name,
+            ivz_addresscountry:data[i].ivz_addresscountry,
+            ivz_addressprovince:data[i].ivz_addressprovince,
+            ivz_addressdistrict:data[i].ivz_addressdistrict,
+            ivz_availablefromtime:data[i].ivz_availablefromtime,
+            ivz_availabletotime:data[i].ivz_availabletotime,
+            territoryid:data[i].territoryid,
+            customertypecode:data[i].customertypecode,
+            statuscode:data[i].statuscode,
+            accountnumber:data[i].accountnumber,
+            filtername:data[i].filtername,
+            ivz_customer:data[i].ivz_customer,
+            accountype:data[i].accountype,
+            ivz_statuscomplete:data[i].ivz_statuscomplete,
+            remarkreject:data[i].remarkreject,
+            ivz_taxid:data[i].ivz_taxid,
+            customertypecode:data[i].customertypecode
+          });
+        }
+      }
+      $scope.$apply();
+    });
+  }
+
 })
+/*------------------------------- account editor ---------------------------*/
+.controller('AccountEditorCtrl',function($scope, $stateParams,$cookies,Data,$state,$ionicLoading,$ionicHistory){
+  $scope.Data = Data;//accountid;accountname
+  Data.mastertype = $stateParams.mastertype;
+  Data.getparaaccount = $stateParams.accountid;
+  Data.getparaname = $stateParams.accountname;
+  Data.gettxtid = $stateParams.accounttxtid;
+  $scope.uistate = function(){
+    $state.go('app.openaccount',{territoryid:Data.termas,mastertype:1
+      ,getguid:$stateParams.accountid,pricelevel:Data.pricelevel
+      ,transactioncurrency:Data.transactioncurrency});
+  }
+  $scope.deteaccount = function(){
+    $scope.showLoadingProperTimes();
+    try{
+      var ins = new MobileCRM.DynamicEntity("account",$stateParams.accountid);
+          ins.properties.statuscode = parseInt(2);
+          ins.properties.ivz_statuscomplete = parseInt(0);
+          ins.save(function(er){
+            if(er){
+              alert('error deteaccount 2697 '+er);
+            }else{
+              setTimeout(function(){
+                $ionicLoading.hide();
+                $ionicHistory.goBack(-1);
+              },2000);
+            }
+          });
+    }catch(er){
+      alert("error27006"+er);
+    }
+  }
+})
+/*-------------------------- Wait Controller -------------------------*/
+.controller('WaitCtrl',function($scope, $stateParams,$cookies,Data,$state,$ionicLoading,$ionicHistory){
+  $scope.Data = Data;
+  Data.mastertype = $stateParams.mastertype;
+  $scope.typego = $stateParams.typego;
+  //:masname/:mastertype/:typego
+  gettername($stateParams.masname,function(data){
+    $scope.listmaster = data;
+    $scope.$apply();
+  });
+  $scope.clickgo = function(idter){
+    if($stateParams.typego == 1 || $stateParams.typego == '1'){
+        $state.go('app.waitaccount',{terid:idter});
+    }
+  }
+})
+.controller('WaitListCtrl',function($scope, $stateParams,$cookies,Data,$state,$ionicLoading,$ionicHistory){
+  $scope.Data = Data;
+  $scope.gotoleft = function(txt){
+    if(txt == 0 || txt == '0'){
+      $state.go('app.approveplanning',{mastertype:Data.mastertype});
+    }else if(txt == 1 || txt == '1'){
+      $state.go('app.waitapprove',{masname:Data.masname,mastertype:Data.mastertype,typego:1});
+    }
+  }
+})
+.controller('WaitAccountCtrl',function($scope, $stateParams,$cookies,Data,$state,$ionicLoading,$ionicHistory,arrlist){
+  $scope.Data = Data;
+  $scope.filtertxt = '';
+  $scope.reloaddata = function(){
+    $scope.listaccount = [];
+    GetAccount($stateParams.terid,1,function(data){
+      for(var i in data){
+        if(data[i].statuscode == 917970000 || data[i].statuscode == '917970000'){
+          $scope.listaccount.push({
+            accountid:data[i].accountid,
+            name:data[i].name,
+            ivz_addresscountry:data[i].ivz_addresscountry,
+            ivz_addressprovince:data[i].ivz_addressprovince,
+            ivz_addressdistrict:data[i].ivz_addressdistrict,
+            ivz_availablefromtime:data[i].ivz_availablefromtime,
+            ivz_availabletotime:data[i].ivz_availabletotime,
+            territoryid:data[i].territoryid,
+            customertypecode:data[i].customertypecode,
+            statuscode:data[i].statuscode,
+            accountnumber:data[i].accountnumber,
+            filtername:data[i].filtername,
+            ivz_customer:data[i].ivz_customer,
+            accountype:data[i].accountype,
+            ivz_statuscomplete:data[i].ivz_statuscomplete,
+            remarkreject:data[i].remarkreject,
+            ivz_taxid:data[i].ivz_taxid,
+            customertypecode:data[i].customertypecode,
+            statustype:data[i].statustype,
+            ivz_doc01:data[i].ivz_doc01,
+            ivz_doc02:data[i].ivz_doc02,
+            ivz_doc03:data[i].ivz_doc03,
+            ivz_dochouseholdregis:data[i].ivz_dochouseholdregis,
+            ivz_docidcard:data[i].ivz_docidcard,
+            matchtype:data[i].matchtype
+          });
+        }
+      }
+      $scope.$apply();
+    });
+  }
+  $scope.reloaddata();
+  $scope.removeitem = function(index){
+    $scope.listaccount.splice(index,1);
+  }
+  $scope.approveaccount = function(){
+    alert('approve');
+  };
+  $scope.rejectapprove = function(){
+    arrlist.listac = $scope.listaccount;
+    getTerEmp($stateParams.terid,function(data){
+      if(data){
+        $state.go('app.rejectaccount',{terid:$stateParams.terid,salename:data[0].ivz_empname,tername:data[0].name});
+      }
+    });
+  };
+})
+.controller('WaitAccountRejectCtrl',function($scope, $stateParams,$cookies,Data,$state,$ionicLoading,$ionicHistory,arrlist){
+  $scope.Data = Data;
+  Data.mastertype = $stateParams.mastertype;
+  //$stateParams.salename,$stateParams.tername
+  $scope.salename = $stateParams.salename;
+  $scope.tername = $stateParams.tername;
+  $scope.txtreject;
+  $scope.txthidden = true;
+  var comment = $scope.txtreject;
+  $scope.confirmreject = function(){
+    var listac = arrlist.listac;
+    $scope.showLoadingProperTimesRegter('click confirm '+listac.length);
+    if(comment.length <= 0){
+      $scope.txthidden = false;
+    }else{
+      $scope.txthidden = true;
+      var x = 0;
+      var loopArray = function(arr){
+        insertdb(x,function(){
+          x++;
+          if(x < arr.length){
+            loopArray(arr);
+          }else{
+            if((x+1) >= arr.length || (x+1) == arr.length){
+              	console.log('Mutch more');
+                $ionicLoading.hide();
+                SendMail(listac[0].ivz_emailcontact,'title',$scope.txtreject);
+                setTimeout(function(){
+                  $ionicHistory.goBack(-1);
+                },2000);
+              }
+            }
+          }
+        });
+      }
+      loopArray(listac);
+      function insertdb(i,callback){
+        $scope.showLoadingProperTimesRegter('กำลังบันทึกข้อมูล '+listac[i].name);
+        try{
+          var ins = new MobileCRM.DynamicEntity('account',listac[i].accountid);
+              ins.properties.statuscode = parseInt(917970003);
+              ins.properties.ivz_remarkreject = $scope.txtcomment;
+              ins.save(function(es){
+                if(es){
+                  alert('error 2918 '+es);
+                }else{
+                  setTimeout(function(){
+                    callback();
+                  },3000);
+                }
+              });
+        }catch(er){
+          alert('error insert db 2907 '+er);
+        }
+      }
+    }
+  }
+  $scope.cancelcp = function(){
+    $ionicLoading.goBack(-1);
+  }
+})
+/*
+------------------------------------------------------------------------------------------
+*/
 .controller('AccountDetailCtrl',function($scope, $stateParams,$cookies,Data){
   $scope.Data = Data;
   Data.mastertype = $stateParams.mastertype;
-  $scope.vCheckAll = 0;
-  // if(Data.mastertype == 1 || Data.mastertype == '1'){
-  //   Data.dirsale = false;
-  // }else if(Data.mastertype == 2 || Data.mastertype == '2' || Data.mastertype == 3 || Data.mastertype == '3'){
-  //   Data.dirsale = true;
-  // }
 })
 .controller('AccountInvoiceCtrl',function($scope, $stateParams,$cookies,Data){
   $scope.Data = Data;

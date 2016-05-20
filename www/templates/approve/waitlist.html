@@ -1,0 +1,17 @@
+<ion-view view-title="เลือกเขตการขาย">
+  <ion-content>
+    <div class="card">
+      <div class="item item-text-wrap">
+        <br />
+        <md-list>
+          <md-list-item class="md-2-line" ng-repeat="n in listmaster" ng-click="clickgo(n.ivz_leftterritory.id)">
+             <div class="md-list-item-text" layout="column">
+                <h2>{{ n.ivz_leftterritory.primaryName }}</h2>
+              </div>
+             <a class="md-secondary ion-chevron-right text-h1 text-bold error" ng-click="clickgo(n.ivz_leftterritory.id)"></a>
+         </md-list-item>
+        </md-list>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

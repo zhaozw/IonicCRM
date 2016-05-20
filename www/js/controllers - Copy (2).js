@@ -9,14 +9,14 @@ angular.module('starter.controllers', [])
              noBackdrop: true
          });
      };
-  $scope.showLoadingProperTimesRegter = function() {
-            $ionicLoading.show({
-                template:   '<ion-spinner icon="bubbles" class="spinner-energized"></ion-spinner><div class="row">'+
-                            '<div class="col"><h4>กรุณารอสักครู่กำลังบันทึกข้อมูลอาจใช้เวลา 1-2 นาทีในการบันทึก</h4></div>'+
-                            '</div>',
-                noBackdrop: true
-            });
-        };
+     $scope.showLoadingProperTimesRegter = function(txt) {
+                  $ionicLoading.show({
+                      template:   '<ion-spinner icon="bubbles" class="spinner-energized"></ion-spinner><div class="row">'+
+                                  '<div class="col"><h4>กรุณารอสักครู่ '+ txt +'</h4></div>'+
+                                  '</div>',
+                      noBackdrop: true
+                  });
+              };
   $scope.showLoadGPS = function() {
                   $ionicLoading.show({
                       template:   '<ion-spinner icon="bubbles" class="spinner-energized"></ion-spinner><div class="row">'+

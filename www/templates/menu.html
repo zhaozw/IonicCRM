@@ -21,15 +21,15 @@
         <ion-item menu-close ui-sref="app.sendplan({territory:Data.masname,mastertype:2})"  class="success" ng-click="setdmaster(2)"><i class="ion-android-calendar"></i>&nbsp;แผนการดำเนินงาน sup direct</ion-item>
         <ion-item menu-close href="#/app/listplanned/1"  class="success"><i class="ion-android-calendar"></i>&nbsp;ผลการดำเนินงาน</ion-item>
         <ion-item menu-close href="#/app/resultplan/0/{{Data.mastertype}}"  class="success"><i class="ion-android-calendar"></i>&nbsp;ผลการดำเนินงาน sup</ion-item>
-        <ion-item menu-close href="#/app/rejectplan/1234556/mrddd/D10"  class="success"><i class="ion-android-calendar"></i>&nbsp;Test Reject</ion-item>
+        <ion-item menu-close href="#/app/waitlist"  class="success"><i class="ion-android-calendar"></i>&nbsp;รายการรออนุมัติ</ion-item>
         <ion-item menu-close
-          ui-sref="app.openaccount({territoryid:Data.termas,mastertype:1,getguid:Data.getguid,pricelevel:Data.pricelevel,transactioncurrency:Data.transactioncurrency})" 
+          ui-sref="app.openaccount({territoryid:Data.termas,mastertype:1,getguid:Data.getguid,pricelevel:Data.pricelevel,transactioncurrency:Data.transactioncurrency})"
           class="success"><i class="ion-android-calendar"></i>&nbsp;เปิดบัญชีลูกค้า</ion-item>
         <ion-item menu-close ui-sref="app.openaccountsup({territoryid:Data.termas,mastertype:2,getguid:Data.getguid})"   class="success"><i class="ion-android-calendar"></i>&nbsp;เปิดบัญชีลูกค้า Sup,Dir</ion-item>
         <ion-item menu-close href="#/app/accountlist/0/{{Data.mastertype}}"  class="success"><i class="ion-android-calendar"></i>&nbsp;รายการลูกค้า</ion-item>
-        <ion-item menu-close href="#/app/openaccount/{{Data.mastertype}}"  class="success"><i class="ion-android-calendar"></i>&nbsp;เปิดบัญชีลูกค้า Sup,Dir</ion-item>
         <ion-item menu-close ng-click="login()" class="success"><i class="ion-power"></i>&nbsp;เข้าสู่ระบบ</ion-item>
         <ion-item menu-close ng-click="login()" class="success"><i class="ion-power"></i>&nbsp;ออกจากระบบ</ion-item>
+        <ion-item menu-close href="#/app/rejectplan/1234556/mrddd/D10"  class="success"><i class="ion-android-calendar"></i>&nbsp;Test Reject</ion-item>
       </ion-list>
     </ion-content>
   </ion-side-menu>

@@ -25,16 +25,20 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     Tername:'A01',
     supsale:false,
     dirsale:false,
-    mastertype:'',
+    mastertype:2,//set default null
     sterritory:'',
     nterritory:'',
-    termas:'40791CA7-D5E1-E511-80E1-005056A71F87',
-    pricelevel:'0F6889BA-3D46-E511-80D1-005056A71F87',
-    transactioncurrency:'83008D3A-1A05-E511-80C7-005056A71F87',
+    termas:'40791CA7-D5E1-E511-80E1-005056A71F87',//A02
+    pricelevel:'0F6889BA-3D46-E511-80D1-005056A71F87',//บาท
+    transactioncurrency:'83008D3A-1A05-E511-80C7-005056A71F87',// บาท
+    countrymaster:'6EF2ECB7-D5E1-E511-80E1-005056A71F87',//address th
     masname:'U01',
     Empid:'EXAMPLE',
     mailtomail:'test@gmail.com;leader@gmail.com;ccmail@gmail.com',
     getguid:guid(),
+    getparaaccount:'',
+    getparaname:'',
+    gettxtid:'',
     dataguid:'',
     emnot:'',
     salename:'Mr.Test Saler',
@@ -63,6 +67,11 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   return {
     contact:[],
     company:[]
+  }
+})
+.factory('arrlist',function(){
+  return {
+    listac:''
   }
 })
 .service('rego',function(){
@@ -246,7 +255,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.planneddetail', {
-  url: '/planneddetail/:mastertype',
+  url: '/planneddetail/:mastertype/:accountid/:accountname/:terid/:province/:distid/:txtid',
   views: {
     'menuContent': {
       templateUrl: 'templates/planned/planneddetail.html',
@@ -438,6 +447,15 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   }
 })
+.state('app.accounteditor', {
+  url: '/accounteditor/:accountid/:accountname/:accounttxtid/:mastertype',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/account/accounteditor.html',
+      controller:'AccountEditorCtrl'
+    }
+  }
+})
 ///////////////////// end ///////////////////////////////
 ///////////////////// Adjustment ////////////////////////
 .state('app.adjustment', {
@@ -457,6 +475,43 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     'menuContent': {
       templateUrl: 'templates/order/option.html',
       controller:'OrderCtrl'
+    }
+  }
+})
+/*---------------------- Approve Wating --------------------*/
+.state('app.waitapprove', {
+  url: '/waitapprove/:masname/:mastertype/:typego',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/approve/waitlist.html',
+      controller:'WaitCtrl'
+    }
+  }
+})
+.state('app.waitlist', {
+  url: '/waitlist',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/approve/menu.html',
+      controller:'WaitListCtrl'
+    }
+  }
+})
+.state('app.waitaccount', {
+  url: '/waitaccount/:terid',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/approve/waitaccount.html',
+      controller:'WaitAccountCtrl'
+    }
+  }
+})
+.state('app.rejectaccount', {
+  url: '/rejectaccount/:terid/:salename/:tername',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/approve/rejectapprove.html',
+      controller:'WaitAccountRejectCtrl'
     }
   }
 })
