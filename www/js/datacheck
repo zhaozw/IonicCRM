@@ -1,0 +1,6 @@
+Data.logonstatus //check status logonstatus
+Data.logontype  //check status account type
+Data.mastertype // type sale
+Data.StoreDoc // get Document Account
+Data.custermertype // customertype
+Data.Tername //set Territerryname

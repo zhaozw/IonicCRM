@@ -1,0 +1,6 @@
+//Before
+$ionicHistory.nextViewOptions({
+  disableBack: true
+});
+//after
+$ionicHistory.clearHistory();

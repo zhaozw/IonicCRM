@@ -1,7 +1,25 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout,$cookies,Data,$ionicLoading) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout,$cookies,Data,$ionicLoading,$state,$ionicHistory) {
+  $state.reload();
   $scope.Data = Data;
+  var chUser = $cookies.get('name');
+  if(chUser){
+    console.log('logon true');
+    if($cookies.get('mastertype') == 3 || $cookies.get('mastertype') == 2){
+      Data.logontype = true;
+    }else{
+      Data.logontype = false;
+    }
+    Data.logonstatus = false;
+  }else{
+    Data.logonstatus = true;
+    console.log('logon false');
+    $ionicHistory.nextViewOptions({
+      disableBack: true
+    });
+    $state.go('app.playlists',{},{reload:true});
+  }
   $scope.showLoadingProperTimesReg = function(txtname) {
          $ionicLoading.show({
              template:   '<ion-spinner icon="bubbles" class="spinner-energized"></ion-spinner><div class="row">'+
@@ -26,6 +44,22 @@ angular.module('starter.controllers', [])
                       noBackdrop: true
                   });
               };
+  $scope.showLoadingProperTimesRegterComplete = function() {
+                              $ionicLoading.show({
+                                  template:   '<ion-spinner icon="bubbles" class="spinner-energized"></ion-spinner><div class="row">'+
+                                              '<div class="col"><h4>บันทึกข้อมูลเสร็จแล้ว</h4></div>'+
+                                              '</div>',
+                                  noBackdrop: true
+                              });
+                          };
+  $scope.showLoadingComplete = function(txt) {
+          $ionicLoading.show({
+          template:   '<ion-spinner icon="bubbles"  class="success text-l spinner-energized"></ion-spinner><div class="row">'+
+                      '<div class="col"><h4>'+txt+'</h4></div>'+
+                      '</div>',
+          noBackdrop: true
+        });
+  };
   $scope.showLoadingProperTimesRegAll = function() {
             $ionicLoading.show({
                 template:   '<ion-spinner icon="bubbles" class="spinner-energized"></ion-spinner><div class="row">'+
@@ -36,7 +70,7 @@ angular.module('starter.controllers', [])
         };
   $scope.showLoadingProperTimes = function() {
        $ionicLoading.show({
-           template:  '<ion-spinner icon="bubbles" class="spinner-energized"></ion-spinner>',
+           template:  '<ion-spinner icon="bubbles" class="success text-l spinner-energized"></ion-spinner>',
            noBackdrop: true
        });
    };
@@ -88,12 +122,12 @@ angular.module('starter.controllers', [])
       //$scope.showLoadingProperTimes();
   		$('#'+cClick).trigger('click');
   }
-  $scope.InAnnoteAttract = function(table,id,base64String,title,callback){
+  $scope.InAnnoteAttract = function(table,id,base64String,title,objid,callback){
     $scope.showLoadingProperTimesReg(title);
       try{
         var note = MobileCRM.DynamicEntity.createNew("annotation");
                 note.properties.objectid = new MobileCRM.Reference(table,id);
-                note.properties.notetext = title;
+                note.properties.notetext = objid;
                 note.properties.subject = title;
                 note.properties.documentbody = base64String;
                 note.properties.mimetype = fileType;
@@ -112,22 +146,212 @@ angular.module('starter.controllers', [])
       }catch(er){
         alert('insert doc '+title+'\n'+er);
       }
-  }
-})
-.controller('PlaylistsCtrl', function($scope,Data) {
-  $scope.Data = Data;
-  GetGPSLocation(function(res){
-      Data.latitude = res.latitude;
-      Data.longitude = res.longitude;
-  });
-})
+  };
 
-.controller('PlaylistCtrl', function($scope, $stateParams,Data) {
+  $scope.clicklnk = function (id){
+    if(id == 1 || id == '1'){
+      $state.go('app.openaccount',{
+        territoryid:Data.termas,
+        mastertype:Data.mastertype,
+        getguid:Data.getguid,
+        pricelevel:Data.pricelevel,
+        transactioncurrency:Data.transactioncurrency
+      },{reload:true});
+    }
+  };
+  $scope.clicklogout = function(){
+    $state.go('app.logout',{},{reload:true});
+  };
+  $scope.clicktaccountlist = function(){
+    $state.go('app.accountlist',{terriid:Data.termas,mastertype:Data.mastertype},{reload:true});
+  };
+  $scope.clickter = function(){
+    $state.go('app.accountlistsup',{terriid:Data.termas,mastertype:Data.mastertype},{reload:true});
+  };
+})
+/*-------------- เข้าสู่ระบบ -------------------*/
+.controller('PlaylistsCtrl', function($scope,$stateParams,$cookies,Data,$state,$ionicLoading,$ionicHistory,datauser) {
+  $state.reload();
+  $ionicHistory.clearHistory();
+  var chUser = $cookies.get('ivz_empid');
+  if(chUser){
+    if($cookies.get('mastertype') == 3 || $cookies.get('mastertype') == 2){
+      Data.logontype = true;
+    }else{
+      Data.logontype = false;
+    }
+    Data.logonstatus = false;
+    $ionicHistory.nextViewOptions({
+      disableBack: true
+    });
+    $state.go('app.browse',{},{reload:true});
+  }else{
   $scope.Data = Data;
-  GetGPSLocation(function(res){
-      Data.latitude = res.latitude;
-      Data.longitude = res.longitude;
+  datauser.territoryid = '';
+  datauser.ivz_empname = '';
+  datauser.ivz_empid = '';
+  datauser.ivz_password = '';
+  datauser.ivz_emailcontact = '';
+  datauser.ivz_leadermail = '';
+  datauser.ivz_ccmail = '';
+  datauser.name = '';
+  datauser.description = '';
+  datauser.ivz_statusempid = '';
+  $scope.chk = {
+    check:true,
+    checknull:true
+  };
+  $scope.user = {
+    txtname:'',
+    pwdname:''
+  };
+  Data.logonstatus = true;
+  $scope.checkuser = function(user,pwd){
+    console.log(user+'::'+pwd);
+    if(!(user) && !(pwd)){
+      $scope.chk.checknull = false;
+      $scope.user.txtname = '';
+      $scope.user.pwdname = '';
+      console.log('null');
+    }else{
+      $scope.chk.checknull = true;
+      console.log('ok');
+      $scope.showLoadingProperTimesRegter('กำลังตรวจสอบผู้ใช้งานอยู่ .');
+      getUserCheck(user,pwd,function(data){
+        if(data){
+          var x = 0;
+          var loopArray = function(arr){
+            chkuser(x,function(){
+              x++;
+              if(x < arr.length){
+                loopArray(arr);
+              }else{
+                $scope.chk.check = true;
+                Data.logonstatus = false;
+                setTimeout(function(){
+                  $ionicLoading.hide();
+                  $scope.user.txtname = '';
+                  $scope.user.pwdname = '';
+                  $ionicHistory.nextViewOptions({
+                    disableBack: true
+                  });
+                  $state.go('app.browse',{},{reload:true});
+                },2000);
+              }
+            });
+          };
+          loopArray(data);
+          function checkmatch(str){
+            if(str){
+              if(str.match('M')){
+                return 3;
+              }else if(str.match('U')){
+                return 2;
+              }else{
+                return 1;
+              }
+            }
+          }
+          function chkuser(i,callback){
+            $scope.showLoadingProperTimesRegter('กำลังตรวจสอบผู้ใช้งานอยู่ ..');
+            var dType = checkmatch(data[i].ivz_name);
+            Data.mastertype = checkmatch(data[i].ivz_name);
+            if(dType == 3 || dType == 2){
+              Data.logontype = true;
+            }else{
+              Data.logontype = false;
+            }
+            try{
+              $cookies.put('mastertype',dType);
+              Data.Empid = data[i].ivz_empid;
+              Data.Tername = data[i].ivz_name;
+              Data.termas = data[i].territoryid;
+              $cookies.put('territoryid',data[i].territoryid);
+              $cookies.put('ivz_empname',data[i].ivz_empname);
+              $cookies.put('ivz_empid',data[i].ivz_empid);
+              $cookies.put('ivz_password',data[i].ivz_password);
+              $cookies.put('ivz_emailcontact',data[i].ivz_emailcontact);
+              $cookies.put('ivz_leadermail',data[i].ivz_leadermail);
+              $cookies.put('ivz_ccmail',data[i].ivz_ccmail);
+              $cookies.put('name',data[i].ivz_name);
+              $cookies.put('description',data[i].ter_description);
+              $cookies.put('ivz_statusempid',data[i].ivz_statusempid);
+              datauser.territoryid = data[i].territoryid;
+              datauser.ivz_empname = data[i].ivz_empname;
+              datauser.ivz_empid = data[i].ivz_empid;
+              datauser.ivz_password = data[i].ivz_password;
+              datauser.ivz_emailcontact = data[i].ivz_emailcontact;
+              datauser.ivz_leadermail = data[i].ivz_leadermail;
+              datauser.ivz_ccmail = data[i].ivz_ccmail;
+              datauser.name = data[i].ivz_name;
+              datauser.description = data[i].ter_description;
+              datauser.ivz_statusempid = data[i].ivz_statusempid;
+            }catch(er){
+              alert('error logon '+er);
+            }
+            setTimeout(function(){
+              $ionicLoading.hide();
+                $scope.showLoadingProperTimesRegter('กำลังตรวจสอบผู้ใช้งานอยู่ ...');
+                callback();
+            },2000);
+          }
+        }else{
+          $scope.chk.check = false;
+        }
+        $scope.$apply();
+      });
+    }
+  }
+}
+})
+/*--------------------------------------------*/
+
+.controller('ProfileCtrl', function($scope,$stateParams,$cookies,Data,$state,$ionicLoading,$ionicHistory,datauser) {
+  $scope.Data = Data;
+  $state.reload();
+  $ionicHistory.clearHistory();
+  $scope.user = {
+    territoryid:$cookies.get('territoryid'),
+    ivz_empname:$cookies.get('ivz_empname'),
+    ivz_empid:$cookies.get('ivz_empid'),
+    ivz_password:$cookies.get('ivz_password'),
+    ivz_emailcontact:$cookies.get('ivz_emailcontact'),
+    ivz_leadermail:$cookies.get('ivz_leadermail'),
+    ivz_ccmail:$cookies.get('ivz_ccmail'),
+    name:$cookies.get('name'),
+    description:$cookies.get('description'),
+    ivz_statusempid:$cookies.get('ivz_statusempid')
+  };
+})
+.controller('LogoutCtrl', function($scope,$stateParams,$cookies,Data,$state,$ionicLoading,$ionicHistory) {
+  $state.reload();
+  $scope.showLoadingProperTimesRegter('กำลังออกจากระบบ');
+  $scope.Data = Data;
+  Data.logonstatus = true;
+  Data.logontype = true;
+  Data.mastertype = '';
+  Data.Empid = '';
+  Data.Tername = '';
+  Data.termas = '';
+  $ionicHistory.clearHistory();
+  $ionicHistory.nextViewOptions({
+    disableBack: true
   });
+  $cookies.remove('territoryid');
+  $cookies.remove('ivz_empname');
+  $cookies.remove('ivz_empid');
+  $cookies.remove('ivz_password');
+  $cookies.remove('ivz_emailcontact');
+  $cookies.remove('ivz_leadermail');
+  $cookies.remove('ivz_ccmail');
+  $cookies.remove('name');
+  $cookies.remove('description');
+  $cookies.remove('ivz_statusempid');
+  $cookies.remove('mastertype');
+  setTimeout(function(){
+    $ionicLoading.hide();
+    $state.go('app.playlists',{},{reload:true});
+  },3000);
 })
 ////////////// Calendar ///////////////////////////
 .controller('PlanCtrl',function($scope, $stateParams,$cookies,$location,Data){
@@ -783,7 +1007,7 @@ angular.module('starter.controllers', [])
 .controller('PlanedListCtrl',function($scope, $stateParams,$cookies,Data){
   $scope.Data = Data;
   Data.mastertype = $stateParams.mastertype;
-  $scope.territoryid = '40791CA7-D5E1-E511-80E1-005056A71F87';
+  $scope.territoryid = $cookies.get('territoryid');
   //$ionicHistory.removeBackView();
   $scope.filtertxt = '';
   $scope.listaccount = [];
@@ -924,7 +1148,8 @@ angular.module('starter.controllers', [])
 })
 ///////////////////  End //////////////////////
 /////////////////// Open Account //////////////
-.controller('OpenAccountCtrl',function($scope, $stateParams,$cookies,Data,rego,$ionicHistory,$ionicLoading){
+.controller('OpenAccountCtrl',function($scope,$state, $stateParams,$cookies,Data,rego,$ionicHistory,$ionicLoading){
+  $state.reload();
   $scope.Data = Data;
   Data.mastertype = $stateParams.mastertype;
   Data.dataguid = $stateParams.getguid;
@@ -1023,6 +1248,7 @@ angular.module('starter.controllers', [])
     ////////////////// insert /////////////////////////
     $ionicLoading.hide();
     if($scope.chk.infomat == true && $scope.chk.txtid == false && $scope.chk.infomattxtname == false){
+      Data.listregist = $scope.user.name;
       console.log('insert DB');
       try{
         var a = new MobileCRM.FetchXml.Entity('account');
@@ -1108,37 +1334,73 @@ angular.module('starter.controllers', [])
   }
 
 })
-.controller('OpenAccountSupCtrl',function($scope, $stateParams,$cookies,Data,rego,$ionicHistory,$ionicLoading){
-  $scope.Data = Data;
-  Data.mastertype = $stateParams.mastertype;
-  Data.dataguid = $stateParams.getguid;
-  //$stateParams.territoryid;
-  $scope.teritype = true;
-  console.log($stateParams.mastertype);
-  $scope.insertaccount = function(){
-    window.location.href="#/app/accountcontact/"+Data.dataguid;
-  }
-  $scope.vm = {
-    determinateValue:0
-  };
-  $scope.user = {
-    branchselect:''
-  };
-  var i = 0;
-  $scope.settime = setInterval(function(){
-    var j = rego.countserve;
-    $scope.vm.determinateValue = parseInt(j[i++]);
-    if(i > 9){
-      console.log('Match');
-      clearInterval($scope.settime);
+.controller('OpenAccountSupCtrl',function($scope,$state, $stateParams,$cookies,Data,rego,$ionicHistory,$ionicLoading){
+    $state.reload();
+    var ckUser = $cookies.get('name');
+    $scope.masname = $cookies.get('name');
+    if(ckUser){
+      $scope.listmaster = [];
+      gettername($cookies.get('name'),function(data){
+        if(data){
+          var x = 0;
+          var loopArray =function (arr){
+            getPush(x,function(){
+              x++;
+              if(x < arr.length){
+                loopArray(arr);
+              }else{
+                $scope.showLoadingComplete('โหลดข้อมูลเสร็จแล้ว');
+                setTimeout(function(){
+                  $ionicLoading.hide();
+                },2000);
+              }
+            });
+          }
+          loopArray(data);
+          function getPush(i,callback){
+            $scope.showLoadingProperTimesRegter('โหลดข้อมูลเขตการขาย '+data[i].description);
+            $scope.listmaster.push({
+              ivz_territorymasterid:data[i].ivz_territorymasterid,
+              ivz_mastername:data[i].ivz_mastername,
+              ivz_leftterritory:data[i].ivz_leftterritory,
+              ivz_emailcontact:data[i].ivz_emailcontact,
+              ivz_leadermail:data[i].ivz_leadermail,
+              ivz_ccmail:data[i].ivz_ccmail,
+              ivz_empid:data[i].ivz_empid,
+              ivz_empname:data[i].ivz_empname,
+              ivz_statusempid:data[i].ivz_statusempid,
+              description:data[i].description
+            });
+            setTimeout(function(){
+              callback();
+            },600);
+          }
+        }
+        $scope.$apply();
+      });
+    }else{
+      $ionicHistory.nextViewOptions({
+        disableBack: true
+      });
+      $state.go('app.playlists',{},{reload:true});
     }
-  },1000);
-  $scope.goback = function(){
-    $ionicHistory.goBack(-1);
-  }
+    $scope.goaccountlist = function(id){
+      Data.termas = id;
+      $ionicHistory.nextViewOptions({
+        disableBack: true
+      });
+      $state.go('app.openaccount',{
+        territoryid:id,
+        mastertype:Data.mastertype,
+        getguid:Data.getguid,
+        pricelevel:Data.pricelevel,
+        transactioncurrency:Data.transactioncurrency
+      },{reload:true});
+    }
 })
 /* --------------------------------- Contact ----------------------------------------- */
-.controller('AccountContactCtrl',function($scope, $stateParams,$cookies,Data,$ionicHistory,$ionicLoading){
+.controller('AccountContactCtrl',function($scope,$state ,$stateParams,$cookies,Data,$ionicHistory,$ionicLoading){
+  $state.reload();
   $scope.Data = Data;
   //Data.dataguid = $stateParams.getguid;
   $scope.chk = {
@@ -1291,10 +1553,10 @@ angular.module('starter.controllers', [])
   }
 })
 /* --------------------------------- Meetting --------------------------------------- */
-.controller('AccountMeetingCtrl',function($scope, $stateParams,$cookies,Data,$ionicHistory,$ionicLoading){
+.controller('AccountMeetingCtrl',function($scope,$state ,$stateParams,$cookies,Data,$ionicHistory,$ionicLoading){
+  $state.reload();
   $scope.Data = Data;
   //Data.dataguid = $stateParams.getguid;
-
   $scope.user = {
     actionfn:false,
     optionDay:0,
@@ -1392,7 +1654,8 @@ angular.module('starter.controllers', [])
 
 
 
-.controller('AccountAddressCtrl',function($scope, $stateParams,$cookies,Data,$ionicHistory,$ionicLoading,Darray){
+.controller('AccountAddressCtrl',function($scope,$state, $stateParams,$cookies,Data,$ionicHistory,$ionicLoading,Darray){
+  $state.reload();
   $scope.Data = Data;
   //Data.dataguid = $stateParams.getguid;
   $scope.user = {
@@ -1515,7 +1778,8 @@ angular.module('starter.controllers', [])
     $ionicHistory.goBack(-1);
   }
 })
-.controller('AccountAddressInvoiceCtrl',function($scope, $stateParams,$cookies,Data,$ionicHistory,$ionicLoading,Darray){
+.controller('AccountAddressInvoiceCtrl',function($scope, $state,$stateParams,$cookies,Data,$ionicHistory,$ionicLoading,Darray){
+  $state.reload();
   $scope.Data = Data;
   //Data.dataguid = $stateParams.getguid;
   $scope.user = {
@@ -1636,7 +1900,8 @@ angular.module('starter.controllers', [])
   }
 })
 
-.controller('AccountAddressOtherCtrl',function($scope, $stateParams,$cookies,Data,$ionicHistory,$ionicLoading){
+.controller('AccountAddressOtherCtrl',function($scope, $stateParams,$cookies,Data,$ionicHistory,$ionicLoading,$state){
+  $state.reload();
   $scope.Data = Data;
   //Data.dataguid = $stateParams.getguid;
 
@@ -1697,7 +1962,8 @@ angular.module('starter.controllers', [])
 })
 
 
-.controller('AccountTransportCtrl',function($scope, $stateParams,$cookies,Data,$ionicHistory){
+.controller('AccountTransportCtrl',function($scope, $stateParams,$cookies,Data,$ionicHistory,$state){
+  $state.reload();
   $scope.Data = Data;
   //Data.dataguid = $stateParams.getguid;
   $scope.user = {
@@ -1754,7 +2020,8 @@ angular.module('starter.controllers', [])
 })
 
 
-.controller('AccountDocumentCtrl',function($scope, $stateParams,$cookies,Data,$ionicHistory,$ionicLoading,actype){
+.controller('AccountDocumentCtrl',function($scope, $stateParams,$cookies,Data,$ionicHistory,$ionicLoading,actype,$state){
+  $state.reload();
   $scope.Data = Data;
   //Data.dataguid = $stateParams.getguid;
   $scope.user = {
@@ -1875,7 +2142,7 @@ angular.module('starter.controllers', [])
           /// insert a
           if(a.length >= 1){
             setTimeout(function(){
-              $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs1,'สำเนาหนังสือรับรองการจดทะเบียนพาณิชย์ร้านของร้าน'+ Data.businessname+' ',function(ert){
+              $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs1,'สำเนาหนังสือรับรองการจดทะเบียนพาณิชย์ร้านของร้าน'+ Data.businessname+' ',3,function(ert){
               if(ert){
                 //alert(ert);
               }
@@ -1886,7 +2153,7 @@ angular.module('starter.controllers', [])
           /// insert b
           if(b.length >= 1){
             setTimeout(function(){
-              $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs2,'ทะเบียนภาษีมูลค่าเพิ่ม( ภพ. 20)ของร้าน'+ Data.businessname+' ',function(ert){
+              $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs2,'ทะเบียนภาษีมูลค่าเพิ่ม( ภพ. 20)ของร้าน'+ Data.businessname+' ',3,function(ert){
               if(ert){
                 //alert(ert);
               }
@@ -1897,7 +2164,7 @@ angular.module('starter.controllers', [])
           /// insert c
           if(c.length >= 1){
             setTimeout(function(){
-              $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs3,'หนังสือรับรองบริษัทของร้าน'+ Data.businessname+' ',function(ert){
+              $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs3,'หนังสือรับรองบริษัทของร้าน'+ Data.businessname+' ',3,function(ert){
               if(ert){
                 //alert(ert);
               }
@@ -1907,7 +2174,7 @@ angular.module('starter.controllers', [])
           }
           /// insert d
           if(d.length >= 1){
-            $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs4,'สำเนาทะเบียนบ้านของร้าน'+ Data.businessname+' ',function(ert){
+            $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs4,'สำเนาทะเบียนบ้านของร้าน'+ Data.businessname+' ',3,function(ert){
             if(ert){
               //alert(ert);
             }
@@ -1917,7 +2184,7 @@ angular.module('starter.controllers', [])
           /// insert e
           if(e.length >= 1){
             setTimeout(function(){
-              $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs5,'สำเนาประจำตัวบัตรประชาชนของร้าน'+ Data.businessname+' ',function(ert){
+              $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs5,'สำเนาประจำตัวบัตรประชาชนของร้าน'+ Data.businessname+' ',3,function(ert){
               if(ert){
                 //alert(ert);
               }
@@ -1929,6 +2196,8 @@ angular.module('starter.controllers', [])
             $ionicLoading.hide();
             window.location.href="#/app/accountcredit/"+$stateParams.getguid;
             try{
+              Data.StoreDoc = 1;
+              Data.custermertype = 2;
     					var ins = new MobileCRM.DynamicEntity("account",Data.dataguid);
     							ins.properties.ivz_statustype = parseInt(2);
                   if(a.length > 1){
@@ -1986,7 +2255,7 @@ angular.module('starter.controllers', [])
           $scope.showLoadingProperTimesReg();
           /// insert d
           if(d.length >= 1){
-            $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs4,'สำเนาทะเบียนบ้านของร้าน'+ Data.businessname+' ',function(ert){
+            $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs4,'สำเนาทะเบียนบ้านของร้าน'+ Data.businessname+' ',3,function(ert){
             if(ert){
               //alert(ert);
             }
@@ -1996,7 +2265,7 @@ angular.module('starter.controllers', [])
           /// insert e
           if(e.length >= 1){
             setTimeout(function(){
-              $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs5,'สำเนาประจำตัวบัตรประชาชนร้าน'+ Data.businessname+' ',function(ert){
+              $scope.InAnnoteAttract('account',Data.dataguid,$scope.user.bs5,'สำเนาประจำตัวบัตรประชาชนร้าน'+ Data.businessname+' ',3,function(ert){
               if(ert){
               //  alert(ert);
               }
@@ -2007,6 +2276,8 @@ angular.module('starter.controllers', [])
           setTimeout(function(){
             $ionicLoading.hide();
             try{
+              Data.StoreDoc = 1;
+              Data.custermertype = 1;
     					var ins = new MobileCRM.DynamicEntity("account",Data.dataguid);
     							ins.properties.ivz_statustype = parseInt(1);
                   ins.properties.ivz_doc01 = parseInt(0);
@@ -2049,7 +2320,8 @@ angular.module('starter.controllers', [])
 
 
 
-.controller('AccountCreditCtrl',function($scope, $stateParams,$cookies,Data,$compile,actype,$ionicHistory,$ionicLoading){
+.controller('AccountCreditCtrl',function($scope, $stateParams,$cookies,Data,$compile,actype,$ionicHistory,$ionicLoading,$state){
+  $state.reload();
   $scope.Data = Data;
   //Data.mastertype = $stateParams.getguid;
   GetPayMentTerm(function(data){
@@ -2069,6 +2341,7 @@ angular.module('starter.controllers', [])
     txtCreditlimit:0,
     optionPaymentType:'',
     optionPaymentBank:'',
+    txtBankAccount:'',
     txtBankBranch:'',
     optionPaymentbnkYss:917970001//yss bank กสิกร ออมทรัพย์
   };
@@ -2104,6 +2377,7 @@ angular.module('starter.controllers', [])
   					ins.properties.creditlimit = $scope.user.txtCreditlimit;
   					ins.properties.ivz_paymentoption = parseInt($scope.user.optionPaymentType);
   					ins.properties.ivz_banknamecustomer = parseInt($scope.user.optionPaymentBank);
+            ins.properties.ivz_bankaccount = $scope.user.txtBankAccount;
   					ins.properties.ivz_bankaccountnumber = $scope.user.txtBankBranch;
   					ins.properties.ivz_bankname = $scope.user.optionPaymentbnkYss;
   					ins.save(function(er){
@@ -2125,6 +2399,7 @@ angular.module('starter.controllers', [])
     					ins.properties.creditlimit = $scope.user.txtCreditlimit;
     					ins.properties.ivz_paymentoption = parseInt($scope.user.optionPaymentType);
     					ins.properties.ivz_banknamecustomer = parseInt($scope.user.optionPaymentBank);
+              ins.properties.ivz_bankaccount = $scope.user.txtBankAccount;
     					ins.properties.ivz_bankaccountnumber = $scope.user.txtBankBranch;
     					ins.properties.ivz_bankname = $scope.user.optionPaymentbnkYss;
     					ins.save(function(er){
@@ -2148,7 +2423,8 @@ angular.module('starter.controllers', [])
   }
 })
 /*------------------------------- info mar----------------------------*/
-.controller('AccountInfoMartCtrl',function($scope, $stateParams,$cookies,Data,$compile,$ionicHistory,$ionicLoading){
+.controller('AccountInfoMartCtrl',function($scope, $state,$stateParams,$cookies,Data,$compile,$ionicHistory,$ionicLoading){
+  $state.reload();
   $scope.Data = Data;
   //Data.mastertype = $stateParams.getguid;
   $scope.user = {
@@ -2290,13 +2566,31 @@ angular.module('starter.controllers', [])
     			}catch(er){
     				alert("error970"+er);
     			}
+
+
           var datapush = $scope.user.doc;
-          for(var j in datapush){
+          var x = 0;
+          var loopArray = function(arr){
+            inserta(x,function(){
+              x++;
+              if(x < arr.length){
+                loopArray(arr);
+              }else{
+                $scope.showLoadingProperTimesRegterComplete();
+                setTimeout(function(){
+                  $ionicLoading.hide();
+                  $state.go('app.contactus',{getguid:$stateParams.getguid});
+                },2000);
+              }
+            });
+          }
+          loopArray(datapush);
+          function inserta(j,callback){
             try{
               $scope.showLoadingProperTimesRegter('กำลังบันทึกข้อมูลเกี่ยวกับร้าน'+Data.businessname+' รูปที่ '+j);
               var note = MobileCRM.DynamicEntity.createNew("annotation");
                       note.properties.objectid = new MobileCRM.Reference('account',Data.dataguid);
-                      note.properties.notetext = 'ข้อมูลเกี่ยวกับร้าน'+Data.businessname+' รูปที่ '+j;
+                      note.properties.notetext = 2;
                       note.properties.subject = 'ข้อมูลเกี่ยวกับร้าน'+Data.businessname+' รูปที่ '+j;
                       note.properties.documentbody = datapush[j];
                       note.properties.mimetype = fileType;
@@ -2307,18 +2601,14 @@ angular.module('starter.controllers', [])
                             function(er){
                               if(er){
                                 alert(Data.businessname+'\n'+er);
+                              }else{
+                                callback();
                               }
                             });
             }catch(er){
               alert('insert doc '+Data.businessname+' รูปที่ '+j+'\n'+er);
             }
           }
-          $scope.insertset = setTimeout(function(){
-            $ionicLoading.hide();
-            window.location.href="#/app/contactus/"+$stateParams.getguid;
-            clearTimeout($scope.insertset);
-          },6000);
-          $scope.insertset();
     }
   }
   $scope.goback = function(){
@@ -2326,7 +2616,8 @@ angular.module('starter.controllers', [])
   }
 })
 /*----------------------- contact us ---------------------------*/
-.controller('AccountContactUsCtrl',function($scope,Darray, $stateParams,$cookies,Data,arcontact,$compile,$ionicHistory,$ionicLoading){
+.controller('AccountContactUsCtrl',function($scope,Darray, $stateParams,$cookies,Data,arcontact,$compile,$ionicHistory,$ionicLoading,$state){
+  $state.reload();
   $scope.Data = Data;
   //Data.mastertype = $stateParams.getguid;
   console.log('load :'+$stateParams.getguid);
@@ -2396,7 +2687,7 @@ angular.module('starter.controllers', [])
         var docl = contact[msg].doc;
         //alert('customAttract:'+contact[msg].firstname+'::'+docl.length);
         var title = contact[msg].firstname+' '+contact[msg].lastname+' ผู้ติดต่อร้าน '+Data.businessname;
-        $scope.InAnnoteAttract('contact',diug,contact[msg].doc,title,function(er){
+        $scope.InAnnoteAttract('contact',diug,contact[msg].doc,title,1,function(er){
           if(er){
             setTimeout(function(){
               callback();
@@ -2414,7 +2705,8 @@ angular.module('starter.controllers', [])
     $ionicHistory.goBack(-1);
   }
 })
-.controller('AccountContactUsAddCtrl',function($scope, $stateParams,$cookies,Data,arcontact,$compile,$ionicHistory,$ionicLoading){
+.controller('AccountContactUsAddCtrl',function($scope, $stateParams,$cookies,Data,arcontact,$compile,$ionicHistory,$ionicLoading,$state){
+  $state.reload();
   $scope.Data = Data;
   //Data.mastertype = $stateParams.getguid;
   $scope.getguid = $stateParams.getguid;
@@ -2467,7 +2759,8 @@ angular.module('starter.controllers', [])
   }
 })
 
-.controller('AccountCompanyCtrl',function($scope, $stateParams,$cookies,Data,$compile,$ionicHistory,$ionicLoading,arcontact){
+.controller('AccountCompanyCtrl',function($scope, $stateParams,$cookies,Data,$compile,$ionicHistory,$ionicLoading,arcontact,$state){
+  $state.reload();
   $scope.Data = Data;
   $scope.getguid = $stateParams.getguid;
   $scope.chk = {
@@ -2531,7 +2824,8 @@ angular.module('starter.controllers', [])
     $ionicHistory.goBack(-1);
   }
 })
-.controller('AccountCompanyAddCtrl',function($scope, $stateParams,$cookies,Data,$compile,$ionicHistory,$ionicLoading,arcontact){
+.controller('AccountCompanyAddCtrl',function($scope, $stateParams,$cookies,Data,$compile,$ionicHistory,$ionicLoading,arcontact,$state){
+  $state.reload();
   $scope.Data = Data;
   $scope.getguid = $stateParams.getguid;
   $scope.user = {
@@ -2562,12 +2856,13 @@ angular.module('starter.controllers', [])
 })
 /*------------------------- Confirm Account -------------------------*/
 .controller('AccountConfirmCtrl',function($scope, $state,$stateParams,$cookies,Data,$compile,$ionicHistory,$ionicLoading,$ionicViewService){
+  $state.reload();
   $scope.Data = Data;
   $scope.getguid = $stateParams.getguid;
-
   $scope.chk ={
     infomat:''
   };
+  $scope.territoryid = $cookies.get('territoryid');// set default from login
   var tol = [10,20,30,40,50,60,70,80,90,100,110,120,130];
   var tltxt = ['กำลังทำการบันทึกข้อมูลทั่วไป','กำลังทำการบันทึกข้อมูลเงื่อนไขการเข้าพบ','กำลังทำการบันทึกข้อมูลที่อยู่ส่งของ'
             ,'กำลังทำการบันทึกข้อมูลที่อยู่ Invoice','กำลังทำการบันทึกที่อยู่อื่นๆ'
@@ -2583,14 +2878,30 @@ angular.module('starter.controllers', [])
       if(x < arr.length){
         loopArray(arr);
       }else{
-          $ionicLoading.hide();
-          SendMail(Data.mailtomail,'text title','text body');
-          setTimeout(function(){
-            $ionicHistory.nextViewOptions({
-              disableBack: true
-            });
-            $scope.confirmnew();
-          },2000);
+          getTerEmp($scope.territoryid,function(data){
+            if(data){
+              confirmnew(function(){
+                try{
+                  insertTask(function(){
+                      var title = 'เปิดบัญชีลูกค้าใหม่';
+                      var text = "เรียน  Sup./Sales Manger, รบกวนดำเนินการอนุมัติเปิดบัญชีลูกค้าใหม่เขตการขาย "+data[0].name+"  ลูกค้าชื่อ "+
+                       Data.listregist +" ให้ด้วยครับ  ขอบคุณครับ  (อีเมลฉบับนี้ส่งอัตโนมัติจากระบบ CRM)";
+                      SendMail(data[0].ivz_leadermail,title,text);
+                      setTimeout(function(){
+                        $ionicLoading.hide();
+                        $ionicHistory.nextViewOptions({
+                          disableBack: true
+                        });
+                        $state.go('app.accountlist',{terriid:Data.termas,mastertype:Data.mastertype},{reload:true});
+                      },2000);
+                  });
+                }catch(er){
+                  alert('error 2888 '+er);
+                }
+              });
+            }
+          });
+
       }
     });
   }
@@ -2603,25 +2914,46 @@ angular.module('starter.controllers', [])
       callback();
     },2000);
   }
+  function insertTask(callback){
+    try{
+      var ins = new MobileCRM.DynamicEntity.createNew("ivz_tasknewaccount");
+          ins.properties.ivz_name = Data.listregist;
+          ins.properties.ivz_customer = new MobileCRM.Reference('account',Data.dataguid);
+          ins.properties.ivz_saletype = parseInt(Data.mastertype);
+          ins.properties.ivz_statusdoc = parseInt(Data.StoreDoc);
+          ins.properties.ivz_statuscustomer = parseInt(Data.custermertype);
+          ins.properties.ivz_territory = new MobileCRM.Reference('territory',Data.termas);
+          ins.properties.ivz_statuscomplete = parseInt(3);//new Account
+          ins.save(function(er){
+            if(er){
+              alert('error ac 2897 tasknew '+er);
+            }else{
+              callback();
+            }
+          });
+    }catch(er){
+      alert("error2919"+er);
+    }
+  }
 
-  $scope.confirmnew = function(){
+  function confirmnew(callback){
     try{
       var ins = new MobileCRM.DynamicEntity("account",Data.dataguid);
           ins.properties.statuscode = parseInt(917970000);
           ins.properties.ivz_statuscomplete = parseInt(2);
-          ins.properties.address1_latitude = Data.latitude;
-          ins.properties.address1_longitude = Data.longitude;
+          ins.properties.address1_latitude = parseFloat(Data.latitude);
+          ins.properties.address1_longitude = parseFloat(Data.longitude);
           ins.save(function(er){
             if(er){
-              alert('error ac 966 '+er);
+              alert('error ac 2932 confirm '+er);
             }else{
-              $state.go('app.accountlist',{terriid:0102,mastertype:Data.mastertype});
+              callback();
             }
           });
     }catch(er){
-      alert("error970"+er);
+      alert("error2938"+er);
     }
-    console.log('update guid sendmail'+ $scope.chk.infomat);
+    //console.log('update guid sendmail'+ $scope.chk.infomat);
   }
   $scope.goback = function(){
     $ionicHistory.goBack(-1);
@@ -2631,69 +2963,175 @@ angular.module('starter.controllers', [])
 
 
 /////////////////// Account List //////////////
+.controller('AccountListSupCtrl',function($scope,$state, $stateParams,$cookies,Data,$ionicLoading,$ionicHistory){
+  $state.reload();
+  var ckUser = $cookies.get('name');
+  $scope.masname = $cookies.get('name');
+  if(ckUser){
+    $scope.listmaster = [];
+    gettername($cookies.get('name'),function(data){
+      if(data){
+        var x = 0;
+        var loopArray =function (arr){
+          getPush(x,function(){
+            x++;
+            if(x < arr.length){
+              loopArray(arr);
+            }else{
+              $scope.showLoadingComplete('โหลดข้อมูลเสร็จแล้ว');
+              setTimeout(function(){
+                $ionicLoading.hide();
+              },2000);
+            }
+          });
+        }
+        loopArray(data);
+        function getPush(i,callback){
+          $scope.showLoadingProperTimesRegter('โหลดข้อมูลเขตการขาย '+data[i].description);
+          $scope.listmaster.push({
+            ivz_territorymasterid:data[i].ivz_territorymasterid,
+            ivz_mastername:data[i].ivz_mastername,
+            ivz_leftterritory:data[i].ivz_leftterritory,
+            ivz_emailcontact:data[i].ivz_emailcontact,
+            ivz_leadermail:data[i].ivz_leadermail,
+            ivz_ccmail:data[i].ivz_ccmail,
+            ivz_empid:data[i].ivz_empid,
+            ivz_empname:data[i].ivz_empname,
+            ivz_statusempid:data[i].ivz_statusempid,
+            description:data[i].description
+          });
+          setTimeout(function(){
+            callback();
+          },600);
+        }
+      }
+      $scope.$apply();
+    });
+
+  }else{
+    $ionicHistory.nextViewOptions({
+      disableBack: true
+    });
+    $state.go('app.playlists',{},{reload:true});
+  }
+  $scope.goaccountlist = function(id){
+    Data.termas = id;
+    $ionicHistory.nextViewOptions({
+      disableBack: true
+    });
+    $state.go('app.accountlist',{terriid:id,mastertype:Data.mastertype},{reload:true});
+  }
+})
 .controller('AccountListCtrl',function($scope,$state, $stateParams,$cookies,Data,$ionicLoading,$ionicHistory){
+  $state.reload();
+  var ckUser = $cookies.get('ivz_empid');
+  if(ckUser){
   $scope.Data = Data;
   $ionicHistory.clearHistory();
-  $scope.territoryid = '40791CA7-D5E1-E511-80E1-005056A71F87';
-  //$ionicHistory.removeBackView();
+  $scope.territoryid = $stateParams.terriid;
   $scope.filtertxt = '';
   $scope.listaccount = [];
-  GetAccount($scope.territoryid,1,function(data){
-    for(var i in data){
-      if(data[i].statuscode == 1 || data[i].statuscode == '1'){
-        $scope.listaccount.push({
-          accountid:data[i].accountid,
-          name:data[i].name,
-          ivz_addresscountry:data[i].ivz_addresscountry,
-          ivz_addressprovince:data[i].ivz_addressprovince,
-          ivz_addressdistrict:data[i].ivz_addressdistrict,
-          ivz_availablefromtime:data[i].ivz_availablefromtime,
-          ivz_availabletotime:data[i].ivz_availabletotime,
-          territoryid:data[i].territoryid,
-          customertypecode:data[i].customertypecode,
-          statuscode:data[i].statuscode,
-          accountnumber:data[i].accountnumber,
-          filtername:data[i].filtername,
-          ivz_customer:data[i].ivz_customer,
-          accountype:data[i].accountype,
-          ivz_statuscomplete:data[i].ivz_statuscomplete,
-          remarkreject:data[i].remarkreject,
-          ivz_taxid:data[i].ivz_taxid,
-          customertypecode:data[i].customertypecode
-        });
-      }
-    }
+  GetAccount($stateParams.terriid,Data.mastertype,function(data){
+     $scope.showLoadingProperTimesRegter('โหลดข้อมูล');
+     if(data){
+       var x = 0;
+       var loopArray = function(arr){
+         getPush(x,function(){
+           x++;
+           if(x < arr.length){
+             loopArray(arr);
+           }else{
+             $scope.showLoadingComplete('โหลดข้อมูลเสร็จแล้ว');
+             setTimeout(function(){
+               $ionicLoading.hide();
+             },2000);
+           }
+         });
+       }
+       loopArray(data);
+       function getPush(i,callback){
+         if(data[i].statuscode == 1 || data[i].statuscode == '1'){
+           $scope.showLoadingProperTimesRegter('โหลดข้อมูลของ '+data[i].name);
+           $scope.listaccount.push({
+             accountid:data[i].accountid,
+             name:data[i].name,
+             ivz_addresscountry:data[i].ivz_addresscountry,
+             ivz_addressprovince:data[i].ivz_addressprovince,
+             ivz_addressdistrict:data[i].ivz_addressdistrict,
+             ivz_availablefromtime:data[i].ivz_availablefromtime,
+             ivz_availabletotime:data[i].ivz_availabletotime,
+             territoryid:data[i].territoryid,
+             customertypecode:data[i].customertypecode,
+             statuscode:data[i].statuscode,
+             accountnumber:data[i].accountnumber,
+             filtername:data[i].filtername,
+             ivz_customer:data[i].ivz_customer,
+             accountype:data[i].accountype,
+             ivz_statuscomplete:data[i].ivz_statuscomplete,
+             remarkreject:data[i].remarkreject,
+             ivz_taxid:data[i].ivz_taxid,
+             customertypecode:data[i].customertypecode
+           });
+         }
+         callback();
+       }
+     }
+    $scope.$apply();
   });
   $scope.openaccount = function(){
-    $state.go('app.openaccount',{territoryid:Data.termas,mastertype:1,getguid:Data.getguid,pricelevel:Data.pricelevel,transactioncurrency:Data.transactioncurrency});
+    $state.go('app.openaccount',{
+      territoryid:Data.termas,
+      mastertype:Data.mastertype,
+      getguid:Data.getguid,
+      pricelevel:Data.pricelevel,
+      transactioncurrency:Data.transactioncurrency},{reload:true});
   };
   $scope.reloaddata = function(){
-    $scope.showLoadingProperTimes();
+    $scope.showLoadingProperTimesRegter('โหลดข้อมูล');
     $scope.listaccount = [];
-    GetAccount($scope.territoryid,1,function(data){
-      $ionicLoading.hide();
-      for(var i in data){
-        if(data[i].statuscode == 1 || data[i].statuscode == '1'){
-          $scope.listaccount.push({
-            accountid:data[i].accountid,
-            name:data[i].name,
-            ivz_addresscountry:data[i].ivz_addresscountry,
-            ivz_addressprovince:data[i].ivz_addressprovince,
-            ivz_addressdistrict:data[i].ivz_addressdistrict,
-            ivz_availablefromtime:data[i].ivz_availablefromtime,
-            ivz_availabletotime:data[i].ivz_availabletotime,
-            territoryid:data[i].territoryid,
-            customertypecode:data[i].customertypecode,
-            statuscode:data[i].statuscode,
-            accountnumber:data[i].accountnumber,
-            filtername:data[i].filtername,
-            ivz_customer:data[i].ivz_customer,
-            accountype:data[i].accountype,
-            ivz_statuscomplete:data[i].ivz_statuscomplete,
-            remarkreject:data[i].remarkreject,
-            ivz_taxid:data[i].ivz_taxid,
-            customertypecode:data[i].customertypecode
+    GetAccount(Data.termas,Data.mastertype,function(data){
+      $scope.showLoadingProperTimesRegter('โหลดข้อมูล');
+      if(data){
+        var x = 0;
+        var loopArray = function(arr){
+          getPush(x,function(){
+            x++;
+            if(x < arr.length){
+              loopArray(arr);
+            }else{
+              $scope.showLoadingComplete('โหลดข้อมูลเสร็จแล้ว');
+              setTimeout(function(){
+                $ionicLoading.hide();
+              },2000);
+            }
           });
+        }
+        loopArray(data);
+        function getPush(i,callback){
+          if(data[i].statuscode == 1 || data[i].statuscode == '1'){
+            $scope.showLoadingProperTimesRegter('โหลดข้อมูลของ '+data[i].name);
+            $scope.listaccount.push({
+              accountid:data[i].accountid,
+              name:data[i].name,
+              ivz_addresscountry:data[i].ivz_addresscountry,
+              ivz_addressprovince:data[i].ivz_addressprovince,
+              ivz_addressdistrict:data[i].ivz_addressdistrict,
+              ivz_availablefromtime:data[i].ivz_availablefromtime,
+              ivz_availabletotime:data[i].ivz_availabletotime,
+              territoryid:data[i].territoryid,
+              customertypecode:data[i].customertypecode,
+              statuscode:data[i].statuscode,
+              accountnumber:data[i].accountnumber,
+              filtername:data[i].filtername,
+              ivz_customer:data[i].ivz_customer,
+              accountype:data[i].accountype,
+              ivz_statuscomplete:data[i].ivz_statuscomplete,
+              remarkreject:data[i].remarkreject,
+              ivz_taxid:data[i].ivz_taxid,
+              customertypecode:data[i].customertypecode
+            });
+          }
+          callback();
         }
       }
       $scope.$apply();
@@ -2702,33 +3140,50 @@ angular.module('starter.controllers', [])
   //$scope.filtertype = 0 = no,1=complete,2=wait,3=reject,4=yes
   $scope.filtertype = '';
   $scope.setfilter = function(txtfilter){
-    //alert(txtfilter);
-    $scope.showLoadingProperTimes();
     $scope.listaccount = [];
-    GetAccount($scope.territoryid,1,function(data){
-      $ionicLoading.hide();
-      for(var i in data){
-        if(data[i].statuscode == txtfilter){
-          $scope.listaccount.push({
-            accountid:data[i].accountid,
-            name:data[i].name,
-            ivz_addresscountry:data[i].ivz_addresscountry,
-            ivz_addressprovince:data[i].ivz_addressprovince,
-            ivz_addressdistrict:data[i].ivz_addressdistrict,
-            ivz_availablefromtime:data[i].ivz_availablefromtime,
-            ivz_availabletotime:data[i].ivz_availabletotime,
-            territoryid:data[i].territoryid,
-            customertypecode:data[i].customertypecode,
-            statuscode:data[i].statuscode,
-            accountnumber:data[i].accountnumber,
-            filtername:data[i].filtername,
-            ivz_customer:data[i].ivz_customer,
-            accountype:data[i].accountype,
-            ivz_statuscomplete:data[i].ivz_statuscomplete,
-            remarkreject:data[i].remarkreject,
-            ivz_taxid:data[i].ivz_taxid,
-            customertypecode:data[i].customertypecode
+    GetAccount(Data.termas,Data.mastertype,function(data){
+      $scope.showLoadingProperTimesRegter('โหลดข้อมูล');
+      if(data){
+        var x = 0;
+        var loopArray = function(arr){
+          getPush(x,function(){
+            x++;
+            if(x < arr.length){
+              loopArray(arr);
+            }else{
+              $scope.showLoadingComplete('โหลดข้อมูลเสร็จแล้ว');
+              setTimeout(function(){
+                $ionicLoading.hide();
+              },2000);
+            }
           });
+        }
+        loopArray(data);
+        function getPush(i,callback){
+          if(data[i].statuscode == txtfilter){
+            $scope.showLoadingProperTimesRegter('โหลดข้อมูลของ '+data[i].name);
+            $scope.listaccount.push({
+              accountid:data[i].accountid,
+              name:data[i].name,
+              ivz_addresscountry:data[i].ivz_addresscountry,
+              ivz_addressprovince:data[i].ivz_addressprovince,
+              ivz_addressdistrict:data[i].ivz_addressdistrict,
+              ivz_availablefromtime:data[i].ivz_availablefromtime,
+              ivz_availabletotime:data[i].ivz_availabletotime,
+              territoryid:data[i].territoryid,
+              customertypecode:data[i].customertypecode,
+              statuscode:data[i].statuscode,
+              accountnumber:data[i].accountnumber,
+              filtername:data[i].filtername,
+              ivz_customer:data[i].ivz_customer,
+              accountype:data[i].accountype,
+              ivz_statuscomplete:data[i].ivz_statuscomplete,
+              remarkreject:data[i].remarkreject,
+              ivz_taxid:data[i].ivz_taxid,
+              customertypecode:data[i].customertypecode
+            });
+          }
+          callback();
         }
       }
       $scope.$apply();
@@ -2738,48 +3193,76 @@ angular.module('starter.controllers', [])
     //alert(txtfilter);
     $scope.showLoadingProperTimes();
     $scope.listaccount = [];
-    GetAccount($scope.territoryid,1,function(data){
-      $ionicLoading.hide();
-      for(var i in data){
-        if(data[i].statuscode == txtfilter || data[i].statuscode == txtfilter2){
-          $scope.listaccount.push({
-            accountid:data[i].accountid,
-            name:data[i].name,
-            ivz_addresscountry:data[i].ivz_addresscountry,
-            ivz_addressprovince:data[i].ivz_addressprovince,
-            ivz_addressdistrict:data[i].ivz_addressdistrict,
-            ivz_availablefromtime:data[i].ivz_availablefromtime,
-            ivz_availabletotime:data[i].ivz_availabletotime,
-            territoryid:data[i].territoryid,
-            customertypecode:data[i].customertypecode,
-            statuscode:data[i].statuscode,
-            accountnumber:data[i].accountnumber,
-            filtername:data[i].filtername,
-            ivz_customer:data[i].ivz_customer,
-            accountype:data[i].accountype,
-            ivz_statuscomplete:data[i].ivz_statuscomplete,
-            remarkreject:data[i].remarkreject,
-            ivz_taxid:data[i].ivz_taxid,
-            customertypecode:data[i].customertypecode
+    GetAccount(Data.termas,Data.mastertype,function(data){
+      $scope.showLoadingProperTimesRegter('โหลดข้อมูล');
+      if(data){
+        var x = 0;
+        var loopArray = function(arr){
+          getPush(x,function(){
+            x++;
+            if(x < arr.length){
+              loopArray(arr);
+            }else{
+              $scope.showLoadingComplete('โหลดข้อมูลเสร็จแล้ว');
+              setTimeout(function(){
+                $ionicLoading.hide();
+              },2000);
+            }
           });
+        }
+        loopArray(data);
+        function getPush(i,callback){
+          if(data[i].statuscode == txtfilter || data[i].statuscode == txtfilter2){
+            $scope.showLoadingProperTimesRegter('โหลดข้อมูลของ '+data[i].name);
+            $scope.listaccount.push({
+              accountid:data[i].accountid,
+              name:data[i].name,
+              ivz_addresscountry:data[i].ivz_addresscountry,
+              ivz_addressprovince:data[i].ivz_addressprovince,
+              ivz_addressdistrict:data[i].ivz_addressdistrict,
+              ivz_availablefromtime:data[i].ivz_availablefromtime,
+              ivz_availabletotime:data[i].ivz_availabletotime,
+              territoryid:data[i].territoryid,
+              customertypecode:data[i].customertypecode,
+              statuscode:data[i].statuscode,
+              accountnumber:data[i].accountnumber,
+              filtername:data[i].filtername,
+              ivz_customer:data[i].ivz_customer,
+              accountype:data[i].accountype,
+              ivz_statuscomplete:data[i].ivz_statuscomplete,
+              remarkreject:data[i].remarkreject,
+              ivz_taxid:data[i].ivz_taxid,
+              customertypecode:data[i].customertypecode
+            });
+          }
+          callback();
         }
       }
       $scope.$apply();
     });
   }
-
+}else{
+  $ionicHistory.nextViewOptions({
+    disableBack: true
+  });
+  $state.go('app.playlists',{},{reload:true});
+}
 })
 /*------------------------------- account editor ---------------------------*/
 .controller('AccountEditorCtrl',function($scope, $stateParams,$cookies,Data,$state,$ionicLoading,$ionicHistory){
+  $state.reload();
   $scope.Data = Data;//accountid;accountname
   Data.mastertype = $stateParams.mastertype;
   Data.getparaaccount = $stateParams.accountid;
   Data.getparaname = $stateParams.accountname;
   Data.gettxtid = $stateParams.accounttxtid;
   $scope.uistate = function(){
-    $state.go('app.openaccount',{territoryid:Data.termas,mastertype:1
-      ,getguid:$stateParams.accountid,pricelevel:Data.pricelevel
-      ,transactioncurrency:Data.transactioncurrency});
+    $state.go('app.openaccount',{
+      territoryid:Data.termas,
+      mastertype:Data.mastertype,
+      getguid:$stateParams.accountid,
+      pricelevel:Data.pricelevel,
+      transactioncurrency:Data.transactioncurrency},{reload:true});
   }
   $scope.deteaccount = function(){
     $scope.showLoadingProperTimes();
@@ -2791,44 +3274,107 @@ angular.module('starter.controllers', [])
             if(er){
               alert('error deteaccount 2697 '+er);
             }else{
-              setTimeout(function(){
-                $ionicLoading.hide();
-                $ionicHistory.goBack(-1);
-              },2000);
+              $scope.deletetask($stateParams.accountid);
             }
           });
     }catch(er){
       alert("error27006"+er);
     }
   }
+
+  $scope.deletetask = function(id){
+    gettaskaccont(id,function(data){
+      if(data){
+        try {
+          var ins = new MobileCRM.DynamicEntity("ivz_tasknewaccount",data[0].ivz_tasknewaccountid);
+              ins.properties.ivz_statuscomplete = parseInt(0);
+              ins.save(function(er){
+                if(er){
+                  alert('error deteaccount 2697 '+er);
+                }else{
+                  setTimeout(function(){
+                    $ionicLoading.hide();
+                    $ionicHistory.goBack(-1);
+                  },2000);
+                }
+              });
+        } catch (ee) {
+          alert('error change status task '+ee);
+        } finally {
+          setTimeout(function(){
+            $ionicLoading.hide();
+            $ionicHistory.goBack(-1);
+          },2000);
+        }
+      }
+    });
+  }
 })
 /*-------------------------- Wait Controller -------------------------*/
 .controller('WaitCtrl',function($scope, $stateParams,$cookies,Data,$state,$ionicLoading,$ionicHistory){
+  $state.reload();
   $scope.Data = Data;
   Data.mastertype = $stateParams.mastertype;
   $scope.typego = $stateParams.typego;
   //:masname/:mastertype/:typego
-  gettername($stateParams.masname,function(data){
-    $scope.listmaster = data;
+  $scope.listmaster = [];
+  gettername($cookies.get('name'),function(data){
+    if(data){
+      var x = 0;
+      var loopArray =function (arr){
+        getPush(x,function(){
+          x++;
+          if(x < arr.length){
+            loopArray(arr);
+          }else{
+            $scope.showLoadingComplete('โหลดข้อมูลเสร็จแล้ว');
+            setTimeout(function(){
+              $ionicLoading.hide();
+            },2000);
+          }
+        });
+      }
+      loopArray(data);
+      function getPush(i,callback){
+        $scope.showLoadingProperTimesRegter('โหลดข้อมูลเขตการขาย '+data[i].description);
+        $scope.listmaster.push({
+          ivz_territorymasterid:data[i].ivz_territorymasterid,
+          ivz_mastername:data[i].ivz_mastername,
+          ivz_leftterritory:data[i].ivz_leftterritory,
+          ivz_emailcontact:data[i].ivz_emailcontact,
+          ivz_leadermail:data[i].ivz_leadermail,
+          ivz_ccmail:data[i].ivz_ccmail,
+          ivz_empid:data[i].ivz_empid,
+          ivz_empname:data[i].ivz_empname,
+          ivz_statusempid:data[i].ivz_statusempid,
+          description:data[i].description
+        });
+        setTimeout(function(){
+          callback();
+        },200);
+      }
+    }
     $scope.$apply();
   });
   $scope.clickgo = function(idter){
     if($stateParams.typego == 1 || $stateParams.typego == '1'){
-        $state.go('app.waitaccount',{terid:idter});
+        $state.go('app.waitaccount',{terid:idter},{reload:true});
     }
   }
 })
 .controller('WaitListCtrl',function($scope, $stateParams,$cookies,Data,$state,$ionicLoading,$ionicHistory){
+  $state.reload();
   $scope.Data = Data;
   $scope.gotoleft = function(txt){
     if(txt == 0 || txt == '0'){
       $state.go('app.approveplanning',{mastertype:Data.mastertype});
     }else if(txt == 1 || txt == '1'){
-      $state.go('app.waitapprove',{masname:Data.masname,mastertype:Data.mastertype,typego:1});
+      $state.go('app.waitapprove',{masname:$cookies.get('name'),mastertype:Data.mastertype,typego:1},{reload:true});
     }
   }
 })
 .controller('WaitAccountCtrl',function($scope, $stateParams,$cookies,Data,$state,$ionicLoading,$ionicHistory,arrlist){
+  $state.reload();
   $scope.Data = Data;
   $scope.filtertxt = '';
   $scope.reloaddata = function(){
@@ -2873,18 +3419,67 @@ angular.module('starter.controllers', [])
     $scope.listaccount.splice(index,1);
   }
   $scope.approveaccount = function(){
-    alert('approve');
+    var listac = $scope.listaccount;
+    var x = 0;
+    var loopArray = function(arr){
+      upins(x,function(){
+        x++;
+        if(x < arr.length){
+          loopArray(arr);
+        }else{
+          $ionicLoading.hide();
+          setTimeout(function(){
+            $ionicHistory.goBack(-1);
+          },2000);
+        }
+      });
+    }
+    loopArray(listac);
+    function upins(i,callback){
+      $scope.showLoadingProperTimesRegter('บันทึกข้อมูลลูกค้า '+listac[i].name);
+          var ins = new MobileCRM.DynamicEntity('account',listac[i].accountid);
+              ins.properties.statuscode = parseInt(917970001);
+              ins.save(function(es){
+                if(es){
+                  alert('error 2899 '+es);
+                }else{
+                  setTimeout(function(){
+                    callback();
+                  },1000);
+                }
+              });
+    }
   };
   $scope.rejectapprove = function(){
-    arrlist.listac = $scope.listaccount;
-    getTerEmp($stateParams.terid,function(data){
-      if(data){
-        $state.go('app.rejectaccount',{terid:$stateParams.terid,salename:data[0].ivz_empname,tername:data[0].name});
-      }
-    });
+    var databulid = $scope.listaccount;
+    var x = 0;
+    var loopArray = function(arr){
+      inpush(x,function(){
+        x++;
+        if(x < arr.length){
+          loopArray(arr);
+        }else{
+          getTerEmp($stateParams.terid,function(data){
+            if(data){
+              $state.go('app.rejectaccount',{terid:$stateParams.terid,salename:data[0].ivz_empname,tername:data[0].name});
+            }
+          });
+        }
+      });
+    }
+    loopArray($scope.listaccount);
+    function inpush(msg,callback){
+      arrlist.listac.push({
+        accountid:databulid[msg].accountid,
+        name:databulid[msg].name,
+        territoryid:databulid[msg].territoryid
+      });
+      callback();
+    }
   };
 })
 .controller('WaitAccountRejectCtrl',function($scope, $stateParams,$cookies,Data,$state,$ionicLoading,$ionicHistory,arrlist){
+  $state.reload();
   $scope.Data = Data;
   Data.mastertype = $stateParams.mastertype;
   //$stateParams.salename,$stateParams.tername
@@ -2892,95 +3487,119 @@ angular.module('starter.controllers', [])
   $scope.tername = $stateParams.tername;
   $scope.txtreject;
   $scope.txthidden = true;
-  var comment = $scope.txtreject;
-  $scope.confirmreject = function(){
+  $scope.user = {
+    txtreject:''
+  }
+  /*-------------reject account ---------------*/
+  $scope.confirmreject = function(comment){
     var listac = arrlist.listac;
-    $scope.showLoadingProperTimesRegter('click confirm '+listac.length);
-    if(comment.length <= 0){
-      $scope.txthidden = false;
-    }else{
+    if(comment){
       $scope.txthidden = true;
       var x = 0;
       var loopArray = function(arr){
-        insertdb(x,function(){
+      //  alert(x);
+        upins(x,function(){
           x++;
           if(x < arr.length){
             loopArray(arr);
           }else{
-            if((x+1) >= arr.length || (x+1) == arr.length){
-              	console.log('Mutch more');
-                $ionicLoading.hide();
-                SendMail(listac[0].ivz_emailcontact,'title',$scope.txtreject);
+            $ionicLoading.hide();
+            var terid = listac[0].territoryid;
+            //alert(terid.id);
+            getTerEmp(terid.id,function(data){
+              if(data){
+                var title = 'ไม่อนุมัติเปิดบัญชีลูกค้าใหม่';
+                var text = "เรียน พนักงานขายเขต "+data[0].name+" ไม่สามารถเปิดบัญชีลูกค้าใหม่ได้เนื่องจาก"+ comment +
+                " ขอบคุณครับ  (อีเมลฉบับนี้ส่งอัตโนมัติจากระบบ CRM)";
+                SendMail(data[0].ivz_emailcontact,title,text);
                 setTimeout(function(){
                   $ionicHistory.goBack(-1);
                 },2000);
               }
-            }
+              $scope.$apply();
+            });
           }
         });
       }
       loopArray(listac);
-      function insertdb(i,callback){
-        $scope.showLoadingProperTimesRegter('กำลังบันทึกข้อมูล '+listac[i].name);
-        try{
-          var ins = new MobileCRM.DynamicEntity('account',listac[i].accountid);
-              ins.properties.statuscode = parseInt(917970003);
-              ins.properties.ivz_remarkreject = $scope.txtcomment;
-              ins.save(function(es){
-                if(es){
-                  alert('error 2918 '+es);
-                }else{
-                  setTimeout(function(){
-                    callback();
-                  },3000);
-                }
-              });
-        }catch(er){
-          alert('error insert db 2907 '+er);
-        }
+      function upins(i,callback){
+        $scope.showLoadingProperTimesRegter('บันทึกข้อมูลลูกค้า '+listac[i].name);
+            var ins = new MobileCRM.DynamicEntity('account',listac[i].accountid);
+                ins.properties.statuscode = parseInt(917970003);
+                ins.properties.ivz_remarkreject = comment;
+                ins.save(function(es){
+                  if(es){
+                    alert('error 2918 '+es);
+                  }else{
+                    setTimeout(function(){
+                      callback();
+                    },1000);
+                  }
+                });
       }
+    }else{
+      $scope.txthidden = false;
     }
-  }
-  $scope.cancelcp = function(){
-    $ionicLoading.goBack(-1);
+  };
+  $scope.cancelback = function(){
+    $ionicHistory.goBack(-1);
   }
 })
 /*
 ------------------------------------------------------------------------------------------
 */
-.controller('AccountDetailCtrl',function($scope, $stateParams,$cookies,Data){
+.controller('AccountDetailCtrl',function($scope, $stateParams,$cookies,Data,$state,$ionicLoading,$ionicHistory){
+  $state.reload();
   $scope.Data = Data;
   Data.mastertype = $stateParams.mastertype;
 })
-.controller('AccountInvoiceCtrl',function($scope, $stateParams,$cookies,Data){
+.controller('AccountInvoiceCtrl',function($scope, $stateParams,$cookies,Data,$state,$ionicLoading,$ionicHistory){
+  $state.reload();
   $scope.Data = Data;
   Data.mastertype = $stateParams.mastertype;
   $scope.vCheckAll = 0;
-  // if(Data.mastertype == 1 || Data.mastertype == '1'){
-  //   Data.dirsale = false;
-  // }else if(Data.mastertype == 2 || Data.mastertype == '2' || Data.mastertype == 3 || Data.mastertype == '3'){
-  //   Data.dirsale = true;
-  // }
 })
-.controller('AccountBillingCtrl',function($scope, $stateParams,$cookies,Data){
+.controller('AccountBillingCtrl',function($scope, $stateParams,$cookies,Data,$state,$ionicLoading,$ionicHistory){
+  $state.reload();
   $scope.Data = Data;
   Data.mastertype = $stateParams.mastertype;
   $scope.vCheckAll = 0;
-  // if(Data.mastertype == 1 || Data.mastertype == '1'){
-  //   Data.dirsale = false;
-  // }else if(Data.mastertype == 2 || Data.mastertype == '2' || Data.mastertype == 3 || Data.mastertype == '3'){
-  //   Data.dirsale = true;
-  // }
 })
 ////////////////////// end /////////////////
 ////////////////////// Adjustment ///////////////
-.controller('AdjustmentCtrl',function($scope, $stateParams,$cookies,Data){
+.controller('AdjustmentListCtrl',function($scope, $stateParams,$cookies,Data,$state,$ionicLoading,$ionicHistory){
+  $state.reload();
+  $scope.Data = Data;
+  $scope.mdchk = function(idval){
+    console.log(idval);
+  }
+  $scope.cAdjustment = function(){
+    $state.go('app.adjustment',{accountid:1234554,mastertype:1});
+  }
+  $scope.cAdjustmentCredit = function(){
+    $state.go('app.adjustmentcredit',{accountid:1234554,mastertype:1});
+  }
+})
+.controller('AdjustmentCtrl',function($scope, $stateParams,$cookies,Data,$state,$ionicLoading,$ionicHistory){
+  $state.reload();
   $scope.Data = Data;
   Data.mastertype = $stateParams.mastertype;
+  $scope.goop = function(id){
+    if(id == 1 || id == '1'){
+      $state.go('app.adjustmentname',{accountid:$stateParams.accountid,mastertype:$stateParams.mastertype});
+    }else if(id == 2 || id == '2'){
+
+    }else if(id == 3 || id == '3'){
+
+    }else if(id == 4 || id == '4'){
+
+    }
+  }
 })
 //////////////////////// End ////////////////////
 ////////////////////// Order ///////////////
-.controller('OrderCtrl',function($scope, $stateParams,$cookies,Data){
+.controller('OrderCtrl',function($scope, $stateParams,$cookies,Data,$state,$ionicLoading,$ionicHistory){
+  $state.reload();
   $scope.Data = Data;
   Data.mastertype = $stateParams.mastertype;
 })

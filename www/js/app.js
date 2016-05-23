@@ -1,6 +1,6 @@
 angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookies','ngMessages'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $rootScope, $ionicHistory) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -14,6 +14,9 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
       StatusBar.styleDefault();
     }
   });
+  $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+     $ionicHistory.clearCache();
+  });
 })
 .factory('Data',function(){
   return {
@@ -21,32 +24,37 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     scollecttion:0,
     latitude:'',
     longitude:'',
-    salestype:2,
-    Tername:'A01',
+    salestype:'',
+    Tername:'',
     supsale:false,
     dirsale:false,
-    mastertype:2,//set default null
+    mastertype:'',//set default null
     sterritory:'',
     nterritory:'',
-    termas:'40791CA7-D5E1-E511-80E1-005056A71F87',//A02
+    termas:'',//A02
     pricelevel:'0F6889BA-3D46-E511-80D1-005056A71F87',//บาท
     transactioncurrency:'83008D3A-1A05-E511-80C7-005056A71F87',// บาท
     countrymaster:'6EF2ECB7-D5E1-E511-80E1-005056A71F87',//address th
-    masname:'U01',
-    Empid:'EXAMPLE',
-    mailtomail:'test@gmail.com;leader@gmail.com;ccmail@gmail.com',
+    masname:'',
+    Empid:'',
+    mailtomail:'',
     getguid:guid(),
     getparaaccount:'',
     getparaname:'',
     gettxtid:'',
     dataguid:'',
     emnot:'',
-    salename:'Mr.Test Saler',
-    tername:'D09',
+    salename:'',
+    tername:'',
     DataList:'',
     countserve:[10,20,30,40,50,60,70,80,90,100,110,120,130,140,150],
     recivename:'',
-    businessname:''
+    businessname:'',
+    listregist:'',
+    logonstatus:true,
+    logontype:true,
+    StoreDoc:'',
+    custermertype:''
   }
 })
 .factory('Darray',function(){
@@ -71,7 +79,21 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
 })
 .factory('arrlist',function(){
   return {
-    listac:''
+    listac:[]
+  }
+})
+.factory('datauser',function(){
+  return {
+    territoryid:'',
+    ivz_empname:'',
+    ivz_empid:'',
+    ivz_password:'',
+    ivz_emailcontact:'',
+    ivz_leadermail:'',
+    ivz_ccmail:'',
+    name:'',
+    description:'',
+    ivz_statusempid:''
   }
 })
 .service('rego',function(){
@@ -99,9 +121,8 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
 
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
-
  .state('app', {
-    url: '/app',
+    url:'/app',
     abstract: true,
     templateUrl: 'templates/menu.html',
     controller: 'AppCtrl'
@@ -109,7 +130,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
 
   ///////////////// Calendar /////////////////////////
   .state('app.search', {
-    url: '/search/:mastertype/:sterritory/:nterritory',
+    url:'/search/:mastertype/:sterritory/:nterritory',
     views: {
       'menuContent': {
         templateUrl: 'templates/planning/search.html',
@@ -118,7 +139,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   })
   .state('app.search2', {
-    url: '/search/:mastertype/:sterritory/:nterritory',
+    url:'/search/:mastertype/:sterritory/:nterritory',
     views: {
       'menuContent': {
         templateUrl: 'templates/planning/search2.html',
@@ -127,7 +148,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   })
   .state('app.searchplan', {
-    url: '/searchplan/:mastertype/:sterritory/:nterritory',
+    url:'/searchplan/:mastertype/:sterritory/:nterritory',
     views: {
       'menuContent': {
         templateUrl: 'templates/planning/searchplan.html',
@@ -136,7 +157,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   })
   .state('app.calendarlist', {
-    url: '/calendarlist',
+    url:'/calendarlist',
     views: {
       'menuContent': {
         templateUrl: 'templates/planning/calendarlist.html',
@@ -145,7 +166,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   })
   .state('app.listaccount', {
-    url: '/listaccount/:accountype',
+    url:'/listaccount/:accountype',
     views: {
       'menuContent': {
         templateUrl: 'templates/planning/accountlist.html',
@@ -154,7 +175,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   })
   .state('app.accountid', {
-    url: '/accountid/:accountid/:accountname/:accountype/:proviceid/:districtid/:territoryid',
+    url:'/accountid/:accountid/:accountname/:accountype/:proviceid/:districtid/:territoryid',
     views: {
       'menuContent': {
         templateUrl: 'templates/planning/accountid.html',
@@ -163,7 +184,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   })
   .state('app.searchsup', {
-    url: '/searchsup/:mastertype',
+    url:'/searchsup/:mastertype',
     views: {
       'menuContent': {
         templateUrl: 'templates/planning/searchsup.html',
@@ -172,7 +193,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   })
   .state('app.sendplan', {
-    url: '/sendplan/:territory/:mastertype',
+    url:'/sendplan/:territory/:mastertype',
     views: {
       'menuContent': {
         templateUrl: 'templates/planning/sendplan.html',
@@ -181,7 +202,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   })
   .state('app.listtersup', {
-    url: '/listtersup/:mastertype',
+    url:'/listtersup/:mastertype',
     views: {
       'menuContent': {
         templateUrl: 'templates/planning/listtersup.html',
@@ -190,7 +211,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   })
   .state('app.listplaning', {
-    url: '/listplaning/:mastertype/:territoryid/:mailtomail',
+    url:'/listplaning/:mastertype/:territoryid/:mailtomail',
     views: {
       'menuContent': {
         templateUrl: 'templates/planning/listplaning.html',
@@ -199,7 +220,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   })
   .state('app.sendplanning', {
-    url: '/sendplanning/:mastertype',
+    url:'/sendplanning/:mastertype',
     views: {
       'menuContent': {
         templateUrl: 'templates/planning/sendplanning.html',
@@ -208,7 +229,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   })
   .state('app.approveplanning', {
-    url: '/approveplanning/:mastertype',
+    url:'/approveplanning/:mastertype',
     views: {
       'menuContent': {
         templateUrl: 'templates/planning/approveplanning.html',
@@ -217,7 +238,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   })
   .state('app.listapprove', {
-    url: '/listapprove/:territoryid',
+    url:'/listapprove/:territoryid',
     views: {
       'menuContent': {
         templateUrl: 'templates/planning/listapprove.html',
@@ -226,7 +247,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   })
   .state('app.rejectplan', {
-    url: '/rejectplan/:territoryid/:salename/:tername',
+    url:'/rejectplan/:territoryid/:salename/:tername',
     views: {
       'menuContent': {
         templateUrl: 'templates/planning/rejectplan.html',
@@ -237,7 +258,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
 ///////////////// End /////////////////////////////////////
 //////////////// planned /////////////////////////////////
 .state('app.resultplan', {
-  url: '/resultplan/:mastertype/:sterritory',
+  url:'/resultplan/:mastertype/:sterritory',
   views: {
     'menuContent': {
       templateUrl: 'templates/planned/resultplan.html',
@@ -246,7 +267,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.listplanned', {
-  url: '/listplanned/:mastertype',
+  url:'/listplanned/:mastertype',
   views: {
     'menuContent': {
       templateUrl: 'templates/planned/listplan.html',
@@ -255,7 +276,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.planneddetail', {
-  url: '/planneddetail/:mastertype/:accountid/:accountname/:terid/:province/:distid/:txtid',
+  url:'/planneddetail/:mastertype/:accountid/:accountname/:terid/:province/:distid/:txtid',
   views: {
     'menuContent': {
       templateUrl: 'templates/planned/planneddetail.html',
@@ -266,7 +287,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
 ////////////////// End ///////////////////////////////////
 ////////////////// new account //////////////////////////
 .state('app.openaccount', {
-  url: '/openaccount/:territoryid/:mastertype/:getguid/:pricelevel/:transactioncurrency',
+  url:'/openaccount/:territoryid/:mastertype/:getguid/:pricelevel/:transactioncurrency',
   views: {
     'menuContent': {
       templateUrl: 'templates/newaccount/openaccount.html',
@@ -275,7 +296,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.openaccountsup', {
-  url: '/openaccount/:territoryid/:mastertype/:getguid',
+  url:'/openaccount/:territoryid/:mastertype/:getguid/:tername',
   views: {
     'menuContent': {
       templateUrl: 'templates/newaccount/openaccountsup.html',
@@ -284,7 +305,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.accountcontact', {
-  url: '/accountcontact/:getguid',
+  url:'/accountcontact/:getguid',
   views: {
     'menuContent': {
       templateUrl: 'templates/newaccount/accountcontact.html',
@@ -293,7 +314,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.addresstran', {
-  url: '/addresstran/:getguid',
+  url:'/addresstran/:getguid',
   views: {
     'menuContent': {
       templateUrl: 'templates/newaccount/addresstran.html',
@@ -302,7 +323,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.accountmeetting', {
-  url: '/accountmeetting/:getguid',
+  url:'/accountmeetting/:getguid',
   views: {
     'menuContent': {
       templateUrl: 'templates/newaccount/accountmeetting.html',
@@ -311,7 +332,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.addressinvoice', {
-  url: '/addressinvoice/:getguid',
+  url:'/addressinvoice/:getguid',
   views: {
     'menuContent': {
       templateUrl: 'templates/newaccount/addressinvoice.html',
@@ -320,7 +341,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.addressother', {
-  url: '/addressother/:getguid',
+  url:'/addressother/:getguid',
   views: {
     'menuContent': {
       templateUrl: 'templates/newaccount/addressother.html',
@@ -329,7 +350,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.infotransport', {
-  url: '/infotransport/:getguid',
+  url:'/infotransport/:getguid',
   views: {
     'menuContent': {
       templateUrl: 'templates/newaccount/infotransport.html',
@@ -338,7 +359,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.document', {
-  url: '/document/:getguid',
+  url:'/document/:getguid',
   views: {
     'menuContent': {
       templateUrl: 'templates/newaccount/document.html',
@@ -347,7 +368,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.accountcredit', {
-  url: '/accountcredit/:getguid',
+  url:'/accountcredit/:getguid',
   views: {
     'menuContent': {
       templateUrl: 'templates/newaccount/accountcredit.html',
@@ -356,7 +377,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.infomart', {
-  url: '/infomart/:getguid',
+  url:'/infomart/:getguid',
   views: {
     'menuContent': {
       templateUrl: 'templates/newaccount/infomart.html',
@@ -365,7 +386,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.contactus', {
-  url: '/contactus/:getguid',
+  url:'/contactus/:getguid',
   views: {
     'menuContent': {
       templateUrl: 'templates/newaccount/contactus.html',
@@ -374,7 +395,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.contactusadd', {
-  url: '/contactusadd/:getguid',
+  url:'/contactusadd/:getguid',
   views: {
     'menuContent': {
       templateUrl: 'templates/newaccount/contactusadd.html',
@@ -383,7 +404,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.companyus', {
-  url: '/companyus/:getguid',
+  url:'/companyus/:getguid',
   views: {
     'menuContent': {
       templateUrl: 'templates/newaccount/companyus.html',
@@ -392,7 +413,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.companyusadd', {
-  url: '/companyusadd/:getguid',
+  url:'/companyusadd/:getguid',
   views: {
     'menuContent': {
       templateUrl: 'templates/newaccount/companyusadd.html',
@@ -401,7 +422,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.confirmreg', {
-  url: '/confirmreg/:getguid',
+  url:'/confirmreg/:getguid',
   views: {
     'menuContent': {
       templateUrl: 'templates/newaccount/confirmreg.html',
@@ -412,7 +433,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
 ///////////////////// end ///////////////////////////////
 //////////////////  account list //////////////////////////
 .state('app.accountlist', {
-  url: '/accountlist/:terriid/:mastertype',
+  url:'/accountlist/:terriid/:mastertype',
   views: {
     'menuContent': {
       templateUrl: 'templates/account/accountlist.html',
@@ -420,8 +441,17 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   }
 })
+.state('app.accountlistsup', {
+  url:'/accountlistsup/:terriid/:mastertype',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/account/accountlistsup.html',
+      controller:'AccountListSupCtrl'
+    }
+  }
+})
 .state('app.accountdetail', {
-  url: '/accountdetail/:accountid/:mastertype',
+  url:'/accountdetail/:accountid/:mastertype',
   views: {
     'menuContent': {
       templateUrl: 'templates/account/accountdetail.html',
@@ -430,7 +460,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.accountinvoice', {
-  url: '/accountinvoice/:accountid/:mastertype',
+  url:'/accountinvoice/:accountid/:mastertype',
   views: {
     'menuContent': {
       templateUrl: 'templates/account/accountinvoice.html',
@@ -439,7 +469,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.accountbilling', {
-  url: '/accountbilling/:accountid/:mastertype',
+  url:'/accountbilling/:accountid/:mastertype',
   views: {
     'menuContent': {
       templateUrl: 'templates/account/accountbilling.html',
@@ -448,7 +478,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.accounteditor', {
-  url: '/accounteditor/:accountid/:accountname/:accounttxtid/:mastertype',
+  url:'/accounteditor/:accountid/:accountname/:accounttxtid/:mastertype',
   views: {
     'menuContent': {
       templateUrl: 'templates/account/accounteditor.html',
@@ -458,8 +488,35 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
 })
 ///////////////////// end ///////////////////////////////
 ///////////////////// Adjustment ////////////////////////
+.state('app.adjustmentlist', {
+  url:'/adjustmentlist/:terid/:mastertype',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/adjustment/adjustmentlist.html',
+      controller:'AdjustmentListCtrl'
+    }
+  }
+})
+.state('app.adjustmentlistsup', {
+  url:'/adjustmentlistsup/:tername/:mastertype',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/adjustment/option.html',
+      controller:'AdjustmentCtrl'
+    }
+  }
+})
 .state('app.adjustment', {
-  url: '/adjustment/:accountid/:mastertype',
+  url:'/adjustment/:accountid/:mastertype',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/adjustment/option.html',
+      controller:'AdjustmentCtrl'
+    }
+  }
+})
+.state('app.adjustmentname', {
+  url:'/adjustmentname/:accountid/:mastertype',
   views: {
     'menuContent': {
       templateUrl: 'templates/adjustment/option.html',
@@ -470,7 +527,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
 ///////////////////// End ///////////////////////////////
 ///////////////////// Order ////////////////////////
 .state('app.order', {
-  url: '/order/:accountid/:mastertype',
+  url:'/order/:accountid/:mastertype',
   views: {
     'menuContent': {
       templateUrl: 'templates/order/option.html',
@@ -480,7 +537,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
 })
 /*---------------------- Approve Wating --------------------*/
 .state('app.waitapprove', {
-  url: '/waitapprove/:masname/:mastertype/:typego',
+  url:'/waitapprove/:masname/:mastertype/:typego',
   views: {
     'menuContent': {
       templateUrl: 'templates/approve/waitlist.html',
@@ -489,7 +546,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.waitlist', {
-  url: '/waitlist',
+  url:'/waitlist',
   views: {
     'menuContent': {
       templateUrl: 'templates/approve/menu.html',
@@ -498,7 +555,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.waitaccount', {
-  url: '/waitaccount/:terid',
+  url:'/waitaccount/:terid',
   views: {
     'menuContent': {
       templateUrl: 'templates/approve/waitaccount.html',
@@ -507,7 +564,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.rejectaccount', {
-  url: '/rejectaccount/:terid/:salename/:tername',
+  url:'/rejectaccount/:terid/:salename/:tername',
   views: {
     'menuContent': {
       templateUrl: 'templates/approve/rejectapprove.html',
@@ -518,15 +575,16 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
 ///////////////////// End ///////////////////////////////
 
   .state('app.browse', {
-      url: '/browse',
+      url:'/browse',
       views: {
         'menuContent': {
-          templateUrl: 'templates/browse.html'
+          templateUrl: 'templates/browse.html',
+          controller: 'ProfileCtrl'
         }
       }
     })
     .state('app.playlists', {
-      url: '/playlists',
+      url:'/playlists',
       views: {
         'menuContent': {
           templateUrl: 'templates/playlists.html',
@@ -534,15 +592,14 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
         }
       }
     })
-  .state('app.single', {
-    url: '/playlists/:playlistId',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/playlist.html',
-        controller: 'PlaylistCtrl'
+  .state('app.logout', {
+      url:'/playlists',
+      views: {
+        'menuContent': {
+          controller: 'LogoutCtrl'
+        }
       }
-    }
-  });
+    });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/playlists');
 });

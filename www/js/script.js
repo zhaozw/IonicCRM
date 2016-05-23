@@ -14,7 +14,144 @@ document.writeln('<script src="js/controllers.js"></script>');
 function alerter(er){
 	alert(er);
 }
+/*--------------------------- Check User --------------------------*/
+function getUserCheck(uid,upwd,callback){
+	/*alert('Get user:'+uid+'=='+upwd);*/
+	var a = new MobileCRM.FetchXml.Entity('territory');
+		a.addAttribute('territoryid');//0
+		a.addAttribute('ivz_empname');//1
+		a.addAttribute('ivz_empid');//2
+		a.addAttribute('ivz_password');//3
+		a.addAttribute('ivz_emailcontact');//4
+		a.addAttribute('ivz_leadermail');//5
+		a.addAttribute('ivz_ccmail');//6
+		a.addAttribute('name');//7
+		a.addAttribute('description');//8
+		a.addAttribute('ivz_statusempid');//9
+	var filter = new MobileCRM.FetchXml.Filter();
+		filter.where('name','eq',uid);
+		a.filter = filter;
+	var fetch = new MobileCRM.FetchXml.Fetch(a);
+		fetch.execute('array',function(data){
+			var b = [];
+			for(var i in data){
+				if(data[0][3] === upwd){
+					b.push({
+							territoryid:data[0][0],
+							ivz_empname:data[0][1],
+							ivz_empid:data[0][2],
+							ivz_password:data[0][3],
+							ivz_emailcontact:data[i][4],
+							ivz_leadermail:data[i][5],
+							ivz_ccmail:data[i][6],
+							ivz_name:data[i][7],
+							ter_description:data[i][8],
+							ivz_statusempid:data[i][9]
+						});
+				}
+			}
+			callback(b);
+		},function(er){alert(er);},null);
+}
+/* ----------------------------- Get Task ----------------------*/
+function gettaskaccont(id,callback){
+	var a = new MobileCRM.FetchXml.Entity('ivz_tasknewaccount');
+		a.addAttribute('ivz_tasknewaccountid');//0
+		a.addAttribute('ivz_name');//1
+		a.addAttribute('ivz_customer');//2
+		a.addAttribute('ivz_saletype');//3
+		a.addAttribute('ivz_statusdoc');//4
+		a.addAttribute('ivz_statuscustomer');//5
+		a.addAttribute('ivz_territory');//6
+		a.addAttribute('ivz_remarkcomment');//7
+		a.addAttribute('ivz_statuscomplete');//8
+	var filter = new MobileCRM.FetchXml.Filter();
+		filter.where('ivz_customer','eq',id);
+		a.filter = filter;
+		var l = a.addLink('territory','territoryid','ivz_territory','outer');
+				l.addAttribute('ivz_emailcontact');//9
+				l.addAttribute('ivz_leadermail');//10
+				l.addAttribute('ivz_ccmail');//11
+				l.addAttribute('ivz_empid');//12
+				l.addAttribute('ivz_empname');//13
+				l.addAttribute('ivz_statusempid');//14
+				l.addAttribute('description');//15
+	var fetch = new MobileCRM.FetchXml.Fetch(a);
+		fetch.execute('array',function(data){
+			var b = [];
+			for(var i in data){
+					b.push({
+							ivz_tasknewaccountid:data[0][0],
+							ivz_name:data[0][1],
+							ivz_customer:data[0][2],
+							ivz_saletype:data[0][3],
+							ivz_statusdoc:data[i][4],
+							ivz_statuscustomer:data[i][5],
+							ivz_territory:data[i][6],
+							ivz_remarkcomment:data[i][7],
+							ivz_statuscomplete:data[i][8],
+							ivz_emailcontact:data[i][9],
+							ivz_leadermail:data[i][10],
+							ivz_ccmail:data[i][11],
+							ivz_empid:data[i][12],
+							ivz_empname:data[i][13],
+							ivz_statusempid:data[i][14],
+							description:data[i][15]
+						});
+			}
+			callback(b);
+		},function(er){alert(er);},null);
+}
+function gettaskaccontbyter(id,callback){
+	var a = new MobileCRM.FetchXml.Entity('ivz_tasknewaccount');
+		a.addAttribute('ivz_tasknewaccountid');//0
+		a.addAttribute('ivz_name');//1
+		a.addAttribute('ivz_customer');//2
+		a.addAttribute('ivz_saletype');//3
+		a.addAttribute('ivz_statusdoc');//4
+		a.addAttribute('ivz_statuscustomer');//5
+		a.addAttribute('ivz_territory');//6
+		a.addAttribute('ivz_remarkcomment');//7
+		a.addAttribute('ivz_statuscomplete');//8
+	var filter = new MobileCRM.FetchXml.Filter();
+		filter.where('ivz_territory','eq',id);
+		a.filter = filter;
+		var l = a.addLink('territory','territoryid','ivz_territory','outer');
+				l.addAttribute('ivz_emailcontact');//9
+				l.addAttribute('ivz_leadermail');//10
+				l.addAttribute('ivz_ccmail');//11
+				l.addAttribute('ivz_empid');//12
+				l.addAttribute('ivz_empname');//13
+				l.addAttribute('ivz_statusempid');//14
+				l.addAttribute('description');//15
+	var fetch = new MobileCRM.FetchXml.Fetch(a);
+		fetch.execute('array',function(data){
+			var b = [];
+			for(var i in data){
+					b.push({
+							ivz_tasknewaccountid:data[i][0],
+							ivz_name:data[i][1],
+							ivz_customer:data[i][2],
+							ivz_saletype:data[i][3],
+							ivz_statusdoc:data[i][4],
+							ivz_statuscustomer:data[i][5],
+							ivz_territory:data[i][6],
+							ivz_remarkcomment:data[i][7],
+							ivz_statuscomplete:data[i][8],
+							ivz_emailcontact:data[i][9],
+							ivz_leadermail:data[i][10],
+							ivz_ccmail:data[i][11],
+							ivz_empid:data[i][12],
+							ivz_empname:data[i][13],
+							ivz_statusempid:data[i][14],
+							description:data[i][15]
+						});
+			}
+			callback(b);
+		},function(er){alert(er);},null);
+}
 //////////////////////////// call doc ///////////////////////////
+
 function calldoc(cClick,ethis){
 		$('#'+cClick).trigger('click');
 	}
@@ -214,6 +351,10 @@ function gettername(tername,callback){
     	  l.addAttribute('ivz_emailcontact');//3
 		    l.addAttribute('ivz_leadermail');//4
 		    l.addAttribute('ivz_ccmail');//5
+				l.addAttribute('ivz_empid');//6
+				l.addAttribute('ivz_empname');//7
+				l.addAttribute('ivz_statusempid');//8
+				l.addAttribute('description');//9
     var fetch = new MobileCRM.FetchXml.Fetch(n);
 		    fetch.execute('array',function(data){
 		var b = [];
@@ -224,7 +365,11 @@ function gettername(tername,callback){
               				ivz_leftterritory:data[i][2],
                       ivz_emailcontact:data[i][3],
               		    ivz_leadermail:data[i][4],
-              		    ivz_ccmail:data[i][5]
+              		    ivz_ccmail:data[i][5],
+											ivz_empid:data[i][6],
+											ivz_empname:data[i][7],
+											ivz_statusempid:data[i][8],
+											description:data[i][9]
           				});
 			}
 			callback(b);

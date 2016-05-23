@@ -2,13 +2,14 @@
   <ion-content>
     <div class="card">
       <div class="item item-text-wrap">
-        <br />
         <md-list>
-          <md-list-item class="md-2-line" ng-repeat="n in listmaster" ng-click="clickgo(n.ivz_leftterritory.id)">
+          <md-list-item class="md-3-line" ng-repeat="item in listmaster">
              <div class="md-list-item-text" layout="column">
-                <h2>{{ n.ivz_leftterritory.primaryName }}</h2>
-              </div>
-             <a class="md-secondary ion-chevron-right text-h1 text-bold error" ng-click="clickgo(n.ivz_leftterritory.id)"></a>
+               <h3>{{ item.ivz_leftterritory.primaryName +'-'+item.description}}</h3>
+               <p>พนักงาน:{{item.ivz_empname}}</p>
+             </div>
+             <a class="md-secondary ion-ios-arrow-forward text-h1 text-bold" ng-click="clickgo(item.ivz_leftterritory.id)"></a>
+             <md-divider></md-divider>
          </md-list-item>
         </md-list>
       </div>

@@ -1,0 +1,43 @@
+$cookies.put('territoryid',data[i].territoryid);
+$cookies.put('ivz_empname',data[i].ivz_empname);
+$cookies.put('ivz_empid',data[i].ivz_empid);
+$cookies.put('ivz_password',data[i].ivz_password);
+$cookies.put('ivz_emailcontact',data[i].ivz_emailcontact);
+$cookies.put('ivz_leadermail',data[i].ivz_leadermail);
+$cookies.put('ivz_ccmail',data[i].ivz_ccmail);
+$cookies.put('name',data[i].name);
+$cookies.put('description',data[i].description);
+$cookies.put('ivz_statusempid',data[i].ivz_statusempid);
+
+$cookies.territoryid;
+$cookies.ivz_empname;
+$cookies.ivz_empid;
+$cookies.ivz_password;
+$cookies.ivz_emailcontact;
+$cookies.ivz_leadermail;
+$cookies.ivz_ccmail;
+$cookies.name;
+$cookies.description;
+$cookies.ivz_statusempid;
+
+var chUser = $cookies.get('ivz_empid');
+if(chUser){
+  $ionicHistory.nextViewOptions({
+    disableBack: true
+  });
+  $state.go('app.browse',{},{reload:true});
+}
+
+$state.go('app.playlists',{},{reload:true});
+
+
+
+if($cookies.get('mastertype') == 3 || $cookies.get('mastertype') == 2){
+  Data.logontype = true;
+}else{
+  Data.logontype = false;
+}
+Data.logonstatus = false;
+$ionicHistory.nextViewOptions({
+  disableBack: true
+});
