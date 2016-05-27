@@ -1,0 +1,60 @@
+<ion-view view-title="ข้อมูลชื่อลูกค้า">
+  <ion-content>
+    <br />
+    <div>
+      <div class="row">
+        <div class="col"></div>
+        <div class="col col-75">
+          <md-input-container>
+            <label><h3>ชื่อลูกค้า/ร้านค้า/บริษัท</h3></label>
+            <input type="text" ng-model="user.txtname" placeholder="ชื่อลูกค้า/ร้านค้า/บริษัท">
+          </md-input-container>
+          <div>
+            <h4>สำเนาทะเบียนบ้าน(ต้องมี)</h4>
+  					<span class="text text-danger" ng-hide="chk.doc004">* กรุณาเพิ่มสำเนาสำเนาทะเบียนบ้านด้วย</span>
+  					<div>
+  							<br />
+                <md-button class="md-raised md-warn" aria-label="description" md-ripple-size="auto" ng-click="calldoc('doc004',this)">UPLOAD</md-button>
+                <canvas id="canvas04" width="578" height="400" ng-hide="true"></canvas>
+                <input type="file" id="doc004" ng-hide="true"/>
+                <div class="row">
+                  <div class="col col-75">
+                    <img  id="idcImg04" ng-click="calldoc('doc004',this)">
+                  </div>
+                </div>
+  					</div>
+  					<br />
+            <h4>สำเนาประจำตัวบัตรประชาชน(ต้องมี)</h4>
+  					<span class="text text-danger" ng-hide="chk.doc005">* กรุณาเพิ่มสำเนาสำเนาประจำตัวบัตรประชาชนด้วย</span>
+  					<div>
+  							<br />
+                <md-button class="md-raised md-warn" aria-label="description" md-ripple-size="auto" ng-click="calldoc('doc005',this)">UPLOAD</md-button>
+                <canvas id="canvas05" width="578" height="400" ng-hide="true"></canvas>
+                <input type="file" id="doc005" ng-hide="true"/>
+                <div class="row">
+                  <div class="col col-75">
+                    <img  id="idcImg05" ng-click="calldoc('doc005',this)">
+                  </div>
+                </div>
+  					</div>
+
+            <br />
+            <div class="log" id="log"></div>
+
+  				</div>
+        </div>
+        <div class="col"></div>
+      </div>
+    </div>
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="cAdjustment()">
+      <i class="icon ion-checkmark-circled primary"></i>
+      บันทึกข้อมูล
+    </a>
+    <a class="tab-item" ng-click="cAdjustmentCancel()">
+      <i class="icon ion-android-cancel error"></i>
+      ยกเลิก
+    </a>
+  </div>
+</ion-view>

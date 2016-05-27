@@ -1,0 +1,33 @@
+<ion-view view-title="ยืนยันไม่อนุมัติ">
+  <ion-content>
+    <div class="card">
+      <div class="item item-text-wrap">
+        <div class="list">
+          <label class="item item-input item-stacked-label">
+            <span class="input-label">ชื่อพนักงานขาย</span>
+            <input type="text" ng-model="salename">
+          </label>
+          <label class="item item-input item-stacked-label">
+            <span class="input-label">เขตการขาย</span>
+            <input type="text" ng-model="tername">
+          </label>
+          <label class="item item-input item-stacked-label">
+            <span class="input-label">ระบุเหตุผล</span>
+            <input type="text" placeholder="ระบุเหตุผล..........................." data-ng-model="user.txtreject">
+            <span class="error" ng-hide="txthidden">* กรุณาระบุเหตุผลด้วย</span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item success" ng-click="confirmreject(user.txtreject)">
+      <i class="icon ion-checkmark"></i>
+      ยืนยัน
+    </a>
+    <a class="tab-item error" ng-click="cancelback()">
+      <i class="icon ion-close"></i>
+      ยกเลิก
+    </a>
+  </div>
+</ion-view>

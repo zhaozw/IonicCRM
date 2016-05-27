@@ -4,3 +4,9 @@ $ionicHistory.nextViewOptions({
 });
 //after
 $ionicHistory.clearHistory();
+
+
+$scope.$on("$ionicView.enter", function(){
+console.log('reload complete');
+  getCusAds($stateParams.accountid);
+});

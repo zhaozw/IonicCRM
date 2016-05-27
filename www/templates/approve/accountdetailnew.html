@@ -1,0 +1,53 @@
+<ion-view view-title="รายละเอียด">
+  <ion-content>
+    <br /><br />
+    <div class="row">
+      <div class="col"></div>
+      <div class="col col-90">
+        <md-input-container>
+          <label>ชื่อร้าน</label>
+          <input type="text" data-ng-model="user.txtname" ng-disabled="true">
+        </md-input-container>
+        <md-input-container>
+          <label>ประเภทลูกค้า</label>
+          <input type="text" data-ng-model="user.txtstate" ng-disabled="true">
+        </md-input-container>
+        <md-input-container>
+          <label>วงเงินที่ขอมา</label>
+          <input type="text" data-ng-model="user.txtcredit" ng-disabled="true">
+        </md-input-container>
+        <md-input-container>
+          <label>วงเงินที่อนุมัติ</label>
+          <input type="text" data-ng-model="user.txtresult">
+        </md-input-container>
+        <div ng-repeat="n in annote" class="imageHolder">
+            <img src="{{n.documentbody}}" alt="{{n.subject}}" class="thumbnail" width="350" height="270" ng-click="opop(n.documentbody,n.subject)">
+            <div class="caption">Pic.{{$index +'-'+ n.subject}}</div>
+            <br />
+        </div>
+      </div>
+      <div class="col"></div>
+    </div>
+    <script id="templates/modal-1.html" type="text/ng-template">
+          <div class="modal image-modal transparent" ng-click="closeModal(1)">
+              <ion-pane class="transparent">
+                 <img ng-src="{{imageSrc}}" class="fullscreen-image"/>
+              </ion-pane>
+          </div>
+    </script>
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="forwardback()">
+      <i class="icon ion-arrow-left-c error"></i>
+      ย้อนกลับ
+    </a>
+    <a class="tab-item" ng-click="cAdjustment()">
+      <i class="icon ion-checkmark-circled primary"></i>
+      อนุมัติเปิดบัญชี
+    </a>
+    <a class="tab-item" ng-click="openModal(2)">
+      <i class="icon ion-android-cancel error"></i>
+      ไม่อนุมัติ
+    </a>
+  </div>
+</ion-view>

@@ -1,0 +1,49 @@
+<ion-view view-title="ฟอร์มข้อมูลที่อยู่ลูกค้า">
+  <ion-content>
+    <br />
+    <div>
+      <div class="row">
+        <div class="col"></div>
+        <div class="col col-75">
+          <div class="row">
+            <div class="col">
+              <md-input-container>
+                <label>ประเภทผู้ติดต่อ</label>
+                <md-select ng-model="user.slType">
+                    <md-option >test</md-option>
+                </md-select>
+              </md-input-container>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <md-input-container>
+                <label><h3>ชื่อผู้ติดต่อ</h3></label>
+                <input type="text" ng-model="user.txtfirstname" placeholder="ระบุชื่อผู้ติดต่อ">
+              </md-input-container>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <md-input-container>
+                <label><h3>นามสกุลผู้ติดต่อ</h3></label>
+                <input type="text" ng-model="user.txtlastname" placeholder="ระบุนามสกุลผู้ติดต่อ">
+              </md-input-container>
+            </div>
+          </div>
+        </div>
+        <div class="col"></div>
+      </div>
+    </div>
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="cAdjustment()">
+      <i class="icon ion-checkmark-circled primary"></i>
+      บันทึกข้อมูล
+    </a>
+    <a class="tab-item" ng-click="cAdjustmentCancel()">
+      <i class="icon ion-android-cancel error"></i>
+      ยกเลิก
+    </a>
+  </div>
+</ion-view>

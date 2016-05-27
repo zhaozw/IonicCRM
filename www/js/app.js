@@ -1,4 +1,4 @@
-angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookies','ngMessages'])
+angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookies','ngMessages','ngAnimate','ngCordova'])
 
 .run(function($ionicPlatform, $rootScope, $ionicHistory) {
   $ionicPlatform.ready(function() {
@@ -54,7 +54,8 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     logonstatus:true,
     logontype:true,
     StoreDoc:'',
-    custermertype:''
+    custermertype:'',
+    statustypecode:''
   }
 })
 .factory('Darray',function(){
@@ -94,6 +95,11 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     name:'',
     description:'',
     ivz_statusempid:''
+  }
+})
+.factory('dataaccount',function(){
+  return {
+    user:[]
   }
 })
 .service('rego',function(){
@@ -516,11 +522,83 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.adjustmentname', {
-  url:'/adjustmentname/:accountid/:mastertype',
+  url:'/adjustmentname/:accountid/:accountname/:mastertype/:terid/:ivz_integrationid',
   views: {
     'menuContent': {
-      templateUrl: 'templates/adjustment/option.html',
-      controller:'AdjustmentCtrl'
+      templateUrl: 'templates/adjustment/formname.html',
+      controller:'AdjustmentNameCtrl'
+    }
+  }
+})
+.state('app.adjustmentaddress', {
+  url:'/adjustmentaddress/:accountid/:statustypecode/:mastertype',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/adjustment/optionaddress.html',
+      controller:'AdjustmentOptionCtrl'
+    }
+  }
+})
+// .state('app.adjustmentaddressform', {
+//   url:'/adjustmentaddressform',
+//   views: {
+//     'menuContent': {
+//       templateUrl: 'templates/adjustment/formaddress.html',
+//       controller:'AdjustmentAddressFormCtrl'
+//     }
+//   }
+// })
+.state('app.adjustmentaddressform', {
+  url:'/adjustmentaddressform/:addressid/:accountid/:statustypecode/:mastertype',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/adjustment/formaddress.html',
+      controller:'AdjustmentAddressFormCtrl'
+    }
+  }
+})
+.state('app.adjustmenttransport', {
+  url:'/adjustmenttransport/:accountid/:mastertype',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/adjustment/adjustmenttransport.html',
+      controller:'AdjustmentTransportCtrl'
+    }
+  }
+})
+.state('app.adjustmentcontact', {
+  url:'/adjustmentcontact/:accountid/:mastertype',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/adjustment/adjustmentcontact.html',
+      controller:'AdjustmentContactCtrl'
+    }
+  }
+})
+.state('app.adjustmentcontactform', {
+  url:'/adjustmentcontactform/:accountid/:mastertype',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/adjustment/adjustmentcontactform.html',
+      controller:'AdjustmentContactFormCtrl'
+    }
+  }
+})
+.state('app.adjustmentcredit', {
+  url:'/adjustmentcredit/:accountid/:mastertype',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/adjustment/adjustmentcredit.html',
+      controller:'AdjustmentCreditCtrl'
+    }
+  }
+})
+.state('app.adjustmentlistsupter', {
+  url:'/adjustmentlistsupter/:tername/:mastertype',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/adjustment/adjustsup.html',
+      controller:'AdjustmentSupTerCtrl'
     }
   }
 })
@@ -572,6 +650,25 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   }
 })
+.state('app.accountdetailnew', {
+  url:'/accountdetailnew/:accountid/:statustype/:credit/:terid/:acname',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/approve/accountdetailnew.html',
+      controller:'AccountNewCtrl'
+    }
+  }
+})
+/*------------------- order -----------------------*/
+.state('app.orderlist', {
+  url:'/orderlist/:terid/:mastertype/:ordertype',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/productlist/productlist.html',
+      controller:'OrderListCtrl'
+    }
+  }
+})
 ///////////////////// End ///////////////////////////////
 
   .state('app.browse', {
@@ -599,7 +696,16 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
           controller: 'LogoutCtrl'
         }
       }
-    });
+    })
+  .state('app.exampl', {
+        url:'/exampl',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/exampl.html',
+            controller: 'ExamplCtrl'
+          }
+        }
+      });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/playlists');
 });

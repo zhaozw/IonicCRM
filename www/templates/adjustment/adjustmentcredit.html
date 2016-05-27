@@ -1,0 +1,65 @@
+<ion-view view-title="ฟอร์มข้อมูลเครดิตของลูกค้า">
+  <ion-content>
+    <br />
+    <div>
+      <div class="row">
+        <div class="col"></div>
+        <div class="col col-75">
+          <div class="row">
+            <div class="col">
+              <md-input-container>
+                <label><h3>ชื่อ-สกุล</h3></label>
+                <input type="text" ng-model="user.txtname" placeholder="ระบุชื่อ-สกุล">
+              </md-input-container>
+            </div>
+          </div>
+          <div class="">
+            <md-list>
+              <md-list-item>
+                <h4>ปิดบัญชี</h4>
+                <md-switch class="md-secondary md-warn" ng-model="user.swCloseAccount" ng-change="chkSwitch(user.swCloseAccount)"></md-switch>
+              </md-list-item>
+              <md-list-item>
+                <h4>แก้ไขข้อมูลเครดิต</h4>
+                <md-switch class="md-secondary md-warn" ng-model="user.swCredit" ng-change="chkSwitchCredit(user.swCredit)"></md-switch>
+              </md-list-item>
+            </md-list>
+          </div>
+          <div class="row" ng-show="user.swCloseAccount">
+            <div class="col">
+              <md-input-container>
+                <label><h3>เลือกเหตุผลการปิดบัญชี</h3></label>
+                <md-select ng-model="user.slRemark">
+                    <md-option>testt</md-option>
+                </md-select>
+              </md-input-container>
+            </div>
+          </div>
+          <div class="row" ng-show="user.swCredit">
+            <div class="col">
+              <md-input-container>
+                <label><h4>จำนวนเครดิตเดิม</h4></label>
+                <input type="text" ng-model="user.txtCreditOld" ng-disabled="true">
+              </md-input-container>
+              <md-input-container>
+                <label><h4>จำนวนเครดิตเดิม</h4></label>
+                <input type="text" ng-model="user.txtCreditNew">
+              </md-input-container>
+            </div>
+          </div>
+        </div>
+        <div class="col"></div>
+      </div>
+    </div>
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="cAdjustment()">
+      <i class="icon ion-checkmark-circled primary"></i>
+      บันทึกข้อมูล
+    </a>
+    <a class="tab-item" ng-click="cAdjustmentCancel()">
+      <i class="icon ion-android-cancel error"></i>
+      ยกเลิก
+    </a>
+  </div>
+</ion-view>

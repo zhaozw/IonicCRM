@@ -1,5 +1,5 @@
 <ion-view view-title="เลือกลูกค้า">
-  <ion-content>
+  <ion-content on-scroll="logscroll()">
     <div>
       <div class="bar bar-header item-input-inset">
         <label class="item-input-wrapper">
@@ -8,30 +8,27 @@
         </label>
         <md-button class="md-raised button-clear md-warn" aria-label="description" md-ripple-size="auto">&nbsp;ยกเลิก&nbsp;</md-button>
       </div>
-      <md-list>
-        <!-- <md-list-item class="md-3-line" ng-repeat="n in listaccount | filter:{filtername:filtertxt}"> -->
-        <md-list-item class="md-3-line">
-          <img src="img/d05.png" class="md-avatar" alt="testt" />
-           <div class="md-list-item-text" layout="column">
-             <h3>name1</h3>
-             <h4>ter1</h4>
-           </div>
-           <md-checkbox class="md-secondary" ng-click="mdchk($event)"></md-checkbox>
-           <!-- <md-radio-button ng-value="12334443" class="md-secondary"></md-radio-button> -->
-         </md-list-item>
-       <md-divider></md-divider>
-       <md-list-item class="md-3-line">
-         <img src="img/d05.png" class="md-avatar" alt="testt" />
-          <div class="md-list-item-text" layout="column">
-            <h3>name2</h3>
-            <h4>ter3</h4>
+      <div class="row">
+          <div class="col">
+            <md-radio-group ng-model="group.accountid">
+              <md-list>
+                <md-list-item class="md-3-line" ng-repeat="n in listaccount | filter:filtertxt">
+                  <img src="img/d05.png" class="md-avatar" alt="testt" />
+                   <div class="md-list-item-text" layout="column">
+                     <h3>{{n.filtername}}</h3>
+                   </div>
+                   <md-radio-button value="{{n.accountid}}" class="md-secondary md-warn"></md-radio-button>
+                 </md-list-item>
+               <md-divider></md-divider>
+              </md-list>
+            </md-radio-group>
           </div>
-          <md-checkbox class="md-secondary" ng-click="mdchk(this)"></md-checkbox>
-      </md-list>
+      </div>
     </div>
+    <br /><br /><br />
   </ion-content>
   <div class="tabs tabs-icon-top">
-    <a class="tab-item" ng-click="reloaddata()">
+    <a class="tab-item" ng-click="reloader()">
       <i class="icon ion-ios-reload primary"></i>
       เรียกข้อมูลใหม่
     </a>

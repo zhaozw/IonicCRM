@@ -4349,7 +4349,9 @@ a.subdued {
   border-style: solid;
   border-top-width: 1px;
   background-size: 0;
-  line-height: 49px; }
+  line-height: 49px;
+  font-size:20px;
+}
   .tabs .tab-item .badge {
     background-color: #444;
     color: #f8f8f8; }

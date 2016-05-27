@@ -41,3 +41,26 @@ Data.logonstatus = false;
 $ionicHistory.nextViewOptions({
   disableBack: true
 });
+
+$scope.sendmailtosup = function(id,title,txt,callback){
+  getTerEmp(id,function(data){
+    if(data){
+      var text = "เรียน  Sup./Sales Manger, รบกวนดำเนินการอนุมัติ"+txt+"เขตการขาย "+data[0].name+"ให้ด้วยครับ  ขอบคุณครับ  (อีเมลฉบับนี้ส่งอัตโนมัติจากระบบ CRM)";
+      SendMail(data[0].ivz_leadermail,title,text);
+      setTimeout(function(){
+        callback();
+      },2000);
+    }
+  });
+}
+$scope.sendmailtosales= function(id,title,txt,callback){
+  getTerEmp(id,function(data){
+    if(data){
+      var text = "เรียน  sales, "+txt+"  ขอบคุณครับ  (อีเมลฉบับนี้ส่งอัตโนมัติจากระบบ CRM)";
+      SendMail(data[0].ivz_emailcontact,title,text);
+      setTimeout(function(){
+        callback();
+      },2000);
+    }
+  });
+}

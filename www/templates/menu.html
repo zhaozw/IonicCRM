@@ -46,10 +46,12 @@
         <ion-item menu-close   class="success" ng-show="Data.logontype" ng-click= "clickter()">
           <i class="ion-android-calendar"></i>&nbsp;รายการลูกค้า Sup
         </ion-item>
-        <ion-item menu-close href="#/app/adjustmentlist/0/{{Data.mastertype}}"  class="success">
+        <ion-item menu-close ui-sref="app.adjustmentlist({terid:Data.termas,mastertype:Data.mastertype})"
+        class="success" ng-hide="Data.logontype" ui-sref-opts="{reload:true}">
           <i class="ion-android-calendar"></i>&nbsp;ปรับปรุงข้อมูลลูกค้า
         </ion-item>
-        <ion-item menu-close href="#/app/adjustmentlist/0/{{Data.mastertype}}"  class="success">
+        <ion-item menu-close ui-sref="app.adjustmentlistsupter({tername:Data.Tername,mastertype:Data.mastertype})"
+          ui-sref-opts="{reload:true}"  class="success" ng-show="Data.logontype">
           <i class="ion-android-calendar"></i>&nbsp;ปรับปรุงข้อมูลลูกค้า Sup
         </ion-item>
         <ion-item menu-close ui-sref="app.playlists" class="success" ng-show="Data.logonstatus">
@@ -59,6 +61,11 @@
           <i class="ion-power"></i>&nbsp;ออกจากระบบ
         </ion-item>
         <ion-item menu-close href="#/app/rejectplan/1234556/mrddd/D10"  class="success"><i class="ion-android-calendar"></i>&nbsp;Test Reject</ion-item>
+        <ion-item menu-close ui-sref="app.orderlist({terid:12345,mastertype:1,ordertype:1})"
+          ui-sref-opts="{reload:true}" class="success">
+          <i class="ion-android-calendar"></i>&nbsp;ทดสอบเปิดใบสั่งขาย</ion-item>
+        <ion-item menu-close ui-sref="app.exampl"class="success">
+            <i class="ion-android-calendar"></i>&nbsp;ทดสอบ</ion-item>
       </ion-list>
     </ion-content>
   </ion-side-menu>

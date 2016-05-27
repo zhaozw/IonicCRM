@@ -1,0 +1,50 @@
+<ion-view view-title="ข้อมูลที่อยู่">
+  <ion-content>
+    <div>
+      <div class="bar bar-header item-input-inset">
+        <label class="item-input-wrapper">
+          <i class="icon ion-ios-search placeholder-icon"></i>
+          <input type="search" placeholder="Search" ng-model="filtertxt">
+        </label>
+        <md-button class="md-raised button-clear md-warn" aria-label="description" md-ripple-size="auto">&nbsp;ยกเลิก&nbsp;</md-button>
+      </div>
+      <div class="row">
+          <div class="col">
+            <md-radio-group ng-model="group.accountid">
+              <md-list>
+                <md-list-item class="md-3-line" ng-repeat="n in listaddressaccount">
+                  <img src="img/d05.png" class="md-avatar" alt="testt" />
+                   <div class="md-list-item-text" layout="column">
+                      <h3>{{n.addressname}}</h3>
+                      <p>
+                        <span ng-if="n.line1">{{n.line1}}</span>&nbsp;&nbsp;
+                        <span ng-if="n.city">{{n.city}}</span>&nbsp;&nbsp;
+                        <span ng-if="n.stateorprovince">{{n.stateorprovince}}</span>&nbsp;&nbsp;
+                        <span ng-if="n.postalcode">{{n.postalcode}}</span>
+                      </p>
+                      <p>ประเภทที่อยู่:<span style="color:blue;">{{n.addresstypecode}}</span></p>
+                   </div>
+                  <a class="md-secondary ion-ios-arrow-forward text-h1 text-bold error" ng-click="goaddress(n.customeraddressid)"></a>
+                   <md-divider ng-if="!$last"></md-divider>
+                 </md-list-item>
+              </md-list>
+            </md-radio-group>
+          </div>
+      </div>
+    </div>
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="reloaddata()">
+      <i class="icon ion-ios-reload primary"></i>
+      เรียกข้อมูลใหม่
+    </a>
+    <a class="tab-item" ng-click="cAdjustment()">
+      <i class="icon ion-checkmark-circled primary"></i>
+      เพิ่มที่อยู่
+    </a>
+    <a class="tab-item" ng-click="cAdjustmentCredit()">
+      <i class="icon ion-android-cancel error"></i>
+      ยกเลิก
+    </a>
+  </div>
+</ion-view>

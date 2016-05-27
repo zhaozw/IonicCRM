@@ -1,0 +1,49 @@
+<ion-view view-title="ลูกค้าที่ขออนุมัติเปิดบัญชีใหม่">
+  <ion-content>
+    <div>
+      <div class="bar bar-header item-input-inset">
+        <label class="item-input-wrapper">
+          <i class="icon ion-ios-search placeholder-icon"></i>
+          <input type="search" placeholder="Search" ng-model="filtertxt">
+        </label>
+        <md-button class="md-raised button-clear md-warn" aria-label="description" md-ripple-size="auto">&nbsp;ยกเลิก&nbsp;</md-button>
+      </div>
+      <md-list>
+        <md-list-item class="md-3-line" ng-repeat="n in listaccount | filter:{filtername:filtertxt}">
+          <img src="img/d05.png" class="md-avatar" alt="testt" />
+           <div class="md-list-item-text" layout="column">
+             <h3>{{ n.territoryid.primaryName +' - '+ n.name}}</h3>
+             <p>
+               เอกสาร:
+               <span ng-if="n.matchtype == 1" style="color:green;">ครบ</span>
+               <span ng-if="n.matchtype == 0" style="color:red;">ไม่ครบ</span>
+             </p>
+             <p>
+               สถานะลูกค้า:<span style="color:#264348;">{{n.statustype}}</span>&nbsp;&nbsp;
+             </p>
+             <p ng-if="n.statuscode == 1">สถานะ:<span style="color:#264348;">Actived</span></p>
+             <p ng-if="n.statuscode == 917970002">สถานะ:<span style="color:#8F1D21;">ไม่อนุมัติ</span>&nbsp;&nbsp;เนื่องจาก:<span style="color:#8F1D21;">{{n.remarkreject}}</span></p>
+             <p ng-if="n.statuscode == 917970003">สถานะ:<span style="color:#003171;">บันทึกข้อมูลยังไม่สมบูรณ์</span></p>
+             <p ng-if="n.statuscode == 917970000">สถานะ:<span style="color:#A17917;">รอดำเนินงาน</span></p>
+           </div>
+           <a class="md-secondary ion-trash-a text-h1 text-bold error" ng-click="removeitem($index)"></a>
+       </md-list-item>
+       <md-divider></md-divider>
+      </md-list>
+    </div>
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="reloaddata()">
+      <i class="icon ion-ios-reload primary"></i>
+      เรียกข้อมูลใหม่
+    </a>
+    <a class="tab-item" ng-click="approveaccount()">
+      <i class="icon ion-checkmark-circled primary"></i>
+      อนุมัติ
+    </a>
+    <a class="tab-item" ng-click="rejectapprove()">
+      <i class="icon ion-android-cancel error"></i>
+      ไม่อนุมัติ
+    </a>
+  </div>
+</ion-view>

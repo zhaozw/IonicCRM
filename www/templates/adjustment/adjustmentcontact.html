@@ -1,0 +1,56 @@
+<ion-view view-title="ข้อมูลผู้ติดต่อ">
+  <ion-content>
+    <div>
+      <div class="bar bar-header item-input-inset">
+        <label class="item-input-wrapper">
+          <i class="icon ion-ios-search placeholder-icon"></i>
+          <input type="search" placeholder="Search" ng-model="filtertxt">
+        </label>
+        <md-button class="md-raised button-clear md-warn" aria-label="description" md-ripple-size="auto">&nbsp;ยกเลิก&nbsp;</md-button>
+      </div>
+      <div class="row">
+          <div class="col">
+            <md-radio-group ng-model="group.accountid">
+              <md-list>
+                <md-list-item class="md-3-line">
+                  <img src="img/d05.png" class="md-avatar" alt="testt" />
+                   <div class="md-list-item-text" layout="column">
+                     <h3>contactname1</h3>
+                     <h4>ter1</h4>
+                   </div>
+                  <a class="md-secondary ion-ios-arrow-forward text-h1 text-bold error"
+                   ui-sref="app.adjustmentcontactform({accountid:accountid,mastertype:Data.mastertype})" ui-sref-opts="{reload: true}"></a>
+                 </md-list-item>
+               <md-divider></md-divider>
+               <md-list-item class="md-3-line">
+                 <img src="img/d05.png" class="md-avatar" alt="testt" />
+                  <div class="md-list-item-text" layout="column">
+                    <h3>contactname2</h3>
+                    <h4>ter3</h4>
+                  </div>
+                  <a class="md-secondary ion-ios-arrow-forward text-h1 text-bold error"
+                  ui-sref="app.adjustmentcontactform({accountid:accountid,mastertype:Data.mastertype})" ui-sref-opts="{reload: true}"></a>
+               </md-list-item>
+               <md-divider></md-divider>
+              </md-list>
+            </md-radio-group>
+          </div>
+      </div>
+<!-- <md-list-item class="md-3-line" ng-repeat="n in listaccount | filter:{filtername:filtertxt}"> -->
+    </div>
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="reloaddata()">
+      <i class="icon ion-ios-reload primary"></i>
+      เรียกข้อมูลใหม่
+    </a>
+    <a class="tab-item" ng-click="cAdjustment()">
+      <i class="icon ion-checkmark-circled primary"></i>
+      เพิ่มผู้ติดต่อ
+    </a>
+    <a class="tab-item" ng-click="cAdjustmentCredit()">
+      <i class="icon ion-android-cancel error"></i>
+      ยกเลิก
+    </a>
+  </div>
+</ion-view>

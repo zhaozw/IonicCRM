@@ -1,0 +1,37 @@
+<ion-view view-title="ข้อมูขนส่ง">
+  <ion-content>
+    <br />
+    <div class="row">
+      <div class="col"></div>
+      <div class="col col-75">
+        <div class="row">
+          <div class="col">
+            <md-input-container>
+              <label><h3>ชื่อขนส่ง</h3></label>
+              <input type="text" ng-model="user.txtname" placeholder="ระบุชื่อขนส่ง">
+            </md-input-container>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <md-input-container>
+              <label><h3>เบอร์โทรขนส่ง</h3></label>
+              <input type="text" ng-model="user.txtname" placeholder="ระบุเบอร์โทรขนส่ง">
+            </md-input-container>
+          </div>
+        </div>
+      </div>
+      <div class="col"></div>
+    </div>
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="cAdjustment()">
+      <i class="icon ion-checkmark-circled primary"></i>
+      บันทึกข้อมูล
+    </a>
+    <a class="tab-item" ng-click="cAdjustmentCancel()">
+      <i class="icon ion-android-cancel error"></i>
+      ยกเลิก
+    </a>
+  </div>
+</ion-view>

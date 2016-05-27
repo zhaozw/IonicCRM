@@ -1,5 +1,5 @@
 <ion-view view-title="เข้าสู่ระบบ YSS CRM">
-  <ion-content>
+  <ion-content on-scroll="logscroll()">
     <br /><br /><br /><br /><br />
     <div class="container">
       <div id="login">
@@ -8,7 +8,7 @@
           <fieldset>
             <p ng-hide="chk.check"><span class="error">ไม่พบข้อมูลผู้ใช้งาน</span></p>
             <p ng-hide="chk.checknull"><span class="error">กรุณากรอกข้อมูลให้ครบด้วย</span></p>
-            <p><label for="email">ชื่อผู้ใช้งาาน</label></p>
+            <p><label for="email">ชื่อผู้ใช้งาน</label></p>
             <p><input class="input" type="text" id="email" placeholder="ชื่อผู้ใช้งาน" ng-model="user.txtname"></p>
             <p><label for="password">รหัสผ่าน</label></p>
             <p><input class="input" type="password" id="password" placeholder="รหัสผ่าน" ng-model="user.pwdname"></p>
@@ -17,5 +17,7 @@
         </form>
       </div> <!-- end login -->
     </div>
+    <!-- <button type="button" name="button" ng-click="clicknext()">item</button>
+     -->
   </ion-content>
 </ion-view>
