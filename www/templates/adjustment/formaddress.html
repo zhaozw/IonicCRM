@@ -4,29 +4,30 @@
        <div class="row">
          <div class="col"></div>
          <div class="col col-75">
-           <span style="color:red;">{{debuglog}}</span>
+           <!-- <span style="color:red;">{{debuglog}}</span> -->
               <label class="item-input item-floating-label">
-                <span style="color:red;font-weight:bold;"><br />กรุณาระบุประเภทที่อยู่ด้วย</span>
+                <span style="color:red;font-weight:bold;" ng-hide="user.txtcode"><br />กรุณาระบุประเภทที่อยู่ด้วย</span>
                 <span class="input-label">ประเภทที่อยู่</span>
                 <input type="text" placeholder="ระบุประเภทที่อยู่" ng-model="user.txtcode"
-                ng-change="serachtype(user.txtcode)">
+                ng-change="searchtype(user.txtcode)">
               </label>
               <div class="list" ng-hide="chk.accounttype">
-                <li class="item itemlist" ng-repeat="n in adjusttype | filter:user.txtcode" ng-click="cSetType(n.val,n.name)">{{n.name}}</li>
+                <li class="item itemlist" ng-repeat="n in adjusttype | filter:user.txtcode"
+                ng-click="cSetType(n.val,n.name)">{{n.name}}</li>
               </div>
               <hr class="divider"/>
               <label class="item-input item-floating-label">
-                <span style="color:red;font-weight:bold;"><br />กรุณาระบุชื่อร้าน/ลูกค้า/บริษัทด้วย</span>
+                <span style="color:red;font-weight:bold;" ng-hide="user.txtname"><br />กรุณาระบุชื่อร้าน/ลูกค้า/บริษัทด้วย</span>
                 <span class="input-label">ชื่อร้าน/ลูกค้า/บริษัท</span>
                 <input type="text" placeholder="ชื่อร้าน/ลูกค้า/บริษัท" ng-model="user.txtname">
               </label>
               <label class="item-input item-floating-label">
-                <span style="color:red;font-weight:bold;"><br />กรุณาระบุที่อยู่ด้วย</span>
+                <span style="color:red;font-weight:bold;" ng-hide="user.txtaddress"><br />กรุณาระบุที่อยู่ด้วย</span>
                 <span class="input-label">ที่อยู่</span>
                 <input type="text" placeholder="ที่อยู่" ng-model="user.txtaddress">
               </label>
               <label class="item-input item-floating-label">
-                <span style="color:red;font-weight:bold;"><br />กรุณาระบุจังหวัดด้วย</span>
+                <span style="color:red;font-weight:bold;" ng-hide="user.txtprovice"><br />กรุณาระบุจังหวัดด้วย</span>
                 <span class="input-label">จังหวัด</span>
                 <input type="text" placeholder="ที่อยู่ของลูกค้า - ชื่อจังหวัด" ng-model="user.txtprovice"
                 ng-change="searchProvince(user.txtprovice)">
@@ -37,7 +38,7 @@
                 ng-click="cSetTypeProvince(n.ivz_addressprovinceid,n.ivz_description)">{{n.ivz_description}}</li>
               </div>
               <label class="item-input item-floating-label">
-                <span style="color:red;font-weight:bold;"><br />กรุณาระบุเขตอำเภอด้วยด้วย</span>
+                <span style="color:red;font-weight:bold;" ng-hide="user.txtdistrict"><br />กรุณาระบุเขตอำเภอด้วยด้วย</span>
                 <span class="input-label">เขต</span>
                 <input type="text" placeholder="ที่อยู่ของลูกค้า - ชื่อเขต"
                   ng-model="user.txtdistrict"
@@ -49,15 +50,18 @@
                 ng-click="cSetTypeDistrict(n.ivz_addressdistrictid,n.ivz_name)">{{n.ivz_name}}</li>
               </div>
               <label class="item-input item-floating-label">
-                <span style="color:red;font-weight:bold;"><br />กรุณาระบุรหัสไปรษณีย์ด้วย</span>
+                <span style="color:red;font-weight:bold;" ng-hide="user.txtzipcode"><br />กรุณาระบุรหัสไปรษณีย์ด้วย</span>
                 <span class="input-label">รหัสไปรษณี</span>
                 <input type="text" placeholder="รหัสไปรษณี" ng-model="user.txtzipcode">
               </label>
-              <section ng-if="chk.section == 2">
+              <section ng-if="chk.section == 2 || chk.section == '-1'">
                 <hr class="divider"/>
                 <span style="color:red;font-weight:bold;"><br />กรุณาแนบไฟล์ตามด้านล่างนี้ด้วย</span>
-                <md-button class="md-raised md-warn" md-ripple-size="full" ng-click="calldoc('doc01',this)">1.แนบสำเนาหนังสือรับรองการจดทะเบียนพาณิชย์</md-button>
-                <div class="" ng-hide="chk.doc01">
+                <br />
+                <md-button class="md-raised md-warn" md-ripple-size="full" ng-click="calldoc('doc01',this)">
+                  1.แนบสำเนาหนังสือรับรองการจดทะเบียนพาณิชย์
+                </md-button>
+                <div ng-hide="chk.doc01">
                   <canvas id="canvas01" width="578" height="400" ng-hide="true"></canvas>
                   <input type="file" id="doc01" ng-hide="true"/>
                   <div class="row">
@@ -67,8 +71,10 @@
                   </div>
                 </div>
                 <br />
-                <md-button class="md-raised md-warn" md-ripple-size="full" ng-click="calldoc('doc02',this)">2.แนบทะเบียนภาษีมูลค่าเพิ่ม( ภพ. 20)</md-button>
-                <div class="" ng-hide="chk.doc02">
+                <md-button class="md-raised md-warn" md-ripple-size="full" ng-click="calldoc('doc02',this)">
+                  2.แนบทะเบียนภาษีมูลค่าเพิ่ม( ภพ. 20)
+                </md-button>
+                <div  ng-hide="chk.doc02">
                   <canvas id="canvas02" width="578" height="400" ng-hide="true"></canvas>
                   <input type="file" id="doc02" ng-hide="true"/>
                   <div class="row">
@@ -91,6 +97,7 @@
               </section>
               <hr class="divider"/>
               <span style="color:red;font-weight:bold;">กรุณาแนบสำเนาประจำตัวบัตรประชาชนด้วย</span>
+              <p />
               <md-button class="md-raised md-warn" md-ripple-size="full" ng-click="calldoc('doc04',this)">สำเนาประจำตัวบัตรประชาชน(ต้องมี)</md-button>
               <div class="" ng-hide="chk.doc04">
                 <canvas id="canvas04" width="578" height="400" ng-hide="true"></canvas>
@@ -103,6 +110,7 @@
               </div>
               <br />
               <span style="color:red;font-weight:bold;">กรุณาแนบสำเนาทะเบียนบ้านด้วย</span>
+              <p />
               <md-button class="md-raised md-warn" md-ripple-size="full" ng-click="calldoc('doc05',this)">สำเนาทะเบียนบ้าน(ต้องมี)</md-button>
               <div class="" ng-hide="chk.doc05">
                 <canvas id="canvas05" width="578" height="400" ng-hide="true"></canvas>
@@ -124,7 +132,7 @@
       <i class="icon ion-chevron-left error"></i>
       ย้อนกลับ
     </a>
-    <a class="tab-item" mg-click="cAdjustment()">
+    <a class="tab-item" ng-click="cAdjustment()">
       <i class="icon ion-checkmark success"></i>
       บันทึกข้อมูล
     </a>

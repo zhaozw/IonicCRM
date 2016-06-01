@@ -10,14 +10,16 @@
               <label><h3>ชื่อขนส่ง</h3></label>
               <input type="text" ng-model="user.txtname" placeholder="ระบุชื่อขนส่ง">
             </md-input-container>
+            <!-- <span style="color:red;font-weight:bold;" ng-hide="user.txtname">กรุณาระบุชื่อขนส่งด้วย</span> -->
           </div>
         </div>
         <div class="row">
           <div class="col">
             <md-input-container>
               <label><h3>เบอร์โทรขนส่ง</h3></label>
-              <input type="text" ng-model="user.txtname" placeholder="ระบุเบอร์โทรขนส่ง">
+              <input type="text" ng-model="user.txttel" placeholder="ระบุเบอร์โทรขนส่ง" md-length="10" maxlength="10">
             </md-input-container>
+            <!-- <span style="color:red;font-weight:bold;" ng-hide="user.txttel">กรุณาระบุเบอร์โทรขนส่งด้วย</span> -->
           </div>
         </div>
       </div>
@@ -25,13 +27,13 @@
     </div>
   </ion-content>
   <div class="tabs tabs-icon-top">
-    <a class="tab-item" ng-click="cAdjustment()">
-      <i class="icon ion-checkmark-circled primary"></i>
-      บันทึกข้อมูล
-    </a>
     <a class="tab-item" ng-click="cAdjustmentCancel()">
-      <i class="icon ion-android-cancel error"></i>
-      ยกเลิก
+      <i class="icon ion-chevron-left error"></i>
+      ย้อนกลับ
+    </a>
+    <a class="tab-item" ng-click="cAdjustment()">
+      <i class="icon ion-checkmark success"></i>
+      บันทึกข้อมูล
     </a>
   </div>
 </ion-view>

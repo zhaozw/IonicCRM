@@ -25,25 +25,28 @@
               </md-list-item>
             </md-list>
           </div>
+          <hr class="divider" />
           <div class="row" ng-show="user.swCloseAccount">
             <div class="col">
               <md-input-container>
                 <label><h3>เลือกเหตุผลการปิดบัญชี</h3></label>
                 <md-select ng-model="user.slRemark">
-                    <md-option>testt</md-option>
+                    <md-option ng-repeat="n in optionRession" ng-value="n.val">{{n.name}}</md-option>
                 </md-select>
               </md-input-container>
+              <span style="color:red;font-weight:bold;" ng-hide="user.slRemark">กรุณาระบุเหตุผลที่ปิดบัญชีด้วย</span>
             </div>
           </div>
+          <br ng-show="user.swCredit" />
           <div class="row" ng-show="user.swCredit">
             <div class="col">
               <md-input-container>
                 <label><h4>จำนวนเครดิตเดิม</h4></label>
-                <input type="text" ng-model="user.txtCreditOld" ng-disabled="true">
+                <input type="text" ng-model="user.txtCreditOld" ng-disabled="true" md-maxlength="10" maxlength="10">
               </md-input-container>
               <md-input-container>
-                <label><h4>จำนวนเครดิตเดิม</h4></label>
-                <input type="text" ng-model="user.txtCreditNew">
+                <label><h4>จำนวนเครดิตที่ร้องขอ</h4></label>
+                <input type="text" ng-model="user.txtCreditNew" md-maxlength="10" maxlength="10">
               </md-input-container>
             </div>
           </div>
@@ -53,13 +56,13 @@
     </div>
   </ion-content>
   <div class="tabs tabs-icon-top">
-    <a class="tab-item" ng-click="cAdjustment()">
-      <i class="icon ion-checkmark-circled primary"></i>
-      บันทึกข้อมูล
-    </a>
     <a class="tab-item" ng-click="cAdjustmentCancel()">
-      <i class="icon ion-android-cancel error"></i>
-      ยกเลิก
+      <i class="icon ion-chevron-left error"></i>
+      ย้อนกลับ
+    </a>
+    <a class="tab-item" ng-click="cAdjustment()">
+      <i class="icon ion-checkmark success"></i>
+      บันทึกข้อมูล
     </a>
   </div>
 </ion-view>

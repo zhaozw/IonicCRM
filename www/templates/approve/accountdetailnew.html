@@ -18,7 +18,7 @@
         </md-input-container>
         <md-input-container>
           <label>วงเงินที่อนุมัติ</label>
-          <input type="text" data-ng-model="user.txtresult">
+          <input type="text" data-ng-model="user.txtresult" ng-disabled="user.stateture">
         </md-input-container>
         <div ng-repeat="n in annote" class="imageHolder">
             <img src="{{n.documentbody}}" alt="{{n.subject}}" class="thumbnail" width="350" height="270" ng-click="opop(n.documentbody,n.subject)">

@@ -55,7 +55,8 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     logontype:true,
     StoreDoc:'',
     custermertype:'',
-    statustypecode:''
+    statustypecode:'',
+    territoryadjmust:''
   }
 })
 .factory('Darray',function(){
@@ -549,7 +550,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
 //   }
 // })
 .state('app.adjustmentaddressform', {
-  url:'/adjustmentaddressform/:addressid/:accountid/:statustypecode/:mastertype',
+  url:'/adjustmentaddressform/:addressid/:accountid/:statustypecode/:mastertype/:typeinsert',
   views: {
     'menuContent': {
       templateUrl: 'templates/adjustment/formaddress.html',
@@ -558,7 +559,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.adjustmenttransport', {
-  url:'/adjustmenttransport/:accountid/:mastertype',
+  url:'/adjustmenttransport/:accountid/:mastertype/:cusname',
   views: {
     'menuContent': {
       templateUrl: 'templates/adjustment/adjustmenttransport.html',
@@ -567,20 +568,11 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.adjustmentcontact', {
-  url:'/adjustmentcontact/:accountid/:mastertype',
+  url:'/adjustmentcontact/:accountid/:mastertype/:cusname',
   views: {
     'menuContent': {
       templateUrl: 'templates/adjustment/adjustmentcontact.html',
       controller:'AdjustmentContactCtrl'
-    }
-  }
-})
-.state('app.adjustmentcontactform', {
-  url:'/adjustmentcontactform/:accountid/:mastertype',
-  views: {
-    'menuContent': {
-      templateUrl: 'templates/adjustment/adjustmentcontactform.html',
-      controller:'AdjustmentContactFormCtrl'
     }
   }
 })
@@ -656,6 +648,24 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     'menuContent': {
       templateUrl: 'templates/approve/accountdetailnew.html',
       controller:'AccountNewCtrl'
+    }
+  }
+})
+.state('app.waitapproveadjust', {
+  url:'/waitapproveadjust',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/approveadjust/territory.html',
+      controller:'WaitAdjustCtrl'
+    }
+  }
+})
+.state('app.approveadjust', {
+  url:'/approveadjust/:terid/:mastertype',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/approveadjust/waitaccount.html',
+      controller:'WaitAccountAdjustCtrl'
     }
   }
 })

@@ -1,0 +1,54 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">รายละเอียดการขออนุมัติ</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closereject2()">
+        <i class="ion-close error"></i>
+      </button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <div class="row">
+      <div class="col">
+        <md-input-container>
+          <label>ชื่อร้าน:</label>
+          <input type="text" ng-model="user.txtname">
+        </md-input-container>
+      </div>
+      <div class="col">
+        <md-input-container>
+          <label>เขตการขาย:</label>
+          <input type="text" ng-model="user.tername">
+        </md-input-container>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <md-input-container>
+          <label>ร้องขอ:</label>
+          <input type="text" ng-model="user.filetername">
+        </md-input-container>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <span style="color:red;font-weight:bold;" ng-hide="chk.remark">กรุณาระบุเหตุผลที่ไม่อนุมัติด้วย</span>
+        <md-input-container>
+          <label>ระบุเหตุผลที่ไม่อนุมัติ</label>
+          <input type="text" ng-model="user.remarkname" ng-change="changetxt(user.remarkname)">
+        </md-input-container>
+      </div>
+    </div>
+    <br /><br />
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="approveAdj(user.id,user.adjustid,917970001)">
+      <i class="icon ion-checkmark-circled success"></i>
+      อนุมัติ
+    </a>
+    <a class="tab-item" ng-click="rejectAdj(user.id,user.adjustid,917970002)">
+      <i class="icon ion-close-circled error"></i>
+      ไม่อนุมัติ
+    </a>
+  </div>
+</ion-modal-view>

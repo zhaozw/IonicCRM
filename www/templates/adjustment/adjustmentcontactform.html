@@ -9,17 +9,19 @@
             <div class="col">
               <md-input-container>
                 <label>ประเภทผู้ติดต่อ</label>
-                <md-select ng-model="user.slType">
-                    <md-option >test</md-option>
+                <md-select ng-model="user.contype">
+                    <md-option ng-repeat="n in listcontact" ng-value="n.val">{{n.name}}</md-option>
                 </md-select>
               </md-input-container>
             </div>
           </div>
+          <hr class="divider"/>
+          <br />
           <div class="row">
             <div class="col">
               <md-input-container>
                 <label><h3>ชื่อผู้ติดต่อ</h3></label>
-                <input type="text" ng-model="user.txtfirstname" placeholder="ระบุชื่อผู้ติดต่อ">
+                <input type="text" ng-model="user.txtcontactname" placeholder="ระบุชื่อผู้ติดต่อ" md-maxlength="50" maxlength="50">
               </md-input-container>
             </div>
           </div>
@@ -27,7 +29,7 @@
             <div class="col">
               <md-input-container>
                 <label><h3>นามสกุลผู้ติดต่อ</h3></label>
-                <input type="text" ng-model="user.txtlastname" placeholder="ระบุนามสกุลผู้ติดต่อ">
+                <input type="text" ng-model="user.txtcontactlastname" placeholder="ระบุนามสกุลผู้ติดต่อ" md-maxlength="10" maxlength="10">
               </md-input-container>
             </div>
           </div>
@@ -37,13 +39,13 @@
     </div>
   </ion-content>
   <div class="tabs tabs-icon-top">
-    <a class="tab-item" ng-click="cAdjustment()">
-      <i class="icon ion-checkmark-circled primary"></i>
-      บันทึกข้อมูล
-    </a>
     <a class="tab-item" ng-click="cAdjustmentCancel()">
-      <i class="icon ion-android-cancel error"></i>
-      ยกเลิก
+      <i class="icon ion-chevron-left error"></i>
+      ย้อนกลับ
+    </a>
+    <a class="tab-item" ng-click="cAdjustment()">
+      <i class="icon ion-checkmark success"></i>
+      บันทึกข้อมูล
     </a>
   </div>
 </ion-view>

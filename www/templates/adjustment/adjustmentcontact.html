@@ -1,56 +1,51 @@
-<ion-view view-title="ข้อมูลผู้ติดต่อ">
+<ion-view view-title="ฟอร์มข้อมูลที่อยู่ลูกค้า">
   <ion-content>
+    <br />
     <div>
-      <div class="bar bar-header item-input-inset">
-        <label class="item-input-wrapper">
-          <i class="icon ion-ios-search placeholder-icon"></i>
-          <input type="search" placeholder="Search" ng-model="filtertxt">
-        </label>
-        <md-button class="md-raised button-clear md-warn" aria-label="description" md-ripple-size="auto">&nbsp;ยกเลิก&nbsp;</md-button>
-      </div>
       <div class="row">
-          <div class="col">
-            <md-radio-group ng-model="group.accountid">
-              <md-list>
-                <md-list-item class="md-3-line">
-                  <img src="img/d05.png" class="md-avatar" alt="testt" />
-                   <div class="md-list-item-text" layout="column">
-                     <h3>contactname1</h3>
-                     <h4>ter1</h4>
-                   </div>
-                  <a class="md-secondary ion-ios-arrow-forward text-h1 text-bold error"
-                   ui-sref="app.adjustmentcontactform({accountid:accountid,mastertype:Data.mastertype})" ui-sref-opts="{reload: true}"></a>
-                 </md-list-item>
-               <md-divider></md-divider>
-               <md-list-item class="md-3-line">
-                 <img src="img/d05.png" class="md-avatar" alt="testt" />
-                  <div class="md-list-item-text" layout="column">
-                    <h3>contactname2</h3>
-                    <h4>ter3</h4>
-                  </div>
-                  <a class="md-secondary ion-ios-arrow-forward text-h1 text-bold error"
-                  ui-sref="app.adjustmentcontactform({accountid:accountid,mastertype:Data.mastertype})" ui-sref-opts="{reload: true}"></a>
-               </md-list-item>
-               <md-divider></md-divider>
-              </md-list>
-            </md-radio-group>
+        <div class="col"></div>
+        <div class="col col-75">
+          <div class="row">
+            <div class="col">
+              <md-input-container>
+                <label>ประเภทผู้ติดต่อ</label>
+                <md-select ng-model="user.contype">
+                    <md-option ng-repeat="n in listcontact" ng-value="n.val">{{n.name}}</md-option>
+                </md-select>
+              </md-input-container>
+            </div>
           </div>
+          <hr class="divider"/>
+          <br />
+          <div class="row">
+            <div class="col">
+              <md-input-container>
+                <label><h3>ชื่อผู้ติดต่อ</h3></label>
+                <input type="text" ng-model="user.txtcontactname" placeholder="ระบุชื่อผู้ติดต่อ" md-maxlength="50" maxlength="50">
+              </md-input-container>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <md-input-container>
+                <label><h3>นามสกุลผู้ติดต่อ</h3></label>
+                <input type="text" ng-model="user.txtcontactlastname" placeholder="ระบุนามสกุลผู้ติดต่อ" md-maxlength="50" maxlength="10">
+              </md-input-container>
+            </div>
+          </div>
+        </div>
+        <div class="col"></div>
       </div>
-<!-- <md-list-item class="md-3-line" ng-repeat="n in listaccount | filter:{filtername:filtertxt}"> -->
     </div>
   </ion-content>
   <div class="tabs tabs-icon-top">
-    <a class="tab-item" ng-click="reloaddata()">
-      <i class="icon ion-ios-reload primary"></i>
-      เรียกข้อมูลใหม่
+    <a class="tab-item" ng-click="cAdjustmentCancel()">
+      <i class="icon ion-chevron-left error"></i>
+      ย้อนกลับ
     </a>
     <a class="tab-item" ng-click="cAdjustment()">
-      <i class="icon ion-checkmark-circled primary"></i>
-      เพิ่มผู้ติดต่อ
-    </a>
-    <a class="tab-item" ng-click="cAdjustmentCredit()">
-      <i class="icon ion-android-cancel error"></i>
-      ยกเลิก
+      <i class="icon ion-checkmark success"></i>
+      บันทึกข้อมูล
     </a>
   </div>
 </ion-view>

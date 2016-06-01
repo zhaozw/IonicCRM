@@ -53,7 +53,7 @@ $scope.sendmailtosup = function(id,title,txt,callback){
     }
   });
 }
-$scope.sendmailtosales= function(id,title,txt,callback){
+$scope.sendmailtosales = function(id,title,txt,callback){
   getTerEmp(id,function(data){
     if(data){
       var text = "เรียน  sales, "+txt+"  ขอบคุณครับ  (อีเมลฉบับนี้ส่งอัตโนมัติจากระบบ CRM)";

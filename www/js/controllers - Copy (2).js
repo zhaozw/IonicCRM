@@ -44,3 +44,5 @@ $scope.showLoadingComplete = function(txt) {
          noBackdrop: true
        });
  };
+
+ $scope.InAnnoteAttract = function(table,id,base64String,title,objid,callback)
