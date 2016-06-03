@@ -712,6 +712,7 @@ function GetAcAdjustmentByTerid(terid,callback){
 			a.addAttribute('ivz_approvedby');//36
 			a.addAttribute('ivz_territory');//37
 			a.addAttribute('ivz_transdate');//38
+			a.addAttribute('statuscode');//39
 	var filter = new MobileCRM.FetchXml.Filter();
 			filter.where('ivz_territory','eq',terid);
 			a.filter = filter;
@@ -723,14 +724,14 @@ function GetAcAdjustmentByTerid(terid,callback){
 					b.push({
 						ivz_accountadjustmentid:data[i][0],
 						ivz_name:data[i][1],
-						ivz_adjcredcloseaccount:data[i][2],
+						ivz_adjcredcloseaccount:CtoTrue(data[i][2]),
 						ivz_adjcredclosereason:data[i][3],
-						ivz_adjcredit:data[i][4],
+						ivz_adjcredit:CtoTrue(data[i][4]),
 						ivz_adjcredreopenaccount:data[i][5],
 						ivz_adjcredreopenreason:data[i][6],
 						ivz_adjgenaddress:CtoTrue(data[i][7]),
 						ivz_adjgencontact:CtoTrue(data[i][8]),
-						ivz_adjgeneral:data[i][9],
+						ivz_adjgeneral:CtoTrue(data[i][9]),
 						ivz_adjgenname:CtoTrue(data[i][10]),
 						ivz_adjgentransport:CtoTrue(data[i][11]),
 						ivz_newcredcredit:data[i][12],
@@ -760,7 +761,9 @@ function GetAcAdjustmentByTerid(terid,callback){
 						ivz_approvedby:data[i][36],
 						ivz_territory:data[i][37],
 						ivz_transdate:data[i][38],
-						ivz_remark: getRemarkName(data[i][10])+' '+getRemarkTransport(data[i][11])+' '+getRemarkContact(data[i][8])+' '+getRemarkAddress(data[i][7])
+						ivz_remark: getRemarkName(data[i][10])+' '+getRemarkTransport(data[i][11])+' '+getRemarkContact(data[i][8])+' '+getRemarkAddress(data[i][7]),
+						ivz_remarkcredit:getRemarkCredit(data[i][4])+' '+getRemarkcolse(data[i][2],data[i][3]),
+						statuscode:data[i][39]
 					});
 			}
 			callback(b);
@@ -790,6 +793,25 @@ function getRemarkContact(id){
 function getRemarkAddress(id){
 	if(id === 'True' || id === true){
 		return 'ปรับปรุงข้อมูลที่อยู่';
+	}else{
+		return '';
+	}
+}
+function getRemarkCredit(id){
+	if(id === 'True' || id === true){
+		return 'ปรับปรุงข้อมูลเครดิต';
+	}else{
+		return '';
+	}
+}
+function getRemarkcolse(id,remark){
+	if(id === 'True' || id === true){
+		var x = '';
+		if(remark === '917970000'){
+			return 'ขอปิดบัญชีเนื่องจากเลิกกิจการ';
+		}else{
+			return 'ขอปิดบัญชีเนื่องจากปัญหาทางการเงิน';
+		}
 	}else{
 		return '';
 	}
@@ -1058,6 +1080,110 @@ function GetCustomerAddresById(byid,callback){
     	    parentid:data[i][8]
         });
       }
+			callback(b);
+		},function(er){alert(er);},null);
+}
+/*--------------------- Get Product -----------------------*/
+function GetProductList(tatol,page,callback){
+	var n = new MobileCRM.FetchXml.Entity('product');
+			n.addAttribute('productid');//0
+			n.addAttribute('name');//1
+			n.addAttribute('productnumber');//2
+			n.addAttribute('price');//3
+			n.addAttribute('defaultuomid');//4
+			n.addAttribute('pricelevelid');//5
+			n.addAttribute('createdon');//6
+	    //n.addAttribute('ivz_stockstatus');//7//real
+	    n.addAttribute('ivz_statustock');//7//test
+			n.addAttribute('defaultuomscheduleid');//8
+	var fetch = new MobileCRM.FetchXml.Fetch(n,parseInt(tatol),parseInt(page));
+		fetch.execute('array',function(data){
+			var b = [];
+			for(var i in data){
+				b.push({
+					productid:data[i][0],
+					name:data[i][1],
+					productnumber:data[i][2],
+					price:data[i][3],
+					uomid:data[i][4],
+					pricelevelid:data[i][5],
+					createdon:data[i][6],
+			    stockstatus:data[i][7],
+					defaultuomscheduleid:data[i][8],
+					filtername:data[i][2]+'-'+data[i][1]
+				});
+			}
+			callback(b);
+		},function(er){alert(er);},null);
+}
+function GetProductListName(txtname,tatol,page,callback){
+	var n = new MobileCRM.FetchXml.Entity('product');
+			n.addAttribute('productid');//0
+			n.addAttribute('name');//1
+			n.addAttribute('productnumber');//2
+			n.addAttribute('price');//3
+			n.addAttribute('defaultuomid');//4
+			n.addAttribute('pricelevelid');//5
+			n.addAttribute('createdon');//6
+	    //n.addAttribute('ivz_stockstatus');//7//real
+	    n.addAttribute('ivz_statustock');//7//test
+			n.addAttribute('defaultuomscheduleid');//8
+	var filter = new MobileCRM.FetchXml.Filter();
+			filter.where('name','like','%'+txtname+'%');
+			n.filter = filter;
+	var fetch = new MobileCRM.FetchXml.Fetch(n,parseInt(tatol),parseInt(page));
+		fetch.execute('array',function(data){
+			var b = [];
+			for(var i in data){
+				b.push({
+					productid:data[i][0],
+					name:data[i][1],
+					productnumber:data[i][2],
+					price:data[i][3],
+					uomid:data[i][4],
+					pricelevelid:data[i][5],
+					createdon:data[i][6],
+			    stockstatus:data[i][7],
+					defaultuomscheduleid:data[i][8],
+					filtername:data[i][2]+'-'+data[i][1]
+				});
+			}
+			callback(b);
+		},function(er){alert(er);},null);
+}
+function GetProductListNumber(txtname,tatol,page,callback){
+	var n = new MobileCRM.FetchXml.Entity('product');
+			n.addAttribute('productid');//0
+			n.addAttribute('name');//1
+			n.addAttribute('productnumber');//2
+			n.addAttribute('price');//3
+			n.addAttribute('defaultuomid');//4
+			n.addAttribute('pricelevelid');//5
+			n.addAttribute('createdon');//6
+	    //n.addAttribute('ivz_stockstatus');//7//real
+	    n.addAttribute('ivz_statustock');//7//test
+			n.addAttribute('defaultuomscheduleid');//8
+	var filter = new MobileCRM.FetchXml.Filter();
+			filter.where('productnumber','like','%'+txtname+'%');
+			n.filter = filter;
+	var fetch = new MobileCRM.FetchXml.Fetch(n,parseInt(tatol),parseInt(page));
+		fetch.execute('array',function(data){
+			alert(data.length);
+			var b = [];
+			for(var i in data){
+				b.push({
+					productid:data[i][0],
+					name:data[i][1],
+					productnumber:data[i][2],
+					price:data[i][3],
+					uomid:data[i][4],
+					pricelevelid:data[i][5],
+					createdon:data[i][6],
+			    stockstatus:data[i][7],
+					defaultuomscheduleid:data[i][8],
+					filtername:data[i][2]+'-'+data[i][1]
+				});
+			}
 			callback(b);
 		},function(er){alert(er);},null);
 }

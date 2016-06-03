@@ -7,6 +7,13 @@
       <ion-nav-buttons side="left">
         <button class="button button-icon button-clear" menu-toggle="left">เมนู</button>
       </ion-nav-buttons>
+      <ion-nav-buttons side="right" >
+        <button class="button button-icon button-clear" ng-show="Data.showcart" ng-click="confirmorder()">
+          สินค้า:<b style="color:red;font-weight:bold;">{{Data.tatolminplus | currency:''}}</b>ชิ้น&nbsp;
+          รวม:<b style="color:red;font-weight:bold;">{{Data.tatolmatch | currency:''}}</b>บาท&nbsp;
+          <!-- <i class="icon ion-ios-cart-outline error"></i> -->
+        </button>
+      </ion-nav-buttons>
     </ion-nav-bar>
     <ion-nav-view name="menuContent"></ion-nav-view>
   </ion-side-menu-content>
@@ -25,7 +32,8 @@
         ng-click="setdmaster(2)" ng-show="Data.logontype">
           <i class="ion-android-calendar"></i>&nbsp;แผนการดำเนินงาน sup direct
         </ion-item>
-        <ion-item menu-close href="#/app/listplanned/1"  class="success" ng-hide="Data.logontype">
+        <ion-item menu-close ui-sref="app.listplanned({mastertype:Data.mastertype})"
+        ui-sref-opts="{reload:true}"  class="success" ng-hide="Data.logontype">
           <i class="ion-android-calendar"></i>&nbsp;ผลการดำเนินงาน
         </ion-item>
         <ion-item menu-close href="#/app/resultplan/0/{{Data.mastertype}}"  class="success" ng-show="Data.logontype">
@@ -54,18 +62,26 @@
           ui-sref-opts="{reload:true}"  class="success" ng-show="Data.logontype">
           <i class="ion-android-calendar"></i>&nbsp;ปรับปรุงข้อมูลลูกค้า Sup
         </ion-item>
+        <!-- productlist/:accountid/:mastertype/:ordertype -->
+        <ion-item menu-close class="success" ng-click="orderlink(1)">
+          <i class="icon ion-bag"></i>&nbsp;รายการสินค้า</ion-item>
+        <ion-item menu-close class="success" ng-click="orderlink(2)">
+          <i class="icon ion-bag"></i>&nbsp;รายการเปิดใบสั่งขาย</ion-item>
         <ion-item menu-close ui-sref="app.playlists" class="success" ng-show="Data.logonstatus">
           <i class="ion-power"></i>&nbsp;เข้าสู่ระบบ
         </ion-item>
         <ion-item menu-close  class="success" ng-hide="Data.logonstatus" ng-click="clicklogout()">
           <i class="ion-power"></i>&nbsp;ออกจากระบบ
         </ion-item>
+
         <ion-item menu-close href="#/app/rejectplan/1234556/mrddd/D10"  class="success"><i class="ion-android-calendar"></i>&nbsp;Test Reject</ion-item>
         <ion-item menu-close ui-sref="app.orderlist({terid:12345,mastertype:1,ordertype:1})"
           ui-sref-opts="{reload:true}" class="success">
           <i class="ion-android-calendar"></i>&nbsp;ทดสอบเปิดใบสั่งขาย</ion-item>
-        <ion-item menu-close ui-sref="app.exampl"class="success">
+        <ion-item menu-close ui-sref="app.exampl"class="success" ui-sref-opts="{reload:true}">
             <i class="ion-android-calendar"></i>&nbsp;ทดสอบ</ion-item>
+        <ion-item menu-close ui-sref="app.productdetail"class="success" ui-sref-opts="{reload:true}">
+            <i class="ion-android-calendar"></i>&nbsp;ทดสอบ detail</ion-item>
       </ion-list>
     </ion-content>
   </ion-side-menu>

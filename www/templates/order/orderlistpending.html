@@ -1,0 +1,79 @@
+<ion-view view-title="รายการใบสั่งขาย">
+  <ion-content>
+    <br />
+    <div class="row">
+      <div class="col">
+        <div>
+          <md-list>
+            <md-list-item class="md-3-line">
+              <div class="md-list-item-text">
+                <h3>Order Number</h3>
+                <h4>Customer</h4>
+                <p>state:<span style="color:green">sync</span> status:<span class="warning">pending</span></p>
+              </div>
+              <md-button class="md-secondary" ng-click="showdetailorder(123344)">
+                <i class="icon ion-chevron-right error text-h1"></i>
+              </md-button>
+              <md-divider></md-divider>
+            </md-list-item>
+            <md-list-item class="md-3-line">
+              <div class="md-list-item-text">
+                <h3>Order Number</h3>
+                <h4>Customer</h4>
+                <p>state:<span style="color:green">sync</span> status:<span class="warning">pending</span></p>
+              </div>
+              <md-button class="md-secondary" ng-click="showdetailorder(123344)">
+                <i class="icon ion-chevron-right error text-h1"></i>
+              </md-button>
+              <md-divider></md-divider>
+            </md-list-item>
+            <md-list-item class="md-3-line">
+              <div class="md-list-item-text">
+                <h3>Order Number</h3>
+                <h4>Customer</h4>
+                <p>state:<span style="color:green">sync</span> status:<span class="error">new</span></p>
+              </div>
+              <md-button class="md-secondary" ng-click="showdetailorder(123344)">
+                <i class="icon ion-chevron-right error text-h1"></i>
+              </md-button>
+              <md-divider></md-divider>
+            </md-list-item>
+            <md-list-item class="md-3-line">
+              <div class="md-list-item-text">
+                <h3>Order Number</h3>
+                <h4>Customer</h4>
+                <p>state:<span style="color:red">no sync</span> status:<span class="warning">pending</span></p>
+              </div>
+              <md-button class="md-secondary" ng-click="showdetailorder(123344)">
+                <i class="icon ion-chevron-right error text-h1"></i>
+              </md-button>
+              <md-divider></md-divider>
+            </md-list-item>
+          </md-list>
+          <md-list-item class="md-3-line">
+            <div class="md-list-item-text">
+              <h3>Order Number</h3>
+              <h4>Customer</h4>
+              <p>state:<span style="color:green">sync</span> status:<span class="success">submitted</span></p>
+            </div>
+            <md-button class="md-secondary" ng-click="showdetailorder(123344)">
+              <i class="icon ion-chevron-right error text-h1"></i>
+            </md-button>
+            <md-divider></md-divider>
+          </md-list-item>
+        </div>
+      </div>
+    </div>
+    <br /><br />
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="ordedetail()">
+      <i class="icon ion-refresh primary"></i>
+      เรียกข้อมูลใหม่
+    </a>
+    <a class="tab-item" ng-click="showmodal(1)">
+      <i class="icon ion-navicon-round success"></i>
+     กรองข้อมูล
+    </a>
+  </div>
+</ion-view>

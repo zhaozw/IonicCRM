@@ -10,3 +10,14 @@ $scope.$on("$ionicView.enter", function(){
 console.log('reload complete');
   getCusAds($stateParams.accountid);
 });
+
+getguid:$stateParams.getguid,
+accountid:$stateParams.accountid,
+ordertype:$stateParams.ordertype,
+productid:$scope.item.productid,
+productname:$scope.item.productname,
+priceperunit:$scope.item.priceperunit,
+pricelevelid:$scope.item.pricelevel,
+uomid:$scope.item.uomid,
+tatol:$scope.item.tatol,
+matchitem:$scope.item.matchitem

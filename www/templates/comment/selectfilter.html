@@ -1,0 +1,45 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">รูปแบบกรองข้อมูล</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closemodal(1)">
+        <i class="ion-close error"></i>
+      </button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+      <div class="row">
+        <div class="col">
+          <md-radio-group  ng-model="group.filter">
+            <md-list>
+              <md-list-item>
+                 <md-radio-button class="md-primary" ng-value="0">All || ทั้งหมด</md-radio-button>
+                 <md-divider></md-divider>
+              </md-list-item>
+              <md-list-item>
+                 <md-radio-button class="md-warn" ng-value="1">In Progress || อยู่ในช่วงดำเนินการ</md-radio-button>
+                 <md-divider></md-divider>
+              </md-list-item>
+              <md-list-item>
+                 <md-radio-button class="md-primary" ng-value="2">Submitted || ยืนยันแล้ว</md-radio-button>
+                 <md-divider></md-divider>
+              </md-list-item>
+              <md-list-item>
+                 <md-radio-button ng-value="3">New || ถูกเลิก</md-radio-button>
+                 <md-divider></md-divider>
+              </md-list-item>
+            </md-list>
+          </md-radio-group>
+        </div>
+      </div>
+      <!-- <h4 ng-if="n.statuscode == 3">STATUS:<span style="color:green;">In Progress || อยู่ในช่วงดำเนินการ</span></h4>
+      <h4 ng-if="n.statuscode == 8">STATUS:<span style="color:blue;">Submitted || ยืนยันแล้ว</span></h4>
+      <h4 ng-if="n.statuscode == 917970001">STATUS:<span style="color:blue;">Wait Submit</span></h4>
+      <h4 ng-if="n.statuscode == 1">STATUS:<span style="color:red;">New || ถูกเลิก</span></h4>
+      <h4 ng-if="n.statuscode == 4">STATUS:<span style="color:red;">Cancel</span></h4>
+      <h4 ng-if="n.statuscode == 5 && n.ordernumber == 'S'">STATUS:<span style="color:Blue;">Completed</span></h4>
+      <h4 ng-if="n.statuscode == 6">STATUS:<span style="color:Blue;">Partial</span></h4>
+      <h4 ng-if="n.statuscode == 7">STATUS:<span style="color:Blue;">Invoiced</span></h4>
+      <h4 ng-if="n.statuscode == 2">STATUS:<span style="color:#6666FF;">Pending || รอยืนยัน</span></h4> -->
+  </ion-content>
+</ion-modal-view>

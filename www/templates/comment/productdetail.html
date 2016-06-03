@@ -1,0 +1,153 @@
+<ion-modal-view style="width:80%; height: 800px;max-height: 100%;left: 10%; right: 10%; bottom: 0px; top:5px;">
+  <ion-header-bar>
+    <h1 class="title">รายละเอียดการขออนุมัติ</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closereject()">
+        <i class="ion-close error"></i>
+      </button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <br />
+    <div class="">
+      <ul class="slides">
+        <input type="radio" name="radio-btn" id="img-1" checked />
+        <li class="slide-container">
+    		<div class="slide">
+    			<img src="img/accessories_03.jpg" />
+            </div>
+    		<div class="nav">
+    			<label for="img-6" class="prev">&#x2039;</label>
+    			<label for="img-2" class="next">&#x203a;</label>
+    		</div>
+        </li>
+
+        <input type="radio" name="radio-btn" id="img-2" />
+        <li class="slide-container">
+            <div class="slide">
+              <img src="img/ecoline_product_03.jpg" />
+            </div>
+    		<div class="nav">
+    			<label for="img-1" class="prev">&#x2039;</label>
+    			<label for="img-3" class="next">&#x203a;</label>
+    		</div>
+        </li>
+
+        <input type="radio" name="radio-btn" id="img-3" />
+        <li class="slide-container">
+            <div class="slide">
+              <img src="img/front_fork_03.jpg" />
+            </div>
+    		<div class="nav">
+    			<label for="img-2" class="prev">&#x2039;</label>
+    			<label for="img-4" class="next">&#x203a;</label>
+    		</div>
+        </li>
+
+        <input type="radio" name="radio-btn" id="img-4" />
+        <li class="slide-container">
+            <div class="slide">
+              <img src="img/pdrange_banner_09.jpg" />
+            </div>
+    		<div class="nav">
+    			<label for="img-3" class="prev">&#x2039;</label>
+    			<label for="img-5" class="next">&#x203a;</label>
+    		</div>
+        </li>
+
+        <input type="radio" name="radio-btn" id="img-5" />
+        <li class="slide-container">
+            <div class="slide">
+              <img src="img/pdrange_banner_10.jpg" />
+            </div>
+    		<div class="nav">
+    			<label for="img-4" class="prev">&#x2039;</label>
+    			<label for="img-6" class="next">&#x203a;</label>
+    		</div>
+        </li>
+
+        <input type="radio" name="radio-btn" id="img-6" />
+        <li class="slide-container">
+            <div class="slide">
+              <img src="img/racing_product_03.jpg" />
+            </div>
+    		<div class="nav">
+    			<label for="img-5" class="prev">&#x2039;</label>
+    			<label for="img-7" class="next">&#x203a;</label>
+    		</div>
+        </li>
+
+        <input type="radio" name="radio-btn" id="img-7" />
+        <li class="slide-container">
+            <div class="slide">
+              <img src="img/steering_damper_03.jpg" />
+            </div>
+    		<div class="nav">
+    			<label for="img-6" class="prev">&#x2039;</label>
+    			<label for="img-8" class="next">&#x203a;</label>
+    		</div>
+        </li>
+
+        <input type="radio" name="radio-btn" id="img-8" />
+        <li class="slide-container">
+            <div class="slide">
+              <img src="img/topline_product_03.jpg" />
+            </div>
+    		<div class="nav">
+    			<label for="img-7" class="prev">&#x2039;</label>
+    			<label for="img-1" class="next">&#x203a;</label>
+    		</div>
+        </li>
+
+        <li class="nav-dots">
+          <label for="img-1" class="nav-dot" id="img-dot-1"></label>
+          <label for="img-2" class="nav-dot" id="img-dot-2"></label>
+          <label for="img-3" class="nav-dot" id="img-dot-3"></label>
+          <label for="img-4" class="nav-dot" id="img-dot-4"></label>
+          <label for="img-5" class="nav-dot" id="img-dot-5"></label>
+          <label for="img-6" class="nav-dot" id="img-dot-6"></label>
+          <label for="img-7" class="nav-dot" id="img-dot-7"></label>
+          <label for="img-8" class="nav-dot" id="img-dot-8"></label>
+        </li>
+      </ul>
+      <div class="row">
+        <div class="col"></div>
+        <div class="col col-90">
+          <hr class="divider">
+          <div class="row">
+            <div class="col">
+              <span style="font-size: 30px;font-weight:bold;">{{item.productname}}</span>
+            </div>
+          </div>
+          <p />
+          <div class="row">
+            <div class="col">
+              <span style="font-size: 30px;">ราคา:<b style="font-weight:bold;">{{item.priceperunit | currency:''}}</b></span>
+            </div>
+            <div class="col">
+              <span style="font-size: 30px;" ng-show="Data.showcart">ยอดรวม:<b style="font-weight:bold;">{{item.tatol | currency:''}}</b></span>
+            </div>
+          </div>
+          <hr class="divider" ng-show="Data.showcart"/>
+          <div class="row" ng-show="Data.showcart">
+            <div class="col">
+              <div class="row">
+                <div class="col"><i class="icon ion-ios-plus text-h1 success" ng-click="addplus(1)"></i></div>
+                <div class="col col-15">
+                  <span style="color:blue;font-weight:bold;font-size: 30px;">{{item.matchitem}}</span>
+                </div>
+                <div class="col"><i class="icon ion-ios-minus text-h1 warn" ng-click="minus(1)"></i></div>
+              </div>
+            </div>
+            <div class="col"></div>
+            <div class="col">
+              <md-button class="md-raised md-warn" aria-label="description"md-ripple-size="full" ng-click="additem()">เพิ่มสินค้า</md-button>
+            </div>
+          </div>
+        </div>
+        <div class="col"></div>
+      </div>
+    </div>
+    <br /><br />
+  </ion-content>
+</ion-modal-view>

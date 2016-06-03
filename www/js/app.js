@@ -56,7 +56,11 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     StoreDoc:'',
     custermertype:'',
     statustypecode:'',
-    territoryadjmust:''
+    territoryadjmust:'',
+    showcart:false,
+    tatolmatch:0,
+    tatolminplus:0,
+    creditlimit:0
   }
 })
 .factory('Darray',function(){
@@ -101,6 +105,18 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
 .factory('dataaccount',function(){
   return {
     user:[]
+  }
+})
+.factory('DataOrder',function(){
+  return {
+    order:[],
+    tatol:0,
+    matcher:0
+  }
+})
+.factory('Setting',function(){
+  return{
+    requestproduct:100
   }
 })
 .service('rego',function(){
@@ -605,6 +621,24 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   }
 })
+.state('app.productlist', {
+  url:'/productlist/:accountid/:mastertype/:ordertype/:getguid',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/productlist/productlist.html',
+      controller:'ProductLisCtrl'
+    }
+  }
+})
+.state('app.listorder', {
+  url:'/listorder',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/order/listorder.html',
+      controller:'ListOrderCtrl'
+    }
+  }
+})
 /*---------------------- Approve Wating --------------------*/
 .state('app.waitapprove', {
   url:'/waitapprove/:masname/:mastertype/:typego',
@@ -652,7 +686,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.waitapproveadjust', {
-  url:'/waitapproveadjust',
+  url:'/waitapproveadjust/:masname/:mastertype/:typego',
   views: {
     'menuContent': {
       templateUrl: 'templates/approveadjust/territory.html',
@@ -661,7 +695,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.approveadjust', {
-  url:'/approveadjust/:terid/:mastertype',
+  url:'/approveadjust/:terid/:mastertype/:typego',
   views: {
     'menuContent': {
       templateUrl: 'templates/approveadjust/waitaccount.html',
@@ -676,6 +710,24 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     'menuContent': {
       templateUrl: 'templates/productlist/productlist.html',
       controller:'OrderListCtrl'
+    }
+  }
+})
+.state('app.orderlistpending', {
+  url:'/orderlistpending/:terid/:mastertype/:ordertype',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/order/orderlistpending.html',
+      controller:'ListOrderPendingCtrl'
+    }
+  }
+})
+.state('app.orderlistother', {
+  url:'/orderlistpending/:terid/:mastertype/:ordertype',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/order/orderother.html',
+      controller:'ListOrderOtherCtrl'
     }
   }
 })
@@ -715,7 +767,18 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
             controller: 'ExamplCtrl'
           }
         }
-      });
+      })
+  .state('app.productdetail', {
+        url:'/productdetail',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/productlist/productdetail.html',
+            controller: 'ExamplCtrl'
+          }
+        }
+      })
+
+      ;
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/playlists');
 });

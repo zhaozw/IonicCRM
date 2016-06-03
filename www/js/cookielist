@@ -64,3 +64,4 @@ $scope.sendmailtosales = function(id,title,txt,callback){
     }
   });
 }
+text = "เรียน  พนักงานขายเขต "+tscope.scope().territoryid+"    Sup./Sales Manger  ไม่อนุมัติ"+titleconfirm+"ลูกค้าชื่อ "+tscope.scope().accountnumber+':'+tscope.scope().Adjname+" เนื่องจาก "+txtear+"  ขอบคุณครับ     (อีเมลฉบับนี้ส่งอัตโนมัติจากระบบ CRM)";

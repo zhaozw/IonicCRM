@@ -1,0 +1,25 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">YSS CRM</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closesearch()">
+        <i class="ion-close error"></i>
+      </button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+      <div class="list">
+        <label class="item item-input">
+          <span class="input-label">ชื่อสินค้า</span>
+          <input type="text" ng-model="item.itemname" placeholder="ชื่อสินค้า.............................................">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">รหัสสินค้า</span>
+          <input type="text" ng-model="item.itemnumber" placeholder="รหัสสินค้า............................................">
+        </label>
+        <label class="item">
+          <button class="button button-block button-positive" type="submit" ng-click="searclickitem(item.itemname,item.itemnumber)">ค้นหา</button>
+        </label>
+      </div>
+  </ion-content>
+</ion-modal-view>

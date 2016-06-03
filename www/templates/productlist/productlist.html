@@ -1,78 +1,39 @@
 <ion-view view-title="รายการสินค้า">
-  <ion-content on-scroll="logscroll()">
-    <div class="card">
-      <div class="item item-text-wrap">
-        <md-list>
-          <md-list-item class="md-3-line">
-             <div class="md-list-item-text" layout="column">
-               <h3><span style="font-weight:bold;">Item 1</span></h3>
-               <p>Price:<span style="font-weight:bold;">1233</span></p>
-               <p>Stock:<span style="color:green;font-weight:bold;">In Stock</span></p>
-               <p>Stock:<span style="color:red;font-weight:bold;">Out Of Stock</span></p>
-             </div>
-             <a class="md-secondary ion-ios-arrow-forward text-h1 text-bold" ng-click="clickgo(item.ivz_leftterritory.id)"></a>
-             <md-divider></md-divider>
-             </md-list-item>
-             <md-list-item class="md-3-line">
-                <div class="md-list-item-text" layout="column">
-                  <h3><span style="font-weight:bold;">Item 1</span></h3>
-                  <p>Price:<span style="font-weight:bold;">1233</span></p>
-                  <p>Stock:<span style="color:green;font-weight:bold;">In Stock</span></p>
-                  <p>Stock:<span style="color:red;font-weight:bold;">Out Of Stock</span></p>
-                </div>
-                <a class="md-secondary ion-ios-arrow-forward text-h1 text-bold" ng-click="clickgo(item.ivz_leftterritory.id)"></a>
-                <md-divider></md-divider>
-            </md-list-item>
-          <md-list-item class="md-3-line">
-               <div class="md-list-item-text" layout="column">
-                 <h3><span style="font-weight:bold;">Item 1</span></h3>
-                 <p>Price:<span style="font-weight:bold;">1233</span></p>
-                 <p>Stock:<span style="color:green;font-weight:bold;">In Stock</span></p>
-                 <p>Stock:<span style="color:red;font-weight:bold;">Out Of Stock</span></p>
-               </div>
-               <a class="md-secondary ion-ios-arrow-forward text-h1 text-bold" ng-click="clickgo(item.ivz_leftterritory.id)"></a>
-               <md-divider></md-divider>
-           </md-list-item>
-           <md-list-item class="md-3-line">
-              <div class="md-list-item-text" layout="column">
-                <h3><span style="font-weight:bold;">Item 1</span></h3>
-                <p>Price:<span style="font-weight:bold;">1233</span></p>
-                <p>Stock:<span style="color:green;font-weight:bold;">In Stock</span></p>
-                <p>Stock:<span style="color:red;font-weight:bold;">Out Of Stock</span></p>
-              </div>
-              <a class="md-secondary ion-ios-arrow-forward text-h1 text-bold" ng-click="clickgo(item.ivz_leftterritory.id)"></a>
-              <md-divider></md-divider>
-              </md-list-item>
-              <md-list-item class="md-3-line">
-                 <div class="md-list-item-text" layout="column">
-                   <h3><span style="font-weight:bold;">Item 1</span></h3>
-                   <p>Price:<span style="font-weight:bold;">1233</span></p>
-                   <p>Stock:<span style="color:green;font-weight:bold;">In Stock</span></p>
-                   <p>Stock:<span style="color:red;font-weight:bold;">Out Of Stock</span></p>
-                 </div>
-                 <a class="md-secondary ion-ios-arrow-forward text-h1 text-bold" ng-click="clickgo(item.ivz_leftterritory.id)"></a>
-                 <md-divider></md-divider>
-             </md-list-item>
-             <md-list-item class="md-3-line">
-                <div class="md-list-item-text" layout="column">
-                  <h3><span style="font-weight:bold;">Item 1</span></h3>
-                  <p>Price:<span style="font-weight:bold;">1233</span></p>
-                  <p>Stock:<span style="color:green;font-weight:bold;">In Stock</span></p>
-                  <p>Stock:<span style="color:red;font-weight:bold;">Out Of Stock</span></p>
-                </div>
-                <a class="md-secondary ion-ios-arrow-forward text-h1 text-bold" ng-click="clickgo(item.ivz_leftterritory.id)"></a>
-                <md-divider></md-divider>
-            </md-list-item>
-        </md-list>
-        <md-input-container>
-          <label>ประเภทที่อยู่</label>
-          <md-select ng-model="txtaddress">
-            <md-option ng-repeat="n in adjusttype" ng-value="n.id">{{n.name}}</md-option>
-          </md-select>
-        </md-input-container>
+  <ion-content>
+    <div>
+      <div class="bar bar-header item-input-inset">
+        <label class="item-input-wrapper">
+          <i class="icon ion-ios-search placeholder-icon"></i>
+          <input type="search" placeholder="Search" ng-model="filtertxt">
+        </label>
+        <md-button class="md-raised button-clear md-warn" aria-label="description" md-ripple-size="auto" ng-click="clearfilter()">&nbsp;ยกเลิก&nbsp;</md-button>
       </div>
+      <md-list>
+        <md-list-item class="md-3-line" ng-repeat="n in listproduct | filter:{filtername:filtertxt}"
+        ng-click="open1(n.productid,n.filtername,n.price,n.pricelevelid,n.uomid)">
+          <img src="img/ionic.png" class="md-avatar" alt="testt" />
+           <div class="md-list-item-text" layout="column">
+             <h5>{{n.filtername}}</h5>
+             <h5>{{n.price | currency:''}}</h5>
+             <p  ng-if="n.stockstatus.length > 9" style="color:red;font-weight:bold;">{{n.stockstatus}}</p>
+             <p  ng-if="n.stockstatus.length < 9" style="color:green;font-weight:bold;">{{n.stockstatus}}</p>
+           </div>
+           <a class="md-secondary icon ion-chevron-right text-h1 text-bold error"
+             ng-click="open1(n.productid,n.productnumber,n.price,n.pricelevelid,n.uomid)"></a>
+           <md-divider ng-if="!$last"></md-divider>
+       </md-list-item>
+      </md-list>
     </div>
-    <md-button class="md-raised md-warn" ng-click="clickmodel()">content</md-button>
-    <md-button class="md-raised md-warn" ng-click="gobb()">content back</md-button>
+    <br /><br />
   </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="reload()">
+      <i class="icon ion-ios-reload primary"></i>
+      เรียกข้อมูลใหม่
+    </a>
+    <a class="tab-item" ng-click="opensearch()">
+      <i class="icon ion-android-search warn"></i>
+      ค้นหาสินค้า
+    </a>
+  </div>
 </ion-view>
