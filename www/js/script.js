@@ -915,6 +915,9 @@ function GetAccountById(id,stype,callback){
 						a.addAttribute('ivz_satatusempid');//21
 						a.addAttribute('creditlimit');//22
 						a.addAttribute('ivz_integrationid');//23
+						a.addAttribute('transactioncurrencyid');//24
+						a.addAttribute('shippingmethodcode');//25
+						a.addAttribute('paymenttermscode');//26
         var filter = new MobileCRM.FetchXml.Filter();
       		  filter.where('accountid','eq',id);
 						a.filter = filter;
@@ -956,7 +959,10 @@ function GetAccountById(id,stype,callback){
 												CtoNum(data[i][20])),
 											statusempid:data[i][21],
 											ivz_balancecredit:data[i][22],
-											ivz_integrationid:data[i][23]
+											ivz_integrationid:data[i][23],
+											currencyid:data[i][24],
+											shippingmethodcode:data[i][25],
+											paymenttermscode:data[i][26]
       							});
       					}
       					callback(b);
