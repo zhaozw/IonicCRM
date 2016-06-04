@@ -5,57 +5,22 @@
       <div class="col">
         <div>
           <md-list>
-            <md-list-item class="md-3-line">
+            <md-list-item class="md-3-line" ng-repeat="n in listorderdetail"
+            ng-click="opendetail(n.productid,n.productname,n.priceperunit,n.tatol,n.quality)">
               <div class="md-list-item-text">
-                <h3>Item Name</h3>
-                <h4>price</h4>
-                <p>tatol</p>
+                <h3>{{n.salesorderid.primaryName+':'+n.salesorderid.id}}</h3>
+                <h3>{{n.productname}}</h3>
+                <h4>
+                  ราคา/หน่วย:&nbsp;
+                  <span class="error" style="font-weight:bold;">{{n.priceperunit |currency:''}}</span>
+                  &nbsp;บาท
+                </h4>
+                <p>
+                  สินค้า:&nbsp;<span class="error" style="font-weight:bold;">{{n.quality}}</span>&nbsp;
+                  ยอดรวม:&nbsp;<span class="error" style="font-weight:bold;">{{n.tatol | currency:''}}</span>&nbsp;บาท
+                </p>
               </div>
-              <md-button class="md-secondary">
-                <i class="icon ion-close-round error text-h1"></i>
-              </md-button>
-              <md-divider></md-divider>
-            </md-list-item>
-            <md-list-item class="md-3-line">
-              <div class="md-list-item-text">
-                <h3>Item Name</h3>
-                <h4>price</h4>
-                <p>tatol</p>
-              </div>
-              <md-button class="md-secondary">
-                <i class="icon ion-close-round error text-h1"></i>
-              </md-button>
-              <md-divider></md-divider>
-            </md-list-item>
-            <md-list-item class="md-3-line">
-              <div class="md-list-item-text">
-                <h3>Item Name</h3>
-                <h4>price</h4>
-                <p>tatol</p>
-              </div>
-              <md-button class="md-secondary">
-                <i class="icon ion-close-round error text-h1"></i>
-              </md-button>
-              <md-divider></md-divider>
-            </md-list-item>
-            <md-list-item class="md-3-line">
-              <div class="md-list-item-text">
-                <h3>Item Name</h3>
-                <h4>price</h4>
-                <p>tatol</p>
-              </div>
-              <md-button class="md-secondary">
-                <i class="icon ion-close-round error text-h1"></i>
-              </md-button>
-              <md-divider></md-divider>
-            </md-list-item>
-            <md-list-item class="md-3-line">
-              <div class="md-list-item-text">
-                <h3>Item Name:xxxxxxxxxxxxxxxxxxxx</h3>
-                <h4>price:1525</h4>
-                <p>tatol:123 quality:123</p>
-              </div>
-              <md-button class="md-secondary">
+              <md-button class="md-secondary" ng-click="removeitem($index)">
                 <i class="icon ion-close-round error text-h1"></i>
               </md-button>
               <md-divider></md-divider>
@@ -67,9 +32,8 @@
     <div class="row">
       <div class="col"></div>
       <div class="col"></div>
-      <div class="col"></div>
-      <div class="col">
-        <h4>ยอดรวม:&nbsp;<span class="error">1223526</span>&nbsp;บาท</h4>
+      <div class="col col-30">
+        <h4>ยอดรวมทั้งหมด:&nbsp;<span class="error">{{addpluss() | currency:''}}</span>&nbsp;บาท</h4>
       </div>
     </div>
     <br /><br />
@@ -81,7 +45,7 @@
     </a>
     <a class="tab-item" ng-click="showmodal(1)">
       <i class="icon ion-checkmark-circled success"></i>
-     ยืนยันใบสั่งขาย
+     บันทึกใบสั่งขาย
     </a>
   </div>
 </ion-view>

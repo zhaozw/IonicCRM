@@ -5,62 +5,28 @@
       <div class="col">
         <div>
           <md-list>
-            <md-list-item class="md-3-line">
+            <md-list-item class="md-3-line" ng-repeat="n in listorder | filter:{statuscode:group.filter}" ng-if="n.ivz_statussales == 1">
               <div class="md-list-item-text">
-                <h3>Order Number</h3>
-                <h4>Customer</h4>
-                <p>state:<span style="color:green">sync</span> status:<span class="warning">pending</span></p>
+                <h3>{{n.ordernumber}}</h3>
+                <h4>{{n.name}}</h4>
+                <p>
+                  สถานะ:
+                  <span style="color:red;font-weight:bold;" ng-if="!n.ivz_ordernumber.length">กำลังรอซิงค์เข้า AX</span>
+                  <span style="color:green;font-weight:bold;" ng-if="n.ivz_ordernumber.length > 0">ซิงค์เข้า AX แล้ว</span>
+                  สถานะออร์เดอร์:
+                  <!-- <span style="color:#006442;font-weight:bold;">All || ทั้งหมด</span> -->
+                  <span style="color:#CA6924;font-weight:bold;" ng-if="n.statuscode == 2">Pending || รอดำเนินการ</span>
+                  <span style="color:#003171;font-weight:bold;" ng-if="n.statuscode == 3">In Progress || อยู่ในช่วงดำเนินการ</span>
+                  <span style="color:#757D75;font-weight:bold;" ng-if="n.statuscode == 4">Submitted || ยืนยันแล้ว</span>
+                  <span style="color:#9D2933;font-weight:bold;" ng-if="n.statuscode == 1">New || ถูกเลิก</span>
+                </p>
               </div>
-              <md-button class="md-secondary" ng-click="showdetailorder(123344)">
-                <i class="icon ion-chevron-right error text-h1"></i>
-              </md-button>
-              <md-divider></md-divider>
-            </md-list-item>
-            <md-list-item class="md-3-line">
-              <div class="md-list-item-text">
-                <h3>Order Number</h3>
-                <h4>Customer</h4>
-                <p>state:<span style="color:green">sync</span> status:<span class="warning">pending</span></p>
-              </div>
-              <md-button class="md-secondary" ng-click="showdetailorder(123344)">
-                <i class="icon ion-chevron-right error text-h1"></i>
-              </md-button>
-              <md-divider></md-divider>
-            </md-list-item>
-            <md-list-item class="md-3-line">
-              <div class="md-list-item-text">
-                <h3>Order Number</h3>
-                <h4>Customer</h4>
-                <p>state:<span style="color:green">sync</span> status:<span class="error">new</span></p>
-              </div>
-              <md-button class="md-secondary" ng-click="showdetailorder(123344)">
-                <i class="icon ion-chevron-right error text-h1"></i>
-              </md-button>
-              <md-divider></md-divider>
-            </md-list-item>
-            <md-list-item class="md-3-line">
-              <div class="md-list-item-text">
-                <h3>Order Number</h3>
-                <h4>Customer</h4>
-                <p>state:<span style="color:red">no sync</span> status:<span class="warning">pending</span></p>
-              </div>
-              <md-button class="md-secondary" ng-click="showdetailorder(123344)">
+              <md-button class="md-secondary" ng-click="showdetailorder(n.salesorderid)">
                 <i class="icon ion-chevron-right error text-h1"></i>
               </md-button>
               <md-divider></md-divider>
             </md-list-item>
           </md-list>
-          <md-list-item class="md-3-line">
-            <div class="md-list-item-text">
-              <h3>Order Number</h3>
-              <h4>Customer</h4>
-              <p>state:<span style="color:green">sync</span> status:<span class="success">submitted</span></p>
-            </div>
-            <md-button class="md-secondary" ng-click="showdetailorder(123344)">
-              <i class="icon ion-chevron-right error text-h1"></i>
-            </md-button>
-            <md-divider></md-divider>
-          </md-list-item>
         </div>
       </div>
     </div>

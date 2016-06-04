@@ -116,7 +116,8 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
 })
 .factory('Setting',function(){
   return{
-    requestproduct:100
+    requestproduct:100,
+    setValorder:10000
   }
 })
 .service('rego',function(){
@@ -140,6 +141,19 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
       }
     }
   }
+})
+.directive('myclick', function() {
+
+    return function(scope, element, attrs) {
+
+        element.bind('touchstart click', function(event) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            scope.$apply(attrs['myclick']);
+        });
+    };
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
@@ -723,7 +737,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.orderlistother', {
-  url:'/orderlistpending/:terid/:mastertype/:ordertype',
+  url:'/orderlistpending/:orderid/:mastertype/:ordertype',
   views: {
     'menuContent': {
       templateUrl: 'templates/order/orderother.html',

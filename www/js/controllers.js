@@ -242,7 +242,7 @@ angular.module('starter.controllers', [])
                 break;
             case 2:
                 $state.go('app.orderlistpending', {
-                    accountid: null,
+                    terid: $cookies.get('territoryid'),
                     mastertype: Data.mastertype,
                     ordertype: 0
                 }, {
@@ -386,20 +386,22 @@ angular.module('starter.controllers', [])
                                     Data.logontype = false;
                                 }
                                 try {
-                                    $cookies.put('mastertype', dType);
+                                    var d = new Date();
+                                    var exp = new Date(d.getFullYear(), d.getMonth(), d.getDate()+1);//set 24 hour
+                                    $cookies.put('mastertype', dType, {'expires': exp});
                                     Data.Empid = data[i].ivz_empid;
                                     Data.Tername = data[i].ivz_name;
                                     Data.termas = data[i].territoryid;
-                                    $cookies.put('territoryid', data[i].territoryid);
-                                    $cookies.put('ivz_empname', data[i].ivz_empname);
-                                    $cookies.put('ivz_empid', data[i].ivz_empid);
-                                    $cookies.put('ivz_password', data[i].ivz_password);
-                                    $cookies.put('ivz_emailcontact', data[i].ivz_emailcontact);
-                                    $cookies.put('ivz_leadermail', data[i].ivz_leadermail);
-                                    $cookies.put('ivz_ccmail', data[i].ivz_ccmail);
-                                    $cookies.put('name', data[i].ivz_name);
-                                    $cookies.put('description', data[i].ter_description);
-                                    $cookies.put('ivz_statusempid', data[i].ivz_statusempid);
+                                    $cookies.put('territoryid', data[i].territoryid, {'expires': exp});
+                                    $cookies.put('ivz_empname', data[i].ivz_empname, {'expires': exp});
+                                    $cookies.put('ivz_empid', data[i].ivz_empid, {'expires': exp});
+                                    $cookies.put('ivz_password', data[i].ivz_password, {'expires': exp});
+                                    $cookies.put('ivz_emailcontact', data[i].ivz_emailcontact, {'expires': exp});
+                                    $cookies.put('ivz_leadermail', data[i].ivz_leadermail, {'expires': exp});
+                                    $cookies.put('ivz_ccmail', data[i].ivz_ccmail, {'expires': exp});
+                                    $cookies.put('name', data[i].ivz_name, {'expires': exp});
+                                    $cookies.put('description', data[i].ter_description, {'expires': exp});
+                                    $cookies.put('ivz_statusempid', data[i].ivz_statusempid, {'expires': exp});
                                     datauser.territoryid = data[i].territoryid;
                                     datauser.ivz_empname = data[i].ivz_empname;
                                     datauser.ivz_empid = data[i].ivz_empid;
@@ -5629,8 +5631,8 @@ angular.module('starter.controllers', [])
                         name: data[i].name,
                         productnumber: data[i].productnumber,
                         price: data[i].price,
-                        uomid: data[i].uomid,
-                        pricelevelid: data[i].pricelevelid,
+                        uomid: data[i].uomid.id,
+                        pricelevelid: data[i].pricelevelid.id,
                         createdon: data[i].createdon,
                         stockstatus: data[i].stockstatus,
                         defaultuomscheduleid: data[i].defaultuomscheduleid,
@@ -5667,7 +5669,7 @@ angular.module('starter.controllers', [])
         };
         $scope.open1 = function (productid, name, priceperunit, pricelevel, uomid) {
             var y = productid + '\n' + name + '\n' + priceperunit + '\n' + pricelevel + '\n' + uomid;
-            console.log(y);
+            //alert(y);
             $scope.item.productid = productid;
             $scope.item.productname = name;
             $scope.item.priceperunit = priceperunit;
@@ -5874,6 +5876,13 @@ angular.module('starter.controllers', [])
           accountid:'',
           name:'',
           territoryname:'',
+          terid:'',
+          currency:'',
+          creditlimit:'',
+          district:'',
+          provinceid:'',
+          shippingmethodcode:'',
+          paymenttermscode:'',
           remark:''
         }
         $scope.item = {
@@ -5908,7 +5917,7 @@ angular.module('starter.controllers', [])
                     productid:dataorder[i].productid,
                     productname:dataorder[i].productname,
                     priceperunit:dataorder[i].priceperunit,
-                    pricelevelid:dataorder[i].pricelevel,
+                    pricelevelid:dataorder[i].pricelevelid,
                     uomid:dataorder[i].uomid,
                     tatol:dataorder[i].tatol,
                     quality:dataorder[i].quality
@@ -5918,16 +5927,7 @@ angular.module('starter.controllers', [])
                 }, 5);
             }
         }
-        $scope.addpluss = function (data) {
-            var m = 0;
-            for (var i in $scope.listorderdetail) {
-                m += parseInt($scope.listorderdetail[i].quality) * parseInt($scope.listorderdetail[i].priceperunit);
-            }
-            return m;
-        }
-        $scope.removeitem = function(id){
-          $scope.listorderdetail.splice(id,1);
-        }
+
         $scope.$on('$ionicView.enter', function () {
             $scope.loading();
         });
@@ -5948,6 +5948,16 @@ angular.module('starter.controllers', [])
         }
 
         /*------------- add product quality ---------------*/
+        $scope.addpluss = function (data) {
+            var m = 0;
+            for (var i in $scope.listorderdetail) {
+                m += parseInt($scope.listorderdetail[i].quality) * parseInt($scope.listorderdetail[i].priceperunit);
+            }
+            return m;
+        }
+        $scope.removeitem = function(id){
+          $scope.listorderdetail.splice(id,1);
+        }
         $scope.addplus = function (id) {
             if ($scope.item.matchitem <= 0) {
                 $scope.item.matchitem = 0 + parseInt(id);
@@ -6014,26 +6024,43 @@ angular.module('starter.controllers', [])
             $scope.modal2 = modal;
         });
         $scope.showmodal = function (id) {
+            $scope.idmodal = id;
             if (id == 1) {
-                console.log('loop accountiid get name territory');
-                GetAccountById($scope.listorderdetail[i].accountid,Data.mastertype,function(data){
-                  $scope.user.accountid = data[0].accountid;
-                  $scope.user.name = data[0].name;
-                  $scope.user.territoryname = data[0].territoryid;
-                  $scope.user.remark = '';
-                  $scope.$apply();
-                });
-                $scope.modal1.show();
+              console.log('loop accountiid get name territory');
+              $scope.modal1.show();
             }else if(id == 2){
               $scope.modal2.show();
             }
         }
+        $scope.$watch('idmodal',function(){
+          GetAccountById($scope.listorderdetail[0].accountid,Data.mastertype,function(data){
+            $scope.user.accountid = data[0].accountid;
+            $scope.user.name = data[0].name;
+            $scope.user.territoryname = data[0].territoryid;
+            $scope.user.terid = data[0].territoryid.id;
+            $scope.user.currency =  data[0].currencyid.id;
+            $scope.user.creditlimit = data[0].ivz_balancecredit;
+            $scope.user.district = data[0].ivz_addressdistrict.id;
+            $scope.user.provinceid = data[0].ivz_addressprovince.id;
+            $scope.user.shippingmethodcode = data[0].shippingmethodcode;
+            $scope.user.paymenttermscode = data[0].paymenttermscode;
+            $scope.user.remark = '';
+            $scope.$apply();
+          });
+        });
         $scope.closemodal = function (id) {
             if (id == 1) {
-              $scope.user.accountid = '';
-              $scope.user.name = '';
-              $scope.user.territoryname = '';
-              $scope.user.remark = '';
+                $scope.user.accountid = '';
+                $scope.user.name = '';
+                $scope.user.territoryname = '';
+                $scope.user.terid = '';
+                $scope.user.currency = '';
+                $scope.user.creditlimit = '';
+                $scope.user.district = '';
+                $scope.user.provinceid = '';
+                $scope.user.shippingmethodcode = '';
+                $scope.user.paymenttermscode = '';
+                $scope.user.remark = '';
                 $scope.modal1.hide();
               }else if(id == 2){
                 $scope.modal2.hide();
@@ -6042,80 +6069,170 @@ angular.module('starter.controllers', [])
         $scope.closereject = function(){
           $scope.modal2.hide();
         }
-        function insertorder(callback){
-            $scope.showLoadingProperTimesRegter('กำลังบันทึกข้อมูลออร์เดอร์'+'Accountname');
-            var id = guid();
-            setTimeout(function(){
-              alert(id);
-              insertorderdetail(id,function(){
-                callback();
-              })
-            },3000);
+        function insertorder(){
+            $scope.showLoadingProperTimesRegter('กำลังบันทึกข้อมูลออร์เดอร์ของลูกค้า '+'$scope.user.name');
+            try {
+              //alert('pricreid:'+$scope.listorderdetail[0].pricelevelid+'\n'+$scope.listorderdetail[0].getguid+'\n'+$scope.listorderdetail[0].ordertype);
+              var ins = new MobileCRM.DynamicEntity.createNew('salesorder');
+                  ins.properties.salesorderid = $scope.listorderdetail[0].getguid;
+                  ins.properties.customerid = new MobileCRM.Reference('account',$scope.user.accountid);
+                  ins.properties.name = $scope.user.name;
+                  ins.properties.transactioncurrencyid = new MobileCRM.Reference('transactioncurrency',$scope.user.currency);
+                  ins.properties.requestdeliveryby = new Date();
+    							ins.properties.pricelevelid = new MobileCRM.Reference('pricelevel',$scope.listorderdetail[0].pricelevelid);
+                  ins.properties.shippingmethodcode = parseInt($scope.user.shippingmethodcode);
+                  ins.properties.paymenttermscode = parseInt($scope.user.paymenttermscode);
+                  ins.properties.ivz_province = new MobileCRM.Reference('ivz_addressprovince',$scope.user.provinceid);
+                  ins.properties.ivz_district =  new MobileCRM.Reference('ivz_addressdistrict',$scope.user.district);
+                  ins.properties.ivz_territory = new MobileCRM.Reference('territory',$scope.user.terid);
+                  ins.properties.ivz_balancecredit = $scope.user.creditlimit;
+                  ins.properties.totalamount = parseInt($scope.addpluss());
+                  ins.properties.ivz_empid = $cookies.get('ivz_empid');
+                  ins.properties.statuscode = parseInt(2);
+    							ins.properties.ivz_statussales = parseInt($scope.listorderdetail[0].ordertype);
+    							ins.properties.description = $scope.user.remark;
+                  ins.save(function(er){
+                    if(er){
+                      alert('error 6077 '+er);
+                    }else{
+                      //alert('insert order');
+                      insertorderdetail($scope.listorderdetail[0].getguid);
+                    }
+                  });
+            } catch (e) {
+              alert('insert order 6080 '+e);
+            }
           }
-        function insertorderdetail(id,callback){
+        function insertorderdetail(id){
             var x = 0;
             var loopArray = function(arr){
+              console.log('Detail x:'+x);
               getPush(x,function(){
                 x++;
                 if(x < arr.length){
                   loopArray(arr);
                 }else{
                   $ionicLoading.hide();
-                  alert('บันทึกข้อมูลเสร็จแล้ว');
-                  callback();
+                  Data.tatolmatch = 0;
+                  Data.tatolminplus = 0;
+                  DataOrder.order.length = 0;
+                  //$scope.modal1.hide();
+                  $ionicHistory.nextViewOptions({
+                      disableBack: true
+                  });
+                  setTimeout(function(){
+                    var expression = $scope.listorderdetail[0].ordertype;//get ordertype
+                    switch (expression) {
+                      case '1':
+                          alert('default order');
+                        break;
+                      case '2':
+                          $scope.sendmailtosup($scope.user.terid,'เปิดใบสั่งขาย(สนับสนุนขาย)','เปิดใบสั่งขาย(สนับสนุนขาย) ร้าน'+$scope.user.name,function(){
+                            alert('special order sendmail');
+                          });
+                        break;
+                      default:
+                    }
+                    $state.go('app.orderlistpending', {
+                        terid: $stateParams.terid,
+                        mastertype: $stateParams.mastertype,
+                        ordertype: $stateParams.ordertype
+                    }, {
+                        reload: true
+                    });
+                  },100);
                 }
               });
-          }
+            }
           loopArray($scope.listorderdetail);
           function getPush(i,callback){
             $scope.showLoadingProperTimesRegter('กำลังทำการบันทึกข้อมูล '+$scope.listorderdetail[i].productname);
-            console.log('insert '+i +'::'+ $scope.listorderdetail[i].productname);
-            setTimeout(function(){
-              callback();
-            },1000);
+            console.log('insert order detail '+i +'::'+ x);
+            var ins = new MobileCRM.DynamicEntity.createNew('salesorderdetail');
+                ins.properties.salesorderid = new MobileCRM.Reference('salesorder',id);
+                ins.properties.productid = new MobileCRM.Reference('product',$scope.listorderdetail[i].productid);
+                ins.properties.ispriceoverridden = parseInt(0);
+                ins.properties.priceperunit = $scope.listorderdetail[i].priceperunit;
+                ins.properties.uomid = new MobileCRM.Reference('uom',$scope.listorderdetail[i].uomid);
+                ins.properties.quantity = $scope.listorderdetail[i].quality;
+                ins.save(function(er){if(er){
+                  alert(er);
+                }else{
+                  setTimeout(function(){
+                    callback();
+                  },1000);
+                }
+              });
           }
         }
-        $scope.confirmorder = function () {
-          console.log('insert order:'+$scope.listorderdetail);
-          insertorder(function(){
-            var expression = 1;//get ordertype
-            switch (expression) {
-              case 1:
-                  console.log('default order');
-                break;
-              case 2:
-                  console.log('special order sendmail');
-                break;
-              default:
-
-            }
-            Data.tatolmatch = 0;
-            Data.tatolminplus = 0;
-            DataOrder.order.length = 0;
-              $scope.modal1.hide();
-              $ionicHistory.nextViewOptions({
-                  disableBack: true
-              });
-              $state.go('app.orderlistpending', {
-                  terid: $stateParams.terid,
-                  mastertype: $stateParams.mastertype,
-                  ordertype: $stateParams.ordertype
-              }, {
-                  reload: true
-              });
-          });
+        $scope.confirmordersales = function () {
+          $scope.modal1.hide();
+          var id = guid();
+          //alert(id);
+          insertorder();
         }
     })
-    .controller('ListOrderPendingCtrl', function ($scope, $stateParams, $cookies, Data, $state, $ionicLoading, $ionicHistory, $ionicModal, DataOrder) {
+    .controller('ListOrderPendingCtrl', function ($scope, $stateParams,Setting, $cookies, Data, $state, $ionicLoading, $ionicHistory, $ionicModal, DataOrder) {
         $state.reload();
         $scope.Data = Data;
         $ionicHistory.clearHistory();
         $scope.group = {
                 filter: ''
             }
+        $scope.user = {
+          filtername:''
+        }
         $scope.$on('$ionicView.enter',function(){
           Data.showcart = false;
+          $scope.loaddata();
         });
+        $scope.loaddata = function(){
+          GetOrder($stateParams.terid,Setting.setValorder,1,function(data){
+            if(data){
+              $scope.listorder = [];
+              var x = 0;
+              var loopArray = function(arr){
+                getPush(x,function(){
+                  x++;
+                  if(x < arr.length){
+                    loopArray(arr);
+                  }else{
+                    $ionicLoading.hide();
+                  }
+                });
+              }
+              loopArray(data);
+              function getPush(i,callback){
+                $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล '+data[i].name);
+                $scope.listorder.push({
+    							salesorderid:data[i].salesorderid,
+    							customerid:data[i].customerid,
+    							name:data[i].name,
+    							transactioncurrencyid:data[i].transactioncurrencyid,
+    							requestdeliveryby:data[i].requestdeliveryby,
+    							pricelevelid:data[i].pricelevelid,
+    							shippingmethodcode:data[i].shippingmethodcode,
+    							paymenttermscode:data[i].paymenttermscode,
+    							ivz_province:data[i].ivz_province,
+    							ivz_district:data[i].ivz_district,
+    							ivz_territory:data[i].ivz_territory,
+    							ivz_balancecredit:data[i].ivz_balancecredit,
+    							totalamount:data[i].totalamount,
+    							ivz_empid:data[i].ivz_empid,
+    							statuscode:data[i].statuscode,
+    							ivz_statussales:data[i].ivz_statussales,
+    							description:data[i].description,
+                  ivz_ordernumber:data[i].ivz_ordernumber,
+                  ordernumber:data[i].ordernumber
+    						});
+                setTimeout(function(){
+                  callback();
+                },10);
+              }
+            }
+            $scope.$apply();
+          });
+        }
             //Data.showcart = false;
         $scope.ordedetail = function () {
             $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล');
@@ -6123,6 +6240,12 @@ angular.module('starter.controllers', [])
                 $ionicLoading.hide();
             }, 3000);
         }
+        $scope.$watch('group.filter',function(){
+          $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล');
+          setTimeout(function () {
+              $ionicLoading.hide();
+          }, 3000);
+        });
         $ionicModal.fromTemplateUrl('templates/comment/selectfilter.html', {
             id: 1,
             scope: $scope,
@@ -6141,9 +6264,11 @@ angular.module('starter.controllers', [])
             }
         }
         $scope.showdetailorder = function (id) {
+          alert(id);
             $state.go('app.orderlistother', {
                 orderid: id,
-                mastertype: Data.mastertype
+                mastertype: Data.mastertype,
+                ordertype:$stateParams.ordertype
             }, {
                 reload: true
             });
@@ -6156,7 +6281,54 @@ angular.module('starter.controllers', [])
         //Data.showcart = false;
         $scope.$on('$ionicView.enter',function(){
           Data.showcart = false;
+          $scope.loadData();
         });
+        $scope.loadData = function(){
+          $scope.listorderdetail = [];
+          GetDetailOrder($stateParams.orderid.trim(),function(data){
+            // alert(data);
+            // alert($stateParams.orderid);
+            // alert('order detail:'+data.length);
+            if(data){
+              var x = 0;
+              var loopArray = function(arr){
+                getPush(x,function(){
+                  x++;
+                  if(x < arr.length){
+                    loopArray(arr);
+                  }else{
+                    $ionicLoading.hide();
+                  }
+                });
+              }
+              loopArray(data);
+              function getPush(i,callback){
+                $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล');
+                $scope.listorderdetail.push({
+                  salesorderdetail:data[i].salesorderdetail,
+                  salesorderid:data[i].salesorderid,
+                  productid:data[i].productid.id,
+                  productname:data[i].productname,
+                  priceperunit:data[i].priceperunit,
+                  uomid:data[i].uomid.id,
+                  quality:data[i].quantity,
+                  price:data[i].price,
+                  productnumber:data[i].productnumber,
+                  tatol:parseInt(data[i].priceperunit) * parseInt(data[i].quantity)
+                });
+                setTimeout(function(){
+                  callback();
+                },10);
+              };
+            }
+            $scope.$apply();
+          });
+        }
+
+        $scope.plusquery = function(price,tatol){
+          return parseInt(price) * parseInt(tatol);
+        }
+
         $scope.ordedetail = function () {
             $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล');
             setTimeout(function () {
@@ -6169,6 +6341,69 @@ angular.module('starter.controllers', [])
             });
             $ionicHistory.goBack(-1);
         }
+
+        /*------------- add product quality ---------------*/
+        $scope.addpluss = function (data) {
+            var m = 0;
+            for (var i in $scope.listorderdetail) {
+                m += parseInt($scope.listorderdetail[i].quality) * parseInt($scope.listorderdetail[i].priceperunit);
+            }
+            return m;
+        }
+        $scope.removeitem = function(id){
+          $scope.listorderdetail.splice(id,1);
+        }
+        $scope.addplus = function (id) {
+            if ($scope.item.matchitem <= 0) {
+                $scope.item.matchitem = 0 + parseInt(id);
+            } else {
+                $scope.item.matchitem = parseInt($scope.item.matchitem) + parseInt(id);
+                //Data.tatolminplus = parseInt(Data.tatolminplus) + parseInt($scope.item.matchitem);
+            }
+            if (Data.tatolminplus <= 0) {
+                $scope.item.tatol = parseInt($scope.item.priceperunit) * 1;
+                //Data.tatolminplus = 0 + 1;
+            } else {
+                $scope.item.tatol = parseInt($scope.item.priceperunit) * parseInt($scope.item.matchitem);
+                //Data.tatolminplus = parseInt(Data.tatolminplus) + 1;
+            }
+        };
+        $scope.minus = function (id) {
+            if ($scope.item.matchitem <= 0) {
+                $scope.item.matchitem = 0;
+                //$scope.item.tatol = parseInt($scope.item.priceperunit) * 0;
+            } else {
+                $scope.item.matchitem = parseInt($scope.item.matchitem) - parseInt(id);
+            }
+        };
+        $scope.$watch('item.matchitem', function () {
+            if ($scope.item.matchitem <= 0) {
+                $scope.item.matchitem = 0;
+                $scope.item.tatol = parseInt($scope.item.priceperunit) * 0;
+                //Data.tatolmatch =
+            } else {
+                $scope.item.tatol = parseInt($scope.item.priceperunit) * parseInt($scope.item.matchitem);
+            }
+            console.log('$scope.item.matchitem :' + $scope.item.matchitem);
+        });
+        $scope.additem = function () {
+            if (DataOrder.order.length > 0) {
+                for (var i in DataOrder.order) {
+                    if (DataOrder.order[i].productid == $scope.item.productid) {
+                        console.log('break ' + i);
+                        DataOrder.order[i].tatol = parseInt($scope.item.tatol);
+                        DataOrder.order[i].quality = parseInt($scope.item.matchitem);
+                        break;
+                    }
+                }
+            }
+            setTimeout(function () {
+                Data.tatolmatch = parseInt(Data.tatolmatch) + parseInt($scope.item.tatol);
+                $scope.loading();
+                $scope.modal2.hide();
+            }, 1000);
+        }
+        /*--------------- end -----------------*/
     })
     /*------------------------------- end order ------------------------------*/
 
@@ -6279,7 +6514,7 @@ angular.module('starter.controllers', [])
             tatolmatch: 0
         };
         $scope.clearfilter = function () {
-            console.log('clickkkk');
+            //console.log('clickkkk');
             $scope.filtertxt = '';
         }
         $scope.minplus = 0;
@@ -6380,7 +6615,7 @@ angular.module('starter.controllers', [])
             } else {
                 $scope.item.tatol = parseInt($scope.item.priceperunit) * parseInt($scope.item.matchitem);
             }
-            console.log('$scope.item.matchitem :' + $scope.item.matchitem);
+            //console.log('$scope.item.matchitem :' + $scope.item.matchitem);
         });
         $scope.searclickitem = function (txtname, itemid) {
             if (txtname) {

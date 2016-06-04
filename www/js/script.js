@@ -1194,6 +1194,146 @@ function GetProductListNumber(txtname,tatol,page,callback){
 		},function(er){alert(er);},null);
 }
 /*----------------------- Get Annote ----------------------*/
+/*------------------------ Get Order ----------------------*/
+function GetOrder(terid,setval,setpage,callback){
+	// ins.properties.salesorderid = $scope.listorderdetail[0].getguid;
+	// ins.properties.customerid = new MobileCRM.Reference('account',$scope.user.accountid);
+	// ins.properties.name = $scope.user.name;
+	// ins.properties.transactioncurrencyid = new MobileCRM.Reference('transactioncurrency',$scope.user.currency);
+	// ins.properties.requestdeliveryby = new Date();
+	// ins.properties.pricelevelid = new MobileCRM.Reference('pricelevel',$scope.listorderdetail[0].pricelevelid);
+	// ins.properties.shippingmethodcode = parseInt($scope.user.shippingmethodcode);
+	// ins.properties.paymenttermscode = parseInt($scope.user.paymenttermscode);
+	// ins.properties.ivz_province = new MobileCRM.Reference('ivz_addressprovince',$scope.user.provinceid);
+	// ins.properties.ivz_district =  new MobileCRM.Reference('ivz_addressdistrict',$scope.user.district);
+	// ins.properties.ivz_territory = new MobileCRM.Reference('territory',$scope.user.terid);
+	// ins.properties.ivz_balancecredit = $scope.user.creditlimit;
+	// ins.properties.totalamount = parseInt($scope.addpluss());
+	// ins.properties.ivz_empid = $cookies.get('ivz_empid');
+	// ins.properties.statuscode = parseInt(2);
+	// ins.properties.ivz_statussales = parseInt($scope.listorderdetail[0].ordertype);
+	// ins.properties.description = $scope.user.remark;
+	try {
+		var n = new MobileCRM.FetchXml.Entity('salesorder');
+				n.addAttribute('salesorderid');//0
+				n.addAttribute('customerid');//1
+				n.addAttribute('name');//2
+				n.addAttribute('transactioncurrencyid');//3
+				n.addAttribute('requestdeliveryby');//4
+				n.addAttribute('pricelevelid');//5
+				n.addAttribute('shippingmethodcode');//6
+				n.addAttribute('paymenttermscode');//7
+				n.addAttribute('ivz_province');//8
+				n.addAttribute('ivz_district');//9
+				n.addAttribute('ivz_territory');//10
+				n.addAttribute('ivz_balancecredit');//11
+				n.addAttribute('totalamount');//12
+				n.addAttribute('ivz_empid');//13
+				n.addAttribute('statuscode');//14
+				n.addAttribute('ivz_statussales');//15
+				n.addAttribute('description');//16
+				n.addAttribute('ivz_ordernumber');//17
+				n.addAttribute('ordernumber');//18
+		var filter = new MobileCRM.FetchXml.Filter();
+				filter.where('ivz_territory','eq',terid);
+				n.filter = filter;
+		var fetch = new MobileCRM.FetchXml.Fetch(n,parseInt(setval),parseInt(setpage));
+				fetch.execute('array',function(data){
+					//alert(data.length);
+					var b = [];
+					for(var i in data){
+						b.push({
+							salesorderid:data[i][0],
+							customerid:data[i][1],
+							name:data[i][2],
+							transactioncurrencyid:data[i][3],
+							requestdeliveryby:data[i][4],
+							pricelevelid:data[i][5],
+							shippingmethodcode:data[i][6],
+							paymenttermscode:data[i][7],
+							ivz_province:data[i][8],
+							ivz_district:data[i][9],
+							ivz_territory:data[i][10],
+							ivz_balancecredit:data[i][11],
+							totalamount:data[i][12],
+							ivz_empid:data[i][13],
+							statuscode:returnorder(data[i][14]),
+							ivz_statussales:data[i][15],
+							description:data[i][16],
+							ivz_ordernumber:data[i][17],
+							ordernumber:data[i][18]
+						});
+					}
+					callback(b);
+				},function(er){alert(er);},null);
+	} catch (e) {
+		alert('error 1265 '+e);
+	}
+}
+function returnorder(expression){
+	switch (expression) {
+		case '1':
+				return 1;
+			break;
+		case '2':
+				return 2;
+			break;
+		case '3':
+				return 3;
+			break;
+		case '917970000':
+				return 4;
+			break;
+		case '5':
+				return 5;
+			break;
+		case '6':
+				return 6;
+			break;
+		default:
+				return 0;
+	}
+}
+function GetDetailOrder(idorder,callback){
+	alert('idorder:'+idorder);
+	var a = new MobileCRM.FetchXml.Entity('salesorderdetail');
+			a.addAttribute('salesorderdetailid');//0
+			a.addAttribute('salesorderid');//1
+			a.addAttribute('productid');//2
+			a.addAttribute('priceperunit');//3
+			a.addAttribute('uomid');//4
+			a.addAttribute('quantity');//5
+	var filter = new MobileCRM.FetchXml.Filter();
+			filter.isIn('salesorderid',[idorder]);
+			a.filter = filter;
+	var l = a.addLink('product','productid','productid','outer');
+			l.addAttribute('price');//6
+	    l.addAttribute('productnumber');//7
+	var fetch = new MobileCRM.FetchXml.Fetch(a,100000,1);
+			fetch.execute('array',function(data){
+				alert(data.length);
+	      if(data){
+	        var b = [];
+	        for(var i in data){
+	          if(data[i][2]){
+	            b.push({
+	                    salesorderdetail:data[i][0],
+	          		      salesorderid:data[i][1],
+	          		      productid:data[i][2],
+	                    productname:data[i][2].primaryName,
+	              		  priceperunit:data[i][3],
+	              		  uomid:data[i][4],
+	              		  quantity:data[i][5],
+	                    price:data[i][6],
+	                    productnumber:data[i][7]
+	                  });
+	          }
+	        }
+	  			callback(b);
+	      }
+		},function(er){alert("ERROR4035:"+er);},null);
+}
+/*--------------------------- End -------------------------*/
 function getAnnote(id,callback){
 	try{
     var n = new MobileCRM.FetchXml.Entity('annotation');
