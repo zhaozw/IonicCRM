@@ -717,6 +717,33 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   }
 })
+.state('app.waitapproveorder', {
+  url:'/waitapproveorder/:masname/:mastertype/:typego',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/approveorder/territory.html',
+      controller:'WaitOrderCtrl'
+    }
+  }
+})
+.state('app.approveorder', {
+  url:'/approveorder/:terid/:mastertype/:typego',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/approveorder/waitorder.html',
+      controller:'WaitOrderListCtrl'
+    }
+  }
+})
+.state('app.approveorderdetail', {
+  url:'/approveorderdetail/:terid/:orderid/:mastertype/:name/:tername',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/approveorder/orderdetail.html',
+      controller:'WaitOrderDetailCtrl'
+    }
+  }
+})
 /*------------------- order -----------------------*/
 .state('app.orderlist', {
   url:'/orderlist/:terid/:mastertype/:ordertype',
@@ -737,7 +764,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.orderlistother', {
-  url:'/orderlistpending/:orderid/:mastertype/:ordertype',
+  url:'/orderlistpending/:orderid/:mastertype/:ordertype/:accountname/:terid/:salestype',
   views: {
     'menuContent': {
       templateUrl: 'templates/order/orderother.html',

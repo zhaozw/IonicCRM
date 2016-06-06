@@ -1,0 +1,48 @@
+<ion-view view-title="รายการเปิดใบสั่งขาย">
+  <ion-content>
+    <div>
+      <div class="bar bar-header item-input-inset">
+        <label class="item-input-wrapper">
+          <i class="icon ion-ios-search placeholder-icon"></i>
+          <input type="search" placeholder="Search" ng-model="filtertxt">
+        </label>
+        <md-button class="md-raised button-clear md-warn" aria-label="description" md-ripple-size="auto">&nbsp;ยกเลิก&nbsp;</md-button>
+      </div>
+      <md-list>
+        <!-- ////////////////////// General -->
+        <md-list-item class="md-3-line" ng-repeat="n in listorder | filter:{name:filtertxt,statuscode:2}" ng-if="n.ivz_statussales == 2">
+          <img src="img/ionic.png" class="md-avatar" alt="testt" />
+           <div class="md-list-item-text" layout="column">
+             <h3>{{n.ordernumber}}</h3>
+             <h4>{{n.name}}</h4>
+             <h4>
+               ยอดรวม:
+               <span style="color:red;font-weight:bold;">{{n.totalamount | currency:''}}</span>บาท</h4>
+             <p>
+                วันที่เปิดใบสั่งขาย:
+                <span class="success" style="font-weight:bold;">{{n.createdon | date:'dd-MM-yyyy'}}</span>
+             </p>
+             <p>
+               {{n.statuscode}}
+             </p>
+           </div>
+           <a class="md-secondary ion-ios-arrow-forward text-h1 text-bold error"
+              ng-click="showdetail(n.salesorderid,n.name,n.ivz_territory.primaryName)">
+           </a>
+           <md-divider ng-if="!$last"></md-divider>
+        </md-list-item>
+      </md-list>
+    </div>
+    <br /><br />
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="reback()">
+      <i class="icon ion-chevron-left error"></i>
+      ย้อนกลับ
+    </a>
+    <a class="tab-item" ng-click="ordedetail()">
+      <i class="icon ion-ios-reload primary"></i>
+      เรียกข้อมูลใหม่
+    </a>
+  </div>
+</ion-view>

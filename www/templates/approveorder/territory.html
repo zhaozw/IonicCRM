@@ -1,0 +1,20 @@
+<ion-view view-title="เลือกเขตการขาย">
+  <ion-content>
+    <div class="card">
+      <div class="item item-text-wrap">
+        <md-list>
+          <md-list-item class="md-3-line" ng-repeat="item in listmaster">
+             <div class="md-list-item-text" layout="column">
+               <h3>{{ item.ivz_leftterritory.primaryName +'-'+item.description}}</h3>
+               <p>พนักงาน:{{item.ivz_empname}}</p>
+             </div>
+             <a class="md-secondary ion-ios-arrow-forward text-h1 text-bold error"
+               ng-click="orderlist(item.ivz_leftterritory.id)"
+             ></a>
+             <md-divider ng-if="!$last"></md-divider>
+         </md-list-item>
+        </md-list>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

@@ -8,7 +8,6 @@
             <md-list-item class="md-3-line" ng-repeat="n in listorderdetail"
             ng-click="opendetail(n.productid,n.productname,n.priceperunit,n.tatol,n.quality)">
               <div class="md-list-item-text">
-                <h3>{{n.salesorderid.primaryName+':'+n.salesorderid.id}}</h3>
                 <h3>{{n.productname}}</h3>
                 <h4>
                   ราคา/หน่วย:&nbsp;
@@ -33,7 +32,7 @@
       <div class="col"></div>
       <div class="col"></div>
       <div class="col col-30">
-        <h4>ยอดรวมทั้งหมด:&nbsp;<span class="error">{{addpluss() | currency:''}}</span>&nbsp;บาท</h4>
+        <h4>ยอดรวมทั้งหมด:&nbsp;<span class="error" style="font-weight:bold;">{{addpluss() | currency:''}}</span>&nbsp;บาท</h4>
       </div>
     </div>
     <br /><br />
@@ -43,7 +42,7 @@
       <i class="icon ion-refresh primary"></i>
       เรียกข้อมูลใหม่
     </a>
-    <a class="tab-item" ng-click="showmodal(1)">
+    <a class="tab-item" ng-click="confirmorder()">
       <i class="icon ion-checkmark-circled success"></i>
      บันทึกใบสั่งขาย
     </a>

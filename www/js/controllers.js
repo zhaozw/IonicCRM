@@ -215,7 +215,7 @@ angular.module('starter.controllers', [])
         $scope.confirmrejectadjust = function (id, txt, callback) {
             console.log(id + '::::' + txt);
         }
-        $scope.confirmorder = function () {
+        $scope.confirmordercart = function () {
             if (DataOrder.order.length > 0) {
                 $state.go('app.listorder', {}, {
                     reload: true
@@ -3641,7 +3641,7 @@ angular.module('starter.controllers', [])
                     reload: true
                 });
             } else if (txt == 3 || txt == '3') {
-                $state.go('app.waitapproveadjust', {
+                $state.go('app.waitapproveorder', {
                     masname: $cookies.get('name'),
                     mastertype: Data.mastertype,
                     typego: 2
@@ -4059,6 +4059,249 @@ angular.module('starter.controllers', [])
         $scope.reback = function () {
             $ionicHistory.goBack(-1);
         }
+    })
+    ///////////////////////////// order territory /////////////////////////
+    .controller('WaitOrderCtrl', function ($scope, $stateParams, $cookies, Data, $state, $ionicLoading, $ionicHistory, arrlist) {
+        $state.reload();
+        Data.showcart = false;
+        $scope.Data = Data;
+        $scope.reloaddata = function () {
+            $scope.listmaster = [];
+            gettername($cookies.get('name'), function (data) {
+                if (data) {
+                    var x = 0;
+                    var loopArray = function (arr) {
+                        getPush(x, function () {
+                            x++;
+                            if (x < arr.length) {
+                                loopArray(arr);
+                            } else {
+                                $scope.showLoadingComplete('โหลดข้อมูลเสร็จแล้ว');
+                                setTimeout(function () {
+                                    $ionicLoading.hide();
+                                }, 2000);
+                            }
+                        });
+                    }
+                    loopArray(data);
+
+                    function getPush(i, callback) {
+                        $scope.showLoadingProperTimesRegter('โหลดข้อมูลเขตการขาย ' + data[i].description);
+                        $scope.listmaster.push({
+                            ivz_territorymasterid: data[i].ivz_territorymasterid,
+                            ivz_mastername: data[i].ivz_mastername,
+                            ivz_leftterritory: data[i].ivz_leftterritory,
+                            ivz_emailcontact: data[i].ivz_emailcontact,
+                            ivz_leadermail: data[i].ivz_leadermail,
+                            ivz_ccmail: data[i].ivz_ccmail,
+                            ivz_empid: data[i].ivz_empid,
+                            ivz_empname: data[i].ivz_empname,
+                            ivz_statusempid: data[i].ivz_statusempid,
+                            description: data[i].description
+                        });
+                        setTimeout(function () {
+                            callback();
+                        }, 10);
+                    }
+                }
+                $scope.$apply();
+            });
+        }
+        $scope.$on("$ionicView.enter", function () {
+            $scope.reloaddata();
+        })
+
+        $scope.orderlist = function (id) {
+          //alert(id);
+            $state.go('app.approveorder', {
+                terid: id,
+                mastertype: Data.mastertype,
+                typego: 2
+            }, {
+                reload: true
+            });
+        }
+    })
+    .controller('WaitOrderListCtrl',function ($scope, $ionicModal,Setting, $stateParams, $cookies, Data, $state, $ionicLoading, $ionicHistory, $compile, $ionicPopup, $timeout) {
+      $state.reload();
+      $scope.Data = Data;
+      $scope.$on('$ionicView.enter',function(){
+        $scope.ordedetail();
+      });
+      $scope.ordedetail = function () {
+          $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล');
+          setTimeout(function () {
+              $ionicLoading.hide();
+              $scope.loadData();
+          }, 3000);
+      }
+      $scope.loadData = function(){
+        GetOrder($stateParams.terid,Setting.setValorder,1,function(data){
+          if(data){
+            $scope.listorder = [];
+            var x = 0;
+            var loopArray = function(arr){
+              getPush(x,function(){
+                x++;
+                if(x < arr.length){
+                  loopArray(arr);
+                }else{
+                  $ionicLoading.hide();
+                }
+              });
+            }
+            loopArray(data);
+            function getPush(i,callback){
+              $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล '+data[i].name);
+              $scope.listorder.push({
+                salesorderid:data[i].salesorderid,
+                customerid:data[i].customerid,
+                name:data[i].name,
+                transactioncurrencyid:data[i].transactioncurrencyid,
+                requestdeliveryby:data[i].requestdeliveryby,
+                pricelevelid:data[i].pricelevelid,
+                shippingmethodcode:data[i].shippingmethodcode,
+                paymenttermscode:data[i].paymenttermscode,
+                ivz_province:data[i].ivz_province,
+                ivz_district:data[i].ivz_district,
+                ivz_territory:data[i].ivz_territory,
+                ivz_balancecredit:data[i].ivz_balancecredit,
+                totalamount:data[i].totalamount,
+                ivz_empid:data[i].ivz_empid,
+                statuscode:data[i].statuscode,
+                ivz_statussales:data[i].ivz_statussales,
+                description:data[i].description,
+                ivz_ordernumber:data[i].ivz_ordernumber,
+                ordernumber:data[i].ordernumber,
+                createdon:new Date(data[i].createdon)
+              });
+              setTimeout(function(){
+                callback();
+              },10);
+            }
+          }
+          $scope.$apply();
+        });
+      }
+      $scope.showdetail = function(index,name,tername){
+        //$scope.listorder.splice(index,1);
+        $state.go('app.approveorderdetail',{
+          terid:$stateParams.terid,
+          orderid:index,
+          mastertype:Data.mastertype,
+          name:name,
+          tername:tername
+        },{reload:true});
+      }
+    })
+    .controller('WaitOrderDetailCtrl',function ($scope, $ionicModal,Setting, $stateParams, $cookies, Data, $state, $ionicLoading, $ionicHistory, $compile, $ionicPopup, $timeout) {
+      $state.reload();
+      $scope.Data = Data;
+      $scope.user = {
+        name:$stateParams.name,
+        tername:$stateParams.tername,
+        remarkname:''
+      };
+      $scope.chk = {
+        remark:true
+      };
+      $scope.$on('$ionicView.enter',function(){
+        $scope.ordedetail();
+      });
+      $scope.ordedetail = function () {
+          $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล');
+          setTimeout(function () {
+              $ionicLoading.hide();
+              $scope.loadData();
+          }, 3000);
+      }
+      $scope.loadData = function(){
+        $scope.listorderdetail = [];
+        var a = new MobileCRM.FetchXml.Entity('salesorderdetail');
+          a.addAttribute('salesorderdetailid');//0
+          a.addAttribute('salesorderid');//1
+          a.addAttribute('productid');//2
+          a.addAttribute('priceperunit');//3
+          a.addAttribute('uomid');//4
+          a.addAttribute('quantity');//5
+        var l = a.addLink('product','productid','productid','outer');
+          l.addAttribute('price');//6
+          l.addAttribute('productnumber');//7
+        var filter = new MobileCRM.FetchXml.Filter();
+          filter.where('salesorderid','eq',$stateParams.orderid.trim());
+          a.filter = filter;
+        var fetch = new MobileCRM.FetchXml.Fetch(a);
+          fetch.execute('array',function(data){
+              if(data){
+                  for(var i in data){
+                    $scope.listorderdetail.push({
+                      salesorderdetail:data[i][0],
+                      salesorderid:data[i][1],
+                      productid:data[i][2].id,
+                      productname:data[i][2].primaryName,
+                      priceperunit:data[i][3],
+                      uomid:data[i][4].id,
+                      quality:data[i][5],
+                      price:data[i][6],
+                      productnumber:data[i][7],
+                      tatol:parseInt(data[i][3]) * parseInt(data[i][5])
+                    });
+                  }
+                }
+                $scope.$apply();
+          },function(er){
+            alert("ERROR 6333:"+er);
+          },null);
+      }
+      $scope.addpluss = function (data) {
+          var m = 0;
+          for (var i in $scope.listorderdetail) {
+              m += parseInt($scope.listorderdetail[i].quality) * parseInt($scope.listorderdetail[i].priceperunit);
+          }
+          return m;
+      }
+      function approveorder(statuscode,txt,callback){
+        var ups = new MobileCRM.DynamicEntity('salesorder',$stateParams.orderid);
+            ups.properties.statuscode = parseInt(statuscode);
+            ups.properties.ivz_remarkcomment = txt;
+            ups.save(function(er){
+              if(er){
+                alert('error 4259 '+er);
+              }else{
+                setTimeout(function(){
+                  callback();
+                },1000);
+              }
+            });
+      }
+      $scope.confirmapproveorder = function(){
+        approveorder(917970000,'',function(){
+          $ionicHistory.goBack(-1);
+        });
+      }
+      $scope.confirmrej = function(statecode,remarktxt){
+        if(remarktxt){
+          approveorder(4,remarktxt,function(){
+            $scope.sendmailtosales($stateParams.terid,'ไม่อนุมัติเปิดใบสั่งขาย','ไม่สามารถอนุมัติเปิดใบสั่งขายให้กลับลูกค้า'+$scope.user.name+'ได้เนื่องจาก'+remarktxt,function(){
+              $scope.closereject();
+              $ionicHistory.goBack(-1);
+            });
+          });
+        }
+      }
+      $scope.closereject = function(){
+        $scope.modal2.hide();
+      }
+      $scope.confirmrejectorder = function(){
+        $scope.modal2.show();
+      }
+      $ionicModal.fromTemplateUrl('templates/comment/rejapprovorder.html', {
+          id: 2,
+          scope: $scope,
+          animation: 'slide-in-up'
+      }).then(function (modal) {
+          $scope.modal2 = modal;
+      });
     })
     ///////////////////////////////////////////////////////////////////////
     .controller('AccountNewCtrl', function ($scope, $ionicModal, $stateParams, $cookies, Data, $state, $ionicLoading, $ionicHistory, $compile, $ionicPopup, $timeout) {
@@ -5870,6 +6113,8 @@ angular.module('starter.controllers', [])
         $scope.Data = Data;
         //Data.showcart = false;
         $scope.$on('$ionicView.enter',function(){
+          //alert($stateParams.terid);
+          //alert('loading list order');
           Data.showcart = false;
         });
         $scope.user = {
@@ -6121,22 +6366,22 @@ angular.module('starter.controllers', [])
                       disableBack: true
                   });
                   setTimeout(function(){
-                    var expression = $scope.listorderdetail[0].ordertype;//get ordertype
-                    switch (expression) {
-                      case '1':
-                          alert('default order');
-                        break;
-                      case '2':
-                          $scope.sendmailtosup($scope.user.terid,'เปิดใบสั่งขาย(สนับสนุนขาย)','เปิดใบสั่งขาย(สนับสนุนขาย) ร้าน'+$scope.user.name,function(){
-                            alert('special order sendmail');
-                          });
-                        break;
-                      default:
-                    }
+                    // var expression = $scope.listorderdetail[0].ordertype;//get ordertype
+                    // switch (expression) {
+                    //   case '1':
+                    //       alert('default order');
+                    //     break;
+                    //   case '2':
+                    //       $scope.sendmailtosup($scope.user.terid,'เปิดใบสั่งขาย(สนับสนุนขาย)','เปิดใบสั่งขาย(สนับสนุนขาย) ร้าน'+$scope.user.name,function(){
+                    //         alert('special order sendmail');
+                    //       });
+                    //     break;
+                    //   default:
+                    // }
                     $state.go('app.orderlistpending', {
-                        terid: $stateParams.terid,
-                        mastertype: $stateParams.mastertype,
-                        ordertype: $stateParams.ordertype
+                        terid: Data.termas,//$cookies.get('territoryid'),//if direct sale can change get value by Data factory
+                        mastertype: Data.mastertype,
+                        ordertype: $scope.listorderdetail[0].ordertype
                     }, {
                         reload: true
                     });
@@ -6263,12 +6508,15 @@ angular.module('starter.controllers', [])
                 $scope.modal1.hide();
             }
         }
-        $scope.showdetailorder = function (id) {
-          alert(id);
+        $scope.showdetailorder = function (id,name,terid,salestype) {
+          //alert(id);
             $state.go('app.orderlistother', {
                 orderid: id,
                 mastertype: Data.mastertype,
-                ordertype:$stateParams.ordertype
+                ordertype:$stateParams.ordertype,
+                accountname:name,
+                terid:terid,
+                salestype:salestype
             }, {
                 reload: true
             });
@@ -6278,51 +6526,60 @@ angular.module('starter.controllers', [])
     .controller('ListOrderOtherCtrl', function ($scope, $stateParams, $cookies, Data, $state, $ionicLoading, $ionicHistory, $ionicModal, DataOrder) {
         $state.reload();
         $scope.Data = Data;
-        //Data.showcart = false;
+        $scope.item = {
+           productid:'',
+           productname:'',
+           priceperunit:'',
+           tatol:'',
+           matchitem:''
+        }
+        $scope.salestype = true;
         $scope.$on('$ionicView.enter',function(){
           Data.showcart = false;
-          $scope.loadData();
+          $scope.ordedetail();
+          if($stateParams.salestype == 1 || $stateParams.salestype == '1'){
+            $scope.salestype = true;
+          }else{
+            $scope.salestype = false;
+          }
         });
         $scope.loadData = function(){
           $scope.listorderdetail = [];
-          GetDetailOrder($stateParams.orderid.trim(),function(data){
-            // alert(data);
-            // alert($stateParams.orderid);
-            // alert('order detail:'+data.length);
-            if(data){
-              var x = 0;
-              var loopArray = function(arr){
-                getPush(x,function(){
-                  x++;
-                  if(x < arr.length){
-                    loopArray(arr);
-                  }else{
-                    $ionicLoading.hide();
+          var a = new MobileCRM.FetchXml.Entity('salesorderdetail');
+        		a.addAttribute('salesorderdetailid');//0
+        		a.addAttribute('salesorderid');//1
+        		a.addAttribute('productid');//2
+        		a.addAttribute('priceperunit');//3
+        		a.addAttribute('uomid');//4
+        		a.addAttribute('quantity');//5
+        	var l = a.addLink('product','productid','productid','outer');
+        		l.addAttribute('price');//6
+            l.addAttribute('productnumber');//7
+        	var filter = new MobileCRM.FetchXml.Filter();
+        		filter.where('salesorderid','eq',$stateParams.orderid.trim());
+        		a.filter = filter;
+        	var fetch = new MobileCRM.FetchXml.Fetch(a);
+        		fetch.execute('array',function(data){
+                if(data){
+                    for(var i in data){
+                      $scope.listorderdetail.push({
+                        salesorderdetail:data[i][0],
+                        salesorderid:data[i][1],
+                        productid:data[i][2].id,
+                        productname:data[i][2].primaryName,
+                        priceperunit:data[i][3],
+                        uomid:data[i][4].id,
+                        quality:data[i][5],
+                        price:data[i][6],
+                        productnumber:data[i][7],
+                        tatol:parseInt(data[i][3]) * parseInt(data[i][5])
+                      });
+                    }
                   }
-                });
-              }
-              loopArray(data);
-              function getPush(i,callback){
-                $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล');
-                $scope.listorderdetail.push({
-                  salesorderdetail:data[i].salesorderdetail,
-                  salesorderid:data[i].salesorderid,
-                  productid:data[i].productid.id,
-                  productname:data[i].productname,
-                  priceperunit:data[i].priceperunit,
-                  uomid:data[i].uomid.id,
-                  quality:data[i].quantity,
-                  price:data[i].price,
-                  productnumber:data[i].productnumber,
-                  tatol:parseInt(data[i].priceperunit) * parseInt(data[i].quantity)
-                });
-                setTimeout(function(){
-                  callback();
-                },10);
-              };
-            }
-            $scope.$apply();
-          });
+                  $scope.$apply();
+        		},function(er){
+              alert("ERROR 6333:"+er);
+            },null);
         }
 
         $scope.plusquery = function(price,tatol){
@@ -6331,6 +6588,7 @@ angular.module('starter.controllers', [])
 
         $scope.ordedetail = function () {
             $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล');
+            $scope.loadData();
             setTimeout(function () {
                 $ionicLoading.hide();
             }, 3000);
@@ -6340,6 +6598,35 @@ angular.module('starter.controllers', [])
                 disableBack: true
             });
             $ionicHistory.goBack(-1);
+        }
+
+        $ionicModal.fromTemplateUrl('templates/comment/orderdetail.html', {
+            id: 2,
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function (modal) {
+            $scope.modal2 = modal;
+        });
+        $scope.showmodal = function (id) {
+            $scope.idmodal = id;
+            if (id == 1) {
+              console.log('loop accountiid get name territory');
+              $scope.modal1.show();
+            }else if(id == 2){
+              $scope.modal2.show();
+            }
+        }
+        $scope.closereject = function(){
+          $scope.modal2.hide();
+        }
+        $scope.opendetail = function(id,name,price,tatol,quality){
+          console.log(id+'\n'+name+'\n'+price+'\n'+tatol+'\n'+quality);
+          $scope.item.productid = id;
+          $scope.item.productname = name;
+          $scope.item.priceperunit = price;
+          $scope.item.tatol = tatol;
+          $scope.item.matchitem = quality;
+          $scope.showmodal(2);
         }
 
         /*------------- add product quality ---------------*/
@@ -6358,14 +6645,6 @@ angular.module('starter.controllers', [])
                 $scope.item.matchitem = 0 + parseInt(id);
             } else {
                 $scope.item.matchitem = parseInt($scope.item.matchitem) + parseInt(id);
-                //Data.tatolminplus = parseInt(Data.tatolminplus) + parseInt($scope.item.matchitem);
-            }
-            if (Data.tatolminplus <= 0) {
-                $scope.item.tatol = parseInt($scope.item.priceperunit) * 1;
-                //Data.tatolminplus = 0 + 1;
-            } else {
-                $scope.item.tatol = parseInt($scope.item.priceperunit) * parseInt($scope.item.matchitem);
-                //Data.tatolminplus = parseInt(Data.tatolminplus) + 1;
             }
         };
         $scope.minus = function (id) {
@@ -6380,28 +6659,141 @@ angular.module('starter.controllers', [])
             if ($scope.item.matchitem <= 0) {
                 $scope.item.matchitem = 0;
                 $scope.item.tatol = parseInt($scope.item.priceperunit) * 0;
-                //Data.tatolmatch =
             } else {
                 $scope.item.tatol = parseInt($scope.item.priceperunit) * parseInt($scope.item.matchitem);
             }
             console.log('$scope.item.matchitem :' + $scope.item.matchitem);
         });
         $scope.additem = function () {
-            if (DataOrder.order.length > 0) {
-                for (var i in DataOrder.order) {
-                    if (DataOrder.order[i].productid == $scope.item.productid) {
+            if ($scope.listorderdetail.length > 0) {
+                for (var i in $scope.listorderdetail) {
+                    if ($scope.listorderdetail[i].productid == $scope.item.productid) {
                         console.log('break ' + i);
-                        DataOrder.order[i].tatol = parseInt($scope.item.tatol);
-                        DataOrder.order[i].quality = parseInt($scope.item.matchitem);
+                        $scope.listorderdetail[i].tatol = parseInt($scope.item.tatol);
+                        $scope.listorderdetail[i].quality = parseInt($scope.item.matchitem);
                         break;
                     }
                 }
             }
             setTimeout(function () {
-                Data.tatolmatch = parseInt(Data.tatolmatch) + parseInt($scope.item.tatol);
-                $scope.loading();
-                $scope.modal2.hide();
+                $scope.closereject();
             }, 1000);
+        }
+        $scope.$watch('listorderdetail',function(){
+          $scope.loading();
+        });
+        function setApproveOrder(){
+          var ups = new MobileCRM.DynamicEntity('salesorder',$stateParams.orderid.trim());
+              ups.properties.statuscode = parseInt(917970000);
+              ups.save(function(er){
+                if(er){
+                  alert('error 6436 '+er);
+                }else{
+                  //call function insert deatil
+                  //alert('approved done');
+                  try {
+                    deleteorderdetail();
+                  } catch (e) {
+                    alert('error 6445 '+e);
+                  }
+                }
+              });
+        }
+
+        function deleteorderdetail(){
+          $scope.showLoadingProperTimesRegter('กำลังทำแก้ไขข้อมูล');
+          console.log('delete orderdetail');
+          //call function insert orderdetail
+          var x = 0;
+          var loopArray = function(arr){
+            getDelete(x,function(){
+              x++;
+              if(x < arr.length){
+                loopArray(arr);
+              }else{
+                //alert('delete done');
+                orderdetailproduct();
+              }
+            });
+          }
+          loopArray($scope.listorderdetail);
+          function getDelete(i,callback){
+              try {
+                MobileCRM.DynamicEntity.deleteById("salesorderdetail",$scope.listorderdetail[i].salesorderdetail,
+                function () {
+
+                },function (er) {
+                                  MobileCRM.bridge.alert("An error occurred: " + er);
+                              	});
+              } catch (e) {
+                alert('error 6479 '+er);
+              } finally {
+                setTimeout(function(){
+                  callback();
+                },10);
+              }
+          }
+        }
+
+        function orderdetailproduct(){
+          //loop approve
+          var x = 0;
+          var loopArray = function(arr){
+            inSertDetail(x,function(){
+              x++;
+              if(x < arr.length){
+                loopArray(arr);
+              }else{
+                //alert('insert detail done ');
+                $ionicLoading.hide();
+                setTimeout(function(){
+                  switch ($scope.salestype) {
+                    case true:
+                      $ionicHistory.goBack(-1);
+                      break;
+                    case false:
+                      $scope.sendmailtosup($stateParams.terid.trim(),'เปิดใบสั่งขาย(สนับสนุนขาย)','เปิดใบสั่งขาย(สนับสนุนขาย) ร้าน'+$stateParams.accountname,function(){
+                        //alert('special order sendmail');
+                        $ionicHistory.goBack(-1);
+                      });
+                      break;
+                  }
+                },10);
+              }
+            });
+          }
+          loopArray($scope.listorderdetail);
+          function inSertDetail(i,callback){
+            $scope.showLoadingProperTimesRegter('กำลังทำการบันทึกข้อมูล '+$scope.listorderdetail[i].productname);
+            var ins = new MobileCRM.DynamicEntity.createNew('salesorderdetail');
+                ins.properties.salesorderid = new MobileCRM.Reference('salesorder',$stateParams.orderid.trim());
+                ins.properties.productid = new MobileCRM.Reference('product',$scope.listorderdetail[i].productid);
+                ins.properties.ispriceoverridden = parseInt(0);
+                ins.properties.priceperunit = $scope.listorderdetail[i].priceperunit;
+                ins.properties.uomid = new MobileCRM.Reference('uom',$scope.listorderdetail[i].uomid);
+                ins.properties.quantity = $scope.listorderdetail[i].quality;
+                ins.save(function(er){
+                  if(er){
+                    alert(er);
+                  }else{
+                    setTimeout(function(){
+                      callback();
+                    },1000);
+                  }
+              });
+          }
+        }
+        $scope.confirmorder = function(){
+          switch ($scope.salestype) {
+            case true:
+                alert('default order');
+                setApproveOrder();
+              break;
+            case false:
+                alert('sales order support');
+                deleteorderdetail();
+              break;
+          }
         }
         /*--------------- end -----------------*/
     })
