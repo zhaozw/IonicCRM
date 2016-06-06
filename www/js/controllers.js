@@ -4193,6 +4193,9 @@ angular.module('starter.controllers', [])
           tername:tername
         },{reload:true});
       }
+      $scope.reback = function(){
+        $ionicHistory.goBack(-1);
+      }
     })
     .controller('WaitOrderDetailCtrl',function ($scope, $ionicModal,Setting, $stateParams, $cookies, Data, $state, $ionicLoading, $ionicHistory, $compile, $ionicPopup, $timeout) {
       $state.reload();
