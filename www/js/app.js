@@ -790,7 +790,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
 })
 .state('app.billingcollectionoption', {
   //url:'/billingcollection/:orderid/:mastertype/:ordertype/:accountname/:terid/:salestype',
-  url:'/billingcollectionoption/:retype',
+  url:'/billingcollectionoption/:accountid/:mastertype/:retype/:terid',
   views: {
     'menuContent': {
       templateUrl: 'templates/billcollect/option.html',

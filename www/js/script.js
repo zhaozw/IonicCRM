@@ -1634,6 +1634,55 @@ function GetInvoice(terid,callback){
 			callback(b);
 		},function(er){alert(er);},null);
   }
+	function GetBillingByIaccount(idac,callback){
+		try{
+	    var a = new MobileCRM.FetchXml.Entity('ivz_billingnotestable');
+	  		a.addAttribute('ivz_billingnotestableid');//0
+	  		a.addAttribute('ivz_name');//1
+	  		a.addAttribute('ivz_billingnumber');//2
+	  		a.addAttribute('ivz_sumbillingamount');//3
+	  		a.addAttribute('ivz_billingdate');//4
+	  		a.addAttribute('ivz_customername');//5
+	  		a.addAttribute('createdon');//6
+	  		a.addAttribute('ivz_customernumber');//7
+	  var filter = new MobileCRM.FetchXml.Filter();
+	      filter.where('ivz_customernumber','eq',idac);
+	  		a.filter = filter;
+	  var b = a.addLink('account','accountid','ivz_customernumber','outer');
+	      b.addAttribute('ivz_addressdistrict');//8
+	      b.addAttribute('ivz_addressprovince');//9
+	      b.addAttribute('territoryid');//10
+	  var c = b.addLink('territory','territoryid','territoryid','outer');
+	      c.addAttribute('ivz_leadermail');//11
+	      c.addAttribute('ivz_emailcontact');//12
+	      c.addAttribute('ivz_ccmail');//13
+		var fetch = new MobileCRM.FetchXml.Fetch(a,10000,1);
+			  fetch.execute('array',function(data){
+	        var d = [];
+	        for(var i in data){
+	            d.push({
+	                    ivz_billingnotestableid:data[i][0],
+	                		ivz_name:data[i][1],
+	                		ivz_billingnumber:data[i][2],
+	                		ivz_sumbillingamount:data[i][3],
+	                		ivz_billingdate:data[i][4],
+	                		ivz_customername:data[i][5],
+	                		createdon:data[i][6],
+	                		ivz_customernumber:data[i][7],
+	                    ivz_addressdistrict:data[i][8],
+	                    ivz_addressprovince:data[i][9],
+	                    territoryid:data[i][10],
+	                    ivz_leadermail:data[i][11],
+	                    ivz_emailcontact:data[i][12],
+	                    ivz_ccmail:data[i][13]
+	                  });
+	        }
+				callback(d);
+			},function(er){alert(er);},null);
+	  }catch(er){
+	    alert("error function 1683 "+er);
+	  }
+	}
 	/*----------------------------------Get Province ---------------------------------*/
 	function GetProvinceList(callback){
 	var n = new MobileCRM.FetchXml.Entity('ivz_addressprovince');

@@ -31,24 +31,24 @@
              <p ng-if="n.statuscode == 917970003">สถานะ:<span style="color:#003171;font-weight:bold;">บันทึกข้อมูลยังไม่สมบูรณ์</span></p>
              <p ng-if="n.statuscode == 917970000">สถานะ:<span style="color:#A17917;font-weight:bold;">รอดำเนินงาน</span></p>
            </div>
-           <a class="md-secondary ion-trash-a text-h1 text-bold error" ng-click="removeitem($index)"></a>
+           <a class="md-secondary ion-chevron-right text-h1 text-bold error" ng-click="detailaccount(n.accountid,n.statustype,n.ivz_balancecredit,n.territoryid.id,n.name)"></a>
            <md-divider in-if="!$last"></md-divider>
        </md-list-item>
       </md-list>
     </div>
   </ion-content>
   <div class="tabs tabs-icon-top">
-    <a class="tab-item" ng-click="reloaddata()">
+    <a class="tab-item" ng-click="loaddata()">
       <i class="icon ion-ios-reload primary"></i>
       เรียกข้อมูลใหม่
     </a>
-    <a class="tab-item" ng-click="approveaccount()">
+    <!-- <a class="tab-item" ng-click="approveaccount()">
       <i class="icon ion-checkmark-circled primary"></i>
       อนุมัติ
     </a>
     <a class="tab-item" ng-click="rejectapprove()">
       <i class="icon ion-android-cancel error"></i>
       ไม่อนุมัติ
-    </a>
+    </a> -->
   </div>
 </ion-view>
