@@ -120,6 +120,11 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     setValorder:10000
   }
 })
+.factory('Dtest',function(){
+  return {
+    data:["Banana", "Orange", "Apple", "Mango","Lemon"]
+  }
+})
 .service('rego',function(){
   this.regoserv = function(){
     window.history.back(-1);
@@ -769,6 +774,81 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     'menuContent': {
       templateUrl: 'templates/order/orderother.html',
       controller:'ListOrderOtherCtrl'
+    }
+  }
+})
+/******************** billing And collection **************************/
+.state('app.billingcollection', {
+  url:'/billingcollection/:accountid/:mastertype/:retype/:terid',
+  //url:'/billingcollection/:retype',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/billcollect/employee.html',
+      controller:'ListBillingAccountCtrl'
+    }
+  }
+})
+.state('app.billingcollectionoption', {
+  //url:'/billingcollection/:orderid/:mastertype/:ordertype/:accountname/:terid/:salestype',
+  url:'/billingcollectionoption/:retype',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/billcollect/option.html',
+      controller:'ListBillingAccountCtrl'
+    }
+  }
+})
+.state('app.billingcollectioncash', {
+  //url:'/billingcollection/:orderid/:mastertype/:ordertype/:accountname/:terid/:salestype',
+  url:'/billingcollectioncash/:billingid/:txtname/:txtbilling/:txttatol/:groupbilling',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/billcollect/optioncash.html',
+      controller:'ListBillingAccountCtrl'
+    }
+  }
+})
+.state('app.billingcollectionnotdo', {
+  //url:'/billingcollection/:orderid/:mastertype/:ordertype/:accountname/:terid/:salestype',
+  //url:'/billingcollectionnotdo/:billingid',
+  url:'/billingcollectionnotdo/:billingid/:txtname/:txtbilling/:txttatol/:groupbilling',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/billcollect/optionnotdo.html',
+      controller:'ListBillingAccountCtrl'
+    }
+  }
+})
+.state('app.billingcollectioncheck', {
+  //url:'/billingcollection/:orderid/:mastertype/:ordertype/:accountname/:terid/:salestype',
+  //url:'/billingcollectionnotdo/:billingid',
+  url:'/billingcollectioncheck/:billingid/:txtname/:txtbilling/:txttatol/:groupbilling',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/billcollect/optioncheck.html',
+      controller:'ListBillingAccountCtrl'
+    }
+  }
+})
+.state('app.billingcollectiontrans', {
+  //url:'/billingcollection/:orderid/:mastertype/:ordertype/:accountname/:terid/:salestype',
+  //url:'/billingcollectionnotdo/:billingid',
+  url:'/billingcollectiontrans/:billingid/:txtname/:txtbilling/:txttatol/:groupbilling',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/billcollect/optiontrans.html',
+      controller:'ListBillingAccountCtrl'
+    }
+  }
+})
+.state('app.billingcollectionother', {
+  //url:'/billingcollection/:orderid/:mastertype/:ordertype/:accountname/:terid/:salestype',
+  //url:'/billingcollectionnotdo/:billingid',
+  url:'/billingcollectionother/:billingid/:txtname/:txtbilling/:txttatol/:groupbilling',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/billcollect/optionother.html',
+      controller:'ListBillingAccountCtrl'
     }
   }
 })

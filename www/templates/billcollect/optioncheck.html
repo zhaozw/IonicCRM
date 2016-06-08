@@ -1,0 +1,66 @@
+<ion-view view-title="รายละเอียด">
+  <ion-content>
+    <div class="card">
+      <div class="item item-text-wrap">
+        <div class="row">
+          <div class="col shake">
+            <span>{{user.txtbilling}}</span>
+            <md-input-container>
+              <label>ชื่อลูกค้า</label>
+              <input type="text" ng-model="user.txtname" required md-maxlength="100" maxlength="100">
+            </md-input-container>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col shake">
+            <md-input-container>
+              <label>เลขที่บิล:</label>
+              <input type="text" ng-model="user.txtbilling" required md-maxlength="100" maxlength="100" >
+            </md-input-container>
+          </div>
+          <div class="col shake">
+            <md-input-container>
+              <label>ยอดรวม:</label>
+              <input type="text" ng-model="user.txttatol" required md-maxlength="100" maxlength="100">
+            </md-input-container>
+          </div>
+        </div>
+        <hr class="divider" />
+        <div class="row">
+          <div class="col">
+            <h2 ng-class="user.class">แนบเอกสารตามล่างนี้ด้วย</h2>
+            <md-button class="md-raised md-warn shake" ng-class="user.class01" aria-label="description" ng-click="calldocfile('#filedoc01',user.class)">
+              *แนบใบวางบิลที่ Sale เซ็น</md-button>
+            <canvas id="canvas01" width="578" height="400" ng-hide="true"></canvas>
+            <input type="file"  ng-hide="true" id="filedoc01">
+            <div id="imgdoc01"></div>
+            <br />
+            <span class="error-bold">*กดที่รูปเพื่อลบรูปภาพที่ไม่ต้องการออก</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <md-button class="md-raised md-warn shake" ng-class="user.class02" aria-label="description" ng-click="calldocfile('#filedoc02',user.class)" >
+              **ถ่ายรูปหน้าเช็ค</md-button>
+            <canvas id="canvas02" width="578" height="400" ng-hide="true"></canvas>
+            <input type="file"  ng-hide="true" id="filedoc02">
+            <div id="imgdoc02"></div>
+            <br />
+            <span class="error-bold">*กดที่รูปเพื่อลบรูปภาพที่ไม่ต้องการออก</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br /><br />
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="reback()">
+      <i class="icon ion-chevron-left error"></i>
+      ย้อนกลับ
+    </a>
+    <a class="tab-item" ng-click="cBillingConfirm(2)">
+      <i class="icon ion-checkmark-circled success"></i>
+      บันทึก
+    </a>
+  </div>
+</ion-view>

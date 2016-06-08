@@ -1,18 +1,58 @@
-<ion-view view-title="เลือกรูปแบบการเปลี่ยนแปลงข้อมูล">
+<ion-view view-title="รายการค้างชำระ">
   <ion-content>
+    <div class="bar bar-header item-input-inset">
+      <label class="item-input-wrapper">
+        <i class="icon ion-ios-search placeholder-icon"></i>
+        <input type="search" placeholder="Search" ng-model="filtertxt">
+      </label>
+      <md-button class="md-raised button-clear md-warn" aria-label="description" md-ripple-size="auto">&nbsp;ยกเลิก&nbsp;</md-button>
+    </div>
     <div class="card">
       <div class="item item-text-wrap">
-        <md-list>
-          <md-list-item>
-            <h2><i class="icon ion-ios-list success"></i>&nbsp;<span class="success">แก้ไขข้อมูลทั่วไป</span></h2>
-            <a class="md-secondary ion-chevron-right text-h1 text-bold error" ng-click="goop(1)"></a>
-          </md-list-item>
-          <md-list-item>
-            <h2><i class="icon ion-ios-list success"></i>&nbsp;<span class="success">แก้ไขข้อมูลเครดิต</span></h2>
-            <a class="md-secondary ion-chevron-right text-h1 text-bold error" ng-click="goop(1)"></a>
-          </md-list-item>
-        </md-list>
+        <md-radio-group ng-model="group.billing">
+          <md-list>
+            <md-list-item class="md-3-line" ng-repeat="n in billingdata | filter:filtertxt">
+               <div class="md-list-item-text" layout="column">
+                 <h3>{{ n.filtername}}</h3>
+                 <p>
+                   ยอดค้างชำระ:&nbsp;
+                   <span class="error-bold">{{n.billingtatol | currency:''}}</span>&nbsp;บาท &nbsp;&nbsp;
+                   วันที่:&nbsp;<span class="error-bold">{{n.createdon | date:'dd-MM-yyyy'}}</span>
+                 </p>
+               </div>
+               <md-radio-button ng-value="n.billingid" aria-label="n.filtername" class="md-secondary"></md-radio-button>
+               <md-divider ng-if="!$last"></md-divider>
+           </md-list-item>
+          </md-list>
+        </md-radio-group>
       </div>
     </div>
+    <br /><br />
   </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item shake" ng-click="reback()">
+      <i class="icon ion-chevron-left error"></i>
+      ย้อนกลับ
+    </a>
+    <a class="tab-item shake" ng-click="loadlink(1)">
+      <i class="icon ion-refresh primary"></i>
+      เรียกใหม่
+    </a>
+    <a class="tab-item shake" ng-click="cBilling(0)">
+      <i class="icon ion-social-usd warning"></i>
+      เงินสด
+    </a>
+    <a class="tab-item shake" ng-click="cBilling(1)">
+      <i class="icon ion-ios-compose-outline success"></i>
+      เช็ค
+    </a>
+    <a class="tab-item shake" ng-click="cBilling(2)">
+      <i class="icon ion-card warn"></i>
+      เงินโอน
+    </a>
+    <a class="tab-item shake" ng-click="cBilling(3)">
+      <i class="icon ion-edit info"></i>
+      อื่นๆ
+    </a>
+  </div>
 </ion-view>

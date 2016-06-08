@@ -1466,15 +1466,9 @@ function GetPostpectByTer(terid,callback){
 		  n.addAttribute('ivz_saledistict');//4
       n.addAttribute('ivz_saleprovinceid');//5
 		  n.addAttribute('ivz_territory');//6
-  //     n.filter = new MobileCRM.FetchXml.Filter();
-  //     n.filter.where('ivz_territory','eq',terid);
-  // var m = n.addLink('territory','territoryid','ivz_territory','outer');
-  //     m.addAttribute('ivz_leadermail');//7
-  //     m.addAttribute('ivz_ccmail');//8
-  //     m.addAttribute('ivz_emailcontact');//9
 	var fetch = new MobileCRM.FetchXml.Fetch(n);
 		  fetch.execute('array',function(data){
-        alert(data);
+        alert(data.length);
         var b = [];
         for(var i in data){
           b.push({
@@ -1487,57 +1481,88 @@ function GetPostpectByTer(terid,callback){
                   ivz_territory:data[i][6],
                   accountype:3
                 });
-                // b.push({
-                //         ivz_saleprospectid:data[i][0],
-                //   		  ivz_name:data[i][1],
-                //   		  ivz_prospectgroup:data[i][2],
-                //   		  ivz_prospectname:data[i][3],
-                //   		  ivz_saledistict:data[i][4],
-                //         ivz_saleprovinceid:data[i][5],
-                //   		  ivz_territory:data[i][6],
-                //         ivz_leadermail:data[i][7],
-                //         ivz_ccmail:data[i][8],
-                //         ivz_emailcontact:data[i][9],
-								// 				accountype:3
-                //       });
         }
 			callback(b);
 		},function(er){alert(er);},null);
 }
 
 function GetAccountInvoice(terid,callback){
-	var n = new MobileCRM.FetchXml.Entity('account');
-			n.addAttribute('accountid');//0
-			n.addAttribute('name');//1
-			n.addAttribute('territoryid');//2
-			n.addAttribute('ivz_addressprovince');//3
-			n.addAttribute('ivz_addressdistrict');//4
-	var filter = new MobileCRM.FetchXml.Filter();
-			filter.where('territoryid','eq',terid);
-			n.filter = filter;
-	var l = n.addLink('ivz_billingnotestable','ivz_customernumber','accountid','outer');
-			l.addAttribute('ivz_billingnumber');//5
-	var filterb = new MobileCRM.FetchXml.Filter();
-			filterb.where('ivz_billingstatus','eq','0');
-			l.filter = filterb;
-	var m = n.addLink('invoice','accountid','accountid','outer');
-	var fetch = new MobileCRM.FetchXml.Fetch(n);
-			fetch.execute('array',function(data){
-				//alert(data.length);
-				var b = [];
-				for(var i in data){
-					b.push({
-						accountid:data[i][0],
-						name:data[i][1],
-						territoryid:data[i][2],
-						ivz_addressprovince:data[i][3],
-						ivz_addressdistrict:data[i][4]
-					});
-				}
-				callback(b);
-			},function(er){
-				alert(er);
-			},null);
+	try {
+		var a = new MobileCRM.FetchXml.Entity('account');
+				a.addAttribute('accountid');//0
+				a.addAttribute('name');//1
+				a.addAttribute('ivz_addresscountry');//2
+				a.addAttribute('ivz_addressprovince');//3
+				a.addAttribute('ivz_addressdistrict');//4
+				a.addAttribute('ivz_availablefromtime');//5
+				a.addAttribute('ivz_availabletotime');//6
+				a.addAttribute('territoryid');//7
+				a.addAttribute('customertypecode');//8
+				a.addAttribute('statuscode');//9
+				a.addAttribute('accountnumber');//10
+				a.addAttribute('ivz_statuscomplete');//11
+				a.addAttribute('ivz_remarkreject');//12
+				a.addAttribute('ivz_taxid');//13
+				a.addAttribute('customertypecode');//14
+				a.addAttribute('ivz_statustype');//15
+				a.addAttribute('ivz_doc01');//16
+				a.addAttribute('ivz_doc02');//17
+				a.addAttribute('ivz_doc03');//18
+				a.addAttribute('ivz_dochouseholdregis');//19
+				a.addAttribute('ivz_docidcard');//20
+				a.addAttribute('ivz_satatusempid');//21
+				a.addAttribute('creditlimit');//22
+				a.addAttribute('ivz_integrationid');//23
+		var filter = new MobileCRM.FetchXml.Filter();
+				filter.where('territoryid','eq',terid);
+				a.filter = filter;
+		var l = a.addLink('ivz_billingnotestable','ivz_customernumber','accountid','outer');
+				l.addAttribute('ivz_billingnumber');//24
+				l.addAttribute('createdon');//25
+		var filterb = new MobileCRM.FetchXml.Filter();
+				filterb.where('ivz_billingstatus','eq','0');
+				l.filter = filterb;
+		var m = a.addLink('invoice','accountid','accountid','outer');
+		var fetch = new MobileCRM.FetchXml.Fetch(a,10000,1);
+				fetch.execute('array',function(data){
+					//alert(data.length);
+					var b = [];
+					for(var i in data){
+						b.push({
+							accountid:data[i][0],
+							name:data[i][1],
+							ivz_addresscountry:data[i][2],
+							ivz_addressprovince:data[i][3],
+							ivz_addressdistrict:data[i][4],
+							ivz_availablefromtime:data[i][5],
+							ivz_availabletotime:data[i][6],
+							territoryid:data[i][7],
+							customertypecode:data[i][8],
+							statuscode:data[i][9],
+							accountnumber:data[i][10],
+							filtername:data[i][10]+'-'+data[i][1],
+							ivz_statuscomplete:data[i][11],
+							ivz_remarkreject:data[i][12],
+							ivz_taxid:data[i][13],
+							customertypecode:data[i][14],
+							ivz_statustype:data[i][15],
+							ivz_doc01:data[i][16],
+							ivz_doc02:data[i][17],
+							ivz_doc03:data[i][18],
+							ivz_dochouseholdregis:data[i][19],
+							ivz_docidcard:data[i][20],
+							ivz_satatusempid:data[i][21],
+							creditlimit:data[i][22],
+							ivz_integrationid:data[i][23],
+							ivz_billingnumber:data[i][24],
+							createdon:new Date(data[i][25])
+						});
+					}
+					callback(b);
+				},function(er){alert(er);},null);
+	} catch (e) {
+		alert('error 1499 '+e);
+	}
 }
 
 function getInvoiceByAccountid(terid,callback){

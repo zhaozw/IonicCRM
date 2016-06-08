@@ -1,0 +1,28 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">ผลการทำกิจกรรม</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closemodal(1)">
+        <i class="ion-close error"></i>
+      </button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+      <div class="row">
+        <div class="col">
+          <md-radio-group  ng-model="group.resultactivities">
+            <md-list>
+              <md-list-item>
+                 <md-radio-button class="md-primary" ng-value="2" ng-click="closemodal(1)">ทำกิจกรรม</md-radio-button>
+                 <md-divider></md-divider>
+              </md-list-item>
+              <md-list-item>
+                 <md-radio-button  ng-value="1" ng-click="closemodal(1)">ไม่ทำกิจกรรม</md-radio-button>
+                 <md-divider></md-divider>
+              </md-list-item>
+            </md-list>
+          </md-radio-group>
+        </div>
+      </div>
+  </ion-content>
+</ion-modal-view>
