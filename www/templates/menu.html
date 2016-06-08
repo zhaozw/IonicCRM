@@ -32,7 +32,7 @@
         ng-click="setdmaster(2)" ng-show="Data.logontype">
           <i class="ion-android-calendar"></i>&nbsp;แผนการดำเนินงาน sup direct
         </ion-item>
-        <ion-item menu-close ui-sref="app.listplanned({mastertype:Data.mastertype})"
+        <ion-item menu-close ui-sref="app.listplanned({mastertype:Data.mastertype,retype:1})"
         ui-sref-opts="{reload:true}"  class="success" ng-hide="Data.logontype">
           <i class="ion-android-calendar"></i>&nbsp;ผลการดำเนินงาน
         </ion-item>
@@ -78,6 +78,9 @@
         <ion-item menu-close ui-sref="app.billingcollection({retype:0})"
           ui-sref-opts="{reload:true}" class="success">
           <i class="ion-android-calendar"></i>&nbsp;ทดสอบเก็บเงิน</ion-item>
+        <ion-item menu-close ui-sref="app.exmpid"
+          ui-sref-opts="{reload:true}" class="success">
+            <i class="ion-android-calendar"></i>&nbsp;ทดสอบ comment</ion-item>
       </ion-list>
     </ion-content>
   </ion-side-menu>

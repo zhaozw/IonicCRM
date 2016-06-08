@@ -8,23 +8,29 @@
     </div>
   </ion-header-bar>
   <ion-content>
-      <div class="list">
-        <label class="item item-input">
-          <span class="input-label">ชื่อร้าน:</span>
-          <input type="text" ng-model="user.txtname" class="txtcemment">
-        </label>
-        <label class="item item-input">
-          <span class="input-label">ประเภทลูกค้า:</span>
-          <input type="text" ng-model="user.txtstate" class="txtcemment">
-        </label>
-        <label class="item item-input">
-          <span class="input-label">วงเงินที่ขอมา:</span>
-          <input type="text" ng-model="user.txtcredit" class="txtcemment">
-        </label>
-        <label class="item item-input">
-          <span class="input-label">เหตุผลที่ไม่อนุมัติ:</span>
-          <input type="text" ng-model="user.txtcomment" placeholder="ระบุเหตุผลที่ไม่อนุมัติ........................" class="txtcemment">
-        </label>
+    <div class="row">
+      <div class="col">
+        <md-input-container>
+          <label>ชื่อร้าน:</label>
+          <input type="text" ng-model="user.txtname">
+        </md-input-container>
+      </div>
+      <div class="col">
+        <md-input-container>
+          <label>ประเภทลูกค้า:</label>
+          <input type="text" ng-model="user.txtstate">
+        </md-input-container>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <md-input-container>
+          <label>เหตุผลที่ไม่อนุมัติ:</label>
+          <input type="text" ng-model="user.txtcomment" md-maxlength="500">
+        </md-input-container>
+      </div>
+    </div>
+    <div class="list">
         <label class="item">
           <button class="button button-block button-positive" type="button"
             ng-click="confirmreject(user.accountid,user.txtcomment)">ยืนยัน</button>

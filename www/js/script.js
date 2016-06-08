@@ -1635,6 +1635,7 @@ function GetInvoice(terid,callback){
 		},function(er){alert(er);},null);
   }
 	function GetBillingByIaccount(idac,callback){
+		//alert('idac:'+idac);
 		try{
 	    var a = new MobileCRM.FetchXml.Entity('ivz_billingnotestable');
 	  		a.addAttribute('ivz_billingnotestableid');//0

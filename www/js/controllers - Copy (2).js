@@ -46,3 +46,5 @@ $scope.showLoadingComplete = function(txt) {
  };
 
  $scope.InAnnoteAttract = function(table,id,base64String,title,objid,callback)
+
+ if($scope.$phase){$scope.$apply();}

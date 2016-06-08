@@ -309,7 +309,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.listplanned', {
-  url:'/listplanned/:mastertype',
+  url:'/listplanned/:mastertype/:retype',
   views: {
     'menuContent': {
       templateUrl: 'templates/planned/listplan.html',
@@ -790,7 +790,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
 })
 .state('app.billingcollectionoption', {
   //url:'/billingcollection/:orderid/:mastertype/:ordertype/:accountname/:terid/:salestype',
-  url:'/billingcollectionoption/:accountid/:mastertype/:retype/:terid',
+  url:'/billingcollectionoption/:accountid/:mastertype/:retype/:terid/:accountname/:province/:distid',
   views: {
     'menuContent': {
       templateUrl: 'templates/billcollect/option.html',
@@ -809,13 +809,11 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.billingcollectionnotdo', {
-  //url:'/billingcollection/:orderid/:mastertype/:ordertype/:accountname/:terid/:salestype',
-  //url:'/billingcollectionnotdo/:billingid',
-  url:'/billingcollectionnotdo/:billingid/:txtname/:txtbilling/:txttatol/:groupbilling',
+  url:'/billingcollectionnotdo/:accountid/:accountname/:province/:distid/:billing/:txttatol/:resultstatus/:terid',
   views: {
     'menuContent': {
       templateUrl: 'templates/billcollect/optionnotdo.html',
-      controller:'ListBillingAccountCtrl'
+      controller:'ListBillingAccountNotDoCtrl'
     }
   }
 })
@@ -897,6 +895,15 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
             controller: 'ExamplCtrl'
           }
         }
+      })
+  .state('app.exmpid', {
+            url:'/exmpid',
+            views: {
+              'menuContent': {
+                templateUrl: 'templates/exmpid.html',
+                controller: 'ExamplCtrl'
+              }
+            }
       })
 
       ;

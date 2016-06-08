@@ -4,7 +4,6 @@
       <div class="item item-text-wrap">
         <div class="row">
           <div class="col shake">
-            <span>{{user.txtbilling}}</span>
             <md-input-container>
               <label>ชื่อลูกค้า</label>
               <input type="text" ng-model="user.txtname" required md-maxlength="100" maxlength="100">
@@ -18,6 +17,8 @@
               <input type="text" ng-model="user.txtbilling" required md-maxlength="100" maxlength="100" >
             </md-input-container>
           </div>
+        </div>
+        <div class="row">
           <div class="col shake">
             <md-input-container>
               <label>ยอดรวม:</label>
@@ -26,11 +27,10 @@
           </div>
         </div>
         <div class="row">
-          <div class="col shake">
-            <span>{{user.txtbilling}}</span>
+          <div class="col">
             <md-input-container>
-              <label>ระบุเหตุผลที่ไม่ทำ</label>
-              <input type="text" ng-model="user.txtname" required md-maxlength="100" maxlength="100">
+              <label class="shacke">ระบุเหตุผลที่ไม่ทำ</label>
+              <input type="text" ng-model="user.txtcomment" required md-maxlength="100" maxlength="100">
             </md-input-container>
           </div>
         </div>
@@ -56,7 +56,7 @@
       <i class="icon ion-chevron-left error"></i>
       ย้อนกลับ
     </a>
-    <a class="tab-item" ng-click="cBillingConfirm(1)">
+    <a class="tab-item" ng-click="cBillingConfirm()">
       <i class="icon ion-checkmark-circled success"></i>
       บันทึก
     </a>

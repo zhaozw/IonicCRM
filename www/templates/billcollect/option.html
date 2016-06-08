@@ -9,22 +9,23 @@
     </div>
     <div class="card">
       <div class="item item-text-wrap">
-        <md-radio-group ng-model="group.billing">
+        <!-- <md-radio-group ng-model="group.billing"> -->
           <md-list>
             <md-list-item class="md-3-line" ng-repeat="n in billingdata | filter:filtertxt">
                <div class="md-list-item-text" layout="column">
-                 <h3>{{ n.filtername}}</h3>
+                 <h3>{{n.ivz_billingnumber}}</h3>
                  <p>
                    ยอดค้างชำระ:&nbsp;
-                   <span class="error-bold">{{n.billingtatol | currency:''}}</span>&nbsp;บาท &nbsp;&nbsp;
-                   วันที่:&nbsp;<span class="error-bold">{{n.createdon | date:'dd-MM-yyyy'}}</span>
+                   <span class="error-bold">{{n.ivz_sumbillingamount | currency:''}}</span>&nbsp;บาท &nbsp;&nbsp;
+                   วันที่:&nbsp;<span class="error-bold">{{n.ivz_billingdate | date:'dd-MM-yyyy'}}</span>
                  </p>
                </div>
-               <md-radio-button ng-value="n.billingid" aria-label="n.filtername" class="md-secondary"></md-radio-button>
+               <md-checkbox ng-checked="exists(n.ivz_billingnumber,n.ivz_sumbillingamount, user.selected)" ng-click="toggle(n.ivz_billingnumber,n.ivz_sumbillingamount, user.selected)" aria-label="n.ivz_name" class="md-secondary">
+               </md-checkbox>
                <md-divider ng-if="!$last"></md-divider>
            </md-list-item>
           </md-list>
-        </md-radio-group>
+        <!-- </md-radio-group> -->
       </div>
     </div>
     <br /><br />
