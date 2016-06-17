@@ -33,18 +33,22 @@
             </md-input-container>
           </div>
           <div class="col">
-            <md-select ng-model="user.yssbank"> <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
-                <md-select-label>เลือกธนาคาร yss ที่โอน</md-select-label>
-                <md-option>testt</md-option>
-            </md-select>
+            <md-input-container>
+              <label>เลือกธนาคารลูกค้า</label>
+              <md-select ng-model="user.accountyssbank">
+                <md-option ng-repeat="n in optionbank" ng-value="n.val">{{n.name}}</md-option>
+              </md-select>
+            </md-input-container>
           </div>
         </div>
         <div class="row">
           <div class="col">
-            <md-select ng-model="user.yssbank"> <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
-                <md-select-label>เลือกธนาคารลูกค้า</md-select-label>
-                <md-option>testt</md-option>
-            </md-select>
+            <md-input-container>
+              <label>เลือกธนาคาร yss ที่โอน</label>
+              <md-select ng-model="user.yssbank">
+                <md-option ng-repeat="n in optionyssbank" ng-value="n.val">{{n.name}}</md-option>
+              </md-select>
+            </md-input-container>
           </div>
         </div>
         <hr class="divider" />

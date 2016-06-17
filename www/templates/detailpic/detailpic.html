@@ -1,0 +1,30 @@
+<ion-view view-title="ข้อมูลเอกสาร">
+  <ion-content>
+    <div>
+      <md-list>
+        <md-list-item class="md-3-line" ng-repeat="n in pushpic" ng-click="showimg(n.documentbody)">
+          <!-- <img src="n.documentbody" class="md-avatar" alt="testt" /> -->
+           <div class="md-list-item-text" layout="column">
+             <h3>Pic.{{$index +'-'+n.subject}}</h3>
+           </div>
+           <a class="md-secondary ion-chevron-right text-h1 text-bold error" ng-click="showimg(n.documentbody)"></a>
+           <md-divider ng-if="!=$last"></md-divider>
+         </md-list-item>
+      </md-list>
+      <br />
+    </div>
+    <script id="templates/modal-1.html" type="text/ng-template">
+          <div class="modal image-modal transparent" ng-click="closeModal(1)">
+              <ion-pane class="transparent">
+                 <img ng-src="{{imageSrc}}" class="fullscreen-image"/>
+              </ion-pane>
+          </div>
+    </script>
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="reback()">
+      <i class="icon ion-chevron-left error"></i>
+      ย้อนกลับ
+    </a>
+  </div>
+</ion-view>

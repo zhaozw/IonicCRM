@@ -4,7 +4,8 @@
       <div class="item item-text-wrap">
         <div class="row">
           <div class="col shake">
-            <span>{{user.txtbilling}}</span>
+            <span>gps:{{user.latitude}}</span>
+            <span>chkscope:{{user.chkscope}}</span>
             <md-input-container>
               <label>ชื่อลูกค้า</label>
               <input type="text" ng-model="user.txtname" required md-maxlength="100" maxlength="100">
@@ -58,7 +59,7 @@
       <i class="icon ion-chevron-left error"></i>
       ย้อนกลับ
     </a>
-    <a class="tab-item" ng-click="cBillingConfirm(0)">
+    <a class="tab-item" ng-click="cBillingConfirm()">
       <i class="icon ion-checkmark-circled success"></i>
       บันทึก
     </a>

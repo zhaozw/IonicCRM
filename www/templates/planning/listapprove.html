@@ -23,6 +23,10 @@
     <br />
   </ion-content>
   <div class="tabs tabs-icon-top">
+    <a class="tab-item error" ng-click="reback()">
+      <i class="icon ion-chevron-left"></i>
+      ย้อนกลับ
+    </a>
     <a class="tab-item primary" ng-click="reloaddata()">
       <i class="icon ion-refresh"></i>
       เรียกข้อมูลใหม่
@@ -35,9 +39,9 @@
       <i class="icon ion-alert"></i>
       ไม่อนุมัติ
     </a>
-    <a class="tab-item error" ng-click="cancelcp()">
+    <!-- <a class="tab-item error" ng-click="cancelcp()">
       <i class="icon ion-close"></i>
       ยกเลิก
-    </a>
+    </a> -->
   </div>
 </ion-view>

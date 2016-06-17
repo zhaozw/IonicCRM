@@ -21,3 +21,6 @@ pricelevelid:$scope.item.pricelevel,
 uomid:$scope.item.uomid,
 tatol:$scope.item.tatol,
 matchitem:$scope.item.matchitem
+
+$scope.sendmailtosup = function (id, title, txt, callback)
+$scope.sendmailtosales = function (id, title, txt, callback)

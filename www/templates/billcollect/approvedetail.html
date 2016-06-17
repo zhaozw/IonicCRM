@@ -1,0 +1,105 @@
+<ion-view view-title="รายละเอียด">
+  <ion-content>
+    <div class="card">
+      <div class="item item-text-wrap">
+        <div class="row">
+          <div class="col">
+            <md-input-container>
+              <label>ชื่อร้าน/ลูกค้า:</label>
+              <input type="text" ng-model="user.txtname">
+            </md-input-container>
+          </div>
+        </div>
+        <!-- <div class="row">
+          <div class="col">
+            <md-input-container ng-show="user.ivz_visitbilling">
+              <label>กิจกรรมที่ไม่ทำ:</label>
+              <input type="text"  value="เก็บเงิน/วางบิล"/>
+            </md-input-container>
+            <md-input-container ng-show="user.ivz_visitsuggest">
+              <label>กิจกรรมที่ไม่ทำ:</label>
+              <input type="text"  value="นำเสนอสินค้า"/>
+            </md-input-container>
+            <md-input-container ng-show="user.ivz_visitprospect">
+              <label>กิจกรรมที่ไม่ทำ:</label>
+              <input type="text"  value="บันทึกลูกค้าค้าดหวัง"/>
+            </md-input-container>
+            <md-input-container ng-show="user.ivz_visitorder">
+              <label>กิจกรรมที่ไม่ทำ:</label>
+              <input type="text"  value="เปิดใบสั่งขาย"/>
+            </md-input-container>
+            <md-input-container ng-show="user.ivz_visitopenaccount">
+              <label>กิจกรรมที่ไม่ทำ:</label>
+              <input type="text"  value="เปิดบัญชีลูกค้า"/>
+            </md-input-container>
+            <md-input-container ng-show="user.ivz_visitadjustment">
+              <label>กิจกรรมที่ไม่ทำ:</label>
+              <input type="text"  value="แก้ไขข้อมูลลูกค้า"/>
+            </md-input-container>
+            <md-input-container ng-show="user.ivz_visitmarket">
+              <label>กิจกรรมที่ไม่ทำ:</label>
+              <input type="text"  value="บันทึกสถาพตลาด"/>
+            </md-input-container>
+            <md-input-container ng-show="user.ivz_visitcompetitor">
+              <label>กิจกรรมที่ไม่ทำ:</label>
+              <input type="text"  value="บันทึกคู่แข่ง"/>
+            </md-input-container>
+            <md-input-container ng-show="user.ivz_visitclaimorder">
+              <label>กิจกรรมที่ไม่ทำ:</label>
+              <input type="text"  value="เปิดใบเคลม"/>
+            </md-input-container>
+            <md-input-container ng-show="user.ivz_visitactivities">
+              <label>กิจกรรมที่ไม่ทำ:</label>
+              <input type="text"  value="บันทึกกิจกรรม"/>
+            </md-input-container>
+            <md-input-container ng-show="user.ivz_productrecall">
+              <label>กิจกรรมที่ไม่ทำ:</label>
+              <input type="text"  value="Product Recall"/>
+            </md-input-container>
+          </div>
+        </div> -->
+        <div class="row">
+          <div class="col">
+            <md-input-container>
+              <label>เลขที่บิล:</label>
+              <input type="text" ng-model="user.txtbillingnumber">
+            </md-input-container>
+          </div>
+          <div class="col">
+            <md-input-container>
+              <label>ยอดรวม:</label>
+              <input type="text" ng-model="user.txtamount">
+            </md-input-container>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <md-input-container>
+              <label>สาเหตุ:</label>
+              <input type="text" ng-model="user.txtremarcomment">
+            </md-input-container>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <md-button class="md-raised md-warn" ng-click="showpic(user.resultid)">ดูเอกสารแนบ</md-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="reback()">
+      <i class="icon ion-chevron-left error-bold"></i>
+      ย้อนกลับ
+    </a>
+    <a class="tab-item" ng-click="confirmapprove()">
+      <i class="icon ion-checkmark success-bold"></i>
+      อนุมัติ
+    </a>
+    <a class="tab-item" ng-click="reject()">
+      <i class="icon ion-alert error-bold"></i>
+      ไม่อนุมัติ
+    </a>
+  </div>
+</ion-view>

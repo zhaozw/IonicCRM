@@ -800,11 +800,11 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
 })
 .state('app.billingcollectioncash', {
   //url:'/billingcollection/:orderid/:mastertype/:ordertype/:accountname/:terid/:salestype',
-  url:'/billingcollectioncash/:billingid/:txtname/:txtbilling/:txttatol/:groupbilling',
+  url:'/billingcollectioncash/:accountid/:accountname/:province/:distid/:billing/:txttatol/:resultstatus/:terid',
   views: {
     'menuContent': {
       templateUrl: 'templates/billcollect/optioncash.html',
-      controller:'ListBillingAccountCtrl'
+      controller:'ListBillingAccountCashCtrl'
     }
   }
 })
@@ -818,35 +818,104 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.billingcollectioncheck', {
-  //url:'/billingcollection/:orderid/:mastertype/:ordertype/:accountname/:terid/:salestype',
-  //url:'/billingcollectionnotdo/:billingid',
-  url:'/billingcollectioncheck/:billingid/:txtname/:txtbilling/:txttatol/:groupbilling',
+  url:'/billingcollectioncheck/:accountid/:accountname/:province/:distid/:billing/:txttatol/:resultstatus/:terid',
   views: {
     'menuContent': {
       templateUrl: 'templates/billcollect/optioncheck.html',
-      controller:'ListBillingAccountCtrl'
+      controller:'ListBillingAccountCheckCtrl'
     }
   }
 })
 .state('app.billingcollectiontrans', {
   //url:'/billingcollection/:orderid/:mastertype/:ordertype/:accountname/:terid/:salestype',
   //url:'/billingcollectionnotdo/:billingid',
-  url:'/billingcollectiontrans/:billingid/:txtname/:txtbilling/:txttatol/:groupbilling',
+  url:'/billingcollectiontrans/:accountid/:accountname/:province/:distid/:billing/:txttatol/:resultstatus/:terid',
   views: {
     'menuContent': {
       templateUrl: 'templates/billcollect/optiontrans.html',
-      controller:'ListBillingAccountCtrl'
+      controller:'ListBillingAccountTransferCtrl'
     }
   }
 })
 .state('app.billingcollectionother', {
   //url:'/billingcollection/:orderid/:mastertype/:ordertype/:accountname/:terid/:salestype',
   //url:'/billingcollectionnotdo/:billingid',
-  url:'/billingcollectionother/:billingid/:txtname/:txtbilling/:txttatol/:groupbilling',
+  url:'/billingcollectionother/:accountid/:accountname/:province/:distid/:billing/:txttatol/:resultstatus/:terid',
   views: {
     'menuContent': {
       templateUrl: 'templates/billcollect/optionother.html',
-      controller:'ListBillingAccountCtrl'
+      controller:'ListBillingAccountOtherCtrl'
+    }
+  }
+})
+.state('app.waitapproveactivities', {
+  url:'/waitapproveactivities/:tername',
+  //url:'/approvebillingcollection/:accountid/:accountname/:province/:distid/:billing/:txttatol/:resultstatus/:terid',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/billcollect/territoryid.html',
+      controller:'ListWaitApproveBillingAccountCtrl'
+    }
+  }
+})
+.state('app.approvebillingcollection', {
+  url:'/approvebillingcollection/:terid',
+  //url:'/approvebillingcollection/:accountid/:accountname/:province/:distid/:billing/:txttatol/:resultstatus/:terid',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/billcollect/approve.html',
+      controller:'ListApproveBillingAccountCtrl'
+    }
+  }
+})
+.state('app.approvebillingcollectiondetail', {
+  url:'/approvebillingcollectiondetail/:resultid/:accountid/:txtname/:territorid/:txtterritory/:txtcomment/:txtremarcomment/:txtbillingnumber/:txtamount/:ivz_visitbilling/:ivz_visitsuggest/:ivz_visitprospect/:ivz_visitorder/:ivz_visitopenaccount/:ivz_visitadjustment/:ivz_visitmarket/:ivz_visitcompetitor/:ivz_visitclaimorder/:ivz_visitactivities/:ivz_productrecall',
+  //url:'/approvebillingcollection/:accountid/:accountname/:province/:distid/:billing/:txttatol/:resultstatus/:terid',
+  ///:ivz_visitbilling/:ivz_visitsuggest/:ivz_visitprospect/:ivz_visitorder/:ivz_visitopenaccount/:ivz_visitadjustment/:ivz_visitmarket/:ivz_visitcompetitor/:ivz_visitclaimorder/:ivz_visitactivities/:ivz_productrecall
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/billcollect/approvedetail.html',
+      controller:'ListApproveBillingAccountDetailCtrl'
+    }
+  }
+})
+.state('app.detailpic', {
+  url:'/detailpic/:tableresult/:idguid',
+  //url:'/approvebillingcollection/:accountid/:accountname/:province/:distid/:billing/:txttatol/:resultstatus/:terid',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/detailpic/detailpic.html',
+      controller:'ListDetailPicCtrl'
+    }
+  }
+})
+.state('app.plannedactivities', {
+  url:'/plannedactivities/:accountid/:mastertype/:retype/:terid/:accountname/:province/:distid',
+  //url:'/approvebillingcollection/:accountid/:accountname/:province/:distid/:billing/:txttatol/:resultstatus/:terid',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/activities/activities.html',
+      controller:'ListActivitiesCtrl'
+    }
+  }
+})
+.state('app.plannedactivitiesnotdo', {
+  url:'/plannedactivitiesdetail/:activitieslist/:accountid/:mastertype/:retype/:terid/:accountname/:province/:distid',
+  //url:'/approvebillingcollection/:accountid/:accountname/:province/:distid/:billing/:txttatol/:resultstatus/:terid',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/activities/plannedactivitiesnotdo.html',
+      controller:'ListActivitiesDetailNotDoCtrl'
+    }
+  }
+})
+.state('app.plannedactivitiesdetail', {
+  url:'/plannedactivitiesdetail/:activitieslist/:accountid/:mastertype/:retype/:terid/:accountname/:province/:distid',
+  //url:'/approvebillingcollection/:accountid/:accountname/:province/:distid/:billing/:txttatol/:resultstatus/:terid',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/activities/plannedactivitiesdetail.html',
+      controller:'ListActivitiesDetailCtrl'
     }
   }
 })
@@ -896,7 +965,16 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
           }
         }
       })
-  .state('app.exmpid', {
+  .state('app.editprofile',{
+    url:'/editprofile/:masterterid/:txtname/:txtempid/:txtemail',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/empid/editprofile.html',
+        controller: 'EmpidProfileCtrl'
+      }
+    }
+  })
+.state('app.exmpid', {
             url:'/exmpid',
             views: {
               'menuContent': {
@@ -905,6 +983,51 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
               }
             }
       })
+.state('app.listmarketting', {
+            url:'/listmarketting',
+            views: {
+              'menuContent': {
+                templateUrl: 'templates/market/listmarketting.html',
+                controller: 'ListMarketCtrl'
+              }
+            }
+      })
+.state('app.addformmarket', {
+        url:'/addformmarket',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/market/form.html',
+            controller: 'MarketFormCtrl'
+          }
+        }
+      })
+.state('app.optioncomputitor',{
+  url:'/optioncomputitor',
+  views:{
+    'menuContent':{
+      templateUrl:'templates/computitor/option.html',
+      controller:'ComputitorCtrl'
+    }
+  }
+})
+.state('app.optioncomputitorproduct',{
+  url:'/optioncomputitorproduct/:retype',
+  views:{
+    'menuContent':{
+      templateUrl:'templates/computitor/optioncomputitorproduct.html',
+      controller:'ComputitorProductCtrl'
+    }
+  }
+})
+.state('app.optioncomputitorshelfshare',{
+  url:'/optioncomputitorshelfshare',
+  views:{
+    'menuContent':{
+      templateUrl:'templates/computitor/optioncomputitorshelfshare.html',
+      controller:'ComputitorProductShelfShareCtrl'
+    }
+  }
+})
 
       ;
   // if none of the above states are matched, use this as the fallback

@@ -1,0 +1,52 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">เพิ่มข้อมูล</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closeModal()">
+        <i class="ion-close error"></i>
+      </button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <div class="row">
+      <div class="col">
+        <md-input-container>
+          <label>Username</label>
+          <md-select ng-model="user.optionweekly"> <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
+              <md-select-label>Select a state</md-select-label>
+              <md-option ng-value="opt.id" ng-repeat="opt in optionsweekly">{{ opt.name }}</md-option>
+          </md-select>
+        </md-input-container>
+      </div>
+      <div class="col">
+        <md-input-container>
+          <label>Username</label>
+          <md-select ng-model="user.optionmonth"> <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
+              <md-select-label>Select a state</md-select-label>
+              <md-option ng-value="opt.id" ng-repeat="opt in optionsmonth">{{ opt.name }}</md-option>
+          </md-select>
+        </md-input-container>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <md-input-container>
+          <label>รหัสผ่านใหม่:</label>
+          <input type="password" ng-model="user.passwd1">
+        </md-input-container>
+      </div>
+      <div class="col">
+        <md-input-container>
+          <label>ยืนยันรหัสผ่านใหม่:</label>
+          <input type="password" ng-model="user.passwd2">
+        </md-input-container>
+      </div>
+    </div>
+    <div class="list">
+        <label class="item">
+          <button class="button button-block button-positive" type="button"
+            myclick="cChangePwd(user.passwd,user.passwd1,user.passwd2)">ยืนยัน</button>
+        </label>
+      </div>
+  </ion-content>
+</ion-modal-view>

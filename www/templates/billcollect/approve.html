@@ -1,0 +1,74 @@
+<ion-view view-title="รายการร้องขอไม่ทำกิจกรรม">
+  <ion-content>
+    <div>
+      <div class="bar bar-header item-input-inset">
+        <label class="item-input-wrapper">
+          <i class="icon ion-ios-search placeholder-icon"></i>
+          <input type="search" placeholder="Search" ng-model="filtertxt">
+        </label>
+        <md-button class="md-raised button-clear md-warn" aria-label="description" md-ripple-size="auto">&nbsp;ยกเลิก&nbsp;</md-button>
+      </div>
+      <md-list>
+        <md-list-item class="md-3-line" ng-repeat="n in listresultplanning | filter:filtertxt:orderBy:ivz_shedulestart:true"
+          ui-sref="app.approvebillingcollectiondetail({resultid:n.ivz_resultappointid,
+                                                        accountid:n.ivz_customer.id,
+                                                        txtname:n.ivz_resultname,
+                                                        territorid:n.ivz_territory.id,
+                                                        txtterritory:n.ivz_territory.primaryName,
+                                                        txtcomment:'',
+                                                        txtremarcomment:n.ivz_resultremark,
+                                                        txtbillingnumber:n.ivz_billingnumber,
+                                                        txtamount:n.ivz_billingamount,
+                                                        ivz_visitbilling:n.ivz_visitbilling,
+                                                        ivz_visitsuggest:n.ivz_visitsuggest,
+                                                        ivz_visitprospect:n.ivz_visitprospect,
+                                                        ivz_visitorder:n.ivz_visitorder,
+                                                        ivz_visitopenaccount:n.ivz_visitopenaccount,
+                                                        ivz_visitadjustment:n.ivz_visitadjustment,
+                                                        ivz_visitmarket:n.ivz_visitmarket,
+                                                        ivz_visitcompetitor:n.ivz_visitcompetitor,
+                                                        ivz_visitclaimorder:n.ivz_visitclaimorder,
+                                                        ivz_visitactivities:n.ivz_visitactivities,
+                                                        ivz_productrecall:n.ivz_productrecall})" ng-if="n.ivz_customer">
+          <img src="img/d05.png" class="md-avatar" alt="testt" />
+           <div class="md-list-item-text" layout="column">
+             <h3>{{n.ivz_customer.primaryName}}</h3>
+             <h4 ng-if="n.ivz_billingnumber">
+               <span class="error-bold">{{n.ivz_billingnumber}}</span>&nbsp;ยอดรวม:&nbsp;
+               <span class="error-bold">{{n.ivz_billingamount | currency:''}}</span>&nbsp;บาท
+             </h4>
+             <h4 ng-show="n.ivz_visit">
+               กิจกรรมที่ทำ:
+               <span class="primary-bold" ng-show="n.ivz_visitbilling">&nbsp;เก็บเงิน/วางบิล</span>
+               <span class="primary-bold" ng-show="n.ivz_visitsuggest">&nbsp;นำเสนอสินค้า</span>
+               <span class="primary-bold" ng-show="n.ivz_visitprospect">&nbsp;บันทึกลูกค้าค้าดหวัง</span>
+               <span class="primary-bold" ng-show="n.ivz_visitorder">&nbsp;เปิดใบสั่งขาย</span>
+               <span class="primary-bold" ng-show="n.ivz_visitopenaccount">&nbsp;เปิดบัญชีลูกค้า</span>
+               <span class="primary-bold" ng-show="n.ivz_visitadjustment">&nbsp;แก้ไขข้อมูลลูกค้า</span>
+               <span class="primary-bold" ng-show="n.ivz_visitmarket">&nbsp;บันทึกสถาพตลาด</span>
+               <span class="primary-bold" ng-show="n.ivz_visitcompetitor">&nbsp;บันทึกคู่แข่ง</span>
+               <span class="primary-bold" ng-show="n.ivz_visitclaimorder">&nbsp;เปิดใบเคลม</span>
+               <span class="primary-bold" ng-show="n.ivz_visitactivities">&nbsp;บันทึกกิจกรรม</span>
+               <span class="primary-bold" ng-show="n.ivz_productrecall">&nbsp;Product Recall</span>
+             </h4>
+             <p>
+               สาเหตุที่ไม่ทำกิจกรรม:<span class="error-bold">{{n.ivz_resultremark}}</span>&nbsp;&nbsp;
+               วันที่:<span class="error-bold">&nbsp;{{n.ivz_shedulestart | date:'dd/MM/yyyy'}}</span></p>
+           </div>
+           <a class="md-secondary ion-chevron-right text-h1 text-bold error"></a>
+           <md-divider in-if="!$last"></md-divider>
+       </md-list-item>
+      </md-list>
+    </div>
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="reback()">
+      <i class="icon ion-chevron-left error"></i>
+      ย้อนกลับ
+    </a>
+    <a class="tab-item" ng-click="loaddata()">
+      <i class="icon ion-ios-reload primary"></i>
+      เรียกข้อมูลใหม่
+    </a>
+  </div>
+</ion-view>

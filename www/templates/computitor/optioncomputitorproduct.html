@@ -1,0 +1,112 @@
+<ion-view view-title="รายงานสินค้า">
+  <ion-content>
+    <div class="row">
+      <div class="col"></div>
+      <div class="col col-90">
+        <div class="row">
+          <div class="col">
+            <md-input-container>
+              <label>ชื่อร้านค้า</label>
+              <input type="text" ng-model="user.txtcustomer" maxlength="500" md-maxlength="500" ng-change="fixhide(user.txtcustomer)">
+            </md-input-container>
+            <div class="row" ng-hide="user.fHide">
+              <div class="col">
+                <ul>
+                  <li ng-repeat="n in user.optionslist | filter:user.txtcustomer" ng-click="setparamater(0,n.id,n.name)">{{n.name}}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <md-input-container>
+              <label>ยี่ห้อสินค้า</label>
+              <input type="text" ng-model="user.banner">
+            </md-input-container>
+            <div class="row" ng-hide="user.fHide">
+              <div class="col">
+                <ul>
+                  <li ng-repeat="n in user.optionslist | filter:user.banner" ng-click="setparamater(1,n.id,n.name)">{{n.name}}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <md-input-container>
+              <label>ประเภทสินค้า</label>
+              <md-select ng-model="user.bannertype">
+                  <md-option ng-value="opt.id" ng-repeat="opt in user.optionslist">{{ opt.name }}</md-option>
+              </md-select>
+            </md-input-container>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <md-input-container>
+              <label>ราคาขายปลีก</label>
+              <input type="text" ng-model="user.priceperunit" md-maxlength="10" maxlength="10">
+            </md-input-container>
+          </div>
+          <div class="col">
+            <md-input-container>
+              <label>ราคาขายส่ง</label>
+              <input type="text" ng-model="user.priceperunittot" md-maxlength="10" maxlength="10">
+            </md-input-container>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <md-input-container>
+              <label>แคมเปญ</label>
+              <md-select ng-model="user.caimpiage">
+                  <md-option ng-value="opt.id" ng-repeat="opt in user.optionslist">{{ opt.name }}</md-option>
+              </md-select>
+            </md-input-container>
+          </div>
+          <div class="col">
+            <md-input-container>
+              <label>ยอดขายต่อเดือน</label>
+              <input type="text" ng-model="user.pricepermonth" md-maxlength="10" maxlength="10">
+            </md-input-container>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <md-input-container>
+              <label>อื่นๆ</label>
+              <input type="text" ng-model="user.txtother" md-maxlength="500" maxlength="500">
+            </md-input-container>
+          </div>
+        </div>
+        <hr class="divider" />
+        <div class="row">
+          <div class="col">
+            <md-button class="md-raised md-warn" ng-click="callfile()">แนบรูปภาพประกอบ</md-button>
+            <hr class="divider" />
+            <div class="row img01" id="img01"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <span class="error-bold">*กดที่รูปเพื่อลบ</span>
+          </div>
+        </div>
+      </div>
+      <div class="col"></div>
+    </div>
+    <br /><br />
+    <canvas width="300" height="300" id="canvas01" ng-hide="true"></canvas>
+    <input type="file" id="infiles" ng-hide="true"/>
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="reback()">
+      <i class="icon ion-chevron-left error"></i>
+      ย้อนกลับ
+    </a>
+    <a class="tab-item" ng-click="cInsert()">
+      <i class="icon ion-checkmark primary"></i>
+      บันทึกข้อมูล
+    </a>
+  </div>
+</ion-view>

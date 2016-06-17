@@ -10,7 +10,8 @@
     <div class="card" ng-hide="user.cards">
       <div class="item item-text-wrap">
         <md-list ng-show="user.checkaccount">
-          <md-list-item class="md-3-line" ng-repeat="n in listaccount | filter:{filtername:filtertxt}">
+          <md-list-item class="md-3-line" ng-repeat="n in listaccount | filter:{filtername:filtertxt}"
+          href="#/app/planneddetail/{{Data.mastertype}}/{{n.accountid}}/{{n.name}}/{{n.territoryid.id}}/{{n.ivz_addressprovince.id}}/{{n.ivz_addressdistrict.id}}/{{n.ivz_taxid}}">
             <img src="img/d05.png" class="md-avatar" alt="testt" />
              <div class="md-list-item-text" layout="column">
                <h3>{{n.filtername}}</h3>

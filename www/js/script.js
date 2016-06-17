@@ -30,6 +30,7 @@ function getUserCheck(uid,upwd,callback){
 		a.addAttribute('name');//7
 		a.addAttribute('description');//8
 		a.addAttribute('ivz_statusempid');//9
+
 	var filter = new MobileCRM.FetchXml.Filter();
 		filter.where('name','eq',uid);
 		a.filter = filter;
@@ -37,21 +38,19 @@ function getUserCheck(uid,upwd,callback){
 		fetch.execute('array',function(data){
 			var b = [];
 			if(data){
-				for(var i in data){
-					if(data[0][3] === upwd){
-						b.push({
-								territoryid:data[0][0],
-								ivz_empname:data[0][1],
-								ivz_empid:data[0][2],
-								ivz_password:data[0][3],
-								ivz_emailcontact:data[i][4],
-								ivz_leadermail:data[i][5],
-								ivz_ccmail:data[i][6],
-								ivz_name:data[i][7],
-								ter_description:data[i][8],
-								ivz_statusempid:data[i][9]
-							});
-					}
+				if(data[0][3] === upwd){
+					b.push({
+							territoryid:data[0][0],
+							ivz_empname:data[0][1],
+							ivz_empid:data[0][2],
+							ivz_password:data[0][3],
+							ivz_emailcontact:data[0][4],
+							ivz_leadermail:data[0][5],
+							ivz_ccmail:data[0][6],
+							ivz_name:data[0][7],
+							ter_description:data[0][8],
+							ivz_statusempid:data[0][9]
+						});
 				}
 				callback(b);
 			}else{
@@ -65,6 +64,7 @@ function chkAdjustment(id,callback){
 			c.addAttribute('ivz_accountadjustmentid');//0
 			c.addAttribute('ivz_customernumber');//1
 			c.addAttribute('statuscode');//2
+			c.orderBy("createdon", false);
 	var filter = new MobileCRM.FetchXml.Filter();
 			filter.where('ivz_customernumber','eq',id);
 			c.filter = filter;
@@ -99,6 +99,7 @@ function gettaskaccont(id,callback){
 		a.addAttribute('ivz_territory');//6
 		a.addAttribute('ivz_remarkcomment');//7
 		a.addAttribute('ivz_statuscomplete');//8
+		a.orderBy("createdon", false);
 	var filter = new MobileCRM.FetchXml.Filter();
 		filter.where('ivz_customer','eq',id);
 		a.filter = filter;
@@ -147,6 +148,7 @@ function gettaskaccontbyter(id,callback){
 		a.addAttribute('ivz_territory');//6
 		a.addAttribute('ivz_remarkcomment');//7
 		a.addAttribute('ivz_statuscomplete');//8
+		a.orderBy("createdon", false);
 	var filter = new MobileCRM.FetchXml.Filter();
 		filter.where('ivz_territory','eq',id);
 		a.filter = filter;
@@ -306,9 +308,13 @@ function guid() {
 
 ///////////////////// option ////////////////////
 function GetGPSLocation(callback){
-	// MobileCRM.Platform.getLocation(function(res){
-	// 	callback(res);
-	// },MobileCRM.bridge.alert);
+	try {
+		MobileCRM.Platform.getLocation(function(res){
+			callback(res);
+		},MobileCRM.bridge.alert);
+	} catch (e) {
+		console.log('error script 314 gps '+e);
+	}
 }
 function getGPSCoords() {
 	var wait = MobileCRM.UI.EntityForm.showPleaseWait("Getting the GPS coordinates...");
@@ -435,7 +441,24 @@ function GetResionStatus(callback){
 	  },function(err){MsgBox(er);},null);
 }
 
-
+var returnmastername = function(id){
+	try {
+		var n = new MobileCRM.FetchXml.Entity('ivz_territorymaster');
+				n.addAttribute('ivz_territorymasterid');//0
+				n.addAttribute('ivz_mastername');//1
+				n.addAttribute('ivz_leftterritory');//2
+    var filter = new MobileCRM.FetchXml.Filter();
+        filter.where('ivz_leftterritory','eq',id);
+        n.filter = filter;
+    var fetch = new MobileCRM.FetchXml.Fetch(n);
+		    fetch.execute('array',function(data){
+		//	alert(data.length+'::'+data[0][0]);
+			return data[0][0];
+		},function(er){alert(er);},null);
+	} catch (err) {
+		alert('error turn 446 '+err);
+	}
+}
 function gettername(tername,callback){
   try{
     var n = new MobileCRM.FetchXml.Entity('ivz_territorymaster');
@@ -671,6 +694,85 @@ function GetAppointStatus(ivz_leftterritory,ist,typ,callback){
         callback(b);
       },function(er){alert(er);},null);
 }
+function GetResultAppointment(terid,statuscode,callback){
+    var n = new MobileCRM.FetchXml.Entity('ivz_resultappoint');
+        n.addAttribute('ivz_resultappointid');//0
+        n.addAttribute('ivz_resultname');//1
+        n.addAttribute('ivz_visit');//2
+        n.addAttribute('ivz_visitsuggest');//3
+        n.addAttribute('ivz_productrecall');//4
+        n.addAttribute('ivz_visitprospect');//5
+        n.addAttribute('ivz_visitorder');//6
+        n.addAttribute('ivz_visitopenaccount');//7
+        n.addAttribute('ivz_visitmarket');//8
+        n.addAttribute('ivz_visitcompetitor');//9
+        n.addAttribute('ivz_visitcollecttion');//10
+        n.addAttribute('ivz_visitclaimorder');//11
+        n.addAttribute('ivz_visitbilling');//12
+        n.addAttribute('ivz_visitadjustment');//13
+        n.addAttribute('ivz_visitactivities');//14
+        n.addAttribute('ivz_activitiestext');//15
+        n.addAttribute('ivz_territory');//16
+        n.addAttribute('ivz_addressprovince');//17
+        n.addAttribute('ivz_addressdistrict');//18
+        n.addAttribute('ivz_shedulestart');//19
+        n.addAttribute('ivz_sheduleend');//20
+        n.addAttribute('ivz_customer');//21
+        n.addAttribute('ivz_salesprospect');//22
+        n.addAttribute('ivz_latitude');//23
+        n.addAttribute('ivz_longtitude');//24
+        n.addAttribute('ivz_billingnumber');//25
+        n.addAttribute('ivz_billingamount');//26
+        n.addAttribute('ivz_resultstatus');//27
+        n.addAttribute('ivz_statuscomplete');//28
+        n.addAttribute('ivz_resultremark');//29
+				n.orderBy("createdon", false);
+		var filter = new MobileCRM.FetchXml.Filter();
+				filter.where('ivz_territory','eq',terid);
+				n.filter = filter;
+		var filter2 = new MobileCRM.FetchXml.Filter();
+				filter2.where('ivz_statuscomplete','eq',statuscode);
+				n.filter = filter2;
+    var fetch = new MobileCRM.FetchXml.Fetch(n,100000,1);
+		fetch.execute('array',function(data){
+			var b = [];
+			for(var i in data){
+				b.push({
+								ivz_resultappointid:data[i][0],
+								ivz_resultname:data[i][1],
+								ivz_visit:CtoTrue(data[i][2]),
+								ivz_visitsuggest:CtoTrue(data[i][3]),
+								ivz_productrecall:CtoTrue(data[i][4]),
+								ivz_visitprospect:CtoTrue(data[i][5]),
+								ivz_visitorder:CtoTrue(data[i][6]),
+								ivz_visitopenaccount:CtoTrue(data[i][7]),
+								ivz_visitmarket:CtoTrue(data[i][8]),
+								ivz_visitcompetitor:CtoTrue(data[i][9]),
+								ivz_visitcollecttion:CtoTrue(data[i][10]),
+								ivz_visitclaimorder:CtoTrue(data[i][11]),
+								ivz_visitbilling:CtoTrue(data[i][12]),
+								ivz_visitadjustment:CtoTrue(data[i][13]),
+								ivz_visitactivities:CtoTrue(data[i][14]),
+								ivz_activitiestext:data[i][15],
+								ivz_territory:data[i][16],
+								ivz_addressprovince:data[i][17],
+								ivz_addressdistrict:data[i][18],
+								ivz_shedulestart:data[i][19],
+								ivz_sheduleend:data[i][20],
+								ivz_customer:data[i][21],
+								ivz_salesprospect:data[i][22],
+								ivz_latitude:data[i][23],
+								ivz_longtitude:data[i][24],
+								ivz_billingnumber:data[i][25],
+								ivz_billingamount:data[i][26],
+								ivz_resultstatus:data[i][27],
+								ivz_statuscomplete:data[i][28],
+								ivz_resultremark:data[i][29]
+							});
+			}
+			callback(b);
+		},function(er){alert(er);},null);
+}
 function GetAcAdjustmentByTerid(terid,callback){
 	var a = new MobileCRM.FetchXml.Entity('ivz_accountadjustment');
 			a.addAttribute('ivz_accountadjustmentid');//0
@@ -713,6 +815,7 @@ function GetAcAdjustmentByTerid(terid,callback){
 			a.addAttribute('ivz_territory');//37
 			a.addAttribute('ivz_transdate');//38
 			a.addAttribute('statuscode');//39
+			a.orderBy("createdon", false);
 	var filter = new MobileCRM.FetchXml.Filter();
 			filter.where('ivz_territory','eq',terid);
 			a.filter = filter;
@@ -843,6 +946,7 @@ function GetAccount(ivz_leftterritory,stype,page,callback){
 						a.addAttribute('ivz_satatusempid');//21
 						a.addAttribute('creditlimit');//22
 						a.addAttribute('ivz_integrationid');//23
+						a.orderBy("createdon", false);
         var filter = new MobileCRM.FetchXml.Filter();
       		  filter.where('territoryid','eq',ivz_leftterritory);
 						a.filter = filter;
@@ -918,6 +1022,7 @@ function GetAccountById(id,stype,callback){
 						a.addAttribute('transactioncurrencyid');//24
 						a.addAttribute('shippingmethodcode');//25
 						a.addAttribute('paymenttermscode');//26
+						a.orderBy("createdon", false);
         var filter = new MobileCRM.FetchXml.Filter();
       		  filter.where('accountid','eq',id);
 						a.filter = filter;
@@ -1031,6 +1136,7 @@ function GetCustomerAddres(byid,callback){
 	    n.addAttribute('addresstypecode');//6
 	    n.addAttribute('ivz_integrationid');//7
 	    n.addAttribute('parentid');//8
+			a.orderBy("createdon", false);
   var filter = new MobileCRM.FetchXml.Filter();
       filter.where('parentid','eq',byid);
       n.filter = filter;
@@ -1066,6 +1172,7 @@ function GetCustomerAddresById(byid,callback){
 	    n.addAttribute('addresstypecode');//6
 	    n.addAttribute('ivz_integrationid');//7
 	    n.addAttribute('parentid');//8
+			a.orderBy("createdon", false);
   var filter = new MobileCRM.FetchXml.Filter();
       filter.where('customeraddressid','eq',byid);
       n.filter = filter;
@@ -1134,6 +1241,7 @@ function GetProductListName(txtname,tatol,page,callback){
 	    //n.addAttribute('ivz_stockstatus');//7//real
 	    n.addAttribute('ivz_statustock');//7//test
 			n.addAttribute('defaultuomscheduleid');//8
+			a.orderBy("createdon", false);
 	var filter = new MobileCRM.FetchXml.Filter();
 			filter.where('name','like','%'+txtname+'%');
 			n.filter = filter;
@@ -1169,6 +1277,7 @@ function GetProductListNumber(txtname,tatol,page,callback){
 	    //n.addAttribute('ivz_stockstatus');//7//real
 	    n.addAttribute('ivz_statustock');//7//test
 			n.addAttribute('defaultuomscheduleid');//8
+			a.orderBy("createdon", false);
 	var filter = new MobileCRM.FetchXml.Filter();
 			filter.where('productnumber','like','%'+txtname+'%');
 			n.filter = filter;
@@ -1218,6 +1327,7 @@ function GetOrder(terid,setval,setpage,callback){
 				n.addAttribute('ivz_ordernumber');//17
 				n.addAttribute('ordernumber');//18
 				n.addAttribute('createdon');//19
+				a.orderBy("createdon", false);
 		var filter = new MobileCRM.FetchXml.Filter();
 				filter.where('ivz_territory','eq',terid);
 				n.filter = filter;
@@ -1290,6 +1400,7 @@ function GetDetailOrder(idorder,callback){
 	// var l = a.addLink('product','productid','productid','outer');
 	// 	l.addAttribute('price');//6
   //   l.addAttribute('productnumber');//7
+		a.orderBy("createdon", false);
 	var filter = new MobileCRM.FetchXml.Filter();
 		filter.isIn('salesorderid',[idorder]);
 		a.filter = filter;
@@ -1366,12 +1477,11 @@ function getAnnote(id,callback){
   			n.addAttribute('objectid');//3
   			n.addAttribute('notetext');//4
   			n.addAttribute('createdon');//5
-        //n.addAttribute('documentbody');//6
-  			n.orderBy("createdon", true);
+  			n.orderBy("createdon", false);
   	var filter = new MobileCRM.FetchXml.Filter();
   			filter.where('objectid','eq',id);
   			n.filter = filter;
-  	var fetch = new MobileCRM.FetchXml.Fetch(n);
+  	var fetch = new MobileCRM.FetchXml.Fetch(n,100000,1);
   			fetch.execute('array',function(data){
   				//alert(data.length)
   				var b = [];
@@ -1382,7 +1492,7 @@ function getAnnote(id,callback){
   							subject:data[i][2],
   							objectid:data[i][3],
   							notetext:data[i][4],
-  							createdon:data[i][5],
+  							createdon:new Date(data[i][5]),
                 documentbody:GetDocBody(data[i][0])
   						});
   				}
@@ -1411,6 +1521,7 @@ function getTerEmp(txtid,callback){
 			n.addAttribute('ivz_empname');//5
 			n.addAttribute('ivz_leadermail');//6
 			n.addAttribute('ivz_statusempid');//7
+			n.orderBy("createdon", false);
 	var filter = new MobileCRM.FetchXml.Filter();
 			filter.where('territoryid','eq',txtid);
 			n.filter = filter;
@@ -1442,6 +1553,7 @@ function GetActivities(callback){
 		n.addAttribute('ivz_activitiesgroup');//3
 	var fetch = new MobileCRM.FetchXml.Fetch(n);
 		fetch.execute('array',function(data){
+			//alert(data.length);
       var b = [];
       for(var i in data){
           b.push({
@@ -1513,6 +1625,7 @@ function GetAccountInvoice(terid,callback){
 				a.addAttribute('ivz_satatusempid');//21
 				a.addAttribute('creditlimit');//22
 				a.addAttribute('ivz_integrationid');//23
+				a.orderBy("createdon", false);
 		var filter = new MobileCRM.FetchXml.Filter();
 				filter.where('territoryid','eq',terid);
 				a.filter = filter;
@@ -1570,6 +1683,7 @@ function getInvoiceByAccountid(terid,callback){
 		n.addAttribute('ivz_invoicedate');//0
     n.addAttribute('invoicenumber');//1
 		n.addAttribute('customerid');//2
+		n.orderBy("createdon", false);
 	var k = n.addLink('account','accountid','customerid','outer');
 		k.addAttribute('territoryid');//3
 		k.addAttribute('accountnumber');//4
@@ -1646,6 +1760,8 @@ function GetInvoice(terid,callback){
 	  		a.addAttribute('ivz_customername');//5
 	  		a.addAttribute('createdon');//6
 	  		a.addAttribute('ivz_customernumber');//7
+
+				a.orderBy("createdon", false);
 	  var filter = new MobileCRM.FetchXml.Filter();
 	      filter.where('ivz_customernumber','eq',idac);
 	  		a.filter = filter;

@@ -1,5 +1,5 @@
 <ion-view view-title="โปรไฟล์ส่วนตัว">
-  <ion-content>
+  <!-- <ion-content>
     <div class="row">
       <div class="col">
         <h1>Say Hi </h1>
@@ -26,4 +26,65 @@
       ถัดไป
     </a>
   </div>
+</ion-view> -->
+<ion-content>
+  <div>
+    <div class="row">
+      <div class="col">
+          <!-- Begin Wrapper -->
+          <div id="wrapper">
+          <!-- Begin Content Area -->
+          <div id="content">
+          <!-- Begin Header -->
+          <header>
+          <!-- Begin Contact Section -->
+          <section id="contact-details">
+          <!-- Begin Profile Image Section -->
+          <div class="header_1">
+          <img  width="250" height="250" alt="Your Name" class="imgborder" id="imgAvator" ng-click="callfile()"/>
+          <p>
+            <span class="error-bold">*กดที่รูปเพื่อเปลี่ยนรูปใหม่</span>
+          </p>
+          </div>
+          <!-- End Profile Image Section -->
+          <!-- Begin Profile Information Section -->
+          <div class="header_2">
+          <h1><span>{{user.ivz_empname}}</span></h1>
+          <h3>เขตการขาย:<span class="error-bold">{{user.name +'-'+user.description}}</span></h3>
+          <hr class="divider" />
+          <ul class="info_2">
+            <li class="phone">รหัสพนักงาน:&nbsp;<span class="error-bold">{{user.ivz_empid}}</span></li>
+            <li class="phone">ชื่อผู้ใช้งาน:&nbsp;<span class="error-bold">{{user.name}}</span></li>
+            <!-- <li class="phone">โทรศัพท์:&nbsp;<span class="error-bold">{{user.txttel}}</span></li> -->
+            <li class="email">ที่อยู่อีเมล์:&nbsp;<span class="error-bold">{{user.ivz_emailcontact}}</span></li>
+          </ul>
+          </div>
+          <!-- End Profile Information Section -->
+          </section>
+          <!-- End Contact Section -->
+          </header>
+          <!-- End Header -->
+          <div class="clear">&nbsp;</div>
+          <div class="clear">&nbsp;</div>
+          </div>
+          <!-- End Content -->
+          </div>
+          <!-- End Wrapper -->
+      </div>
+    </div>
+  </div>
+  <br /><br />
+  <canvas id="canvas01" width="300" height="300" ng-hide="true"></canvas>
+  <input type="file" id="idfile" ng-hide="true">
+</ion-content>
+<div class="tabs tabs-icon-top">
+  <a class="tab-item" ng-click="nextgender()">
+    <i class="icon ion-android-contact primary"></i>
+    แก้ไขข้อมูลทั่วไป
+  </a>
+  <a class="tab-item" ng-click="opensearch()">
+    <i class="icon ion-android-lock warn"></i>
+    เปลี่ยนรหัสผ่าน
+  </a>
+</div>
 </ion-view>

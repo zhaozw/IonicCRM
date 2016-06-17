@@ -1,0 +1,40 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">ยืนยันไม่อนุมัติ</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closeModal(2)">
+        <i class="ion-close error"></i>
+      </button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <div class="row">
+      <div class="col">
+        <md-input-container>
+          <label>ชื่อร้าน:</label>
+          <input type="text" ng-model="user.txtname">
+        </md-input-container>
+      </div>
+      <div class="col">
+        <md-input-container>
+          <label>เขตการขาย:</label>
+          <input type="text" ng-model="user.txtterritory">
+        </md-input-container>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <md-input-container>
+          <label>เหตุผลที่ไม่อนุมัติ:</label>
+          <input type="text" ng-model="user.txtcomment" md-maxlength="500">
+        </md-input-container>
+      </div>
+    </div>
+    <div class="list">
+        <label class="item">
+          <button class="button button-block button-positive" type="button"
+            myclick="confirmreject(user.accountid,user.txtcomment)">ยืนยัน</button>
+        </label>
+      </div>
+  </ion-content>
+</ion-modal-view>

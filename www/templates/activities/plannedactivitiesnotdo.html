@@ -1,0 +1,49 @@
+<ion-view view-title="รายละเอียด">
+  <ion-content>
+    <div>
+      <div class="row">
+        <div class="col">
+          <md-input-container>
+            <label>ชื่อพนักงาน:</label>
+            <input type="text" ng-model="user.txtname">
+          </md-input-container>
+        </div>
+        <div class="col">
+          <md-input-container>
+            <label>เขตการขาย:</label>
+            <input type="text" ng-model="user.txtterritory">
+          </md-input-container>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <span class="error-bold" ng-hide="user.txtcomment">กรุณาระบบเหตุผลที่ไม่ทำกิจกรรมด้วย</span>
+          <md-input-container>
+            <label>เหตุผลที่ไม่ทำกิจกรรม:</label>
+            <input type="text" ng-model="user.txtcomment" md-maxlength="500">
+          </md-input-container>
+        </div>
+      </div>
+      <hr class="divider"/>
+      <div class="row">
+        <div class="col">
+          <md-button class="md-raised md-warn" ng-click="callfile('txtfile01')">แนบรูปภาพ</md-button>
+          <input type="file" ng-hide="true" id="txtfile01"/>
+          <canvas id="canvas01" width="300" height="300" ng-hide="true"></canvas>
+          <div id="img01"></div>
+          <span class="error-bold">*กดที่รูปเพื่อลบ</span>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="reback()">
+      <i class="icon ion-chevron-left error"></i>
+      ย้อนกลับ
+    </a>
+    <a class="tab-item" ng-click="cConfirm(user.txtcomment)">
+      <i class="icon ion-checkmark success"></i>
+      บันทึก
+    </a>
+  </div>
+</ion-view>

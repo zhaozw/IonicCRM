@@ -1,0 +1,46 @@
+<ion-view view-title="บันทึกรายงานสถานการณ์ตลาด">
+  <ion-content>
+    <div>
+      <div class="bar bar-header item-input-inset">
+        <label class="item-input-wrapper">
+          <i class="icon ion-ios-search placeholder-icon"></i>
+          <input type="search" placeholder="Search" ng-model="filtertxt">
+        </label>
+        <md-button class="md-raised button-clear md-warn" aria-label="description" md-ripple-size="auto" ng-click="clearfilter()">&nbsp;ยกเลิก&nbsp;</md-button>
+      </div>
+      <md-list>
+        <md-list-item class="md-3-line" ng-repeat="n in ListMarket">
+          <img src="img/ionic.png" class="md-avatar" alt="testt" />
+           <div class="md-list-item-text" layout="column">
+             <h3>
+                รอบประจำสัปดาที่:<span class="error-bold">{{n.weekly}}</span>
+                เดื่อน:<span class="error-bold">{{n.month}}</span>
+                เขตการขาย:<span class="error-bold">{{n.territory}}</span>
+              </h3>
+             <h4>รายละเอียด:<span class="primary-bold">{{n.remarktext}}</span></h4>
+             <p ng-hide="n.annotetype">
+               <a>ดูรูปภาพประกอบ</a>
+             </p>
+           </div>
+           <a class="md-secondary icon ion-close-round text-h1 text-bold error" ng-click="removeitem($index)"></a>
+           <md-divider ng-if="!$last"></md-divider>
+       </md-list-item>
+      </md-list>
+    </div>
+    <br /><br />
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="loaddata()">
+      <i class="icon ion-refresh success"></i>
+      เรียกข้อมูลใหม่
+    </a>
+    <a class="tab-item" ng-click="reback()">
+      <i class="icon ion-chevron-left error"></i>
+      ย้อนกลับ
+    </a>
+    <a class="tab-item" ng-click="openform()">
+      <i class="icon ion-plus primary"></i>
+      เพิ่มข้อมูล
+    </a>
+  </div>
+</ion-view>

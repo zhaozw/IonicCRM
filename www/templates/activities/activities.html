@@ -1,0 +1,32 @@
+<ion-view view-title="รายการกิจกรรม">
+  <ion-content>
+    <div>
+      <md-list>
+        <md-list-item class="md-3-line" ng-repeat="n in listActivities">
+          <img ng-src="img/ionic.png" class="md-avatar" alt="testt" />
+           <div class="md-list-item-text" layout="column">
+             <h3>{{n.ivz_name}}</h3>
+             <p>{{n.dateresult | date:'dd/MM/yyyy'}}</p>
+           </div>
+           <md-checkbox ng-click="clickadd(n.ivz_name)"></md-checkbox>
+           <md-divider></md-divider>
+         </md-list-item>
+      </md-list>
+      <br />
+    </div>
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="activitieslistload()">
+      <i class="icon ion-refresh success"></i>
+      เรียกข้อมูลใหม่
+    </a>
+    <a class="tab-item" ng-click="cActivities()">
+      <i class="icon ion-checkmark-circled primary"></i>
+      ทำกิจกรรม
+    </a>
+    <a class="tab-item" ng-click="cNotDoActivities()">
+      <i class="icon ion-android-cancel error"></i>
+      ไม่ทำกิจกรรม
+    </a>
+  </div>
+</ion-view>

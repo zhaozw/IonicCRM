@@ -24,20 +24,20 @@
     </ion-header-bar>
     <ion-content>
       <ion-list>
-        <ion-item menu-close ui-sref="app.search({mastertype:1, sterritory:0,nterritory:0})" class="success"
+        <ion-item menu-close ui-sref="app.search({mastertype:Data.mastertype, sterritory:Data.termas,nterritory:0})" class="success"
         ng-click="setdmaster(1)" ng-hide="Data.logontype">
           <i class="ion-android-calendar"></i>&nbsp;แผนการดำเนินงาน
         </ion-item>
         <ion-item menu-close ui-sref="app.sendplan({territory:Data.masname,mastertype:2})" class="success"
         ng-click="setdmaster(2)" ng-show="Data.logontype">
-          <i class="ion-android-calendar"></i>&nbsp;แผนการดำเนินงาน sup direct
+          <i class="ion-android-calendar"></i>&nbsp;แผนการดำเนินงาน
         </ion-item>
         <ion-item menu-close ui-sref="app.listplanned({mastertype:Data.mastertype,retype:1})"
         ui-sref-opts="{reload:true}"  class="success" ng-hide="Data.logontype">
           <i class="ion-android-calendar"></i>&nbsp;ผลการดำเนินงาน
         </ion-item>
         <ion-item menu-close href="#/app/resultplan/0/{{Data.mastertype}}"  class="success" ng-show="Data.logontype">
-          <i class="ion-android-calendar"></i>&nbsp;ผลการดำเนินงาน sup
+          <i class="ion-android-calendar"></i>&nbsp;ผลการดำเนินงาน
         </ion-item>
         <ion-item menu-close href="#/app/waitlist"  class="success" ng-show="Data.logontype">
           <i class="ion-android-calendar"></i>&nbsp;รายการรออนุมัติ
@@ -46,13 +46,13 @@
           <i class="ion-android-calendar"></i>&nbsp;เปิดบัญชีลูกค้า
         </ion-item>
         <ion-item menu-close ui-sref="app.openaccountsup({territoryid:Data.termas,mastertype:Data.mastertype,getguid:Data.getguid})"   class="success" ng-show="Data.logontype">
-          <i class="ion-android-calendar"></i>&nbsp;เปิดบัญชีลูกค้า Sup,Dir
+          <i class="ion-android-calendar"></i>&nbsp;เปิดบัญชีลูกค้า
         </ion-item>
         <ion-item menu-close ng-click= "clicktaccountlist()" class="success" ng-hide="Data.logontype">
           <i class="ion-android-calendar"></i>&nbsp;รายการลูกค้า
         </ion-item>
         <ion-item menu-close   class="success" ng-show="Data.logontype" ng-click= "clickter()">
-          <i class="ion-android-calendar"></i>&nbsp;รายการลูกค้า Sup
+          <i class="ion-android-calendar"></i>&nbsp;รายการลูกค้า
         </ion-item>
         <ion-item menu-close ui-sref="app.adjustmentlist({terid:Data.termas,mastertype:Data.mastertype})"
         class="success" ng-hide="Data.logontype" ui-sref-opts="{reload:true}">
@@ -60,7 +60,7 @@
         </ion-item>
         <ion-item menu-close ui-sref="app.adjustmentlistsupter({tername:Data.Tername,mastertype:Data.mastertype})"
           ui-sref-opts="{reload:true}"  class="success" ng-show="Data.logontype">
-          <i class="ion-android-calendar"></i>&nbsp;ปรับปรุงข้อมูลลูกค้า Sup
+          <i class="ion-android-calendar"></i>&nbsp;ปรับปรุงข้อมูลลูกค้า
         </ion-item>
         <!-- productlist/:accountid/:mastertype/:ordertype -->
         <ion-item menu-close class="success" ng-click="orderlink(1)">
@@ -75,12 +75,15 @@
         </ion-item>
 
         <ion-item menu-close href="#/app/rejectplan/1234556/mrddd/D10"  class="success"><i class="ion-android-calendar"></i>&nbsp;Test Reject</ion-item>
-        <ion-item menu-close ui-sref="app.billingcollection({retype:0})"
+        <ion-item menu-close ui-sref="app.plannedactivities"
           ui-sref-opts="{reload:true}" class="success">
-          <i class="ion-android-calendar"></i>&nbsp;ทดสอบเก็บเงิน</ion-item>
-        <ion-item menu-close ui-sref="app.exmpid"
+          <i class="ion-android-calendar"></i>&nbsp;ทดสอบทำกิจกรรม</ion-item>
+        <ion-item menu-close ui-sref="app.listmarketting"
           ui-sref-opts="{reload:true}" class="success">
-            <i class="ion-android-calendar"></i>&nbsp;ทดสอบ comment</ion-item>
+            <i class="ion-android-calendar"></i>&nbsp;ทดสอบ</ion-item>
+        <ion-item menu-close ui-sref="app.optioncomputitor"
+          ui-sref-opts="{reload:true}" class="success">
+            <i class="ion-android-calendar"></i>&nbsp;ทดสอบบันทึกคู่แข่ง</ion-item>
       </ion-list>
     </ion-content>
   </ion-side-menu>

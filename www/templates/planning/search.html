@@ -7,8 +7,8 @@
       </label>
       <md-button class="md-raised button-clear md-warn" aria-label="description" md-ripple-size="auto">&nbsp;ยกเลิก&nbsp;</md-button>
     </div>
-    <div class="card" ng-hide="dvTodos">
-      <div class="item item-text-wrap">
+    <div class="" ng-hide="dvTodos">
+      <div class="">
         <md-list>
           <!-- <md-list-item class="md-3-line" ng-repeat="item in todos|filter:txtcustomer"> -->
           <md-list-item class="md-3-line" ng-repeat="item in todos|filter:txtcustomer" ng-if="item.ivz_employeeposition == Data.mastertype">
@@ -17,7 +17,22 @@
              <div class="md-list-item-text" layout="column">
                <h3>{{ item.filtername }}</h3>
                <p>{{ item.territoryid.primaryName }}</p>
-               <p>{{Data.mastertype}}</p>
+               <p>
+                 <span>{{item.start | date:'dd/MM/yyyy'}}</span>
+               </p>
+               <p>
+                 <span class="success" ng-show="item.ivz_visitopenaccount">เปิดบัญชีลูกค้าใหม่&nbsp;</span>
+                 <span class="success" ng-show="item.ivz_visitadjustment">แก้ไขข้อมูลลูกค้า&nbsp;</span>
+                 <span class="success" ng-show="item.ivz_visitorder">เปิดใบสั่งขาย&nbsp;</span>
+                 <span class="success" ng-show="item.ivz_visitclaimorder">รับเคลมสินค้า&nbsp;</span>
+                 <span class="success" ng-show="item.ivz_visitpostpect">บันทึกลูกค้าค้าดหวัง&nbsp;</span>
+                 <span class="success" ng-show="item.ivz_visitcompetitors">บันทึกคู่แข่ง&nbsp;</span>
+                 <span class="success" ng-show="item.ivz_visitbilling">เก็บเงิน/วางบิล&nbsp;</span>
+                 <span class="success" ng-show="item.ivz_visitmarket">บันทึกสภาพการตลาด&nbsp;</span>
+                 <span class="success" ng-show="item.ivz_visitsuggest">นำเสนอสินค้า&nbsp;</span>
+                 <span class="success" ng-show="item.ivz_visitproductrecall">PRODUCT RECALL&nbsp;</span>
+                 <span class="success" ng-show="item.ivz_visitactivities">กิจกรรมทางการตลาด&nbsp;</span>
+               </p>
                <p>
                  <b ng-if="item.ivz_planningstatus == 0" style="color:red;">ยังไม่ได้ส่งแผน</b>
                  <b ng-if="item.ivz_planningstatus == 1" style="color:yellow;">รอการอนุมัติ</b>
@@ -25,7 +40,7 @@
                  <b ng-if="item.ivz_planningstatus == 3" style="color:red;">ยังไม่อนุมัติ</b>
                </p>
              </div>
-              <a class="md-secondary ion-trash-a text-h1 text-bold error" ng-click="removeplanning($index)"></a>
+              <a class="md-secondary ion-close text-h1 text-bold error" ng-click="removeplanning($index)"></a>
              <md-divider></md-divider>
          </md-list-item>
         </md-list>
@@ -37,7 +52,7 @@
       <i class="icon ion-refresh"></i>
       เรียกข้อมูลใหม่
     </a>
-    <a class="tab-item success" href="#/app/calendarlist">
+    <a class="tab-item success" ui-sref="app.calendarlist">
       <i class="icon ion-android-calendar"></i>
       วางแผน
     </a>

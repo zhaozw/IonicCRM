@@ -44,7 +44,15 @@ $scope.showLoadingComplete = function(txt) {
          noBackdrop: true
        });
  };
+ $scope.showLoading = function(txt) {
+          $ionicLoading.show({
+          template:   '<ion-spinner icon="bubbles" class="success text-l ion-checkmark-circled"></ion-spinner><div class="row">'+
+                      '<div class="col"><h4>'+txt+'</h4></div>'+
+                      '</div>',
+          noBackdrop: true
+        });
+  };
 
  $scope.InAnnoteAttract = function(table,id,base64String,title,objid,callback)
-
+ var text = "เรียน  Sup./Sales Manger, รบกวนดำเนินการอนุมัติ" + title+"เขตการขาย " + data[0].name+txt + "ให้ด้วยครับ  ขอบคุณครับ  (อีเมลฉบับนี้ส่งอัตโนมัติจากระบบ CRM)";
  if($scope.$phase){$scope.$apply();}

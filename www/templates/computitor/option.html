@@ -1,18 +1,23 @@
-<ion-view view-title="เลือกรูปแบบการเปลี่ยนแปลงข้อมูล">
+<ion-view view-title="เลือกรูปแบบบันทึกรายงานคู่แข่ง">
   <ion-content>
-    <div class="card">
-      <div class="item item-text-wrap">
-        <md-list>
-          <md-list-item>
-            <h2><i class="icon ion-ios-list success"></i>&nbsp;<span class="success">แก้ไขข้อมูลทั่วไป</span></h2>
-            <a class="md-secondary ion-chevron-right text-h1 text-bold error" ng-click="goop(1)"></a>
-          </md-list-item>
-          <md-list-item>
-            <h2><i class="icon ion-ios-list success"></i>&nbsp;<span class="success">แก้ไขข้อมูลเครดิต</span></h2>
-            <a class="md-secondary ion-chevron-right text-h1 text-bold error" ng-click="goop(1)"></a>
-          </md-list-item>
-        </md-list>
+    <div class="row">
+      <div class="col"></div>
+      <div class="col col-75">
+        <div>
+          <md-list>
+            <md-list-item class="md-3-line" ng-repeat="n in listoptioncomputitor">
+              <img ng-src="img/ionic.png" class="md-avatar" alt="testt" />
+               <div class="md-list-item-text" layout="column">
+                 <h3>{{n.name}}</h3>
+               </div>
+               <i class="md-secondary icon ion-chevron-right error-bold" ng-click="tosref(n.link,n.type)"></i>
+               <md-divider ng-if="!$last"></md-divider>
+             </md-list-item>
+          </md-list>
+          <br />
+        </div>
       </div>
+      <div class="col"></div>
     </div>
   </ion-content>
 </ion-view>
