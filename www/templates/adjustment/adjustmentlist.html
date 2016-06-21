@@ -4,9 +4,9 @@
       <div class="bar bar-header item-input-inset">
         <label class="item-input-wrapper">
           <i class="icon ion-ios-search placeholder-icon"></i>
-          <input type="search" placeholder="Search" ng-model="filtertxt">
+          <input type="search" placeholder="Search" data-ng-model="filtertxt">
         </label>
-        <md-button class="md-raised button-clear md-warn" aria-label="description" md-ripple-size="auto">&nbsp;ยกเลิก&nbsp;</md-button>
+        <md-button class="md-raised button-clear md-warn" aria-label="description" md-ripple-size="auto" data-ng-click="filtertxt = ''">&nbsp;ยกเลิก&nbsp;</md-button>
       </div>
       <div class="row">
           <div class="col">
@@ -19,7 +19,7 @@
                    </div>
                    <md-radio-button value="{{n.accountid}}" class="md-secondary md-warn"></md-radio-button>
                  </md-list-item>
-               <md-divider></md-divider>
+               <md-divider ng-if="!$last"></md-divider>
               </md-list>
             </md-radio-group>
           </div>

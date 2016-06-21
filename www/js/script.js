@@ -605,7 +605,6 @@ function GetBankNameYss(callback){
 }
 ///////////////// End Option /////////////////////////
 function GetAppointStatus(ivz_leftterritory,ist,typ,callback){
-	//alert('typ:'+ist+'--'+typ+'--'+ivz_leftterritory);
   var n = new MobileCRM.FetchXml.Entity('appointment');
       n.addAttribute('activityid');//0
       n.addAttribute('ivz_customer');//1
@@ -647,6 +646,7 @@ function GetAppointStatus(ivz_leftterritory,ist,typ,callback){
         o.addAttribute('ivz_ccmail');//33
     var fetch = new MobileCRM.FetchXml.Fetch(n,10000,1);
       fetch.execute('array',function(data){
+				//alert(data.length);
         var b = [];
         for(var i in data){
               if(data[i][23] == ist){

@@ -4,9 +4,9 @@
       <div class="bar bar-header item-input-inset">
         <label class="item-input-wrapper">
           <i class="icon ion-ios-search placeholder-icon"></i>
-          <input type="search" placeholder="Search" ng-model="filtertxt">
+          <input type="search" placeholder="Search" data-ng-model="filtertxt">
         </label>
-        <md-button class="md-raised button-clear md-warn" aria-label="description" md-ripple-size="auto">&nbsp;ยกเลิก&nbsp;</md-button>
+        <md-button class="md-raised button-clear md-warn" aria-label="description" md-ripple-size="auto" data-ng-click="filtertxt = ''">&nbsp;ยกเลิก&nbsp;</md-button>
       </div>
       <div class="row">
           <div class="col">
@@ -43,7 +43,7 @@
       <i class="icon ion-checkmark-circled primary"></i>
       เพิ่มที่อยู่
     </a>
-    <a class="tab-item" ng-click="cAdjustmentCredit()">
+    <a class="tab-item" ng-click="reback()">
       <i class="icon ion-android-cancel error"></i>
       ยกเลิก
     </a>

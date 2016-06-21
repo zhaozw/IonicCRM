@@ -3,9 +3,11 @@
     <div class="bar bar-header item-input-inset">
       <label class="item-input-wrapper">
         <i class="icon ion-ios-search placeholder-icon"></i>
-        <input type="search" placeholder="Search" ng-model="txtcustomer">
+        <input type="search" placeholder="Search" data-ng-model="txtcustomer">
       </label>
-      <md-button class="md-raised button-clear md-warn" aria-label="description" md-ripple-size="auto">&nbsp;ยกเลิก&nbsp;</md-button>
+      <md-button class="md-raised button-clear md-warn"
+        aria-label="description" md-ripple-size="auto"
+        data-ng-click="txtcustomer = ''">&nbsp;ยกเลิก&nbsp;</md-button>
     </div>
     <div class="" ng-hide="dvTodos">
       <div class="">
