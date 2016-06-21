@@ -116,7 +116,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
 })
 .factory('Setting',function(){
   return{
-    requestproduct:100,
+    requestproduct:10,
     setValorder:10000
   }
 })
@@ -289,7 +289,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   })
   .state('app.listapprove', {
-    url:'/listapprove/:territoryid',
+    url:'/listapprove/:territoryid/:salename/:tername',
     views: {
       'menuContent': {
         templateUrl: 'templates/planning/listapprove.html',

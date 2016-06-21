@@ -1352,17 +1352,56 @@ angular.module('starter.controllers', [])
             $ionicHistory.goBack(-1);
         }
     })
-    .controller('PlanApproveSupCtrl', function ($scope, $stateParams, $cookies, Data,$state) {
+    .controller('PlanApproveSupCtrl', function ($scope, $stateParams, $cookies, Data,$state ,$ionicLoading) {
         $state.reload();
         $scope.Data = Data;
         Data.showcart = false;
         Data.mastertype = $stateParams.mastertype;
         $scope.vCheckAll = 0;
-        gettername(Data.Tername, function (data) {
-          //alert(data.length);
-            if (data) {
-                $scope.listmaster = data;
-            }
+        $scope.loaddata = function(){
+          gettername($cookies.get('name'), function (data) {
+            $scope.listmaster = [];
+              if (data) {
+                  var x = 0;
+                  var loopArray = function (arr) {
+                      getPush(x, function () {
+                          x++;
+                          if (x < arr.length) {
+                              loopArray(arr);
+                          } else {
+                              $scope.showLoadingComplete('โหลดข้อมูลเสร็จแล้ว');
+                              setTimeout(function () {
+                                  $ionicLoading.hide();
+                              }, 2000);
+                          }
+                      });
+                  }
+                  loopArray(data);
+                  function getPush(i, callback) {
+                    //alert(data[i].description);
+                      $scope.showLoading('โหลดข้อมูลเขตการขาย ' + data[i].description+' '+data[i].ivz_empname);
+                      $scope.listmaster.push({
+                          ivz_territorymasterid: data[i].ivz_territorymasterid,
+                          ivz_mastername: data[i].ivz_mastername,
+                          ivz_leftterritory: data[i].ivz_leftterritory,
+                          ivz_emailcontact: data[i].ivz_emailcontact,
+                          ivz_leadermail: data[i].ivz_leadermail,
+                          ivz_ccmail: data[i].ivz_ccmail,
+                          ivz_empid: data[i].ivz_empid,
+                          ivz_empname: data[i].ivz_empname,
+                          ivz_statusempid: data[i].ivz_statusempid,
+                          description: data[i].description
+                      });
+                      setTimeout(function () {
+                          callback();
+                      }, 10);
+                  }
+              }
+              if($scope.$phase){$scope.$apply();}
+          });
+        }
+        $scope.$on('$ionicView.enter',function(){
+          $scope.loaddata();
         });
     })
     .controller('PlanListApproveCtrl', function ($scope, $stateParams, $cookies, Data, $ionicHistory, $state,$ionicLoading) {
@@ -1372,29 +1411,34 @@ angular.module('starter.controllers', [])
         Data.sterritory = $stateParams.territoryid;
         $scope.vCheckAll = 0;
         // $scope.reloaddata();
-        $scope.$on('$ionicView.enter',function(){
-          $scope.reloaddata();
-        });
         $scope.reloaddata = function () {
-          var itype;
-          if (Data.mastertype === 2 || Data.mastertype === '2') {
-              itype = 1;
-          } else if (Data.mastertype === 3 || Data.mastertype === '3') {
-              itype = 2;
-          } else {
-              itype = Data.mastertype;
-          }
+            var itype;
+            switch (Data.mastertype) {
+              case '2':
+              case 2:
+                  itype = 1;
+                break;
+              case '3':
+              case 3:
+                  itype = 2;
+                break;
+              default:
+                  itype = Data.mastertype;
+            }
             GetAppointStatus($stateParams.territoryid, 1, itype, function (data) {
+              //alert($stateParams.territoryid+'::'+data.length);
                 $scope.listappointment = [];
                 if(data.length > 0){
                   var x = 0;
                   var loopArray = function(arr){
-                    x++;
-                    if(x < arr.length){
-                      loopArray(arr);
-                    }else{
-                      $ionicLoading.hide();
-                    }
+                    getPush(x,function(){
+                      x++;
+                      if(x < arr.length){
+                        loopArray(arr);
+                      }else{
+                        $ionicLoading.hide();
+                      }
+                    });
                   }
                   loopArray(data);
                   function getPush(i,callback){
@@ -1444,6 +1488,9 @@ angular.module('starter.controllers', [])
                 if($scope.$phase){$scope.$apply();}
             });
         }
+        $scope.$on('$ionicView.enter',function(){
+          $scope.reloaddata();
+        });
         $scope.removeplanning = function (index) {
             $scope.listappointment.splice(index, 1);
         }
@@ -1486,7 +1533,7 @@ angular.module('starter.controllers', [])
         }
         $scope.rejectplan = function () {
             Data.DataList = $scope.listappointment;
-            window.location.href = "#/app/rejectplan/" + Data.sterritory + "/" + Data.salename + "/" + Data.tername;
+            window.location.href = "#/app/rejectplan/" + $stateParams.territoryid + "/" + $stateParams.salename + "/" + $stateParams.tername;
         }
     })
     .controller('PlanRejectCtrl', function ($scope, $stateParams, $cookies, Data, $rootScope, $ionicHistory,$state,$ionicLoading) {
@@ -1830,12 +1877,14 @@ angular.module('starter.controllers', [])
                 });
             } else if (idval == 3 || idval == '3') {
                 console.log('insert activities');
-                $state.go('app.order', {
-                    accountid: $stateParams.accountid,
-                    mastertype: Data.mastertype
-                }, {
-                    reload: true
-                });
+                insertactivities(3, 0, 2, null, function () {
+                    $state.go('app.order', {
+                        accountid: $stateParams.accountid,
+                        mastertype: Data.mastertype
+                    }, {
+                        reload: true
+                    });
+                  });
             } else if (idval == 4 || idval == '4') {
                 //var ins = new MobileCRM.DynamicEntity.createNew('ivz_result');
                 console.log('insert visit open claim');
@@ -1848,12 +1897,15 @@ angular.module('starter.controllers', [])
             } else if (idval == 7 || idval == '7') {
                 //var ins = new MobileCRM.DynamicEntity.createNew('ivz_result');
                 console.log('insert visit open computitor');
-                $state.go('app.optioncomputitor',{
-                  accountid:$stateParams.accountname,
-                  accountiname:$stateParams.accountid
-                },{reload:true});
+                insertactivities(7, 0, 2, null, function () {
+                    $state.go('app.optioncomputitor',{
+                      accountid:$stateParams.accountname,
+                      accountiname:$stateParams.accountid
+                    },{reload:true});
+                  });
             } else if (idval == 8 || idval == '8') {
                 console.log('insert visit open billing');
+                insertactivities(8, 0, 2, null, function () {
                 $state.go('app.billingcollectionoption',{
                                                     accountid: $stateParams.accountid,
                                                     mastertype: Data.mastertype,
@@ -1862,11 +1914,12 @@ angular.module('starter.controllers', [])
                                                     accountname:$stateParams.accountname,
                                                     province:$stateParams.province,
                                                     distid:$stateParams.distid
-                                                  },{reload:true});
+                                                  },{reload:true});});
             } else if (idval == 9 || idval == '9') {
                 //var ins = new MobileCRM.DynamicEntity.createNew('ivz_result');
                 console.log('insert visit open product recall');
             } else if (idval == 10 || idval == '10') {
+              insertactivities(10, 0, 2, null, function () {
                 $state.go('app.plannedactivities',{
                   accountid: $stateParams.accountid,
                   mastertype: Data.mastertype,
@@ -1876,6 +1929,7 @@ angular.module('starter.controllers', [])
                   province:$stateParams.province,
                   distid:$stateParams.distid
                 },{reload:true});
+              });
                 console.log('insert visit 10');
             } else if (idval == 11 || idval == '11') {
                 //var ins = new MobileCRM.DynamicEntity.createNew('ivz_result');
@@ -5618,44 +5672,50 @@ angular.module('starter.controllers', [])
         Data.mastertype = $stateParams.mastertype;
         $scope.typego = $stateParams.typego;
         //:masname/:mastertype/:typego
-        $scope.listmaster = [];
-        gettername($cookies.get('name'), function (data) {
-            if (data) {
-                var x = 0;
-                var loopArray = function (arr) {
-                    getPush(x, function () {
-                        x++;
-                        if (x < arr.length) {
-                            loopArray(arr);
-                        } else {
-                            $scope.showLoadingComplete('โหลดข้อมูลเสร็จแล้ว');
-                            setTimeout(function () {
-                                $ionicLoading.hide();
-                            }, 2000);
-                        }
-                    });
-                }
-                loopArray(data);
-                function getPush(i, callback) {
-                    $scope.showLoading('โหลดข้อมูลเขตการขาย ' + data[i].description);
-                    $scope.listmaster.push({
-                        ivz_territorymasterid: data[i].ivz_territorymasterid,
-                        ivz_mastername: data[i].ivz_mastername,
-                        ivz_leftterritory: data[i].ivz_leftterritory,
-                        ivz_emailcontact: data[i].ivz_emailcontact,
-                        ivz_leadermail: data[i].ivz_leadermail,
-                        ivz_ccmail: data[i].ivz_ccmail,
-                        ivz_empid: data[i].ivz_empid,
-                        ivz_empname: data[i].ivz_empname,
-                        ivz_statusempid: data[i].ivz_statusempid,
-                        description: data[i].description
-                    });
-                    setTimeout(function () {
-                        callback();
-                    }, 100);
-                }
-            }
-            if($scope.$phase){$scope.$apply();}
+        $scope.loaddata = function(){
+          $scope.listmaster = [];
+          gettername($cookies.get('name'), function (data) {
+              if (data) {
+                  var x = 0;
+                  var loopArray = function (arr) {
+                      getPush(x, function () {
+                          x++;
+                          if (x < arr.length) {
+                              loopArray(arr);
+                          } else {
+                              $scope.showLoadingComplete('โหลดข้อมูลเสร็จแล้ว');
+                              setTimeout(function () {
+                                  $ionicLoading.hide();
+                              }, 2000);
+                          }
+                      });
+                  }
+                  loopArray(data);
+                  function getPush(i, callback) {
+                    //alert(data[i].description);
+                      $scope.showLoading('โหลดข้อมูลเขตการขาย ' + data[i].description);
+                      $scope.listmaster.push({
+                          ivz_territorymasterid: data[i].ivz_territorymasterid,
+                          ivz_mastername: data[i].ivz_mastername,
+                          ivz_leftterritory: data[i].ivz_leftterritory,
+                          ivz_emailcontact: data[i].ivz_emailcontact,
+                          ivz_leadermail: data[i].ivz_leadermail,
+                          ivz_ccmail: data[i].ivz_ccmail,
+                          ivz_empid: data[i].ivz_empid,
+                          ivz_empname: data[i].ivz_empname,
+                          ivz_statusempid: data[i].ivz_statusempid,
+                          description: data[i].description
+                      });
+                      setTimeout(function () {
+                          callback();
+                      }, 100);
+                  }
+              }
+              if($scope.$phase){$scope.$apply();}
+          });
+        }
+        $scope.$on('$ionicView.enter',function(){
+          $scope.loaddata();
         });
         $scope.clickgo = function (idter) {
             if ($stateParams.typego == 1 || $stateParams.typego == '1') {
@@ -6350,7 +6410,11 @@ angular.module('starter.controllers', [])
         remark:true
       };
       $scope.$on('$ionicView.enter',function(){
-        $scope.ordedetail();
+        $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล');
+        setTimeout(function () {
+            $ionicLoading.hide();
+            $scope.loadData();
+        }, 3000);
       });
       $scope.ordedetail = function () {
           $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล');
@@ -6368,31 +6432,44 @@ angular.module('starter.controllers', [])
           a.addAttribute('priceperunit');//3
           a.addAttribute('uomid');//4
           a.addAttribute('quantity');//5
+       var filter = new MobileCRM.FetchXml.Filter();
+            filter.where('salesorderid','eq',$stateParams.orderid.trim());
+            a.filter = filter;
         var l = a.addLink('product','productid','productid','outer');
           l.addAttribute('price');//6
           l.addAttribute('productnumber');//7
-        var filter = new MobileCRM.FetchXml.Filter();
-          filter.where('salesorderid','eq',$stateParams.orderid.trim());
-          a.filter = filter;
         var fetch = new MobileCRM.FetchXml.Fetch(a);
           fetch.execute('array',function(data){
-              if(data){
-                  for(var i in data){
-                    $scope.listorderdetail.push({
-                      salesorderdetail:data[i][0],
-                      salesorderid:data[i][1],
-                      productid:data[i][2].id,
-                      productname:data[i][2].primaryName,
-                      priceperunit:data[i][3],
-                      uomid:data[i][4].id,
-                      quality:data[i][5],
-                      price:data[i][6],
-                      productnumber:data[i][7],
-                      tatol:parseInt(data[i][3]) * parseInt(data[i][5])
-                    });
-                  }
+              if(data.length > 0){
+                var x = 0;
+                var loopArray = function(arr){
+                  getPush(x,function(){
+                    x++;
+                    if(x < arr.length){
+                      loopArray(arr);
+                    }else{
+                      $ionicLoading.hide();
+                    }
+                  });
                 }
-                if($scope.$phase){$scope.$apply();}
+                loopArray(data);
+                function getPush(i,callback){
+                  $scope.listorderdetail.push({
+                    salesorderdetail:data[i][0],
+                    salesorderid:data[i][1],
+                    productid:data[i][2].id,
+                    productname:data[i][2].primaryName,
+                    priceperunit:data[i][3],
+                    uomid:data[i][4].id,
+                    quality:data[i][5],
+                    price:data[i][6],
+                    productnumber:data[i][7],
+                    tatol:parseInt(data[i][3]) * parseInt(data[i][5])
+                  });
+                  callback();
+                };
+              }
+            if($scope.$phase){$scope.$apply();}
           },function(er){
             alert("ERROR 6333:"+er);
           },null);
@@ -8001,13 +8078,6 @@ angular.module('starter.controllers', [])
             } else {
                 Data.showcart = false;
             }
-            // Data.tatolmatch = Data.tatolmatch;
-            // Data.tatolminplus = Data.tatolminplus;
-            // if(Data.tatolmatch > 0){
-            //     console.log('eeee');
-            // }else{
-            //   console.log('ffff');
-            // }
         });
         $scope.user = {
             id: '',
@@ -8035,7 +8105,7 @@ angular.module('starter.controllers', [])
         };
         $scope.clearfilter = function () {
             console.log('clickkkk');
-            $scope.filtertxt = '';
+            $scope.filtertxt.length = 0;
         }
         $scope.minplus = 0;
         $scope.reload = function () {
@@ -8160,11 +8230,13 @@ angular.module('starter.controllers', [])
             console.log('$scope.item.matchitem :' + $scope.item.matchitem);
         });
         $scope.searclickitem = function (txtname, itemid) {
-            if (txtname) {
+            $scope.clearfilter();
+            if (txtname.length > 0) {
                 //alert('txtname:'+txtname);
                 GetProductListName(txtname, 10000, 1, function (data) {
+                  //alert(data.length);
                     $scope.listproduct = [];
-                    if (data) {
+                    if (data.length > 0) {
                         var x = 0;
                         var loopArray = function (arr) {
                             getPush(x, function () {
@@ -8172,13 +8244,13 @@ angular.module('starter.controllers', [])
                                 if (x < arr.length) {
                                     loopArray(arr);
                                 } else {
+                                    $scope.item.itemname = "";
                                     $ionicLoading.hide();
                                     $scope.modal2.hide();
                                 }
                             });
                         }
                         loopArray(data);
-
                         function getPush(i, callback) {
                             $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล ' + data[i].filtername);
                             $scope.listproduct.push({
@@ -8200,7 +8272,7 @@ angular.module('starter.controllers', [])
                     }
                     if($scope.$phase){$scope.$apply();}
                 });
-            } else if (itemid) {
+            } else if (itemid.length > 0) {
                 //alert('itemid:'+itemid);
                 GetProductListNumber(itemid, 10000, 1, function (data) {
                     $scope.listproduct = [];
@@ -8212,13 +8284,13 @@ angular.module('starter.controllers', [])
                                 if (x < arr.length) {
                                     loopArray(arr);
                                 } else {
+                                  $scope.item.itemnumber = '';
                                     $ionicLoading.hide();
                                     $scope.modal2.hide();
                                 }
                             });
                         }
                         loopArray(data);
-
                         function getPush(i, callback) {
                             $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล ' + data[i].filtername);
                             $scope.listproduct.push({
@@ -8340,7 +8412,6 @@ angular.module('starter.controllers', [])
                 });
             }
             loopArray(dataorder);
-
             function getPush(i, callback) {
                 $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล ' + dataorder[i].productname);
                 $scope.listorderdetail.push({
@@ -8502,12 +8573,12 @@ angular.module('starter.controllers', [])
         $scope.closereject = function(){
           $scope.modal2.hide();
         }
-        function insertorder(){
+        function insertorder(id,callback){
             $scope.showLoadingProperTimesRegter('กำลังบันทึกข้อมูลออร์เดอร์ร้าน '+'$scope.user.name');
             try {
               //alert('pricreid:'+$scope.listorderdetail[0].pricelevelid+'\n'+$scope.listorderdetail[0].getguid+'\n'+$scope.listorderdetail[0].ordertype);
               var ins = new MobileCRM.DynamicEntity.createNew('salesorder');
-                  ins.properties.salesorderid = $scope.listorderdetail[0].getguid;
+                  ins.properties.salesorderid = id;
                   ins.properties.customerid = new MobileCRM.Reference('account',$scope.user.accountid);
                   ins.properties.name = $scope.user.name;
                   ins.properties.transactioncurrencyid = new MobileCRM.Reference('transactioncurrency',$scope.user.currency);
@@ -8526,17 +8597,17 @@ angular.module('starter.controllers', [])
     							ins.properties.description = $scope.user.remark;
                   ins.save(function(er){
                     if(er){
-                      alert('error 6077 '+er);
+                      alert('error 8576 '+er);
                     }else{
-                      //alert('insert order');
-                      insertorderdetail($scope.listorderdetail[0].getguid);
+                      //alert('insert order complete');
+                      callback(id);
                     }
                   });
             } catch (e) {
               alert('insert order 6080 '+e);
             }
           }
-        function insertorderdetail(id){
+        var insertorderdetail = function(id){
             var x = 0;
             var loopArray = function(arr){
               console.log('Detail x:'+x);
@@ -8554,18 +8625,20 @@ angular.module('starter.controllers', [])
                       disableBack: true
                   });
                   setTimeout(function(){
-                    // var expression = $scope.listorderdetail[0].ordertype;//get ordertype
-                    // switch (expression) {
-                    //   case '1':
-                    //       alert('default order');
-                    //     break;
-                    //   case '2':
-                    //       $scope.sendmailtosup($scope.user.terid,'เปิดใบสั่งขาย(สนับสนุนขาย)','เปิดใบสั่งขาย(สนับสนุนขาย) ร้าน'+$scope.user.name,function(){
-                    //         alert('special order sendmail');
-                    //       });
-                    //     break;
-                    //   default:
-                    // }
+                    var expression = $scope.listorderdetail[0].ordertype;//get ordertype
+                    switch (expression) {
+                      case '1':
+                      case 1:
+                          //alert('default order');
+                        break;
+                      case '2':
+                      case 2:
+                          $scope.sendmailtosup($scope.user.terid,'เปิดใบสั่งขาย(สนับสนุนขาย)','เปิดใบสั่งขาย(สนับสนุนขาย) ร้าน'+$scope.user.name,function(){
+                            //alert('special order sendmail');
+                          });
+                        break;
+                      default:
+                    }
                     $state.go('app.orderlistpending', {
                         terid: Data.termas,//$cookies.get('territoryid'),//if direct sale can change get value by Data factory
                         mastertype: Data.mastertype,
@@ -8600,9 +8673,7 @@ angular.module('starter.controllers', [])
         }
         $scope.confirmordersales = function () {
           $scope.modal1.hide();
-          var id = guid();
-          //alert(id);
-          insertorder();
+          insertorder(guid(),insertorderdetail);
         }
     })
     .controller('ListOrderPendingCtrl', function ($scope, $stateParams,Setting, $cookies, Data, $state, $ionicLoading, $ionicHistory, $ionicModal, DataOrder) {
@@ -8621,7 +8692,7 @@ angular.module('starter.controllers', [])
         });
         $scope.loaddata = function(){
           GetOrder($stateParams.terid,Setting.setValorder,1,function(data){
-            if(data){
+            if(data.length > 0){
               $scope.listorder = [];
               var x = 0;
               var loopArray = function(arr){

@@ -1241,7 +1241,7 @@ function GetProductListName(txtname,tatol,page,callback){
 	    //n.addAttribute('ivz_stockstatus');//7//real
 	    n.addAttribute('ivz_statustock');//7//test
 			n.addAttribute('defaultuomscheduleid');//8
-			a.orderBy("createdon", false);
+			n.orderBy("createdon", false);
 	var filter = new MobileCRM.FetchXml.Filter();
 			filter.where('name','like','%'+txtname+'%');
 			n.filter = filter;
@@ -1277,13 +1277,13 @@ function GetProductListNumber(txtname,tatol,page,callback){
 	    //n.addAttribute('ivz_stockstatus');//7//real
 	    n.addAttribute('ivz_statustock');//7//test
 			n.addAttribute('defaultuomscheduleid');//8
-			a.orderBy("createdon", false);
+			n.orderBy("createdon", false);
 	var filter = new MobileCRM.FetchXml.Filter();
 			filter.where('productnumber','like','%'+txtname+'%');
 			n.filter = filter;
 	var fetch = new MobileCRM.FetchXml.Fetch(n,parseInt(tatol),parseInt(page));
 		fetch.execute('array',function(data){
-			alert(data.length);
+			//alert(data.length);
 			var b = [];
 			for(var i in data){
 				b.push({
@@ -1327,7 +1327,7 @@ function GetOrder(terid,setval,setpage,callback){
 				n.addAttribute('ivz_ordernumber');//17
 				n.addAttribute('ordernumber');//18
 				n.addAttribute('createdon');//19
-				a.orderBy("createdon", false);
+				n.orderBy("createdon", false);
 		var filter = new MobileCRM.FetchXml.Filter();
 				filter.where('ivz_territory','eq',terid);
 				n.filter = filter;
