@@ -1385,7 +1385,62 @@ angular.module('starter.controllers', [])
               itype = Data.mastertype;
           }
             GetAppointStatus($stateParams.territoryid, 1, itype, function (data) {
-                $scope.listappointment = data;
+                $scope.listappointment = [];
+                if(data.length > 0){
+                  var x = 0;
+                  var loopArray = function(arr){
+                    x++;
+                    if(x < arr.length){
+                      loopArray(arr);
+                    }else{
+                      $ionicLoading.hide();
+                    }
+                  }
+                  loopArray(data);
+                  function getPush(i,callback){
+                    $scope.showLoading('กำลังโหลดข้อมูล '+data[i].filtername);
+                    $scope.listappointment.push({
+                        activityid: data[i].activityid,
+                        ivz_customer: data[i].ivz_customer,
+                        ivz_territoryid: data[i].ivz_territoryid,
+                        ivz_empid: data[i].ivz_empid,
+                        start: data[i].start,
+                        end: data[i].end,
+                        ivz_saleprospect: data[i].ivz_saleprospect,
+                        title: data[i].title,
+                        ivz_visit: data[i].ivz_visit,
+                        ivz_visitbilling: data[i].ivz_visitbilling,
+                        ivz_visitclaimorder: data[i].ivz_visitclaimorder,
+                        ivz_visitcollection: data[i].ivz_visitcollection,
+                        ivz_visitopenaccount: data[i].ivz_visitopenaccount,
+                        ivz_visitorder: data[i].ivz_visitorder,
+                        ivz_visitadjustment: data[i].ivz_visitadjustment,
+                        ivz_visitcompetitors: data[i].ivz_visitcompetitors,
+                        ivz_visitmarket: data[i].ivz_visitmarket,
+                        ivz_visitpostpect: data[i].ivz_visitpostpect,
+                        ivz_visitproductrecall: data[i].ivz_visitproductrecall,
+                        ivz_visitactivities: data[i].ivz_visitactivities,
+                        ivz_visitsuggest: data[i].ivz_visitsuggest,
+                        ivz_employeeposition: data[i].ivz_employeeposition,
+                        ivz_addressprovince: data[i].ivz_addressprovince,
+                        ivz_addressdistrict: data[i].ivz_addressdistrict,
+                        territoryid: data[i].territoryid,
+                        accountnumber: data[i].accountnumber,
+                        ivz_planningstatus: data[i].ivz_planningstatus,
+                        ivz_emailcontact: data[i].ivz_emailcontact,
+                        ivz_leadermail: data[i].ivz_leadermail,
+                        ivz_ccmail: data[i].ivz_ccmail,
+                        ivz_balancecredit: data[i].ivz_balancecredit,
+                        filtername: data[i].filtername,
+                        mailtomail: data[i].mailtomail,
+                        ivz_scheduledstarttime: data[i].ivz_scheduledstarttime,
+                        ivz_scheduledendtime: data[i].ivz_scheduledendtime
+                    });
+                    setTimeout(function(){
+                      callback();
+                    },100);
+                  }
+                }
                 if($scope.$phase){$scope.$apply();}
             });
         }
@@ -1435,6 +1490,7 @@ angular.module('starter.controllers', [])
         }
     })
     .controller('PlanRejectCtrl', function ($scope, $stateParams, $cookies, Data, $rootScope, $ionicHistory,$state,$ionicLoading) {
+        $state.reload();
         $scope.Data = Data;
         Data.showcart = false;
         $scope.territoryid = $stateParams.territoryid;
@@ -5580,9 +5636,8 @@ angular.module('starter.controllers', [])
                     });
                 }
                 loopArray(data);
-
                 function getPush(i, callback) {
-                    $scope.showLoadingProperTimesRegter('โหลดข้อมูลเขตการขาย ' + data[i].description);
+                    $scope.showLoading('โหลดข้อมูลเขตการขาย ' + data[i].description);
                     $scope.listmaster.push({
                         ivz_territorymasterid: data[i].ivz_territorymasterid,
                         ivz_mastername: data[i].ivz_mastername,
@@ -5597,7 +5652,7 @@ angular.module('starter.controllers', [])
                     });
                     setTimeout(function () {
                         callback();
-                    }, 5);
+                    }, 100);
                 }
             }
             if($scope.$phase){$scope.$apply();}
