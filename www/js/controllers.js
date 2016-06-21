@@ -1411,6 +1411,7 @@ angular.module('starter.controllers', [])
             }
             loopArray(data);
             function getIns(i,callback){
+              $scope.showLoading('กำลังบันทึกข้อมูล');
               try {
                       var ins = new MobileCRM.DynamicEntity('appointment', data[i].activityid);
                       ins.properties.ivz_planningstatus = parseInt(2);
@@ -1460,6 +1461,7 @@ angular.module('starter.controllers', [])
                     }else{
                       $scope.sendmailtosales(Data.sterritory,'ไม่อนุมัติแผนการดำเนินงาน','ไม่สามารถอนุมัติแผนการดำเนินงานได้เนื่องจาก'+$scope.reject.txtreject,function(){
                         setTimeout(function () {
+                            $ionicLoading.hide();
                             $ionicHistory.goBack(-1);
                         }, 3000);
                       });
@@ -1468,6 +1470,7 @@ angular.module('starter.controllers', [])
                 }
                 loopArray(data);
                 function getReject(i,callback){
+                  $scope.showLoading('กำลังบันทึกข้อมูล');
                   try {
                           var ins = new MobileCRM.DynamicEntity('appointment', data[i].activityid);
                           ins.properties.ivz_planningstatus = parseInt(3);
