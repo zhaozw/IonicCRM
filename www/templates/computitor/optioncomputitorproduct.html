@@ -6,39 +6,31 @@
         <div class="row">
           <div class="col">
             <md-input-container>
-              <label>ชื่อร้านค้า</label>
-              <input type="text" ng-model="user.txtcustomer" maxlength="500" md-maxlength="500" ng-change="fixhide(user.txtcustomer)">
+              <label>ประเภทสินค้า</label>
+              <input type="text" ng-model="user.bannertype" maxlength="500" md-maxlength="500" ng-change="fixhide(2,user.bannertype)">
             </md-input-container>
-            <div class="row" ng-hide="user.fHide">
+            <span ng-hide="user.bannertype" class="error-bold">*กรุณาระบุประเภทสินค้าด้วย</span>
+            <div class="row" ng-hide="user.tHide">
               <div class="col">
-                <ul>
-                  <li ng-repeat="n in user.optionslist | filter:user.txtcustomer" ng-click="setparamater(0,n.id,n.name)">{{n.name}}</li>
+                <ul class="list">
+                  <li class="item" ng-repeat="n in listtypeproduct | filter:user.bannertype" ng-click="setparamater(2,n.id,n.name)">{{n.name}}</li>
                 </ul>
               </div>
             </div>
           </div>
-        </div>
-        <div class="row">
           <div class="col">
             <md-input-container>
               <label>ยี่ห้อสินค้า</label>
-              <input type="text" ng-model="user.banner">
+              <input type="text" ng-model="user.banner" maxlength="500" md-maxlength="500" ng-change="fixhide(1,user.banner)">
             </md-input-container>
-            <div class="row" ng-hide="user.fHide">
+            <span ng-hide="user.banner" class="error-bold">*กรุณาระบุยี่ห้อสินค้าด้วย</span>
+            <div class="row" ng-hide="user.bHide">
               <div class="col">
-                <ul>
-                  <li ng-repeat="n in user.optionslist | filter:user.banner" ng-click="setparamater(1,n.id,n.name)">{{n.name}}</li>
+                <ul class="list">
+                  <li  class="item" ng-repeat="n in listproductname | filter:{name:user.banner,type:user.bannertype}" ng-click="setparamater(1,n.id,n.name)">{{n.name}}</li>
                 </ul>
               </div>
             </div>
-          </div>
-          <div class="col">
-            <md-input-container>
-              <label>ประเภทสินค้า</label>
-              <md-select ng-model="user.bannertype">
-                  <md-option ng-value="opt.id" ng-repeat="opt in user.optionslist">{{ opt.name }}</md-option>
-              </md-select>
-            </md-input-container>
           </div>
         </div>
         <div class="row">
@@ -59,10 +51,16 @@
           <div class="col">
             <md-input-container>
               <label>แคมเปญ</label>
-              <md-select ng-model="user.caimpiage">
-                  <md-option ng-value="opt.id" ng-repeat="opt in user.optionslist">{{ opt.name }}</md-option>
-              </md-select>
+              <input type="text" ng-model="user.caimpiage" maxlength="500" md-maxlength="500" ng-change="fixhide(3,user.caimpiage)">
             </md-input-container>
+            <span ng-hide="user.caimpiage" class="error-bold">*กรุณาระบุแคมเปญด้วย</span>
+            <div class="row" ng-hide="user.cHide">
+              <div class="col">
+                <ul class="list">
+                  <li class="item" ng-repeat="n in listcampaign | filter:user.caimpiage" ng-click="setparamater(3,n.id,n.name)">{{n.name}}</li>
+                </ul>
+              </div>
+            </div>
           </div>
           <div class="col">
             <md-input-container>

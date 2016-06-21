@@ -13,7 +13,7 @@ document.writeln('<script src="lib/ionic/js/ng-cordova-mocks.min.js"></script>')
 document.writeln('<script src="js/app.js"></script>');
 document.writeln('<script src="js/controllers.js"></script>');
 
-function alerter(er){
+var alerterror = function(er){
 	alert(er);
 }
 /*--------------------------- Check User --------------------------*/
@@ -1879,4 +1879,73 @@ function GetDistrict(callback){
 			}
 			callback(b);
 		},function(er){alert(er);},null);
+}
+
+function gettypeproduct(callback){
+	//ivz_typeproduct
+	var a = new MobileCRM.FetchXml.Entity('ivz_typeproduct');
+			a.addAttribute('ivz_typeproductid');//0
+			a.addAttribute('ivz_name');//1
+	var fetch = new MobileCRM.FetchXml.Fetch(a);
+			fetch.execute('array',function(data){
+				var b = [];
+				for(var i in data){
+					b.push({
+						id:data[i][0],
+						name:data[i][1]
+					});
+				}
+				var stiv = setInterval(function(){
+					if(b.length >= data.length){
+						callback(b);
+						clearInterval(stiv);
+					}
+				},100);
+			},alerterror,null);
+}
+function getproductname(callback){
+	//ivz_typeproduct
+	var a = new MobileCRM.FetchXml.Entity('ivz_productbanner');
+			a.addAttribute('ivz_productbannerid');//0
+			a.addAttribute('ivz_name');//1
+			a.addAttribute('ivz_typeproduct');//2
+	var fetch = new MobileCRM.FetchXml.Fetch(a);
+			fetch.execute('array',function(data){
+				var b = [];
+				for(var i in data){
+					b.push({
+						id:data[i][0],
+						name:data[i][1],
+						type:data[i][2]
+					});
+				}
+				var stiv = setInterval(function(){
+					if(b.length >= data.length){
+						callback(b);
+						clearInterval(stiv);
+					}
+				},100);
+			},alerterror,null);
+}
+function getcampiagn(callback){
+	//ivz_typeproduct
+	var a = new MobileCRM.FetchXml.Entity('ivz_campaign');
+			a.addAttribute('ivz_campaignid');//0
+			a.addAttribute('ivz_name');//1
+	var fetch = new MobileCRM.FetchXml.Fetch(a);
+			fetch.execute('array',function(data){
+				var b = [];
+				for(var i in data){
+					b.push({
+						id:data[i][0],
+						name:data[i][1]
+					});
+				}
+				var stiv = setInterval(function(){
+					if(b.length >= data.length){
+						callback(b);
+						clearInterval(stiv);
+					}
+				},100);
+			},alerterror,null);
 }

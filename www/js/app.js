@@ -180,6 +180,15 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
       }
     }
   })
+  .state('app.calendarplanninglist', {
+    url:'/calendarplanninglist',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/planning/calendarplanninglist.html',
+        controller:'PlanListCtrl'
+      }
+    }
+  })
   .state('app.search2', {
     url:'/search/:mastertype/:sterritory/:nterritory',
     views: {
@@ -1002,7 +1011,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
         }
       })
 .state('app.optioncomputitor',{
-  url:'/optioncomputitor',
+  url:'/optioncomputitor/:accountid/:accountiname',
   views:{
     'menuContent':{
       templateUrl:'templates/computitor/option.html',
@@ -1011,7 +1020,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.optioncomputitorproduct',{
-  url:'/optioncomputitorproduct/:retype',
+  url:'/optioncomputitorproduct/:retype/:accountid/:accountiname',
   views:{
     'menuContent':{
       templateUrl:'templates/computitor/optioncomputitorproduct.html',
@@ -1019,12 +1028,30 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   }
 })
+.state('app.optioncomputitorpromotion',{
+  url:'/optioncomputitorpromotion/:retype/:accountid/:accountiname',
+  views:{
+    'menuContent':{
+      templateUrl:'templates/computitor/optioncomputitorpromotion.html',
+      controller:'ComputitorProductPromotionCtrl'
+    }
+  }
+})
 .state('app.optioncomputitorshelfshare',{
-  url:'/optioncomputitorshelfshare',
+  url:'/optioncomputitorshelfshare/:accountid/:accountiname',
   views:{
     'menuContent':{
       templateUrl:'templates/computitor/optioncomputitorshelfshare.html',
       controller:'ComputitorProductShelfShareCtrl'
+    }
+  }
+})
+.state('app.addformselfshare',{
+  url:'/addformselfshare/:accountid/:accountiname',
+  views:{
+    'menuContent':{
+      templateUrl:'templates/computitor/addformselfshare.html',
+      controller:'FormShelfShareCtrl'
     }
   }
 })

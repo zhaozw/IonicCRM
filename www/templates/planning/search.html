@@ -48,9 +48,13 @@
     </div>
   </ion-content>
   <div class="tabs tabs-icon-top">
-    <a class="tab-item primary" ng-click="reloaddata()">
+    <a class="tab-item primary" ng-click="reloaddata(0)">
       <i class="icon ion-refresh"></i>
       เรียกข้อมูลใหม่
+    </a>
+    <a class="tab-item info" ng-click="reloaddata(2)">
+      <i class="icon ion-calendar"></i>
+      รายการแผนการดำเนินงาน
     </a>
     <a class="tab-item success" ui-sref="app.calendarlist">
       <i class="icon ion-android-calendar"></i>

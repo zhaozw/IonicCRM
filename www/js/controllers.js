@@ -669,16 +669,16 @@ angular.module('starter.controllers', [])
         }, 3000);
     })
     ////////////// Calendar ///////////////////////////
-    .controller('PlanCtrl', function ($scope, $stateParams, $cookies, $location, Data,$state,$ionicLoading) {
+    .controller('PlanCtrl', function ($scope, $stateParams, $cookies, $location, Data, $state, $ionicLoading) {
         $state.reload();
         $scope.Data = Data;
         Data.showcart = false;
         $scope.dvTodos = true;
         $scope.$on('$ionicView.enter',function(){
-          $scope.reloaddata();
+          $scope.reloaddata(0);
         });
-        $scope.reloaddata = function () {
-            GetAppointStatus(Data.termas, 0, Data.mastertype, function (data) {
+        $scope.reloaddata = function (sid) {
+            GetAppointStatus(Data.termas, parseInt(sid), Data.mastertype, function (data) {
                 if (data.length > 0) {
                     $scope.dvTodos = false;
                     $scope.todos = [];
@@ -735,7 +735,7 @@ angular.module('starter.controllers', [])
                       });
                       setTimeout(function(){
                         callback();
-                      },20);
+                      },5);
                     };
                 } else {
                     $scope.dvTodos = true;
@@ -759,9 +759,9 @@ angular.module('starter.controllers', [])
                     if(x < arr.length){
                       loopArray(arr);
                     }else{
-                      $scope.sendmailtosup(Data.termas,'ขออนุมัติแผนการดำเนนงาน',null,function(){
+                      $scope.reloaddata(0);
+                      $scope.sendmailtosup(Data.termas,'ขออนุมัติแผนการดำเนนงาน','',function(){
                         $ionicLoading.hide();
-                        $scope.reloaddata();
                       });
                     }
                   });
@@ -1359,32 +1359,31 @@ angular.module('starter.controllers', [])
         Data.mastertype = $stateParams.mastertype;
         $scope.vCheckAll = 0;
         gettername(Data.Tername, function (data) {
-          alert(data.length);
+          //alert(data.length);
             if (data) {
                 $scope.listmaster = data;
             }
         });
     })
-    .controller('PlanListApproveCtrl', function ($scope, $stateParams, $cookies, Data, $ionicHistory,$state,$ionicLoading) {
+    .controller('PlanListApproveCtrl', function ($scope, $stateParams, $cookies, Data, $ionicHistory, $state,$ionicLoading) {
         $state.reload();
         $scope.Data = Data;
         Data.showcart = false;
         Data.sterritory = $stateParams.territoryid;
         $scope.vCheckAll = 0;
         // $scope.reloaddata();
-        var itype;
-        if (Data.mastertype === 2 || Data.mastertype === '2') {
-            itype = 1;
-        } else if (Data.mastertype === 3 || Data.mastertype === '3') {
-            itype = 2;
-        } else {
-            itype = Data.mastertype;
-        }
-        GetAppointStatus($stateParams.territoryid, 1, itype, function (data) {
-            $scope.bnklist = data;
-            $scope.listappointment = data;
+        $scope.$on('$ionicView.enter',function(){
+          $scope.reloaddata();
         });
         $scope.reloaddata = function () {
+          var itype;
+          if (Data.mastertype === 2 || Data.mastertype === '2') {
+              itype = 1;
+          } else if (Data.mastertype === 3 || Data.mastertype === '3') {
+              itype = 2;
+          } else {
+              itype = Data.mastertype;
+          }
             GetAppointStatus($stateParams.territoryid, 1, itype, function (data) {
                 $scope.listappointment = data;
                 if($scope.$phase){$scope.$apply();}
@@ -1767,7 +1766,9 @@ angular.module('starter.controllers', [])
             } else if (idval == 2 || idval == '2') {
                 //var ins = new MobileCRM.DynamicEntity.createNew('ivz_result');
                 console.log('insert visit adjustment');
-                window.location.href = "#/app/adjustment/" + $stateParams.accountid + "/" + Data.mastertype;
+                insertactivities(2, 0, 2, null, function () {
+                  window.location.href = "#/app/adjustment/" + $stateParams.accountid + "/" + Data.mastertype;
+                });
             } else if (idval == 3 || idval == '3') {
                 console.log('insert activities');
                 $state.go('app.order', {
@@ -1788,14 +1789,12 @@ angular.module('starter.controllers', [])
             } else if (idval == 7 || idval == '7') {
                 //var ins = new MobileCRM.DynamicEntity.createNew('ivz_result');
                 console.log('insert visit open computitor');
+                $state.go('app.optioncomputitor',{
+                  accountid:$stateParams.accountname,
+                  accountiname:$stateParams.accountid
+                },{reload:true});
             } else if (idval == 8 || idval == '8') {
                 console.log('insert visit open billing');
-                // $state.go('app.billingcollection',{
-                //                                     accountid: $stateParams.accountid,
-                //                                     mastertype: Data.mastertype,
-                //                                     retype:0,
-                //                                     terid:Data.termas
-                //                                   },{reload:true});app.billingcollectionoption
                 $state.go('app.billingcollectionoption',{
                                                     accountid: $stateParams.accountid,
                                                     mastertype: Data.mastertype,
@@ -9897,16 +9896,21 @@ angular.module('starter.controllers', [])
 .controller('ComputitorCtrl', function ($scope, $stateParams, $cookies, Data, $state, $ionicLoading, $ionicHistory, $ionicModal, DataOrder) {
   $state.reload();
   $scope.Data = Data;
+  Data.showcart = false;
   $scope.listoptioncomputitor = [
-    {id:0,name:'รายงานสินค้า',link:'app.optioncomputitorproduct',type:0},
-    {id:1,name:'Shelf Share',link:'app.optioncomputitorshelfshare'},
-    {id:2,name:'รายงานโปรโมชั่นของคู่แข่ง',link:'app.optioncomputitorproduct',type:1},
-    {id:3,name:'รายงานสินค้าปลอม',link:'app.optioncomputitorproduct',type:2}
+    {id:0,name:'รายงานสินค้า',link:'app.optioncomputitorproduct',type:0,accountid:$stateParams.accountid,accountiname:$stateParams.accountiname},
+    {id:1,name:'Shelf Share',link:'app.optioncomputitorshelfshare',type:3,accountid:$stateParams.accountid,accountiname:$stateParams.accountiname},
+    {id:2,name:'รายงานโปรโมชั่นของคู่แข่ง',link:'app.optioncomputitorpromotion',type:1,accountid:$stateParams.accountid,accountiname:$stateParams.accountiname},
+    {id:3,name:'รายงานสินค้าปลอม',link:'app.optioncomputitorproductscream',type:2,accountid:$stateParams.accountid,accountiname:$stateParams.accountiname}
   ]
   $scope.tosref = function(id,type){
     console.log(id,type);
     try {
-      $state.go(id,{retype:type},{reload:true});
+      $state.go(id,{
+        retype:type,
+        accountid:$stateParams.accountid,
+        accountiname:$stateParams.accountiname
+      },{reload:true});
     } catch (err) {
       console.log(err);
     }
@@ -9915,55 +9919,136 @@ angular.module('starter.controllers', [])
 .controller('ComputitorProductCtrl', function ($scope, $stateParams, $cookies, Data, $state, $ionicLoading, $ionicHistory, $ionicModal, DataOrder , $compile) {
   $state.reload();
   $scope.Data = Data;
+  Data.showcart = false;
   $scope.user = {
     fHide:true,
+    bHide:true,
+    tHide:true,
+    cHide:true,
     optionslist:[],
     retype:$stateParams.retype,
-    accountid:'',
-    txtcustomer:'',
+    accountid:$stateParams.accountid,
+    txtcustomer:$stateParams.accountiname,
+    bannerid:'',
     banner:'',
+    bannertypeid:'',
     bannertype:'',
+    caimpiageid:'',
+    caimpiage:'',
     priceperunit:0,
     priceperunittot:0,
-    caimpiage:'',
     pricepermonth:0,
     txtother:'',
     filedoc:[]
   }
-  for(var i = 0;i <= 10;i++){
-    $scope.user.optionslist.push({
-      id:i,name:'test '+i
-    });
-  }
-  $scope.fixhide = function(txt){
-    if(txt){
-      $scope.user.fHide = false;
-    }else{
-      $scope.user.fHide = true;
+  $scope.fixhide = function(id,txt){
+    switch (id) {
+      case 0:
+              if(txt){
+                if(txt.length >= 1){
+                  $scope.user.fHide = false;
+                }
+              }else{
+                $scope.user.fHide = true;
+              }
+        break;
+        case 1:
+                if(txt){
+                  $scope.user.bHide = false;
+                }else{
+                  $scope.user.bHide = true;
+                }
+          break;
+          case 2:
+                  if(txt){
+                    $scope.user.tHide = false;
+                  }else{
+                    $scope.user.tHide = true;
+                  }
+            break;
+            case 3:
+                    if(txt){
+                      $scope.user.cHide = false;
+                    }else{
+                      $scope.user.cHide = true;
+                    }
+              break;
+      default:
+
     }
   }
   $scope.setparamater = function(type,id,txt){
     switch (type) {
-      case '0':
+      case 0:
               $scope.user.fHide = !$scope.user.fHide;
               $scope.user.accountid = id;
               $scope.user.txtcustomer = txt;
               break;
-      case '1':
+      case 1:
               $scope.user.bHide = !$scope.user.bHide;
-              $scope.user.accountid = id;
-              $scope.user.txtcustomer = txt;
+              $scope.user.bannerid = id;
+              $scope.user.banner = txt;
+              break;
+      case 2:
+              $scope.user.tHide = !$scope.user.tHide;
+              $scope.user.bannertypeid = id;
+              $scope.user.bannertype = txt;
+              break;
+      case 3:
+              $scope.user.cHide = !$scope.user.cHide;
+              $scope.user.caimpiageid = id;
+              $scope.user.caimpiage = txt;
               break;
     }
   }
   $scope.callfile = function(){
     $('#infiles').trigger('click');
   }
+  $scope.loadcustomer = function(){
+    $scope.listaccount = '';
+    GetAccount(Data.termas,Data.mastertype,1,function(data){
+      $scope.listaccount = data;
+      $scope.loadtypeproduct();
+      if($scope.$phase){
+        $scope.$apply();
+      }
+    });
+  }
+  $scope.loadtypeproduct = function(){
+    $scope.listtypeproduct = '';
+    gettypeproduct(function(data){
+      $scope.listtypeproduct = data;
+      $scope.loadproductname();
+    });
+    if($scope.$phase){
+      $scope.$apply();
+    }
+  }
+  $scope.loadproductname = function(){
+    $scope.listproductname = '';
+    getproductname(function(data){
+      $scope.listproductname = data;
+      $scope.loadcampaign();
+    });
+    if($scope.$phase){
+      $scope.$apply();
+    }
+  }
+  $scope.loadcampaign = function(){
+    $scope.listcampaign = '';
+    getcampiagn(function(data){
+      $scope.listcampaign = data;
+    });
+    if($scope.$phase){
+      $scope.$apply();
+    }
+  }
   $scope.$on('$ionicView.enter',function(){
+    $scope.loadcustomer();
     $('#infiles').change(function(){
       GetAtt('#infiles', '', 'canvas01', function (data) {
           console.log(data.length);
-          $scope.user.filedoc.push({docfile:data,title:'รูปหลังทำกิจกรรม '});
+          $scope.user.filedoc.push({docfile:data,title:'รูปภาพประกอบบันทึกรายงานคู่แข่ง'});
           pushImg('img01');
       });
     });
@@ -9983,11 +10068,298 @@ angular.module('starter.controllers', [])
       pushImg('img01');
     }
   });
+  function insdetail(id,callback){
+    try {
+      //body...
+      var ins = new MobileCRM.DynamicEntity.createNew('competitor');
+          ins.properties.competitorid = id;
+          ins.properties.name = $scope.user.txtcustomer;
+          ins.properties.ivz_typereport = parseInt($scope.user.retype);
+          ins.properties.ivz_customer = new MobileCRM.Reference('account',$scope.user.accountid);
+          ins.properties.ivz_territory = new MobileCRM.Reference('territory',Data.termas);
+          ins.properties.ivz_bannerproduct = $scope.user.banner;
+          ins.properties.ivz_bannerproducttype = $scope.user.bannertype;
+          ins.properties.ivz_pricewhole = parseInt($scope.user.priceperunit);
+          ins.properties.ivz_priceretail = parseInt($scope.user.priceperunittot);
+          ins.properties.ivz_campaign = parseInt($scope.user.caimpiage);
+          ins.properties.ivz_tatolpermonth = parseInt($scope.user.pricepermonth);
+          ins.properties.ivz_remarkcomment = $scope.user.txtother;
+          ins.save(function(er){
+            if(er){
+              alert('error 10052 '+er);
+            }else{
+              setTimeout(function(){
+                callback(id);
+              },2000);
+            }
+          });
+    } catch (err) {
+      alert('error 10048 '+err);
+    }
+  }
+  var insannote = function(id){
+    var x = 0;
+    var loopA = function(arr){
+      getIns(x,function(){
+        x++;
+        if(x < arr.length){
+          loopA(arr);
+        }else{
+          $ionicLoading.hide();
+          $scope.reback();
+        }
+      });
+    }
+    loopA($scope.user.filedoc);
+    function getIns(i,callback){
+      try {
+         $scope.InAnnoteAttract('competitor',id,$scope.user.filedoc[i].docfile,$scope.user.filedoc[i].title,3,function(){
+           setTimeout(function(){
+             callback();
+           },1000);
+         });
+      } catch (err) {
+        alert('error 10070 '+err);
+      }
+    }
+  }
+  $scope.cInsert = function(){
+    if($scope.user.accountid.length <= 0 ||
+      $scope.user.banner.length <= 0 ||
+      $scope.user.bannertype.length <= 0 ||
+      $scope.user.caimpiage.length <= 0 ||
+      $scope.user.filedoc.length <= 0){
+        alert('กรุณากรอกข้อมูลให้ครบด้วย');
+      }else{
+        $scope.showLoading('กำลังบันทึกข้อมูล');
+        insdetail(guid(),insannote);
+      }
+  }
+})
+.controller('ComputitorProductPromotionCtrl', function ($scope, $stateParams, $cookies, Data, $state, $ionicLoading, $ionicHistory, $ionicModal, DataOrder , $compile) {
+  $state.reload();
+  $scope.Data = Data;
+  Data.showcart = false;
+  $scope.user = {
+    fHide:true,
+    bHide:true,
+    tHide:true,
+    cHide:true,
+    optionslist:[],
+    retype:$stateParams.retype,
+    accountid:$stateParams.accountid,
+    txtcustomer:$stateParams.accountiname,
+    bannerid:'',
+    banner:'',
+    bannertypeid:'',
+    bannertype:'',
+    caimpiageid:'',
+    caimpiage:'',
+    priceperunit:0,
+    priceperunittot:0,
+    pricepermonth:0,
+    txtother:'',
+    filedoc:[]
+  }
+  $scope.fixhide = function(id,txt){
+    switch (id) {
+      case 0:
+              if(txt){
+                if(txt.length >= 1){
+                  $scope.user.fHide = false;
+                }
+              }else{
+                $scope.user.fHide = true;
+              }
+        break;
+        case 1:
+                if(txt){
+                  $scope.user.bHide = false;
+                }else{
+                  $scope.user.bHide = true;
+                }
+          break;
+          case 2:
+                  if(txt){
+                    $scope.user.tHide = false;
+                  }else{
+                    $scope.user.tHide = true;
+                  }
+            break;
+            case 3:
+                    if(txt){
+                      $scope.user.cHide = false;
+                    }else{
+                      $scope.user.cHide = true;
+                    }
+              break;
+      default:
 
+    }
+  }
+  $scope.setparamater = function(type,id,txt){
+    switch (type) {
+      case 0:
+              $scope.user.fHide = !$scope.user.fHide;
+              $scope.user.accountid = id;
+              $scope.user.txtcustomer = txt;
+              break;
+      case 1:
+              $scope.user.bHide = !$scope.user.bHide;
+              $scope.user.bannerid = id;
+              $scope.user.banner = txt;
+              break;
+      case 2:
+              $scope.user.tHide = !$scope.user.tHide;
+              $scope.user.bannertypeid = id;
+              $scope.user.bannertype = txt;
+              break;
+      case 3:
+              $scope.user.cHide = !$scope.user.cHide;
+              $scope.user.caimpiageid = id;
+              $scope.user.caimpiage = txt;
+              break;
+    }
+  }
+  $scope.callfile = function(){
+    $('#infiles').trigger('click');
+  }
+  $scope.loadcustomer = function(){
+    $scope.listaccount = '';
+    GetAccount(Data.termas,Data.mastertype,1,function(data){
+      $scope.listaccount = data;
+      $scope.loadtypeproduct();
+      if($scope.$phase){
+        $scope.$apply();
+      }
+    });
+  }
+  $scope.loadtypeproduct = function(){
+    $scope.listtypeproduct = '';
+    gettypeproduct(function(data){
+      $scope.listtypeproduct = data;
+      $scope.loadproductname();
+    });
+    if($scope.$phase){
+      $scope.$apply();
+    }
+  }
+  $scope.loadproductname = function(){
+    $scope.listproductname = '';
+    getproductname(function(data){
+      $scope.listproductname = data;
+      $scope.loadcampaign();
+    });
+    if($scope.$phase){
+      $scope.$apply();
+    }
+  }
+  $scope.loadcampaign = function(){
+    $scope.listcampaign = '';
+    getcampiagn(function(data){
+      $scope.listcampaign = data;
+    });
+    if($scope.$phase){
+      $scope.$apply();
+    }
+  }
+  $scope.$on('$ionicView.enter',function(){
+    $scope.loadcustomer();
+    $('#infiles').change(function(){
+      GetAtt('#infiles', '', 'canvas01', function (data) {
+          console.log(data.length);
+          $scope.user.filedoc.push({docfile:data,title:'รูปภาพประกอบบันทึกรายงานคู่แข่ง'});
+          pushImg('img01');
+      });
+    });
+    function pushImg(dClass){
+      $('.divimg').remove();
+      if($scope.user.filedoc){
+        for(var i in $scope.user.filedoc){
+          var html = '<div class="col divimg">' +
+              '<img class="thumbnail" src="data:image/jpeg;base64,' + $scope.user.filedoc[i].docfile + '" width="250" height="250" ng-click="removeimg(' + i + ')"/>' +
+              '</div>';
+          angular.element(document.getElementById(dClass)).append($compile(html)($scope));
+        }
+      }
+    }
+    $scope.removeimg = function(id){
+      $scope.user.filedoc.splice(id,1);
+      pushImg('img01');
+    }
+  });
+  function insdetail(id,callback){
+    try {
+      //body...
+      var ins = new MobileCRM.DynamicEntity.createNew('competitor');
+          ins.properties.competitorid = id;
+          ins.properties.name = $scope.user.txtcustomer;
+          ins.properties.ivz_typereport = parseInt($scope.user.retype);
+          ins.properties.ivz_customer = new MobileCRM.Reference('account',$scope.user.accountid);
+          ins.properties.ivz_territory = new MobileCRM.Reference('territory',Data.termas);
+          ins.properties.ivz_bannerproduct = $scope.user.banner;
+          ins.properties.ivz_bannerproducttype = $scope.user.bannertype;
+          ins.properties.ivz_pricewhole = parseInt($scope.user.priceperunit);
+          ins.properties.ivz_priceretail = parseInt($scope.user.priceperunittot);
+          ins.properties.ivz_campaign = parseInt($scope.user.caimpiage);
+          ins.properties.ivz_tatolpermonth = parseInt($scope.user.pricepermonth);
+          ins.properties.ivz_remarkcomment = $scope.user.txtother;
+          ins.save(function(er){
+            if(er){
+              alert('error 10052 '+er);
+            }else{
+              setTimeout(function(){
+                callback(id);
+              },2000);
+            }
+          });
+    } catch (err) {
+      alert('error 10048 '+err);
+    }
+  }
+  var insannote = function(id){
+    var x = 0;
+    var loopA = function(arr){
+      getIns(x,function(){
+        x++;
+        if(x < arr.length){
+          loopA(arr);
+        }else{
+          $ionicLoading.hide();
+          $scope.reback();
+        }
+      });
+    }
+    loopA($scope.user.filedoc);
+    function getIns(i,callback){
+      try {
+         $scope.InAnnoteAttract('competitor',id,$scope.user.filedoc[i].docfile,$scope.user.filedoc[i].title,3,function(){
+           setTimeout(function(){
+             callback();
+           },1000);
+         });
+      } catch (err) {
+        alert('error 10070 '+err);
+      }
+    }
+  }
+  $scope.cInsert = function(){
+    if($scope.user.accountid.length <= 0 ||
+      $scope.user.banner.length <= 0 ||
+      $scope.user.bannertype.length <= 0 ||
+      $scope.user.caimpiage.length <= 0 ||
+      $scope.user.filedoc.length <= 0){
+        alert('กรุณากรอกข้อมูลให้ครบด้วย');
+      }else{
+        $scope.showLoading('กำลังบันทึกข้อมูล');
+        insdetail(guid(),insannote);
+      }
+  }
 })
 .controller('ComputitorProductShelfShareCtrl', function ($scope, $stateParams, $cookies, Data, $state, $ionicLoading, $ionicHistory, $ionicModal, DataOrder , $compile) {
   $state.reload();
   $scope.Data = Data;
+  Data.showcart = false;
   $scope.user = {
     optionslist:[],
     banner:'',
@@ -9997,40 +10369,324 @@ angular.module('starter.controllers', [])
     caimpiage:'',
     pricepermonth:0,
     txtother:'',
-    filedoc:[]
+    filedoc:[],
+    producttype:'',
+    productband:'',
+    percenter:0,
+    useritem:true,
+    usertypeproduct:true,
+    userband:true,
+    txtcustomer:'',
+    customerid:'',
+    selfshrelist:[],
+    listoption:[],
+    doccomputiter:[]
   }
-  for(var i = 0;i <= 10;i++){
-    $scope.user.optionslist.push({
-      id:i,name:'test '+i
+  $scope.loadcustomer = function(){
+    $scope.listaccount = '';
+    GetAccount(Data.termas,Data.mastertype,1,function(data){
+      $scope.listaccount = data;
+      $scope.loadtypeproduct();
+      if($scope.$phase){
+        $scope.$apply();
+      }
     });
+  }
+  $scope.loadtypeproduct = function(){
+    $scope.listtypeproduct = '';
+    gettypeproduct(function(data){
+      $scope.listtypeproduct = data;
+      $scope.loadproductname();
+    });
+    if($scope.$phase){
+      $scope.$apply();
+    }
+  }
+  $scope.loadproductname = function(){
+    $scope.listproductname = '';
+    getproductname(function(data){
+      $scope.listproductname = data;
+      $scope.loadcampaign();
+    });
+    if($scope.$phase){
+      $scope.$apply();
+    }
+  }
+  $scope.loadcampaign = function(){
+    $scope.listcampaign = '';
+    getcampiagn(function(data){
+      $scope.listcampaign = data;
+    });
+    if($scope.$phase){
+      $scope.$apply();
+    }
   }
   $scope.callfile = function(){
     $('#infiles').trigger('click');
   }
+  function pushImg(dClass){
+    $('.divimg').remove();
+    if($scope.user.filedoc){
+      for(var i in $scope.user.filedoc){
+        var html =  '<div class="col divimg">' +
+                    '<img class="thumbnail" src="data:image/jpeg;base64,' + $scope.user.filedoc[i].docfile + '" width="150" height="150" ng-click="removeimg(' + i + ')"/>' +
+                    '</div>';
+        angular.element(document.getElementById(dClass)).append($compile(html)($scope));
+      }
+    }
+  }
+  $scope.removeimg = function(id){
+    $scope.user.filedoc.splice(id,1);
+    pushImg('img01');
+  }
   $scope.$on('$ionicView.enter',function(){
+    $scope.loadcustomer();
     $('#infiles').change(function(){
       GetAtt('#infiles', '', 'canvas01', function (data) {
           console.log(data.length);
-          $scope.user.filedoc.push({docfile:data,title:'รูปหลังทำกิจกรรม '});
+          $scope.user.filedoc.push({docfile:data,title:'shelf share '});
           pushImg('img01');
       });
     });
-    function pushImg(dClass){
-      $('.divimg').remove();
-      if($scope.user.filedoc){
-        for(var i in $scope.user.filedoc){
-          var html = '<div class="col divimg">' +
-              '<img class="thumbnail" src="data:image/jpeg;base64,' + $scope.user.filedoc[i].docfile + '" width="250" height="250" ng-click="removeimg(' + i + ')"/>' +
-              '</div>';
-          angular.element(document.getElementById(dClass)).append($compile(html)($scope));
+  });
+  $scope.settrue = function(id,txt,type){
+    switch (id) {
+      case 1:
+              if(txt){
+                switch (type) {
+                  case true:
+                          $scope.user.useritem = false;
+                    break;
+                  default:
+                }
+              }
+        break;
+      case 2:
+        switch (type) {
+          case true:
+                  $scope.user.usertypeproduct = false;
+            break;
+          default:
         }
+        break;
+      case 3:
+        switch (type) {
+          case true:
+                  $scope.user.userband = false;
+            break;
+          default:
+        }
+        break;
+    }
+  }
+  $scope.setfalse = function(id,acid,txtname,type){
+    switch (id) {
+      case 1:
+        switch (type) {
+          case false:
+                  $scope.user.txtcustomer = txtname;
+                  $scope.user.customerid = acid;
+                  $scope.user.useritem = true;
+            break;
+        }
+        break;
+      case 2:
+        switch (type) {
+          case false:
+                  $scope.user.producttype = txtname;
+                  $scope.user.customerid = '';
+                  $scope.user.usertypeproduct = true;
+            break;
+        }
+        break;
+      case 3:
+        switch (type) {
+          case false:
+                  $scope.user.productband = txtname;
+                  $scope.user.customerid = '';
+                  $scope.user.userband = true;
+            break;
+        }
+        break;
+    }
+  }
+  $scope.deleteitem = function(index){
+    $scope.user.listoption.splice(index,1);
+  }
+  $scope.cAddCustomer = function(){
+    console.log('add item'+$scope.user.filedoc.length);
+    if($scope.user.customerid.length < 1 &&
+       $scope.user.producttype.length < 1 &&
+       $scope.user.productband.length < 1){
+          alert('กรุณากรอกข้อมูลให้ครบด้วย');
+       }else if($scope.user.filedoc.length <= 0){
+         alert('กรุณาแนบเอกสารด้วย');
+       }else{
+         if($scope.user.listoption.length > 0){
+           if($scope.matchmarket() > 100){
+             alert('ส่วนแบ่งการตลาดเกิน 100 %');
+           }else{
+             $scope.user.listoption.push({
+               accountname:$scope.user.txtcustomer,
+               accountid:$scope.user.customerid,
+               bannerproduct:$scope.user.productband,
+               bannerproducttype:$scope.user.producttype,
+               marketshare:$scope.user.percenter
+             });
+           }
+         }else{
+           $scope.user.listoption.push({
+             accountname:$scope.user.txtcustomer,
+             accountid:$scope.user.customerid,
+             bannerproduct:$scope.user.productband,
+             bannerproducttype:$scope.user.producttype,
+             marketshare:$scope.user.percenter
+           });
+         }
+         for(var i in $scope.user.filedoc){
+           $scope.user.doccomputiter.push({
+             docfile:$scope.user.filedoc[i].docfile,
+             title:$scope.user.filedoc[i].title
+           });
+         }
+         $scope.user.useritem = true;
+         $scope.user.usertypeproduct = true;
+         $scope.user.userband = true;
+         $scope.user.producttype = '';
+         $scope.user.productband = '';
+         $scope.user.percenter = 0;
+         $scope.user.filedoc.length = 0;
+         $('.divimg').remove();
+       }
+    //$scope.reback();
+  }
+  $scope.matchmarket = function(){
+    if($scope.user.listoption.length > 0){
+      var x = 0;
+      for(var i in $scope.user.listoption){
+        console.log(i+'$scope.user.listoption[i].marketshare:'+$scope.user.listoption[i].marketshare);
+        x += parseInt($scope.user.listoption[i].marketshare) + parseInt($scope.user.percenter);
+      }
+      return x;
+    }else{
+      return 0;
+    }
+  }
+  $scope.$watch('user.listoption',function(){
+    $scope.matchmarket();
+    // $('.divimg').remove();
+    // if($scope.user.filedoc){
+    //   for(var i in $scope.user.filedoc){
+    //     var html = '<div class="col divimg">' +
+    //         '<img class="thumbnail" src="data:image/jpeg;base64,' + $scope.user.filedoc[i].docfile + '" width="150" height="150" ng-click="removeimg(' + i + ')"/>' +
+    //         '</div>';
+    //     angular.element(document.getElementById(dClass)).append($compile(html)($scope));
+    //   }
+    // }
+  });
+  function inscomputitor(id,callback){
+    try {
+      //body...
+      // var ins = new MobileCRM.DynamicEntity.createNew('competitor');
+      //     ins.properties.competitorid = id;
+      //     ins.properties.name = $scope.user.txtcustomer;
+      //     ins.properties.ivz_typereport = parseInt(3);
+      //     ins.properties.ivz_customer = new MobileCRM.Reference('account',$scope.user.accountid);
+      //     ins.properties.ivz_territory = new MobileCRM.Reference('territory',Data.termas);
+      //     ins.properties.ivz_bannerproduct = $scope.user.banner;
+      //     ins.properties.ivz_bannerproducttype = $scope.user.bannertype;
+      //     ins.properties.ivz_pricewhole = parseInt($scope.user.priceperunit);
+      //     ins.properties.ivz_priceretail = parseInt($scope.user.priceperunittot);
+      //     ins.properties.ivz_campaign = parseInt($scope.user.caimpiage);
+      //     ins.properties.ivz_tatolpermonth = parseInt($scope.user.pricepermonth);
+      //     ins.properties.ivz_remarkcomment = $scope.user.txtother;
+      //     ins.save(function(er){
+      //       if(er){
+      //         alert('error 10303 '+er);
+      //       }else{
+      //         setTimeout(function(){
+      //           callback(id);
+      //         },2000);
+      //       }
+      //     });
+      var data = $scope.user.listoption;
+      var x = 0;
+      var loopArray = function(arr){
+        inspush(x,function(){
+          if(x < arr.length){
+            loopArray(arr);
+          }else{
+            $ionicLoading.hide();
+          }
+        });
+      }
+      loopArray(data);
+      function inspush(i,callback){
+        $scope.showLoading('กำลังบันทึกข้อมูล '+data[i].accountname);
+        // setTimeout(function(){
+        //   callback();
+        // },1000);
+        var ins = new MobileCRM.DynamicEntity.createNew('competitor');
+            ins.properties.competitorid = id;
+            ins.properties.name = $scope.user.txtcustomer;
+            ins.properties.ivz_typereport = parseInt(3);
+            ins.properties.ivz_customer = new MobileCRM.Reference('account',$scope.user.accountid);
+            ins.properties.ivz_territory = new MobileCRM.Reference('territory',Data.termas);
+            ins.properties.ivz_bannerproduct = $scope.user.banner;
+            ins.properties.ivz_bannerproducttype = $scope.user.bannertype;
+            ins.properties.ivz_pricewhole = parseInt($scope.user.priceperunit);
+            ins.properties.ivz_priceretail = parseInt($scope.user.priceperunittot);
+            ins.properties.ivz_campaign = parseInt($scope.user.caimpiage);
+            ins.properties.ivz_tatolpermonth = parseInt($scope.user.pricepermonth);
+            ins.properties.ivz_remarkcomment = $scope.user.txtother;
+            ins.save(function(er){
+              if(er){
+                alert('error 10303 '+er);
+              }else{
+                setTimeout(function(){
+                  callback(id);
+                },2000);
+              }
+            });
+      }
+    } catch (err) {
+      alert('error 10048 '+err);
+    }
+  }
+  var insannote = function(id){
+    var x = 0;
+    var loopArray = function(arr){
+      inan(x,function(){
+        if(x < arr.length){
+          loopArray(arr);
+        }else{
+          $ionicLoading.hide();
+          $scope.reback();
+        }
+      });
+    }
+    loopArray($scope.user.doccomputiter);
+    function inan(i,callback){
+      try {
+         $scope.InAnnoteAttract('competitor',id,$scope.user.doccomputiter[i].docfile,$scope.user.doccomputiter[i].title,3,function(){
+           setTimeout(function(){
+             callback();
+           },1000);
+         });
+      } catch (err) {
+        alert('error 10070 '+err);
       }
     }
-    $scope.removeimg = function(id){
-      $scope.user.filedoc.splice(id,1);
-      pushImg('img01');
-    }
-  });
+  }
+  $scope.cInsert = function(){
+    console.log('Insert DB Self Share');
+    inscomputitor(guid(),insannote);
+  }
+})
+.controller('FormShelfShareCtrl', function ($scope, $stateParams, $cookies, Data, $state, $ionicLoading, $ionicHistory, $ionicModal, DataOrder , $compile) {
+  $state.reload();
+  $scope.Data = Data;
+  Data.showcart = false;
 
 })
 .controller('ExamplCtrl', function ($scope, $stateParams, $cookies, Data, $state, $ionicLoading, $ionicHistory, $ionicModal, DataOrder) {
