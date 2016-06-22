@@ -510,6 +510,15 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   }
 })
+.state('app.accountmap', {
+  url:'/accountdetail/:accountid/:mastertype',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/account/accountmap.html',
+      controller:'AccountMapCtrl'
+    }
+  }
+})
 .state('app.accountinvoice', {
   url:'/accountinvoice/:accountid/:mastertype',
   views: {

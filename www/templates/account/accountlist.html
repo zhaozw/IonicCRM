@@ -4,13 +4,13 @@
       <div class="bar bar-header item-input-inset">
         <label class="item-input-wrapper">
           <i class="icon ion-ios-search placeholder-icon"></i>
-          <input type="search" placeholder="Search" ng-model="filtertxt">
+          <input type="search" placeholder="Search" data-ng-model="filtertxt">
         </label>
-        <md-button class="md-raised button-clear md-warn" aria-label="description" md-ripple-size="auto">&nbsp;ยกเลิก&nbsp;</md-button>
+        <md-button class="md-raised button-clear md-warn" aria-label="description" md-ripple-size="auto" data-ng-model="filtertxt = ''">&nbsp;ยกเลิก&nbsp;</md-button>
       </div>
       <md-list>
         <md-list-item class="md-3-line" ng-repeat="n in listaccount | filter:{filtername:filtertxt}">
-          <img src="img/d05.png" class="md-avatar" alt="testt" />
+          <img src="img/avatar-1.png" class="md-avatar" alt="testt" />
            <div class="md-list-item-text" layout="column">
              <h3>{{n.filtername}}</h3>
              <p>{{n.territoryid.primaryName}}</p>
@@ -19,7 +19,7 @@
              <p ng-if="n.statuscode == 917970003">สถานะ:<span style="color:#003171;">บันทึกข้อมูลยังไม่สมบูรณ์</span></p>
              <p ng-if="n.statuscode == 917970000">สถานะ:<span style="color:#A17917;">รอดำเนินงาน</span></p>
            </div>
-           <a class="md-secondary ion-chevron-right text-h1 text-bold error" href="#/app/accountdetail/0/{{Data.mastertype}}" ng-if="n.statuscode == 1"></a>
+           <a class="md-secondary ion-chevron-right text-h1 text-bold error" href="#/app/accountdetail/{{n.accountid}}/{{Data.mastertype}}" ng-if="n.statuscode == 1"></a>
            <a class="md-secondary ion-chevron-right text-h1 text-bold error" href="#/app/accounteditor/{{n.accountid}}/{{n.name}}/{{n.ivz_taxid}}/{{Data.mastertype}}"
            ng-if="n.statuscode == 917970002 || n.statuscode == 917970003"></a>
            <a class="md-secondary ion-chevron-right text-h1 text-bold error" ng-disabled="true" ng-if="n.statuscode == 917970000"></a>

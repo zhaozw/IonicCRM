@@ -2,15 +2,23 @@
   <ion-content>
     <div>
       <md-list>
-        <md-list-item class="md-3-line">
-          <img src="img/d05.png" class="md-avatar" alt="testt" />
+        <md-list-item class="md-3-line" ng-repeat="n in listaccountbilling">
+          <img src="img/avatar-4.png" class="md-avatar" alt="testt" />
            <div class="md-list-item-text" layout="column">
-             <h3>Mr.Deera</h3>
-             <p>Tername </p>
+             <h3>{{ n.ivz_customernumber.primaryName}}</h3>
+             <p>{{ n.ivz_billingnumber }}</p>
+             <p>{{ n.ivz_billingdate | data:'dd/MM/yyyy' }}</p>
            </div>
-           <a class="md-secondary ion-chevron-right text-h1 text-bold error" href="#/app/planneddetail/{{Data.mastertype}}"></a>
+           <a class="md-secondary ion-chevron-right text-h1 text-bold error"
+           ui-sref="app.planneddetail({mastertype:Data.mastertype,accountid:n.ivz_customernumber.id,accountname:n.ivz_customernumber.primaryName,terid:n.territoryid.id,province:n.ivz_addressprovince.id,distid:n.ivz_addressdistrict.id,txtid:n.txtid})"></a>
        </md-list-item>
       </md-list>
     </div>
   </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="reback()">
+      <i class="icon ion-chevron-left error"></i>
+      ย้อนกลับ
+    </a>
+  </div>
 </ion-view>

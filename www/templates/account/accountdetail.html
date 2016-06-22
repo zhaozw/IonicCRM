@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col"></div>
       <div class="col">
-        <img src="img/d05.png" alt="" width="150" height="150" class="center" />
+        <img src="{{user.avatar}}" alt="" width="150" height="150" class="center thumbnail" />
       </div>
       <div class="col"></div>
     </div>
@@ -11,34 +11,54 @@
       <div class="col col-10"></div>
       <div class="col">
         <h2>ข้อมูลทั่วไป</h2>
-        <h3>C0001-Mama Shop</h3>
-        <h3>เขตการขาย:D00</h3>
-        <h3>ที่อยู่:123/234 testt</h3>
-        <h3>อำเภอ:west จังหวัด:east รหัสไปรษณี:12342</h3>
-        <hr />
+        <h3>
+          <span class="warn">{{user.filtername}}</span>
+        </h3>
+        <h3>
+          เขตการขาย:&nbsp;
+          <span class="warn">{{user.territoryid.primaryName}}</span>
+        </h3>
+        <h3>
+          ที่อยู่:&nbsp;<span class="warn">{{user.address1_name}}</span>
+        </h3>
+        <h3>
+          อำเภอ:&nbsp;<span class="warn">{{user.ivz_addressdistrict.primaryName}}</span> &nbsp;
+          จังหวัด:&nbsp;<span class="warn">{{user.provincename}}</span> &nbsp;
+          รหัสไปรษณี:&nbsp;<span class="warn">{{user.address1_postalcode}}</span>
+        </h3>
+        <!-- <hr />
         <h2>ข้อมูลผู้ติดต่อ</h2>
-        <h3>Mr.Dee Shoping</h3>
-        <h3>โทรศัพย์:085555875</h3>
-        <h3>โทรสาร:058888112</h3>
-        <h3>ที่อยู่อีเมล์:admin@myhost.com</h3>
+        <h3>Mr.Dee Shoping</h3> -->
+        <h3>
+          โทรศัพย์:&nbsp;
+          <span class="warn">{{user.telephone1}}</span>
+        </h3>
+        <h3>
+          โทรสาร:&nbsp;<span class="warn">{{ user.fax }}</span>
+        </h3>
+        <!-- <h3>ที่อยู่อีเมล์:admin@myhost.com</h3> -->
       </div>
     </div>
   </ion-content>
   <div class="tabs tabs-icon-top">
-    <a class="tab-item">
-      <i class="icon ion-android-contact"></i>
-      ข้อมูลทั่วไป
+    <a class="tab-item" ng-click="reback()">
+      <i class="icon ion-chevron-left error"></i>
+      ย้อนกลับ
     </a>
-    <a class="tab-item" href="#/app/accountmap">
-      <i class="icon ion-android-map"></i>
+    <a class="tab-item"  ng-click="reload()">
+      <i class="icon ion-refresh primary"></i>
+      เรียกข้อมูลใหม่
+    </a>
+    <a class="tab-item" myclick="openAccountEditDetail()">
+      <i class="icon ion-android-map warn"></i>
       แผนที่
     </a>
-    <a class="tab-item" href="#/app/accountinvoice/0/0">
-      <i class="icon ion-android-list"></i>
+    <a class="tab-item" ui-sref="app.accountinvoice({accountid:user.accountid,mastertype:Data.mastertype})">
+      <i class="icon ion-android-list success"></i>
       invoice
     </a>
-    <a class="tab-item" href="#/app/accountbilling/0/0">
-      <i class="icon ion-android-list"></i>
+    <a class="tab-item" ui-sref="app.accountbilling({accountid:user.accountid,mastertype:Data.mastertype})">
+      <i class="icon ion-android-list info"></i>
       billing
     </a>
   </div>

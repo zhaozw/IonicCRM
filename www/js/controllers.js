@@ -298,6 +298,9 @@ angular.module('starter.controllers', [])
         $scope.reback = function(){
           $ionicHistory.goBack(-1);
         }
+        $scope.reload = function(){
+
+        };
     })
     /*-------------- เข้าสู่ระบบ -------------------*/
     .controller('PlaylistsCtrl', function ($scope, $stateParams, $cookies, Data, $state, $ionicLoading, $ionicHistory, datauser, $ionicScrollDelegate, $ionicModal)  {
@@ -914,35 +917,37 @@ angular.module('starter.controllers', [])
                       Data.sBilling = 1;
                       Data.scollecttion = 1;
                       getInvoiceByAccountid(Data.termas, function (data) {
-                          $scope.arInvoice = false;
-                          var x = 0;
-                          var loopArray = function(arr){
-                            getPush(x,function(){
-                              x++;
-                              if(x < arr.length){
-                                loopArray(arr);
-                              }else{
-                                $ionicLoading.hide();
-                              }
-                            });
-                          }
-                          loopArray(data);
-                          function getPush(i,callback){
-                            $scope.showLoading('กำลังโหลดข้อมูล '+data[i].filtername);
-                            $scope.todos.push({
-                                    ivz_invoicedate:data[i].ivz_invoicedate,
-                                    invoicenumber:data[i].invoicenumber,
-                                    customerid:data[i].customerid,
-                                    territoryid:data[i].territoryid,
-                                    accountnumber:data[i].accountnumber,
-                                    ivz_addressprovince:data[i].ivz_addressprovince,
-                                    ivz_addressdistrict:data[i].ivz_addressdistrict,
-                                    filtername:data[i].filtername,
-                                    accountype:1
-                                });
-                                setTimeout(function(){
-                                  callback();
-                                },5);
+                          if(data.length > 0){
+                            $scope.arInvoice = false;
+                            var x = 0;
+                            var loopArray = function(arr){
+                              getPush(x,function(){
+                                x++;
+                                if(x < arr.length){
+                                  loopArray(arr);
+                                }else{
+                                  $ionicLoading.hide();
+                                }
+                              });
+                            }
+                            loopArray(data);
+                            function getPush(i,callback){
+                              $scope.showLoading('กำลังโหลดข้อมูล '+data[i].filtername);
+                              $scope.todos.push({
+                                      ivz_invoicedate:data[i].ivz_invoicedate,
+                                      invoicenumber:data[i].invoicenumber,
+                                      customerid:data[i].customerid,
+                                      territoryid:data[i].territoryid,
+                                      accountnumber:data[i].accountnumber,
+                                      ivz_addressprovince:data[i].ivz_addressprovince,
+                                      ivz_addressdistrict:data[i].ivz_addressdistrict,
+                                      filtername:data[i].filtername,
+                                      accountype:1
+                                  });
+                                  setTimeout(function(){
+                                    callback();
+                                  },5);
+                            }
                           }
                           if($scope.$phase){
                             $scope.$apply();
@@ -954,54 +959,56 @@ angular.module('starter.controllers', [])
                       Data.scollecttion = 0;
                       console.log('insert ค้นหาลูกค้าทั่วไป');
                       GetAccount(Data.termas, Data.mastertype, 1, function (data) {
-                          $scope.arAccount = false;
-                          var x = 0;
-                          var loopArray = function(arr){
-                            getPush(x,function(){
-                              x++;
-                              if(x < arr.length){
-                                loopArray(arr);
-                              }else{
-                                $ionicLoading.hide();
-                              }
-                            });
-                          }
-                          loopArray(data);
-                          function getPush(i,callback){
-                            $scope.showLoading('กำลังโหลดข้อมูล '+data[i].filtername);
-                            $scope.todos.push({
-                                  accountid:data[i].accountid,
-                                  name:data[i].name,
-                                  ivz_addresscountry:data[i].ivz_addresscountry,
-                                  ivz_addressprovince:data[i].ivz_addressprovince,
-                                  ivz_addressdistrict:data[i].ivz_addressdistrict,
-                                  ivz_availablefromtime:data[i].ivz_availablefromtime,
-                                  ivz_availabletotime:data[i].ivz_availabletotime,
-                                  territoryid:data[i].territoryid,
-                                  customertypecode:data[i].customertypecode,
-                                  statuscode:data[i].statuscode,
-                                  accountnumber:data[i].accountnumber,
-                                  filtername:data[i].filtername,
-                                  ivz_customer:data[i].ivz_customer,
-                                  accountype:data[i].accountype,
-                                  ivz_statuscomplete:data[i].ivz_statuscomplete,
-                                  remarkreject:data[i].remarkreject,
-                                  ivz_taxid:data[i].ivz_taxid,
-                                  customertypecode:data[i].customertypecode,
-                                  statustype:data[i].statustype,
-                                  ivz_doc01:data[i].ivz_doc01,
-                                  ivz_doc02:data[i].ivz_doc02,
-                                  ivz_doc03:data[i].ivz_doc03,
-                                  ivz_dochouseholdregis:data[i].ivz_dochouseholdregis,
-                                  ivz_docidcard:data[i].ivz_docidcard,
-                                  matchtype:data[i].matchtype,
-                                  statusempid:data[i].statusempid,
-                                  ivz_balancecredit:data[i].ivz_balancecredit,
-                                  ivz_integrationid:data[i].ivz_integrationid
-                                });
-                                setTimeout(function(){
-                                  callback();
-                                },5);
+                          if(data.length > 0){
+                            $scope.arAccount = false;
+                            var x = 0;
+                            var loopArray = function(arr){
+                              getPush(x,function(){
+                                x++;
+                                if(x < arr.length){
+                                  loopArray(arr);
+                                }else{
+                                  $ionicLoading.hide();
+                                }
+                              });
+                            }
+                            loopArray(data);
+                            function getPush(i,callback){
+                              $scope.showLoading('กำลังโหลดข้อมูล '+data[i].filtername);
+                              $scope.todos.push({
+                                    accountid:data[i].accountid,
+                                    name:data[i].name,
+                                    ivz_addresscountry:data[i].ivz_addresscountry,
+                                    ivz_addressprovince:data[i].ivz_addressprovince,
+                                    ivz_addressdistrict:data[i].ivz_addressdistrict,
+                                    ivz_availablefromtime:data[i].ivz_availablefromtime,
+                                    ivz_availabletotime:data[i].ivz_availabletotime,
+                                    territoryid:data[i].territoryid,
+                                    customertypecode:data[i].customertypecode,
+                                    statuscode:data[i].statuscode,
+                                    accountnumber:data[i].accountnumber,
+                                    filtername:data[i].filtername,
+                                    ivz_customer:data[i].ivz_customer,
+                                    accountype:data[i].accountype,
+                                    ivz_statuscomplete:data[i].ivz_statuscomplete,
+                                    remarkreject:data[i].remarkreject,
+                                    ivz_taxid:data[i].ivz_taxid,
+                                    customertypecode:data[i].customertypecode,
+                                    statustype:data[i].statustype,
+                                    ivz_doc01:data[i].ivz_doc01,
+                                    ivz_doc02:data[i].ivz_doc02,
+                                    ivz_doc03:data[i].ivz_doc03,
+                                    ivz_dochouseholdregis:data[i].ivz_dochouseholdregis,
+                                    ivz_docidcard:data[i].ivz_docidcard,
+                                    matchtype:data[i].matchtype,
+                                    statusempid:data[i].statusempid,
+                                    ivz_balancecredit:data[i].ivz_balancecredit,
+                                    ivz_integrationid:data[i].ivz_integrationid
+                                  });
+                                  setTimeout(function(){
+                                    callback();
+                                  },5);
+                            }
                           }
                           if($scope.$phase){
                             $scope.$apply();
@@ -5498,7 +5505,7 @@ angular.module('starter.controllers', [])
             $scope.listaccount = [];
             GetAccount($stateParams.terriid, Data.mastertype, 1, function (data) {
                 $scope.showLoadingProperTimesRegter('โหลดข้อมูล');
-                if (data) {
+                if (data.length > 0) {
                     var x = 0;
                     var loopArray = function (arr) {
                         getPush(x, function () {
@@ -5543,6 +5550,10 @@ angular.module('starter.controllers', [])
                             callback();
                         }, 25);
                     }
+                }else{
+                  setTimeout(function () {
+                      $ionicLoading.hide();
+                  }, 2000);
                 }
                 if($scope.$phase){$scope.$apply();}
             });
@@ -5562,7 +5573,7 @@ angular.module('starter.controllers', [])
                     $scope.listaccount = [];
                     GetAccount($cookies.get('territoryid'), Data.mastertype, 1, function (data) {
                         $scope.showLoadingProperTimesRegter('โหลดข้อมูล');
-                        if (data) {
+                        if (data.length > 0) {
                             var x = 0;
                             var loopArray = function (arr) {
                                 getPush(x, function () {
@@ -5607,6 +5618,10 @@ angular.module('starter.controllers', [])
                                     callback();
                                 }, 25);
                             }
+                        }else{
+                          setTimeout(function () {
+                              $ionicLoading.hide();
+                          }, 2000);
                         }
                         if($scope.$phase){$scope.$apply();}
                     });
@@ -5617,7 +5632,7 @@ angular.module('starter.controllers', [])
                 $scope.listaccount = [];
                 GetAccount($cookies.get('territoryid'), Data.mastertype, 1, function (data) {
                     $scope.showLoadingProperTimesRegter('โหลดข้อมูล');
-                    if (data) {
+                    if (data.length > 0) {
                         var x = 0;
                         var loopArray = function (arr) {
                             getPush(x, function () {
@@ -5662,6 +5677,10 @@ angular.module('starter.controllers', [])
                                 callback();
                             }, 25);
                         }
+                    }else{
+                      setTimeout(function () {
+                          $ionicLoading.hide();
+                      }, 2000);
                     }
                     if($scope.$phase){$scope.$apply();}
                 });
@@ -5672,7 +5691,7 @@ angular.module('starter.controllers', [])
                 $scope.listaccount = [];
                 GetAccount($cookies.get('territoryid'), Data.mastertype, 1, function (data) {
                     $scope.showLoadingProperTimesRegter('โหลดข้อมูล');
-                    if (data) {
+                    if (data.length > 0) {
                         var x = 0;
                         var loopArray = function (arr) {
                             getPush(x, function () {
@@ -5717,6 +5736,10 @@ angular.module('starter.controllers', [])
                                 callback();
                             }, 25);
                         }
+                    }else{
+                      setTimeout(function () {
+                          $ionicLoading.hide();
+                      }, 2000);
                     }
                     if($scope.$phase){$scope.$apply();}
                 });
@@ -6836,6 +6859,107 @@ angular.module('starter.controllers', [])
         Data.showcart = false;
         $scope.Data = Data;
         Data.mastertype = $stateParams.mastertype;
+        $scope.user = {
+          accountid:$stateParams.accountid,
+          name:'',
+          ivz_addresscountry:'',
+          ivz_addressprovince:'',
+          provincename:'',
+          ivz_addressdistrict:'',
+          ivz_availablefromtime:'',
+          ivz_availabletotime:'',
+          territoryid:'',
+          customertypecode:'',
+          statuscode:'',
+          accountnumber:'',
+          filtername:'',
+          ivz_customer:'',
+          accountype:'',
+          ivz_statuscomplete:'',
+          remarkreject:'',
+          ivz_taxid:'',
+          customertypecode:'',
+          statustype:'',
+          statustypecode:'',
+          ivz_doc01:'',
+          ivz_doc02:'',
+          ivz_doc03:'',
+          ivz_dochouseholdregis:'',
+          ivz_docidcard:'',
+          matchtype:'',
+          statusempid:'',
+          ivz_balancecredit:'',
+          ivz_integrationid:'',
+          currencyid:'',
+          shippingmethodcode:'',
+          paymenttermscode:'',
+          avatar:'img/avatar-6.png'
+        }
+        $scope.getAccount = function(){
+          GetAccountById($stateParams.accountid,$stateParams.mastertype,function(data){
+            if(data.length > 0){
+              $scope.user.accountid = data[0].accountid;
+              $scope.user.name = data[0].name;
+              $scope.user.ivz_addresscountry = data[0].ivz_addresscountry;
+              $scope.user.ivz_addressprovince = data[0].ivz_addressprovince;
+              $scope.user.provincename = data[0].provincename;
+              $scope.user.ivz_addressdistrict = data[0].ivz_addressdistrict;
+              $scope.user.ivz_availablefromtime = data[0].ivz_availablefromtime;
+              $scope.user.ivz_availabletotime = data[0].ivz_availabletotime;
+              $scope.user.territoryid = data[0].territoryid;
+              $scope.user.customertypecode = data[0].customertypecode;
+              $scope.user.statuscode = data[0].statuscode;
+              $scope.user.accountnumber = data[0].accountnumber;
+              $scope.user.filtername = data[0].filtername;
+              $scope.user.ivz_customer = data[0].ivz_customer;
+              $scope.user.accountype = data[0].accountype;
+              $scope.user.ivz_statuscomplete = data[0].ivz_statuscomplete;
+              $scope.user.remarkreject = data[0].remarkreject;
+              $scope.user.ivz_taxid = data[0].ivz_taxid;
+              $scope.user.customertypecode = data[0].customertypecode;
+              $scope.user.statustype = data[0].statustype;
+              $scope.user.statustypecode = data[0].statustypecode;
+              $scope.user.ivz_doc01 = data[0].ivz_doc01;
+              $scope.user.ivz_doc02 = data[0].ivz_doc02;
+              $scope.user.ivz_doc03 = data[0].ivz_doc03;
+              $scope.user.ivz_dochouseholdregis = data[0].ivz_dochouseholdregis;
+              $scope.user.ivz_docidcard = data[0].ivz_docidcard;
+              $scope.user.matchtype = data[0].matchtype;
+              $scope.user.statusempid = data[0].statusempid;
+              $scope.user.ivz_balancecredit = data[0].ivz_balancecredit;
+              $scope.user.ivz_integrationid = data[0].ivz_integrationid;
+              $scope.user.currencyid = data[0].currencyid;
+              $scope.user.shippingmethodcode = data[0].shippingmethodcode;
+              $scope.user.paymenttermscode = data[0].paymenttermscode;
+              $scope.user.telephone1 = data[0].telephone1;
+              $scope.user.address1_name = data[0].address1_name;
+              $scope.user.fax = data[0].fax;
+              $scope.user.address1_postalcode = data[0].address1_postalcode;
+            }
+            if($scope.$phase){
+              $scope.$apply();
+            }
+          });
+        }
+        $scope.openAccountEditDetail = function() {
+            var account = new MobileCRM.FetchXml.Entity("account");
+            account.addAttribute("accountid");
+            // only active record can have edit form
+            account.filter = new MobileCRM.FetchXml.Filter();
+            account.filter.where("accountid", "eq", $scope.user.accountid);
+            // only one record will be fetched
+            var fetch = new MobileCRM.FetchXml.Fetch(account, 1);
+            fetch.execute(
+              "Array",  // Take the results as an array of arrays with field values
+              function (res) {
+                MobileCRM.UI.FormManager.showEditDialog("account", res[0][0], null);
+              },
+              MobileCRM.bridge.alert
+            );
+          }
+        $scope.$on('$ionicView.enter',function(){
+          $scope.getAccount();
+        });
     })
     .controller('AccountInvoiceCtrl', function ($scope, $stateParams, $cookies, Data, $state, $ionicLoading, $ionicHistory) {
         $state.reload();
@@ -6843,6 +6967,54 @@ angular.module('starter.controllers', [])
         $scope.Data = Data;
         Data.mastertype = $stateParams.mastertype;
         $scope.vCheckAll = 0;
+        $scope.getInvoiceChecker = function(){
+          $scope.listaccountinvoice = [];
+          getInvoiceBid($stateParams.accountid,function(data){
+            $scope.showLoading('กำลังโหลดข้อมูล');
+            if(data.length > 0){
+              var x = 0;
+              var loopArray = function(arr){
+                getPush(x,function(){
+                  x++;
+                  if(x < arr.length){
+                    loopArray(arr);
+                  }else{
+                    $ionicLoading.hide();
+                  }
+                });
+              }
+              loopArray(data);
+              function getPush(i,callback){
+                $scope.listaccountinvoice.push({
+                  ivz_invoicedate:new Date(data[i].ivz_invoicedate),
+	                invoicenumber:data[i].invoicenumber,
+	            		customerid:data[i].customerid,
+	                territoryid:data[i].territoryid,
+	            		accountnumber:data[i].accountnumber,
+									ivz_addressprovince:data[i].ivz_addressprovince,
+									ivz_addressdistrict:data[i].ivz_addressdistrict,
+									filtername:data[i].filtername,
+									accountype:$stateParams.mastertype,
+                  txtid:data[i].txtid
+                });
+                setTimeout(function(){
+                  callback();
+                },10);
+              }
+            }else{
+              setTimeout(function(){
+                alert('ไม่พบข้อมูล');
+                $ionicLoading.hide();
+              },3000);
+            }
+            if($scope.$phase){
+              $scope.$apply();
+            }
+          });
+        }
+        $scope.$on('$ionicView.enter',function(){
+          $scope.getInvoiceChecker();
+        });
     })
     .controller('AccountBillingCtrl', function ($scope, $stateParams, $cookies, Data, $state, $ionicLoading, $ionicHistory) {
         $state.reload();
@@ -6850,6 +7022,56 @@ angular.module('starter.controllers', [])
         $scope.Data = Data;
         Data.mastertype = $stateParams.mastertype;
         $scope.vCheckAll = 0;
+        $scope.getInvoiceChecker = function(){
+          $scope.listaccountbilling = [];
+          GetBillingByIaccount($stateParams.accountid,function(data){
+            $scope.showLoading('กำลังโหลดข้อมูล');
+            if(data.length > 0){
+              var x = 0;
+              var loopArray = function(arr){
+                getPush(x,function(){
+                  x++;
+                  if(x < arr.length){
+                    loopArray(arr);
+                  }else{
+                    $ionicLoading.hide();
+                  }
+                });
+              }
+              loopArray(data);
+              function getPush(i,callback){
+                $scope.listaccountbilling.push({
+                  ivz_billingnotestableid:data[i].ivz_billingnotestableid,
+                  ivz_name:data[i].ivz_name,
+                  ivz_billingnumber:data[i].ivz_billingnumber,
+                  ivz_sumbillingamount:data[i].ivz_sumbillingamount,
+                  ivz_billingdate:new Date(data[i].ivz_billingdate),
+                  ivz_customername:data[i].ivz_customername,
+                  createdon:data[i].createdon,
+                  ivz_customernumber:data[i].ivz_customernumber,
+                  ivz_addressdistrict:data[i].ivz_addressdistrict,
+                  ivz_addressprovince:data[i].ivz_addressprovince,
+                  territoryid:data[i].territoryid,
+                  txtid:data[i].txtid
+                });
+                setTimeout(function(){
+                  callback();
+                },10);
+              }
+            }else{
+              setTimeout(function(){
+                alert('ไม่พบข้อมูล');
+                $ionicLoading.hide();
+              },3000);
+            }
+            if($scope.$phase){
+              $scope.$apply();
+            }
+          });
+        }
+        $scope.$on('$ionicView.enter',function(){
+          $scope.getInvoiceChecker();
+        });
     })
     ////////////////////// end /////////////////
     ////////////////////// Adjustment ///////////////
@@ -7303,10 +7525,10 @@ angular.module('starter.controllers', [])
         $scope.Data = Data;
         $ionicLoading.hide();
         Data.mastertype = $stateParams.mastertype;
-        var getCusAds = function (id) {
+        $scope.getCusAds = function (id) {
             $scope.listaddressaccount = [];
             GetCustomerAddres(id, function (data) {
-               alert(data.length);
+               //alert(data.length);
                 var x = 0;
                 var loopArray = function (arr) {
                     getPush(x, function () {
@@ -7342,8 +7564,7 @@ angular.module('starter.controllers', [])
             });
         }
         $scope.$on("$ionicView.enter", function () {
-            //console.log('reload complete');
-            getCusAds($stateParams.accountid);
+            $scope.getCusAds($stateParams.accountid);
         });
         $scope.goaddress = function (id) {
             ///$state.go('app.adjustmentaddressform',{reload:true});
@@ -7482,16 +7703,20 @@ angular.module('starter.controllers', [])
                 $scope.provincelist = data;
                 if($scope.$phase){$scope.$apply();}
             });
+            GetDistrict(function (data) {
+                $scope.showLoadingComplete('โหลดข้อมูลเสร็จแล้ว');
+                setTimeout(function () {
+                    $ionicLoading.hide();
+                }, 1000);
+                $scope.districtlist = data;
+                if($scope.$phase){$scope.$apply();}
+            });
 
         }
-
-
         $scope.$on("$ionicView.enter", function () {
             $ionicLoading.hide();
             //console.log('reload complete');
             getCusAds($stateParams.addressid);
-            $(function () {
-                //alert('loading ok');
                 $('#doc01').change(function () {
                     GetAtt('#doc01', '#idcImg01', 'canvas01', function (data) {
                         //alert('changer');
@@ -7539,19 +7764,21 @@ angular.module('starter.controllers', [])
                         if($scope.$phase){$scope.$apply();}
                     });
                 });
-            }); //documnetload
-            $scope.mdSlProv = function (id) {
-                $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล');
-                GetDistrictById(id, function (data) {
-                    $scope.showLoadingComplete('โหลดข้อมูลเสร็จแล้ว');
-                    setTimeout(function () {
-                        $ionicLoading.hide();
-                    }, 1000);
-                    $scope.districtlist = data;
-                    if($scope.$phase){$scope.$apply();}
-                });
-            };
+
         }); //end on view
+        $scope.mdSlProv = function (id) {
+            $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล');
+            if(id){
+              GetDistrictById(id, function (data) {
+                  $scope.showLoadingComplete('โหลดข้อมูลเสร็จแล้ว');
+                  setTimeout(function () {
+                      $ionicLoading.hide();
+                  }, 1000);
+                  $scope.districtlist = data;
+                  if($scope.$phase){$scope.$apply();}
+              });
+            }
+        };
         //get just
         $scope.searchtype = function (txt) {
             if (txt) {

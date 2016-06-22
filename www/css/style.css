@@ -43,10 +43,10 @@
   color: #2ABB9B;
   font-weight: bold;
 }
-.warning{
+.warn{
   color: #FFA400;
 }
-.warning-bold{
+.warn-bold{
   color: #FFA400;
   font-weight: bold;
 }
@@ -56,9 +56,6 @@
 .error-bold{
   color: #CF000F;
   font-weight: bold;
-}
-.warn{
-  color: #CF000F;
 }
 .text-h1{
   font-size: 30px;
