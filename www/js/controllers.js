@@ -682,12 +682,8 @@ angular.module('starter.controllers', [])
         $scope.$on('$ionicView.enter',function(){
           var todos = $scope.todos;
           if(todos.length < 1){
-            //alert('load '+todos.length);
             $scope.reloaddata(0);
-          }else{
-            //alert('unload '+todos.length);
           }
-
         });
         $scope.reloaddata = function (sid) {
             GetAppointStatus($stateParams.sterritory, parseInt(sid), Data.mastertype, function (data) {
@@ -772,7 +768,7 @@ angular.module('starter.controllers', [])
                       loopArray(arr);
                     }else{
                       $scope.reloaddata(0);
-                      $scope.sendmailtosup(Data.termas,'ขออนุมัติแผนการดำเนนงาน','',function(){
+                      $scope.sendmailtosup(Data.termas,'ขออนุมัติแผนการดำเนินงาน','',function(){
                         $ionicLoading.hide();
                       });
                     }
@@ -915,6 +911,7 @@ angular.module('starter.controllers', [])
         $scope.arLoading = false;
         $scope.Data = Data;
         $scope.accountype = $stateParams.accountype;
+        $scope.numberOfItemsToDisplay = 20;
         $scope.loaddata = function(){
             $scope.todos = [];
             switch ($stateParams.accountype) {
@@ -923,6 +920,7 @@ angular.module('starter.controllers', [])
                       Data.scollecttion = 1;
                       getInvoiceByAccountid(Data.termas, function (data) {
                           if(data.length > 0){
+                            $scope.showLoading('กำลังโหลดข้อมูล');
                             $scope.arInvoice = false;
                             var x = 0;
                             var loopArray = function(arr){
@@ -937,7 +935,7 @@ angular.module('starter.controllers', [])
                             }
                             loopArray(data);
                             function getPush(i,callback){
-                              $scope.showLoading('กำลังโหลดข้อมูล '+data[i].filtername);
+                              // $scope.showLoading('กำลังโหลดข้อมูล '+data[i].filtername);
                               $scope.todos.push({
                                       ivz_invoicedate:data[i].ivz_invoicedate,
                                       invoicenumber:data[i].invoicenumber,
@@ -947,11 +945,12 @@ angular.module('starter.controllers', [])
                                       ivz_addressprovince:data[i].ivz_addressprovince,
                                       ivz_addressdistrict:data[i].ivz_addressdistrict,
                                       filtername:data[i].filtername,
-                                      accountype:1
+                                      accountype:1,
+                                      avator:'img/avatar-5.png'
                                   });
                                   setTimeout(function(){
                                     callback();
-                                  },5);
+                                  },0);
                             }
                           }
                           if($scope.$phase){
@@ -965,6 +964,7 @@ angular.module('starter.controllers', [])
                       console.log('insert ค้นหาลูกค้าทั่วไป');
                       GetAccount(Data.termas, Data.mastertype, 1, function (data) {
                           if(data.length > 0){
+                            $scope.showLoading('กำลังโหลดข้อมูล');
                             $scope.arAccount = false;
                             var x = 0;
                             var loopArray = function(arr){
@@ -979,7 +979,7 @@ angular.module('starter.controllers', [])
                             }
                             loopArray(data);
                             function getPush(i,callback){
-                              $scope.showLoading('กำลังโหลดข้อมูล '+data[i].filtername);
+                              // $scope.showLoading('กำลังโหลดข้อมูล '+data[i].filtername);
                               $scope.todos.push({
                                     accountid:data[i].accountid,
                                     name:data[i].name,
@@ -1008,11 +1008,12 @@ angular.module('starter.controllers', [])
                                     matchtype:data[i].matchtype,
                                     statusempid:data[i].statusempid,
                                     ivz_balancecredit:data[i].ivz_balancecredit,
-                                    ivz_integrationid:data[i].ivz_integrationid
+                                    ivz_integrationid:data[i].ivz_integrationid,
+                                    avator:'img/avatar-4.png'
                                   });
                                   setTimeout(function(){
                                     callback();
-                                  },5);
+                                  },0);
                             }
                           }
                           if($scope.$phase){
@@ -1062,13 +1063,18 @@ angular.module('starter.controllers', [])
                 break;
             }
         }
-        $scope.$on('$ionicView.enter',function(){
-          var todos = $scope.todos;
-          alert(todos.length);
-          if(todos.length <= 0){
-            $scope.loaddata();
-          }
-        });
+        $scope.loaddata();
+
+        // $scope.$on('$ionicView.enter',function(){
+        //   if($scope.todos){
+        //     var listscope = $scope.todos;
+        //     if(listscope.length <= 0){
+        //       $scope.loaddata();
+        //     }
+        //   }else{
+        //     $scope.loaddata();
+        //   }
+        // });
     })
     .controller('PlanAccuntDetailCtrl', function ($scope, $stateParams, $cookies, Data, $ionicHistory, $state, $ionicLoading) {
         $state.reload();
@@ -1607,7 +1613,7 @@ angular.module('starter.controllers', [])
                     });
                     setTimeout(function(){
                       callback();
-                    },100);
+                    },5);
                   }
                 }
                 if($scope.$phase){$scope.$apply();}
@@ -1631,8 +1637,10 @@ angular.module('starter.controllers', [])
                 if(x < arr.length){
                   loopArray(arr);
                 }else{
-                  $ionicLoading.hide();
+                  alert('complete');
                   $scope.reloaddata();
+                  $ionicLoading.hide();
+                  //var lenList = $scope.listappointment;
                 }
               });
             }
@@ -1689,8 +1697,8 @@ angular.module('starter.controllers', [])
                     }else{
                       $scope.sendmailtosales(Data.sterritory,'ไม่อนุมัติแผนการดำเนินงาน','ไม่สามารถอนุมัติแผนการดำเนินงานได้เนื่องจาก'+$scope.reject.txtreject,function(){
                         setTimeout(function () {
+                            $scope.reback();
                             $ionicLoading.hide();
-                            $ionicHistory.goBack(-1);
                         }, 3000);
                       });
                     }

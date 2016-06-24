@@ -10,8 +10,8 @@
         data-ng-click="txtcustomer = ''">&nbsp;ยกเลิก&nbsp;</md-button>
     </div>
     <div class="" ng-hide="dvTodos">
-      <div class="">
-        <md-list>
+      <div class="" >
+        <md-list has-header="true"  padding="true" on-infinite-scroll="addMoreItem">
           <!-- <md-list-item class="md-3-line" ng-repeat="item in todos|filter:txtcustomer"> -->
           <md-list-item class="md-3-line" ng-repeat="item in todos|filter:txtcustomer" ng-if="item.ivz_employeeposition == Data.mastertype">
             <!-- \filter data.mastertype -->

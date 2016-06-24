@@ -1,5 +1,5 @@
 <ion-view view-title="เลือกลูกค้า">
-  <ion-content>
+  <ion-content >
     <div class="bar bar-header item-input-inset">
       <label class="item-input-wrapper">
         <i class="icon ion-ios-search placeholder-icon"></i>
@@ -14,12 +14,11 @@
     <div class="card" ng-hide="arInvoice">
       <div class="item item-text-wrap">
         <md-list>
-          <md-list-item class="md-3-line" ng-repeat="item in todos|filter:txtcustomer"
+          <md-list-item class="md-3-line" ng-repeat="item in todos|filter:txtcustomer | limitTo:numberOfItemsToDisplay"
            href="#/app/accountid/{{item.customerid.id}}/{{item.customerid.primaryName}}/{{item.accountype}}/{{item.ivz_addressprovince.id}}/{{item.ivz_addressdistrict.id}}/{{item.territoryid.id}}">
-             <img src="img/d05.png" class="md-avatar" alt="testt" />
+             <img src="{{item.avator}}" class="md-avatar" alt="testt" />
              <div class="md-list-item-text" layout="column">
                <h3>{{ item.filtername }}</h3>
-               <!-- <p>{{ item.territoryid.primaryName }}</p> -->
              </div>
              <a href="#/app/accountid/{{item.customerid.id}}/{{item.customerid.primaryName}}/{{item.accountype}}/{{item.ivz_addressprovince.id}}/{{item.ivz_addressdistrict.id}}/{{item.territoryid.id}}" class="md-secondary ion-ios-arrow-forward text-h1"></a>
              <md-divider></md-divider>
@@ -31,9 +30,9 @@
     <div class="card" ng-hide="arAccount">
       <div class="item item-text-wrap">
         <md-list>
-          <md-list-item class="md-3-line" ng-repeat="item in todos|filter:txtcustomer"
+          <md-list-item class="md-3-line" ng-repeat="item in todos| filter:txtcustomer | limitTo:numberOfItemsToDisplay"
           href="#/app/accountid/{{item.accountid}}/{{item.name}}/{{item.accountype}}/{{item.ivz_addressprovince.id}}/{{item.ivz_addressdistrict.id}}/{{item.territoryid.id}}">
-             <img src="img/d05.png" class="md-avatar" alt="testt" />
+             <img src="{{item.avator}}" class="md-avatar" alt="testt" />
              <div class="md-list-item-text" layout="column">
                <h3>{{ item.filtername }}</h3>
                <!-- <p>{{ item.territoryid.primaryName }}</p> -->
@@ -50,7 +49,7 @@
         <md-list>
           <md-list-item class="md-3-line" ng-repeat="item in todos|filter:txtcustomer"
           href="#/app/accountid/{{item.ivz_saleprospectid}}/{{item.ivz_name}}/{{item.accountype}}/{{item.ivz_saleprovinceid.id}}/{{item.ivz_saledistict.id}}/{{item.ivz_territory.id}}">
-             <img src="img/d05.png" class="md-avatar" alt="testt" />
+             <img src="{{item.avator}}" class="md-avatar" alt="testt" />
              <div class="md-list-item-text" layout="column">
                <h3>{{ item.ivz_name }}</h3>
                <!-- <p>{{ item.ivz_territory.primaryName }}</p> -->
