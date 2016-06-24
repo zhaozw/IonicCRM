@@ -18,7 +18,7 @@
              <img src="img/d05.png" class="md-avatar" />
              <div class="md-list-item-text" layout="column">
                <h3>{{ item.filtername }}</h3>
-               <p>{{ item.territoryid.primaryName }}</p>
+               <!-- <p>{{ item.territoryid.primaryName }}</p> -->
                <p>
                  <span>{{item.start | date:'dd/MM/yyyy'}}</span>
                </p>
@@ -48,6 +48,7 @@
         </md-list>
       </div>
     </div>
+    <br /><br /><br />
   </ion-content>
   <div class="tabs tabs-icon-top">
     <a class="tab-item primary" ng-click="reloaddata(0)">

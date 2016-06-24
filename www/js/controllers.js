@@ -680,7 +680,14 @@ angular.module('starter.controllers', [])
         Data.showcart = false;
         $scope.dvTodos = true;
         $scope.$on('$ionicView.enter',function(){
-          $scope.reloaddata(0);
+          var todos = $scope.todos;
+          if(todos.length < 1){
+            //alert('load '+todos.length);
+            $scope.reloaddata(0);
+          }else{
+            //alert('unload '+todos.length);
+          }
+
         });
         $scope.reloaddata = function (sid) {
             GetAppointStatus($stateParams.sterritory, parseInt(sid), Data.mastertype, function (data) {
@@ -896,6 +903,7 @@ angular.module('starter.controllers', [])
         $state.reload();
         $scope.Data = Data;
         Data.showcart = false;
+        $scope.listtypeaccount = [{id:0,name:'ลูกค้าค้างชำระ',link:''},{id:1,name:'ลูกค้าทั่วไป',link:''},{id:2,name:'ลูกค้าคาดหวัง',link:''}]
     })
     .controller('PlanListAccountCtrl', function ($scope, $stateParams, $cookies, Data,$state,$ionicLoading) {
         $state.reload();
@@ -907,11 +915,8 @@ angular.module('starter.controllers', [])
         $scope.arLoading = false;
         $scope.Data = Data;
         $scope.accountype = $stateParams.accountype;
-        $scope.todos = [];
-        $scope.$on('$ionicView.enter',function(){
-          //alert(Data.termas);
-          //alert($scope.todos.length);
-          if($scope.todos.length <= 0){
+        $scope.loaddata = function(){
+            $scope.todos = [];
             switch ($stateParams.accountype) {
               case '1':
                       Data.sBilling = 1;
@@ -1056,6 +1061,12 @@ angular.module('starter.controllers', [])
                       // });
                 break;
             }
+        }
+        $scope.$on('$ionicView.enter',function(){
+          var todos = $scope.todos;
+          alert(todos.length);
+          if(todos.length <= 0){
+            $scope.loaddata();
           }
         });
     })

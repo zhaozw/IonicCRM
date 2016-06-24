@@ -5,7 +5,10 @@
         <i class="icon ion-ios-search placeholder-icon"></i>
         <input type="search" placeholder="Search" ng-model="txtcustomer">
       </label>
-      <md-button class="md-raised button-clear md-warn" aria-label="description" md-ripple-size="auto">&nbsp;ยกเลิก&nbsp;</md-button>
+      <md-button class="md-raised button-clear md-warn"
+        aria-label="description"
+        md-ripple-size="auto"
+        ng-click="txtcustomer = ''">&nbsp;ยกเลิก&nbsp;</md-button>
     </div>
     <!-- Invoice -->
     <div class="card" ng-hide="arInvoice">
@@ -16,7 +19,7 @@
              <img src="img/d05.png" class="md-avatar" alt="testt" />
              <div class="md-list-item-text" layout="column">
                <h3>{{ item.filtername }}</h3>
-               <p>{{ item.territoryid.primaryName }}</p>
+               <!-- <p>{{ item.territoryid.primaryName }}</p> -->
              </div>
              <a href="#/app/accountid/{{item.customerid.id}}/{{item.customerid.primaryName}}/{{item.accountype}}/{{item.ivz_addressprovince.id}}/{{item.ivz_addressdistrict.id}}/{{item.territoryid.id}}" class="md-secondary ion-ios-arrow-forward text-h1"></a>
              <md-divider></md-divider>
@@ -33,7 +36,7 @@
              <img src="img/d05.png" class="md-avatar" alt="testt" />
              <div class="md-list-item-text" layout="column">
                <h3>{{ item.filtername }}</h3>
-               <p>{{ item.territoryid.primaryName }}</p>
+               <!-- <p>{{ item.territoryid.primaryName }}</p> -->
              </div>
              <a href="#/app/accountid/{{item.accountid}}/{{item.name}}/{{item.accountype}}/{{item.ivz_addressprovince.id}}/{{item.ivz_addressdistrict.id}}/{{item.territoryid.id}}" class="md-secondary ion-ios-arrow-forward text-h1"></a>
              <md-divider></md-divider>
@@ -50,7 +53,7 @@
              <img src="img/d05.png" class="md-avatar" alt="testt" />
              <div class="md-list-item-text" layout="column">
                <h3>{{ item.ivz_name }}</h3>
-               <p>{{ item.ivz_territory.primaryName }}</p>
+               <!-- <p>{{ item.ivz_territory.primaryName }}</p> -->
              </div>
              <a href="#/app/accountid/{{item.ivz_saleprospectid}}/{{item.ivz_name}}/{{item.accountype}}/{{item.ivz_saleprovinceid.id}}/{{item.ivz_saledistict.id}}/{{item.ivz_territory.id}}" class="md-secondary ion-ios-arrow-forward text-h1"></a>
              <md-divider></md-divider>
