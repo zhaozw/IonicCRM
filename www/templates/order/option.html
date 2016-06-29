@@ -3,17 +3,14 @@
     <div class="card">
       <div class="item item-text-wrap">
         <md-list>
-          <md-list-item class="md-3-line" ng-click="gooporder(1)">
+          <md-list-item class="md-3-line" ng-repeat="n in listorderoption" ng-click="gooporder(n.orderlink)">
+            <img src="{{n.avator}}" class="md-avatar" alt="testt" />
             <div class="md-list-item-text" layout="column">
-              <h2><i class="icon ion-ios-list success"></i>&nbsp;<span class="success">ขาย 1</span></h2>
+              <h2>
+                {{n.ordername}}
+              </h2>
             </div>
-            <a class="md-secondary ion-chevron-right text-h1 text-bold error" ng-click="gooporder(1)"></a>
-          </md-list-item>
-          <md-list-item class="md-3-line" ng-click="gooporder(2)">
-            <div class="md-list-item-text" layout="column">
-              <h2><i class="icon ion-ios-list success"></i>&nbsp;<span class="success">ขาย 2</span></h2>
-            </div>
-            <a class="md-secondary ion-chevron-right text-h1 text-bold error" ng-click="gooporder(2)"></a>
+            <a class="md-secondary ion-chevron-right text-h1 text-bold error" ng-click="gooporder(n.orderlink)"></a>
           </md-list-item>
         </md-list>
       </div>

@@ -32,9 +32,9 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     sterritory:'',
     nterritory:'',
     termas:'',//A02
-    pricelevel:'0F6889BA-3D46-E511-80D1-005056A71F87',//บาท
-    transactioncurrency:'83008D3A-1A05-E511-80C7-005056A71F87',// บาท
-    countrymaster:'6EF2ECB7-D5E1-E511-80E1-005056A71F87',//address th
+    pricelevel:'C94B23EA-B0DB-E511-80DF-005056A71F87',//บาท
+    transactioncurrency:'EB87A95C-0D05-E511-80C5-005056A71F87',// บาท
+    countrymaster:'C67D93ED-98D4-E511-80DF-005056A71F87',//address th
     masname:'',
     Empid:'',
     mailtomail:'',
@@ -59,8 +59,53 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     territoryadjmust:'',
     showcart:false,
     tatolmatch:0,
+    balancecredit:0,
     tatolminplus:0,
-    creditlimit:0
+    creditlimit:0,
+    gid:'',//begin data
+    taxid:'',
+    cusname:'',
+    bracher:'',
+    contactname:'',
+    lastcontactname:'',
+    tel:'',
+    mobile:'',
+    fax:'',
+    email:'',
+    recivename:'',
+    addressname:'',
+    provincename:'',
+    provinceid:'',
+    districtname:'',
+    districtid:'',
+    zipcode:'',
+    invname:'',
+    invprovince:'',
+    invprovinceid:'',
+    invdistrict:'',
+    invdistrictid:'',
+    invzipcode:'',
+    othername:'',
+    otheraddress:'',
+    otherprovince:'',
+    otherprovinceid:'',
+    otherdistrict:'',
+    otherdistrictid:'',
+    otherzipcode:'',
+    transname:'',
+    teltran:'',
+    billvat:false,
+    openremark:'',
+    cashoption:'',
+    cashcredit:'',
+    fncash:'',
+    bankname:'',
+    bankaccount:'',
+    banknumber:'',
+    bankyss:'',
+    datacontact:[],
+    databusiness:[],
+    tersupselect:''
   }
 })
 .factory('Darray',function(){
@@ -117,7 +162,18 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
 .factory('Setting',function(){
   return{
     requestproduct:10,
-    setValorder:10000
+    setValorder:10000,
+    transportname:'รถ YSS',
+    transporttel:'02xxxxxxxx',
+    dateday:[{id: 0,name: "จันทร์"},
+             {id: 1,name: "อังคาร"},
+             {id: 2,name: "พุธ"},
+             {id: 3,name: "พฤหัส"},
+             {id: 4,name: "ศุกร์"},
+             {id: 5,name: "เสาร์"},
+             {id: 6,name: "อาทิตย์"}],
+    orderoption:[{id:0,orderlink:1,ordername:"ขาย 1",avator:"img/ionic.png"},
+                 {id:1,orderlink:2,ordername:"ขาย 2",avator:"img/ionic.png"}]
   }
 })
 .factory('Dtest',function(){
@@ -148,14 +204,10 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .directive('myclick', function() {
-
     return function(scope, element, attrs) {
-
         element.bind('touchstart click', function(event) {
-
             event.preventDefault();
             event.stopPropagation();
-
             scope.$apply(attrs['myclick']);
         });
     };
@@ -313,12 +365,21 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   views: {
     'menuContent': {
       templateUrl: 'templates/planned/resultplan.html',
-      controller:'PlanedCtrl'
+      controller:'PlanListMasterCtrl'
+    }
+  }
+})
+.state('app.listtername', {
+  url:'/listtersup/:mastertype/:typego',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/planned/listtersup.html',
+      controller:'PlanListMasterCtrl'
     }
   }
 })
 .state('app.listplanned', {
-  url:'/listplanned/:mastertype/:retype',
+  url:'/listplanned/:mastertype',
   views: {
     'menuContent': {
       templateUrl: 'templates/planned/listplan.html',
@@ -593,17 +654,8 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   }
 })
-// .state('app.adjustmentaddressform', {
-//   url:'/adjustmentaddressform',
-//   views: {
-//     'menuContent': {
-//       templateUrl: 'templates/adjustment/formaddress.html',
-//       controller:'AdjustmentAddressFormCtrl'
-//     }
-//   }
-// })
 .state('app.adjustmentaddressform', {
-  url:'/adjustmentaddressform/:addressid/:accountid/:statustypecode/:mastertype/:typeinsert',
+  url:'/adjustmentaddressform/:addressid/:accountid/:statustypecode/:maste rtype/:typeinsert',
   views: {
     'menuContent': {
       templateUrl: 'templates/adjustment/formaddress.html',

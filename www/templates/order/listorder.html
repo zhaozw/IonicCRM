@@ -25,10 +25,14 @@
       </div>
     </div>
     <div class="row">
-      <div class="col"></div>
+      <div class="col">
+        <h4>
+          เครดิตของลูกค้า:&nbsp;<b style="color:red;font-weight:bold;">{{Data.balancecredit | currency:''}}</b>&nbsp;บาท&nbsp;
+        </h4>
+      </div>
       <div class="col"></div>
       <div class="col col-30">
-        <h4>ยอดรวมทั้งหมด:&nbsp;<span class="error">{{addpluss() | currency:''}}</span>&nbsp;บาท</h4>
+        <h4>รวม:&nbsp;<span class="error">{{addtatol() | currency:''}}</span>&nbsp;ชิ้น&nbsp;ยอดรวมทั้งหมด:&nbsp;<span class="error">{{addpluss() | currency:''}}</span>&nbsp;บาท</h4>
       </div>
     </div>
     <br /><br />

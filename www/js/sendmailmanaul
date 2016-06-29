@@ -1,0 +1,37 @@
+getTerEmp($scope.territoryid, function (data) {
+    if (data) {
+        confirmnew(function () {
+            try {
+                insertTask(function () {
+                    if(Data.creditlimit > 100000){
+                      var title = 'เปิดบัญชีลูกค้าใหม่';
+                      var text = "เรียน  Sup./Sales Manger, รบกวนดำเนินการอนุมัติเปิดบัญชีลูกค้าใหม่เขตการขาย " +
+                      data[0].name + "  ลูกค้าชื่อ " +
+                          Data.listregist + " ให้ด้วยครับ  ขอบคุณครับ  (อีเมลฉบับนี้ส่งอัตโนมัติจากระบบ CRM)";
+                      SendMail(data[0].ivz_leadermail, title, text);
+                    }else{
+                      var title = 'เปิดบัญชีลูกค้าใหม่';
+                      var text = "เรียน  Sup./Sales Manger, รบกวนดำเนินการอนุมัติเปิดบัญชีลูกค้าใหม่เขตการขาย " +
+                      data[0].name + "  ลูกค้าชื่อ " +
+                          Data.listregist + " ให้ด้วยครับ  ขอบคุณครับ  (อีเมลฉบับนี้ส่งอัตโนมัติจากระบบ CRM)";
+                      SendMail(data[0].ivz_leadermail+';'+data[0].ivz_ccmail, title, text);
+                    }
+                    setTimeout(function () {
+                        $ionicLoading.hide();
+                        $ionicHistory.nextViewOptions({
+                            disableBack: true
+                        });
+                        $state.go('app.accountlist', {
+                            terriid: Data.termas,
+                            mastertype: Data.mastertype
+                        }, {
+                            reload: true
+                        });
+                    }, 2000);
+                });
+            } catch (er) {
+                alert('error 2888 ' + er);
+            }
+        });
+    }
+});

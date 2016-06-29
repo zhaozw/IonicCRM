@@ -15,13 +15,13 @@
                   <span style="color:green;font-weight:bold;" ng-if="n.ivz_ordernumber.length > 0">ซิงค์เข้า AX แล้ว</span>
                   สถานะออร์เดอร์:
                   <!-- <span style="color:#006442;font-weight:bold;">All || ทั้งหมด</span> -->
-                  <span style="color:#CA6924;font-weight:bold;" ng-if="n.statuscode == 2">Pending || รอดำเนินการ</span>
-                  <span style="color:#003171;font-weight:bold;" ng-if="n.statuscode == 3">In Progress || อยู่ในช่วงดำเนินการ</span>
-                  <span style="color:#757D75;font-weight:bold;" ng-if="n.statuscode == 4">Submitted || ยืนยันแล้ว</span>
-                  <span style="color:#9D2933;font-weight:bold;" ng-if="n.statuscode == 1">New || ถูกเลิก</span>
+                  <span style="color:#CA6924;font-weight:bold;" ng-if="n.statuscode === 2">Pending || รอดำเนินการ</span>
+                  <span style="color:#003171;font-weight:bold;" ng-if="n.statuscode === 3">In Progress || อยู่ในช่วงดำเนินการ</span>
+                  <span style="color:#757D75;font-weight:bold;" ng-if="n.statuscode === 4">Submitted || ยืนยันแล้ว</span>
+                  <span style="color:#9D2933;font-weight:bold;" ng-if="n.statuscode === 1">New || ถูกเลิก</span>
                   ประเภทการขาย:
-                  <span style="color:green;font-weight:bold;" ng-if="n.ivz_statussales == '1'">ขาย 1</span>
-                  <span style="color:green;font-weight:bold;" ng-if="n.ivz_statussales == '2'">ขาย 2</span>
+                  <span style="color:green;font-weight:bold;" ng-if="n.ivz_statussales === '1'">ขาย 1</span>
+                  <span style="color:green;font-weight:bold;" ng-if="n.ivz_statussales === '2'">ขาย 2</span>
                 </p>
               </div>
               <md-button class="md-secondary" ng-click="showdetailorder(n.salesorderid,n.customerid.primaryName,n.ivz_territory.id,n.ivz_statussales)">

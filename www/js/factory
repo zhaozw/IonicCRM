@@ -1,0 +1,154 @@
+.factory('Data',function(){
+  return {
+    sBilling:0,
+    scollecttion:0,
+    latitude:'',
+    longitude:'',
+    salestype:'',
+    Tername:'',
+    supsale:false,
+    dirsale:false,
+    mastertype:'',//set default null
+    sterritory:'',
+    nterritory:'',
+    termas:'',//A02
+    pricelevel:'0F6889BA-3D46-E511-80D1-005056A71F87',//บาท
+    transactioncurrency:'83008D3A-1A05-E511-80C7-005056A71F87',// บาท
+    countrymaster:'6EF2ECB7-D5E1-E511-80E1-005056A71F87',//address th
+    masname:'',
+    Empid:'',
+    mailtomail:'',
+    getguid:guid(),
+    getparaaccount:'',
+    getparaname:'',
+    gettxtid:'',
+    dataguid:'',
+    emnot:'',
+    salename:'',
+    tername:'',
+    DataList:'',
+    countserve:[10,20,30,40,50,60,70,80,90,100,110,120,130,140,150],
+    recivename:'',
+    businessname:'',
+    listregist:'',
+    logonstatus:true,
+    logontype:true,
+    StoreDoc:'',
+    custermertype:'',
+    statustypecode:'',
+    territoryadjmust:'',
+    showcart:false,
+    tatolmatch:0,
+    balancecredit:0,
+    tatolminplus:0,
+    creditlimit:0
+  }
+})
+.factory('Darray',function(){
+  return{
+    txtname:'',
+    txtaddress:'',
+    provinceid:'',
+    districtid:'',
+    zipcode:''
+  }
+})
+.factory('actype',function(){
+  return{
+    actype:''
+  }
+})
+.factory('arcontact',function(){
+  return {
+    contact:[],
+    company:[]
+  }
+})
+.factory('arrlist',function(){
+  return {
+    listac:[]
+  }
+})
+.factory('datauser',function(){
+  return {
+    territoryid:'',
+    ivz_empname:'',
+    ivz_empid:'',
+    ivz_password:'',
+    ivz_emailcontact:'',
+    ivz_leadermail:'',
+    ivz_ccmail:'',
+    name:'',
+    description:'',
+    ivz_statusempid:''
+  }
+})
+.factory('dataaccount',function(){
+  return {
+    user:[]
+  }
+})
+.factory('DataOrder',function(){
+  return {
+    order:[],
+    tatol:0,
+    matcher:0
+  }
+})
+.factory('Setting',function(){
+  return{
+    requestproduct:10,
+    setValorder:10000
+  }
+})
+.factory('Dtest',function(){
+  return {
+    data:["Banana", "Orange", "Apple", "Mango","Lemon"]
+  }
+})
+.factory('DataRegistry',function(){
+  return {
+    gid:'',
+    taxid:'',
+    cusname:'',
+    bracher:'',
+    contactname:'',
+    lastcontactname:'',
+    tel:'',
+    mobile:'',
+    fax:'',
+    email:'',
+    recivename:'',
+    addressname:'',
+    provincename:'',
+    provinceid:'',
+    districtname:'',
+    districtid:'',
+    zipcode:'',
+    invname:'',
+    invprovince:'',
+    invprovinceid:'',
+    invdistrict:'',
+    invdistrictid:'',
+    invzipcode:'',
+    othername:'',
+    otherprovince:'',
+    otherprovinceid:'',
+    otherdistrict:'',
+    otherdistrictid:'',
+    otherzipcode:'',
+    transname:'',
+    teltran:'',
+    billvat:false,
+    openremark:'',
+    cashoption:'',
+    cashcredit:'',
+    fncash:'',
+    bankname:'',
+    bankaccount,
+    banknumber:'',
+    bankyss:'',
+    datacontact:[],
+    databusiness:[]
+  }
+})

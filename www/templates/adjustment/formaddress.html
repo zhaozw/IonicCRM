@@ -6,7 +6,7 @@
          <div class="col col-75">
            <!-- <span style="color:red;">{{debuglog}}</span> -->
               <label class="item-input item-floating-label">
-                <span style="color:red;font-weight:bold;" ng-hide="user.txtcode"><br />กรุณาระบุประเภทที่อยู่ด้วย</span>
+                <span style="color:red;font-weight:bold;" ng-hide="user.txtcode"><br />กรุณาระบุประเภทที่อยู่(INVOICE,DELIVERY)ด้วย</span>
                 <span class="input-label">ประเภทที่อยู่</span>
                 <input type="text" placeholder="ระบุประเภทที่อยู่" ng-model="user.txtcode"
                 ng-change="searchtype(user.txtcode)">
@@ -17,8 +17,8 @@
               </div>
               <hr class="divider"/>
               <label class="item-input item-floating-label">
-                <span style="color:red;font-weight:bold;" ng-hide="user.txtname"><br />กรุณาระบุชื่อร้าน/ลูกค้า/บริษัทด้วย</span>
-                <span class="input-label">ชื่อร้าน/ลูกค้า/บริษัท</span>
+                <span style="color:red;font-weight:bold;" ng-hide="user.txtname"><br />กรุณาระบุชื่อผู้รับด้วย</span>
+                <span class="input-label">ชื่อผู้รับ</span>
                 <input type="text" placeholder="ชื่อร้าน/ลูกค้า/บริษัท" ng-model="user.txtname">
               </label>
               <label class="item-input item-floating-label">
@@ -56,7 +56,7 @@
               </label>
               <section ng-if="chk.section == 2 || chk.section == '-1'">
                 <hr class="divider"/>
-                <span style="color:red;font-weight:bold;"><br />กรุณาแนบไฟล์ตามด้านล่างนี้ด้วย</span>
+                <span style="color:red;font-weight:bold;" ng-hide="user.doc01 || user.doc02 || user.doc03"><br />กรุณาแนบไฟล์ตามด้านล่างนี้ด้วย</span>
                 <br />
                 <md-button class="md-raised md-warn" md-ripple-size="full" ng-click="calldoc('doc01',this)">
                   1.แนบสำเนาหนังสือรับรองการจดทะเบียนพาณิชย์
@@ -96,7 +96,7 @@
                 </div>
               </section>
               <hr class="divider"/>
-              <span style="color:red;font-weight:bold;">กรุณาแนบสำเนาประจำตัวบัตรประชาชนด้วย</span>
+              <span style="color:red;font-weight:bold;" ng-hide="user.doc04">กรุณาแนบสำเนาประจำตัวบัตรประชาชนด้วย</span>
               <p />
               <md-button class="md-raised md-warn" md-ripple-size="full" ng-click="calldoc('doc04',this)">สำเนาประจำตัวบัตรประชาชน(ต้องมี)</md-button>
               <div class="" ng-hide="chk.doc04">
@@ -109,7 +109,7 @@
                 </div>
               </div>
               <br />
-              <span style="color:red;font-weight:bold;">กรุณาแนบสำเนาทะเบียนบ้านด้วย</span>
+              <span style="color:red;font-weight:bold;" ng-hide="user.doc05">กรุณาแนบสำเนาทะเบียนบ้านด้วย</span>
               <p />
               <md-button class="md-raised md-warn" md-ripple-size="full" ng-click="calldoc('doc05',this)">สำเนาทะเบียนบ้าน(ต้องมี)</md-button>
               <div class="" ng-hide="chk.doc05">

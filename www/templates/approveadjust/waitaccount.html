@@ -4,9 +4,10 @@
       <div class="bar bar-header item-input-inset">
         <label class="item-input-wrapper">
           <i class="icon ion-ios-search placeholder-icon"></i>
-          <input type="search" placeholder="Search" ng-model="filtertxt">
+          <input type="search" placeholder="Search" data-ng-model="filtertxt">
         </label>
-        <md-button class="md-raised button-clear md-warn" aria-label="description" md-ripple-size="auto">&nbsp;ยกเลิก&nbsp;</md-button>
+        <md-button class="md-raised button-clear md-warn"
+        aria-label="description" md-ripple-size="auto" data-ng-click="filtertxt = ''">&nbsp;ยกเลิก&nbsp;</md-button>
       </div>
       <md-list>
         <!-- ////////////////////// General -->
@@ -21,9 +22,9 @@
                 <span class="success" ng-show="n.ivz_adjgentransport">ปรับปรุงข้อมูลขนส่ง</span>
                 <span class="success" ng-show="n.ivz_adjgencontact">ปรับปรุงข้อมูลผู้ติดต่อ</span>
              </p>
-             <p>วันที่ร้องขอ<span style="color:red;font-weight:bold;">:{{n.ivz_transdate | date:'dd/MM/yyyy HH:mm'}}</span></p>
+             <p>วันที่ร้องขอ<span style="color:red;font-weight:bold;">:{{n.ivz_transdate | date:'dd/MM/yyyy'}}</span></p>
            </div>
-           <a class="md-secondary ion-trash-a text-h1 text-bold error" ng-click="removeitem($index)"></a>
+           <!-- <a class="md-secondary ion-trash-a text-h1 text-bold error" ng-click="removeitem($index)"></a> -->
            <md-divider ng-if="!$last"></md-divider>
         </md-list-item>
         <!-- ////////////////////////// Credit //////////////////////////// -->
@@ -38,9 +39,9 @@
                   เป็น:<span style="color:red;">{{n.ivz_newcredcreditlimitnew | currency:'THB'}}</span></span>
                 <span  ng-show="n.ivz_adjcredcloseaccount">{{n.ivz_remarkcredit}}</span>
              </p>
-             <p>วันที่ร้องขอ<span style="color:red;font-weight:bold;">:{{n.ivz_transdate | date:'dd/MM/yyyy HH:mm'}}</span></p>
+             <p>วันที่ร้องขอ<span style="color:red;font-weight:bold;">:{{n.ivz_transdate | date:'dd/MM/yyyy'}}</span></p>
            </div>
-           <a class="md-secondary ion-trash-a text-h1 text-bold error" ng-click="removeitem($index)"></a>
+           <!-- <a class="md-secondary ion-trash-a text-h1 text-bold error" ng-click="removeitem($index)"></a> -->
            <md-divider ng-if="!$last"></md-divider>
         </md-list-item>
       </md-list>

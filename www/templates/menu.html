@@ -3,21 +3,16 @@
     <ion-nav-bar class="bar-stable">
       <ion-nav-back-button>
       </ion-nav-back-button>
-
       <ion-nav-buttons side="left">
         <button class="button button-icon button-clear" menu-toggle="left">เมนู</button>
       </ion-nav-buttons>
-      <ion-nav-buttons side="right" >
-        <button class="button button-icon button-clear" ng-show="Data.showcart" ng-click="confirmordercart()">
-          สินค้า:&nbsp;<b style="color:red;font-weight:bold;">{{Data.tatolminplus}}</b>&nbsp;ชิ้น&nbsp;
-          รวม:&nbsp;<b style="color:red;font-weight:bold;">{{Data.tatolmatch | currency:''}}</b>&nbsp;บาท&nbsp;
-          <!-- <i class="icon ion-ios-cart-outline error"></i> -->
-        </button>
+      <ion-nav-buttons side="right" ng-show="Data.showcart">
+        <button class="button button-icon icon ion-ios-cart warn"ng-click="confirmordercart()" ng-show="Data.showcart"></button>
       </ion-nav-buttons>
     </ion-nav-bar>
     <ion-nav-view name="menuContent"></ion-nav-view>
   </ion-side-menu-content>
-
+  <!-- menu app -->
   <ion-side-menu side="left">
     <ion-header-bar class="bar-stable">
       <h1 class="title">YSS MENU</h1>
@@ -38,7 +33,7 @@
         <!-- Sale -->
           <i class="ion-android-calendar"></i>&nbsp;ผลการดำเนินงาน
         </ion-item>
-        <ion-item menu-close href="#/app/resultplan/0/{{Data.mastertype}}"  class="success" ng-show="Data.logontype">
+        <ion-item menu-close href="#/app/resultplan/{{Data.mastertype}}/{{Data.termas}}"  class="success" ng-show="Data.logontype">
           <i class="ion-android-calendar"></i>&nbsp;ผลการดำเนินงาน
         </ion-item>
         <ion-item menu-close href="#/app/waitlist"  class="success" ng-show="Data.logontype">
@@ -79,18 +74,44 @@
         <ion-item menu-close  class="success" ng-hide="Data.logonstatus" ng-click="clicklogout()">
           <i class="ion-power"></i>&nbsp;ออกจากระบบ
         </ion-item>
-
-        <!-- <ion-item menu-close href="#/app/rejectplan/1234556/mrddd/D10"  class="success"><i class="ion-android-calendar"></i>&nbsp;Test Reject</ion-item>
-        <ion-item menu-close ui-sref="app.plannedactivities"
-          ui-sref-opts="{reload:true}" class="success">
-          <i class="ion-android-calendar"></i>&nbsp;ทดสอบทำกิจกรรม</ion-item>
-        <ion-item menu-close ui-sref="app.listmarketting"
-          ui-sref-opts="{reload:true}" class="success">
-            <i class="ion-android-calendar"></i>&nbsp;ทดสอบ</ion-item>
-        <ion-item menu-close ui-sref="app.optioncomputitor"
-          ui-sref-opts="{reload:true}" class="success">
-            <i class="ion-android-calendar"></i>&nbsp;ทดสอบบันทึกคู่แข่ง</ion-item> -->
       </ion-list>
+    </ion-content>
+  </ion-side-menu>
+  <!-- cart app -->
+  <ion-side-menu side="right">
+    <ion-header-bar class="bar-stable">
+      <h1 class="title">ตะกร้าสินค้า</h1>
+    </ion-header-bar>
+    <ion-content>
+      <div class="list">
+        <a class="item item-icon-left">
+          สินค้า:
+          <span class="item-note">
+            <b style="color:red;font-weight:bold;">{{Data.tatolminplus}}</b>&nbsp;ชิ้น
+          </span>
+        </a>
+        <a class="item item-icon-left">
+          รวม:
+          <span class="item-note">
+            <b style="color:red;font-weight:bold;">{{Data.tatolmatch | currency:''}}</b>&nbsp;บาท
+          </span>
+        </a>
+        <a class="item item-icon-left">
+          เครดิต:
+          <span class="item-note">
+            <b style="color:red;font-weight:bold;">{{Data.balancecredit | currency:''}}</b>&nbsp;บาท
+          </span>
+        </a>
+      </div>
+      <br />
+      <br />
+      <div class="row">
+        <div class="col"></div>
+        <div class="col">
+          <md-button class="md-raised md-warn" ng-click="confirmordercart()">ยืนยันสั่งซื้อ</md-button>
+        </div>
+        <div class="col"></div>
+      </div>
     </ion-content>
   </ion-side-menu>
 </ion-side-menus>
