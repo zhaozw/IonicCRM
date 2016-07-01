@@ -35,3 +35,22 @@ getTerEmp($scope.territoryid, function (data) {
         });
     }
 });
+
+getTerEmp($scope.user.territory, function (data) {
+    if (data) {
+      if(parseInt(Data.creditlimit) > 100000){
+        var title = 'อนุมัติเปิดบัญชีลูกค้าใหม่';
+        var text = "เรียน Director   Sup./Sales Manger ได้ทำการอนุมัติเปิดบัญชีลูกค้าใหม่เขตการขาย" + data[0].name + " แล้วรบการ Director ทำการอนุมัติเปิดบัญชีลูกค้าใหม่ในลำดับถัดไปด้วยครับ ขอบคุณครับ  (อีเมลฉบับนี้ส่งอัตโนมัติจากระบบ CRM)";
+        SendMail(data[0].ivz_ccmail, title, text);
+      }else{
+        var title = 'อนุมัติเปิดบัญชีลูกค้าใหม่';
+        var text = "เรียน หน่วยงานบัญชี Sup./Sales Manger ได้ทำการอนุมัติเปิดบัญชีลูกค้าใหม่เรียบร้อยแล้ว รบกวนหน่วยงานบัญชีช่วยดำเนินการอนุมัติเปิดบัญชีลูกค้าใหม่ให้ด้วยครับ ขอบคุณครับ  (อีเมลฉบับนี้ส่งอัตโนมัติจากระบบ CRM)";
+        SendMail('acc@yss.co.th', title, text);
+      }
+        setTimeout(function () {
+            $ionicLoading.hide();
+            $scope.reback();
+        }, 2000);
+    }
+    if($scope.$phase){$scope.$apply();}
+});
