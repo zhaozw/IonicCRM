@@ -59,6 +59,43 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     clearInterval(setprice);
     clearInterval(setcurrency);
     clearInterval(setcountrymaster);
+    try {
+      // MobileCRM.AboutInfo.requestObject(
+      //   	function (aboutInfo) {
+      //   		/// <param name="aboutInfo" type="MobileCRM.AboutInfo"/>
+      //   		var appReport = "About Info : \n" +
+      //   			aboutInfo.productTitle + "\n" +
+      //   			aboutInfo.productSubTitle;
+      //   		MobileCRM.bridge.alert(appReport);
+      //   	},
+      //   	MobileCRM.bridge.alert  // alerts an error
+      //   );
+      // MobileCRM.UI.EntityForm.requestObject(
+      // 	function (entityForm) {
+      // 		// get media tab by its name
+      // 		var media = entityForm.getMediaTab("DocumentAction");
+      // 		// bind media tab operations handlers to button onclick event.
+      // 		document.getElementById("capturePhoto").onclick = function () {
+      // 			media.capturePhoto();
+      // 		}
+      // 		document.getElementById("selectPhoto").onclick = function () {
+      // 			media.selectPhoto();
+      // 		}
+      // 		document.getElementById("selectFile").onclick = function () {
+      // 			media.selectFile();
+      // 		}
+      // 		document.getElementById("recordAudio").onclick = function () {
+      // 			media.recordAudio();
+      // 		}
+      // 		document.getElementById("recordVideo").onclick = function () {
+      // 			media.recordVideo();
+      // 		}
+      // 	},
+      // 	MobileCRM.bridge.alert
+      // );
+    } catch (e) {
+      console.log(navigator.geolocation);
+    }
   },1100);
 
   $ionicPlatform.ready(function() {

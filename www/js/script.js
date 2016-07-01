@@ -1282,8 +1282,8 @@ function GetCustomerAddresById(byid,callback){
 	}
 }
 /*--------------------- Get Product -----------------------*/
+
 function GetProductList(tatol,page,callback){
-	try {
 		var n = new MobileCRM.FetchXml.Entity('product');
 				n.addAttribute('productid');//0
 				n.addAttribute('name');//1
@@ -1313,42 +1313,41 @@ function GetProductList(tatol,page,callback){
 					});
 				}
 				callback(b);
-			},function(er){alert(er);},null);
-	} catch (e) {
-		var n = new MobileCRM.FetchXml.Entity('product');
-				n.addAttribute('productid');//0
-				n.addAttribute('name');//1
-				n.addAttribute('productnumber');//2
-				n.addAttribute('price');//3
-				n.addAttribute('defaultuomid');//4
-				n.addAttribute('pricelevelid');//5
-				n.addAttribute('createdon');//6
-		    n.addAttribute('ivz_stockstatus');//7//real
-		    n.addAttribute('ivz_statustock');//7//test
-				//n.addAttribute('defaultuomscheduleid');//8
-		var fetch = new MobileCRM.FetchXml.Fetch(n,parseInt(tatol),parseInt(page));
-			fetch.execute('array',function(data){
-				var b = [];
-				for(var i in data){
-					b.push({
-						productid:data[i][0],
-						name:data[i][1],
-						productnumber:data[i][2],
-						price:data[i][3],
-						uomid:data[i][4],
-						pricelevelid:data[i][5],
-						createdon:data[i][6],
-				    stockstatus:data[i][7],
-						defaultuomscheduleid:data[i][8],
-						filtername:data[i][2]+','+data[i][1]
-					});
-				}
-				callback(b);
-			},function(er){alert(er);},null);
-	}
+			},function(er){
+				/////////////////////
+				var n = new MobileCRM.FetchXml.Entity('product');
+						n.addAttribute('productid');//0
+						n.addAttribute('name');//1
+						n.addAttribute('productnumber');//2
+						n.addAttribute('price');//3
+						n.addAttribute('defaultuomid');//4
+						n.addAttribute('pricelevelid');//5
+						n.addAttribute('createdon');//6
+				  //  n.addAttribute('ivz_stockstatus');//7//real
+				    n.addAttribute('ivz_statustock');//7//test
+						//n.addAttribute('defaultuomscheduleid');//8
+				var fetch = new MobileCRM.FetchXml.Fetch(n,parseInt(tatol),parseInt(page));
+					fetch.execute('array',function(data){
+						var b = [];
+						for(var i in data){
+							b.push({
+								productid:data[i][0],
+								name:data[i][1],
+								productnumber:data[i][2],
+								price:data[i][3],
+								uomid:data[i][4],
+								pricelevelid:data[i][5],
+								createdon:data[i][6],
+						    stockstatus:data[i][7],
+								defaultuomscheduleid:data[i][8],
+								filtername:data[i][2]+','+data[i][1]
+							});
+						}
+						callback(b);
+					},null,null);
+			},null);
 }
 function GetProductListName(txtname,tatol,page,callback){
-	try {
 		var n = new MobileCRM.FetchXml.Entity('product');
 				n.addAttribute('productid');//0
 				n.addAttribute('name');//1
@@ -1382,46 +1381,44 @@ function GetProductListName(txtname,tatol,page,callback){
 					});
 				}
 				callback(b);
-			},function(er){alert(er);},null);
-	} catch (e) {
-		var n = new MobileCRM.FetchXml.Entity('product');
-				n.addAttribute('productid');//0
-				n.addAttribute('name');//1
-				n.addAttribute('productnumber');//2
-				n.addAttribute('price');//3
-				n.addAttribute('defaultuomid');//4
-				n.addAttribute('pricelevelid');//5
-				n.addAttribute('createdon');//6
-		    //n.addAttribute('ivz_stockstatus');//7//real
-		    n.addAttribute('ivz_statustock');//7//test
-				n.addAttribute('defaultuomscheduleid');//8
-				n.orderBy("createdon", false);
-		var filter = new MobileCRM.FetchXml.Filter();
-				filter.where('name','like','%'+txtname+'%');
-				n.filter = filter;
-		var fetch = new MobileCRM.FetchXml.Fetch(n,parseInt(tatol),parseInt(page));
-			fetch.execute('array',function(data){
-				var b = [];
-				for(var i in data){
-					b.push({
-						productid:data[i][0],
-						name:data[i][1],
-						productnumber:data[i][2],
-						price:data[i][3],
-						uomid:data[i][4],
-						pricelevelid:data[i][5],
-						createdon:data[i][6],
-				    stockstatus:data[i][7],
-						defaultuomscheduleid:data[i][8],
-						filtername:data[i][2]+','+data[i][1]
-					});
-				}
-				callback(b);
-			},function(er){alert(er);},null);
-	}
+			},function(er){
+				var n = new MobileCRM.FetchXml.Entity('product');
+						n.addAttribute('productid');//0
+						n.addAttribute('name');//1
+						n.addAttribute('productnumber');//2
+						n.addAttribute('price');//3
+						n.addAttribute('defaultuomid');//4
+						n.addAttribute('pricelevelid');//5
+						n.addAttribute('createdon');//6
+				    //n.addAttribute('ivz_stockstatus');//7//real
+				    n.addAttribute('ivz_statustock');//7//test
+						n.addAttribute('defaultuomscheduleid');//8
+						n.orderBy("createdon", false);
+				var filter = new MobileCRM.FetchXml.Filter();
+						filter.where('name','like','%'+txtname+'%');
+						n.filter = filter;
+				var fetch = new MobileCRM.FetchXml.Fetch(n,parseInt(tatol),parseInt(page));
+					fetch.execute('array',function(data){
+						var b = [];
+						for(var i in data){
+							b.push({
+								productid:data[i][0],
+								name:data[i][1],
+								productnumber:data[i][2],
+								price:data[i][3],
+								uomid:data[i][4],
+								pricelevelid:data[i][5],
+								createdon:data[i][6],
+						    stockstatus:data[i][7],
+								defaultuomscheduleid:data[i][8],
+								filtername:data[i][2]+','+data[i][1]
+							});
+						}
+						callback(b);
+					},null,null);
+			},null);
 }
 function GetProductListNumber(txtname,tatol,page,callback){
-	try {
 		var n = new MobileCRM.FetchXml.Entity('product');
 				n.addAttribute('productid');//0
 				n.addAttribute('name');//1
@@ -1456,44 +1453,44 @@ function GetProductListNumber(txtname,tatol,page,callback){
 					});
 				}
 				callback(b);
-			},function(er){alert(er);},null);
-	} catch (e) {
-		var n = new MobileCRM.FetchXml.Entity('product');
-				n.addAttribute('productid');//0
-				n.addAttribute('name');//1
-				n.addAttribute('productnumber');//2
-				n.addAttribute('price');//3
-				n.addAttribute('defaultuomid');//4
-				n.addAttribute('pricelevelid');//5
-				n.addAttribute('createdon');//6
-		    //n.addAttribute('ivz_stockstatus');//7//real
-		    n.addAttribute('ivz_statustock');//7//test
-				n.addAttribute('defaultuomscheduleid');//8
-				n.orderBy("createdon", false);
-		var filter = new MobileCRM.FetchXml.Filter();
-				filter.where('productnumber','like','%'+txtname+'%');
-				n.filter = filter;
-		var fetch = new MobileCRM.FetchXml.Fetch(n,parseInt(tatol),parseInt(page));
-			fetch.execute('array',function(data){
-				//alert(data.length);
-				var b = [];
-				for(var i in data){
-					b.push({
-						productid:data[i][0],
-						name:data[i][1],
-						productnumber:data[i][2],
-						price:data[i][3],
-						uomid:data[i][4],
-						pricelevelid:data[i][5],
-						createdon:data[i][6],
-				    stockstatus:data[i][7],
-						defaultuomscheduleid:data[i][8],
-						filtername:data[i][2]+','+data[i][1]
-					});
-				}
-				callback(b);
-			},function(er){alert(er);},null);
-	}
+			},function(er){
+				///////////////////////////
+					var n = new MobileCRM.FetchXml.Entity('product');
+							n.addAttribute('productid');//0
+							n.addAttribute('name');//1
+							n.addAttribute('productnumber');//2
+							n.addAttribute('price');//3
+							n.addAttribute('defaultuomid');//4
+							n.addAttribute('pricelevelid');//5
+							n.addAttribute('createdon');//6
+					    //n.addAttribute('ivz_stockstatus');//7//real
+					    n.addAttribute('ivz_statustock');//7//test
+							n.addAttribute('defaultuomscheduleid');//8
+							n.orderBy("createdon", false);
+					var filter = new MobileCRM.FetchXml.Filter();
+							filter.where('productnumber','like','%'+txtname+'%');
+							n.filter = filter;
+					var fetch = new MobileCRM.FetchXml.Fetch(n,parseInt(tatol),parseInt(page));
+						fetch.execute('array',function(data){
+							//alert(data.length);
+							var b = [];
+							for(var i in data){
+								b.push({
+									productid:data[i][0],
+									name:data[i][1],
+									productnumber:data[i][2],
+									price:data[i][3],
+									uomid:data[i][4],
+									pricelevelid:data[i][5],
+									createdon:data[i][6],
+							    stockstatus:data[i][7],
+									defaultuomscheduleid:data[i][8],
+									filtername:data[i][2]+','+data[i][1]
+								});
+							}
+							callback(b);
+						},null,null);
+			},null);
 }
 /*----------------------- Get Annote ----------------------*/
 /*------------------------ Get Order ----------------------*/

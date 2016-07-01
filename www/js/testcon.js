@@ -1,9 +1,29 @@
 angular.module('starter.controllers', [])
+
+requestproduct:10,
+setValorder:10000,
+transportname:'รถ YSS',
+transporttel:'02xxxxxxxx',
+dateday:[{id: 0,name: "จันทร์"},
+         {id: 1,name: "อังคาร"},
+         {id: 2,name: "พุธ"},
+         {id: 3,name: "พฤหัส"},
+         {id: 4,name: "ศุกร์"},
+         {id: 5,name: "เสาร์"},
+         {id: 6,name: "อาทิตย์"}],
+orderoption:[{id:0,orderlink:1,ordername:"ขาย 1"},{id:0,orderlink:2,ordername:"ขาย 2"}]
+
 .controller('AppCtrl', function ($scope, $ionicModal, $timeout, $cookies, Data, $ionicLoading, $state, $ionicHistory, $ionicModal, DataOrder) {
         $state.reload();
         Data.showcart = false;
         $scope.Data = Data;
-
+        // var i = 0;
+        // var stTime = setInterval(function(){
+        //   console.log('hello+'+(i++));
+        //   if(i > 10){
+        //     clearInterval(stTime);
+        //   }
+        // },1000);
         var chUser = $cookies.get('name');
         if (chUser) {
             console.log('logon true');
@@ -46,7 +66,7 @@ angular.module('starter.controllers', [])
         $scope.showLoadGPS = function () {
             $ionicLoading.show({
                 template: '<ion-spinner icon="bubbles" class="spinner-energized"></ion-spinner><div class="row">' +
-                    '<div class="col"><h4>โปรดรอสักครู่ กำลังโหลดข้อมูล GPS อยู่อาจใช้เวลา 1-2 นาทีในการโหลดข้อมูล</h4></div>' +
+                    '<div class="col"><h4>โปรดรอสักครู่ กำลังโหลดข้อมูล GPS อยู่อาจใช้เวลา 1-2 ในการโหลดข้อมูล</h4></div>' +
                     '</div>',
                 noBackdrop: true
             });
@@ -318,6 +338,20 @@ angular.module('starter.controllers', [])
         var a = [];
         var j = 1;
         $scope.logscroll = function () {
+            // $scope.scrolling = parseInt($ionicScrollDelegate.getScrollPosition().top);
+            // var x = $scope.scrolling;
+            // var y =  -100;
+            // var z = x - y;
+            // if(z  <= 100){
+            //   j++;
+            //   a.push(j);
+            //   console.log('a.length:'+a.length+'::'+(a.length - z)+'::'+ j );
+            //   $scope.showLoadingProperTimesRegter(z+'::'+a.length);
+            //   console.log(z);
+            //   setTimeout(function(){
+            //     $ionicLoading.hide();
+            //   },2000);
+            // }
         }
         $scope.$on("$ionicView.enter", function () {
             console.log('reload complete');
@@ -429,7 +463,7 @@ angular.module('starter.controllers', [])
                                 try {
                                     var d = new Date();
                                     var exp = new Date(d.getFullYear(), d.getMonth(), d.getDate()+1);//set 24 hour
-                                    $cookies.put('mastertype', checkmatch(data[i].ivz_name), {'expires': exp});
+                                    $cookies.put('mastertype', dType, {'expires': exp});
                                     Data.Empid = data[i].ivz_empid;
                                     Data.Tername = data[i].ivz_name;
                                     Data.termas = data[i].territoryid;
@@ -443,10 +477,6 @@ angular.module('starter.controllers', [])
                                     $cookies.put('name', data[i].ivz_name, {'expires': exp});
                                     $cookies.put('description', data[i].ter_description, {'expires': exp});
                                     $cookies.put('ivz_statusempid', data[i].ivz_statusempid, {'expires': exp});
-                                    getCountry(function(data){
-                                      $cookies.put('countryid', data[i].ivz_addresscountryid, {'expires': exp});
-                                      $cookies.put('countryname', data[i].ivz_name, {'expires': exp});
-                                    });
                                     datauser.territoryid = data[i].territoryid;
                                     datauser.ivz_empname = data[i].ivz_empname;
                                     datauser.ivz_empid = data[i].ivz_empid;
@@ -660,8 +690,6 @@ angular.module('starter.controllers', [])
         $cookies.remove('description');
         $cookies.remove('ivz_statusempid');
         $cookies.remove('mastertype');
-        $cookies.remove('countryid');
-        $cookies.remove('countryname');
         setTimeout(function () {
             $ionicLoading.hide();
             $state.go('app.playlists', {}, {
@@ -678,17 +706,14 @@ angular.module('starter.controllers', [])
         Data.showcart = false;
         $scope.dvTodos = true;
         $scope.$on('$ionicView.enter',function(){
-          // var todos = $scope.todos;
-          // if(todos.length < 1){
-          //   $scope.reloaddata(0);
-          // }
-          $scope.reloaddata(0);
+          var todos = $scope.todos;
+          if(todos.length < 1){
+            $scope.reloaddata(0);
+          }
         });
         $scope.reloaddata = function (sid) {
-            // GetAppointStatus($stateParams.sterritory, parseInt(sid),retername($cookies.get('mastertype')), function (data) {
-            //alert($cookies.get('territoryid')+':'+parseInt(sid)+':'+Data.mastertype);
-            GetAppointStatus($cookies.get('territoryid'), parseInt(sid),retername($cookies.get('mastertype')), function (data) {
-              //alert(data.length);
+            // GetAppointStatus($stateParams.sterritory, parseInt(sid), Data.mastertype, function (data) {
+            GetAppointStatus($cookies.get('territoryid'), parseInt(sid), Data.mastertype, function (data) {
                 if (data.length > 0) {
                     $scope.dvTodos = false;
                     $scope.todos = [];
@@ -745,7 +770,7 @@ angular.module('starter.controllers', [])
                       });
                       setTimeout(function(){
                         callback();
-                      },0);
+                      },5);
                     };
                 } else {
                     $scope.dvTodos = true;
@@ -755,19 +780,8 @@ angular.module('starter.controllers', [])
                 }
             });
         }
-        $scope.removeplanning = function (id,actid) {
-            $scope.todos.splice(id, 1);
-            try {
-              MobileCRM.DynamicEntity.deleteById("appointment",actid,function () {
-                //alert('delete ap:'+actid);
-                $scope.reloaddata(0);
-              },
-                function (error) {
-                  MobileCRM.bridge.alert("An error occurred: " + error);
-                });
-            } catch (e) {
-              alert('error 1398 '+e);
-            }
+        $scope.removeplanning = function (index) {
+            $scope.todos.splice(index, 1);
         }
         $scope.mailreport = function () {
           if($scope.todos.length > 0){
@@ -827,7 +841,7 @@ angular.module('starter.controllers', [])
             Data.longitude = res.longitude;
         });
         $scope.dvTodos = true;
-        GetAppointStatus(Data.sterritory, 0,retername($cookies.get('mastertype')), function (data) {
+        GetAppointStatus(Data.sterritory, 0, Data.mastertype, function (data) {
             if (data) {
                 $scope.dvTodos = false;
                 $scope.todos = data;
@@ -836,7 +850,7 @@ angular.module('starter.controllers', [])
             }
         });
         $scope.reloaddata = function () {
-            GetAppointStatus(Data.sterritory, 0,retername($cookies.get('mastertype')), function (data) {
+            GetAppointStatus(Data.sterritory, 0, Data.mastertype, function (data) {
                 if (data) {
                     $scope.dvTodos = false;
                     $scope.todos = [];
@@ -922,7 +936,6 @@ angular.module('starter.controllers', [])
         $scope.arAccount = true;
         $scope.arPostpect = true;
         $scope.arLoading = false;
-        $scope.filtertxt = '';
         $scope.Data = Data;
         $scope.accountype = $stateParams.accountype;
         $scope.numberOfItemsToDisplay = 20;
@@ -976,7 +989,7 @@ angular.module('starter.controllers', [])
                       Data.sBilling = 0;
                       Data.scollecttion = 0;
                       console.log('insert ค้นหาลูกค้าทั่วไป');
-                      GetAccount(Data.termas,retername($cookies.get('mastertype')), 1, function (data) {
+                      GetAccount(Data.termas, Data.mastertype, 1, function (data) {
                           if(data.length > 0){
                             $scope.showLoading('กำลังโหลดข้อมูล');
                             $scope.arAccount = false;
@@ -1038,10 +1051,57 @@ angular.module('starter.controllers', [])
               case '3':
                       alert('ขอ อถัย ขณะนี้ยังอยู่ในขั้นตอนการเตรียมข้อมูล');
                       $scope.reback();
+                      // Data.sBilling = 0;
+                      // Data.scollecttion = 0;
+                      // GetPostpectByTer(Data.termas, function (data) {
+                      //     $scope.arPostpect = false;
+                      //     var x = 0;
+                      //     var loopArray = function(arr){
+                      //       getPush(x,function(){
+                      //         x++;
+                      //         if(x < arr.length){
+                      //           loopArray(arr);
+                      //         }else{
+                      //           $ionicLoading.hide();
+                      //         }
+                      //       });
+                      //     }
+                      //     loopArray(data);
+                      //     function getPush(i,callback){
+                      //       $scope.showLoading('กำลังโหลดข้อมูล '+data[i].ivz_name);
+                      //       $scope.todos.push({
+                      //             ivz_saleprospectid:data[i].ivz_saleprospectid,
+                      //             ivz_name:data[i].ivz_name,
+                      //             ivz_prospectgroup:data[i].ivz_prospectgroup,
+                      //             ivz_prospectname:data[i].ivz_prospectname,
+                      //             ivz_saledistict:data[i].ivz_saledistict,
+                      //             ivz_saleprovinceid:data[i].ivz_saleprovinceid,
+                      //             ivz_territory:data[i].ivz_territory,
+                      //             accountype:3
+                      //           });
+                      //           setTimeout(function(){
+                      //             callback();
+                      //           },5);
+                      //     }
+                      //     if($scope.$phase){
+                      //       $scope.$apply();
+                      //     }
+                      // });
                 break;
             }
         }
         $scope.loaddata();
+
+        // $scope.$on('$ionicView.enter',function(){
+        //   if($scope.todos){
+        //     var listscope = $scope.todos;
+        //     if(listscope.length <= 0){
+        //       $scope.loaddata();
+        //     }
+        //   }else{
+        //     $scope.loaddata();
+        //   }
+        // });
     })
     .controller('PlanAccuntDetailCtrl', function ($scope, $stateParams, $cookies, Data, $ionicHistory, $state, $ionicLoading) {
         $state.reload();
@@ -1054,7 +1114,7 @@ angular.module('starter.controllers', [])
         $scope.infoActivitiesSpe = true;
         $scope.user = {
             submissionDate: '',
-            mStart:917970016,
+            mStart: '917970016',
             mEnd: 917970036,
             vOpenAccount: 0,
             vAdjustment: 0,
@@ -1103,8 +1163,12 @@ angular.module('starter.controllers', [])
             } else {
                 $scope.infoDate = false;
             };
-            $scope.infoActivities = $('#swToggleActivities').hasClass('md-checked');
-            if (swToggleActivities  === true) {
+            if (bActivi.length <= 0) {
+                $scope.infoActivities = false;
+            } else {
+                $scope.infoActivities = true;
+            }
+            if (bActivi.length > 0) {
                 console.log(bActivi.toString());
                 if (accountype) {
                     try {
@@ -1124,7 +1188,7 @@ angular.module('starter.controllers', [])
                             } else {
                                 ins.properties.ivz_saleprospect = new MobileCRM.Reference('ivz_saleprospect', accountid);
                             }
-                            ins.properties.ivz_employeeposition = parseInt(retername($cookies.get('mastertype')));
+                            ins.properties.ivz_employeeposition = parseInt(Data.mastertype);
                             ins.properties.ivz_visitopenaccount = parseInt($scope.user.vOpenAccount);
                             ins.properties.ivz_visitorder = parseInt($scope.user.vOpenOrder);
                             ins.properties.ivz_visitclaimorder = parseInt($scope.user.vOpenClaim);
@@ -1147,30 +1211,26 @@ angular.module('starter.controllers', [])
                             ins.save(function (err) {
                                 if (err) {
                                     $scope.txerr = err;
-                                    alert("exappointment " + err);
-                                    // insertcodeex('เกิดข้อผิดพลาด exappointment', 'controller.js PlanAccuntDetailCtrl scope.cbnAppoint', 'บันทึกข้อมูล appointment account:' + accountname, '243', err, Data.masname, 1, function (data) {
-                                    //     if (data) {
-                                    //         alert("exappointment " + err);
-                                    //     }
-                                    // });
+                                    insertcodeex('เกิดข้อผิดพลาด exappointment', 'controller.js PlanAccuntDetailCtrl scope.cbnAppoint', 'บันทึกข้อมูล appointment account:' + accountname, '243', err, Data.masname, 1, function (data) {
+                                        if (data) {
+                                            alert("exappointment " + err);
+                                        }
+                                    });
                                 } else {
-                                  alert("บันทึกข้อมูลเสร็จแล้ว");
-                                  $ionicHistory.goBack(-1);
-                                    // insertcodeex('บันทึกข้อมูล exappointment', 'controller.js PlanAccuntDetailCtrl scope.cbnAppoint', 'บันทึกข้อมูล appointment account:' + accountname, '243', 'ไม่พบข้อผิดพลาด', Data.masname, 0, function (data) {
-                                    //     if (data) {
-                                    //         alert("บันทึกข้อมูลเสร็จแล้ว");
-                                    //         $ionicHistory.goBack(-1);
-                                    //     }
-                                    // });
+                                    insertcodeex('บันทึกข้อมูล exappointment', 'controller.js PlanAccuntDetailCtrl scope.cbnAppoint', 'บันทึกข้อมูล appointment account:' + accountname, '243', 'ไม่พบข้อผิดพลาด', Data.masname, 0, function (data) {
+                                        if (data) {
+                                            alert("บันทึกข้อมูลเสร็จแล้ว");
+                                            $ionicHistory.goBack(-1);
+                                        }
+                                    });
                                 }
                             });
                         } else {
-                          alert('เกิดข้อผิดพลาดไม่พบ GUID กรุณาปิดแอพและเข้าสู่ระบบใหม่ครับ');
-                            // insertcodeex('เกิดข้อผิดพลาดไม่พบ GUID', 'controller.js PlanAccuntDetailCtrl scope.cbnAppoint', 'บันทึกข้อมูล appointment account:' + accountname, '252', $scope.txerr, Data.masname, 1, function (data) {
-                            //     if (data) {
-                            //         alert('เกิดข้อผิดพลาดไม่พบ GUID กรุณาปิดแอพและเข้าสู่ระบบใหม่ครับ');
-                            //     }
-                            // });
+                            insertcodeex('เกิดข้อผิดพลาดไม่พบ GUID', 'controller.js PlanAccuntDetailCtrl scope.cbnAppoint', 'บันทึกข้อมูล appointment account:' + accountname, '252', $scope.txerr, Data.masname, 1, function (data) {
+                                if (data) {
+                                    alert('เกิดข้อผิดพลาดไม่พบ GUID กรุณาปิดแอพและเข้าสู่ระบบใหม่ครับ');
+                                }
+                            });
                         }
                     } catch (er) {
                         alert('excbn02 ' + er);
@@ -1279,8 +1339,7 @@ angular.module('starter.controllers', [])
                           ivz_empid: data[i].ivz_empid,
                           ivz_empname: data[i].ivz_empname,
                           ivz_statusempid: data[i].ivz_statusempid,
-                          description: data[i].description,
-                          typego:$stateParams.typego
+                          description: data[i].description
                       });
                       setTimeout(function () {
                           callback();
@@ -1293,10 +1352,6 @@ angular.module('starter.controllers', [])
         $scope.$on('$ionicView.enter',function(){
           $scope.loaddata();
         });
-        $scope.listgo = function(terid,mastertype,typego,tername){
-          Data.tersupselect = terid;
-          $state.go('app.listplanned',{mastertype:retername(tername)},{reload:true});
-        }
     })
     .controller('PlanListDetailCtrl', function ($scope, $stateParams, $cookies, Data, $ionicHistory , $state , $ionicLoading) {
         $state.reload();
@@ -1516,22 +1571,21 @@ angular.module('starter.controllers', [])
         Data.sterritory = $stateParams.territoryid;
         $scope.vCheckAll = 0;
         // $scope.reloaddata();
-        function getretype(tyid){
-          var p = parseInt(tyid)
-          switch (p) {
-            case 2:
-                      return 1;
-              break;
-            case 3:
-                      return 2;
-              break;
-            default:
-                      return 1;
-          }
-        }
         $scope.reloaddata = function () {
-            GetAppointStatus($stateParams.territoryid, 1, getretype($cookies.get('mastertype')), function (data) {
-              //alert(data.length);
+            var itype;
+            switch (Data.mastertype) {
+              case '2':
+              case 2:
+                  itype = 1;
+                break;
+              case '3':
+              case 3:
+                  itype = 2;
+                break;
+              default:
+                  itype = Data.mastertype;
+            }
+            GetAppointStatus($stateParams.territoryid, 1, itype, function (data) {
               //alert($stateParams.territoryid+'::'+data.length);
                 $scope.listappointment = [];
                 if(data.length > 0){
@@ -1604,48 +1658,44 @@ angular.module('starter.controllers', [])
             $ionicHistory.goBack(-1);
         }
         $scope.confirmcopy = function () {
-            if($scope.listappointment){
-              var data = $scope.listappointment;
-              var x = 0;
-              var loopArray = function(arr){
-                getIns(x,function(){
-                  x++;
-                  if(x < arr.length){
-                    loopArray(arr);
-                  }else{
-                    console.log('complete');
-                    $scope.reloaddata();
-                    $ionicLoading.hide();
-                    //var lenList = $scope.listappointment;
+            var data = $scope.listappointment;
+            var x = 0;
+            var loopArray = function(arr){
+              getIns(x,function(){
+                x++;
+                if(x < arr.length){
+                  loopArray(arr);
+                }else{
+                  console.log('complete');
+                  $scope.reloaddata();
+                  $ionicLoading.hide();
+                  //var lenList = $scope.listappointment;
+                }
+              });
+            }
+            loopArray(data);
+            function getIns(i,callback){
+              $scope.showLoading('กำลังบันทึกข้อมูล');
+              try {
+                      var ins = new MobileCRM.DynamicEntity('appointment', data[i].activityid);
+                      ins.properties.ivz_planningstatus = parseInt(2);
+                      ins.save(function (er) {
+                          if (er) {
+                              alert(er);
+                          }else{
+                            setTimeout(function () {
+                                callback();
+                            }, 500);
+                          }
+                      });
+                  } catch (er) {
+                      alert("เกิดข้อผิดพลาดรหัส 695 " + er);
                   }
-                });
-              }
-              loopArray(data);
-              function getIns(i,callback){
-                $scope.showLoading('กำลังบันทึกข้อมูล');
-                try {
-                        var ins = new MobileCRM.DynamicEntity('appointment', data[i].activityid);
-                        ins.properties.ivz_planningstatus = parseInt(2);
-                        ins.save(function (er) {
-                            if (er) {
-                                alert(er);
-                            }else{
-                              setTimeout(function () {
-                                  callback();
-                              }, 500);
-                            }
-                        });
-                    } catch (er) {
-                        alert("เกิดข้อผิดพลาดรหัส 695 " + er);
-                    }
-              }
             }
         }
         $scope.rejectplan = function () {
-          if($scope.listappointment){
             Data.DataList = $scope.listappointment;
             window.location.href = "#/app/rejectplan/" + $stateParams.territoryid + "/" + $stateParams.salename + "/" + $stateParams.tername;
-          }
         }
     })
     .controller('PlanRejectCtrl', function ($scope, $stateParams, $cookies, Data, $rootScope, $ionicHistory,$state,$ionicLoading) {
@@ -1719,13 +1769,8 @@ angular.module('starter.controllers', [])
         $state.reload();
         $scope.Data = Data;
         Data.showcart = false;
-        $scope.mastertype = $stateParams.mastertype;
-        $scope.territoryid = '';
-        if(Data.tersupselect){
-          $scope.territoryid = Data.tersupselect;
-        }else{
-          $scope.territoryid = Data.termas;
-        }
+        Data.mastertype = $stateParams.mastertype;
+        $scope.territoryid = Data.termas;
         $scope.filtertxt = '';
         $scope.user = {
           cards:true,
@@ -1737,12 +1782,11 @@ angular.module('starter.controllers', [])
         });
         $scope.loadprocress = function(id){
           if(id){
-            var num = parseInt(id);
-            //$scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล');
-            switch (num) {
+            $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล');
+            switch (id) {
               case 1:
                 $scope.user.checkaccount = true;
-                $scope.loadplaned($stateParams.mastertype);
+                $scope.loadplaned(Data.mastertype);
                 break;
               case 2:
                 $scope.user.checkaccount = true;
@@ -1756,17 +1800,16 @@ angular.module('starter.controllers', [])
                 break;
               default:
                 $scope.user.checkaccount = true;
-                $scope.loadplaned($stateParams.mastertype);
+                $scope.loadplaned(Data.mastertype);
                 break;
             }
           }else{
             $scope.user.checkaccount = true;
-            $scope.loadplaned($stateParams.mastertype);
+            $scope.loadplaned(Data.mastertype);
           }
         }
         $scope.loadplaned = function(itype){
           GetAppointStatus($scope.territoryid, 2, itype, function (data) {
-            //alert(data.length);
               if(data.length > 0){
                 $scope.listaccount = [];
                 $scope.user.cards = false;
@@ -1784,7 +1827,7 @@ angular.module('starter.controllers', [])
                 }
                 loopArray(data);
                 function getPush(i,callback){
-                  $scope.showLoading('กำลังโหลดข้อมูล '+data[i].filtername);
+                  // $scope.showLoading('กำลังโหลดข้อมูล '+data[i].filtername);
                   $scope.listaccount.push({
                       activityid: data[i].activityid,
                       ivz_customer: data[i].ivz_customer,
@@ -1836,7 +1879,7 @@ angular.module('starter.controllers', [])
           });
         }
         $scope.loaddata = function(){
-          GetAccount($scope.territoryid,retername($cookies.get('mastertype')), 1, function (data) {
+          GetAccount($scope.territoryid, Data.mastertype, 1, function (data) {
               if (data) {
                 $scope.listaccount = [];
                 $scope.showLoading('กำลังโหลดข้อมูล');
@@ -1989,22 +2032,6 @@ angular.module('starter.controllers', [])
             if($scope.$phase){$scope.$apply();}
           });
         }
-        //url:'/planneddetail/:mastertype/:accountid/:accountname/:terid/:province/:distid/:txtid',
-        $scope.planeddetail = function(mastertype,accountid,accountname,terid,province,distid,txtid){
-          // var txt = mastertype+'\n'+accountid+'\n'+accountname+'\n'+terid+'\n'+province+'\n'+distid+'\n'+txtid;
-          // alert(txt);
-          $state.go('app.planneddetail',{
-                                        mastertype:mastertype,
-                                        accountid:accountid,
-                                        accountname:accountname,
-                                        terid:terid,
-                                        province:province,
-                                        distid:distid,
-                                        txtid:txtid
-                                       },{
-                                          reload:true
-                                        });
-        }
 
     })
     .controller('PlanedDetailCtrl', function ($scope, $stateParams, $cookies, Data, $ionicHistory, $ionicLoading, $state) {
@@ -2062,7 +2089,7 @@ angular.module('starter.controllers', [])
                 } else if (type == 9 || type == '9') {
                     ins.properties.ivz_visitproductrecall = parseInt(1);
                 } else if (type == 10 || type == '10') {
-                    //ins.properties.ivz_visitactivities = typearr.toString();
+                    ins.properties.ivz_visitactivities = typearr.toString();
                 }
                 ins.properties.ivz_latitude = Data.latitude;
                 ins.properties.ivz_longtitude = Data.langtitude;
@@ -2084,9 +2111,6 @@ angular.module('starter.controllers', [])
             } catch (er) {
                 alert('error 846 ' + er);
             }
-        }
-        function aterwait(){
-          alert('ขอ อภัย ในความไม่สะดวกขณะนี้ยังอยู่ในช่วงการพัฒนา');
         }
 
         $scope.goop = function (idval) {
@@ -2120,27 +2144,23 @@ angular.module('starter.controllers', [])
                     });
                   });
             } else if (idval == 4 || idval == '4') {
-              aterwait();
                 //var ins = new MobileCRM.DynamicEntity.createNew('ivz_result');
-                //console.log('insert visit open claim');
+                console.log('insert visit open claim');
             } else if (idval == 5 || idval == '5') {
-              aterwait();
                 //var ins = new MobileCRM.DynamicEntity.createNew('ivz_result');
-                //console.log('insert visit open postpect');
+                console.log('insert visit open postpect');
             } else if (idval == 6 || idval == '6') {
-              aterwait();
                 //var ins = new MobileCRM.DynamicEntity.createNew('ivz_result');
-                //console.log('insert visit open marketting');
+                console.log('insert visit open marketting');
             } else if (idval == 7 || idval == '7') {
-              aterwait();
                 //var ins = new MobileCRM.DynamicEntity.createNew('ivz_result');
-                // console.log('insert visit open computitor');
-                // insertactivities(7, 0, 2, null, function () {
-                //     $state.go('app.optioncomputitor',{
-                //       accountid:$stateParams.accountname,
-                //       accountiname:$stateParams.accountid
-                //     },{reload:true});
-                //   });
+                console.log('insert visit open computitor');
+                insertactivities(7, 0, 2, null, function () {
+                    $state.go('app.optioncomputitor',{
+                      accountid:$stateParams.accountname,
+                      accountiname:$stateParams.accountid
+                    },{reload:true});
+                  });
             } else if (idval == 8 || idval == '8') {
                 console.log('insert visit open billing');
                 insertactivities(8, 0, 2, null, function () {
@@ -2156,7 +2176,6 @@ angular.module('starter.controllers', [])
             } else if (idval == 9 || idval == '9') {
                 //var ins = new MobileCRM.DynamicEntity.createNew('ivz_result');
                 console.log('insert visit open product recall');
-                aterwait();
             } else if (idval == 10 || idval == '10') {
               insertactivities(10, 0, 2, null, function () {
                 $state.go('app.plannedactivities',{
@@ -2171,11 +2190,9 @@ angular.module('starter.controllers', [])
               });
                 console.log('insert visit 10');
             } else if (idval == 11 || idval == '11') {
-              aterwait();
                 //var ins = new MobileCRM.DynamicEntity.createNew('ivz_result');
                 console.log('insert visit 11');
             } else {
-              aterwait();
                 console.log('insert ' + idval);
             }
         }
@@ -3686,16 +3703,23 @@ angular.module('starter.controllers', [])
         $state.reload();
         Data.showcart = false;
         $scope.Data = Data;
-        // $scope.DataRegistry = DataRegistry;
         Data.showcart = false;
         Data.mastertype = $stateParams.mastertype;
         Data.dataguid = $stateParams.getguid;
         if (!$stateParams.getguid) {
             $stateParams.getguid = guid();
         }
+        //alert('$stateParams.getguid:'+$stateParams.getguid.trim());
+        //Data.dataguid = guid();
+        // Data.getparaaccount
+        // Data.getparaname
+        // var acid = Data.getparaaccount;
         if (Data.getparaaccount) {
             Data.getguid = Data.getparaaccount;
         }
+        //$stateParams.pricelevel;
+        //$stateParams.transactioncurrency;
+        //$stateParams.territoryid
         console.log($stateParams.mastertype);
         $scope.chk = {
             determinateValue: 0,
@@ -3705,35 +3729,23 @@ angular.module('starter.controllers', [])
             infomattxtname: false,
             txtid: false
         };
-        // Data.gid
-        // Data.taxid
-        // Data.cusname
-        // Data.bracher
         $scope.user = {
             branchselect: 0,
-            txtid: '',
-            txtname: '',
+            txtid: Data.gettxtid,
+            txtname: Data.getparaname,
             txtbrancher: ''
         };
         $scope.$on('$ionicView.enter',function(){
-          // alert(''+
-          //   '\n $stateParams.getguid:'+$stateParams.getguid+
-          //   '\n $stateParams.territoryid:'+$stateParams.territoryid+
-          //   '\n $stateParams.transactioncurrency:'+$stateParams.transactioncurrency+
-          //   '\n $stateParams.pricelevel:'+$stateParams.pricelevel+
-          //   '\n Data.countrymaster:'+Data.countrymaster);
           var txtname = $scope.user.txtname;
-          if(Data.gettxtid){
-                $scope.user.branchselect = 0;
-                $scope.user.txtid = Data.gettxtid;
-                $scope.user.txtname = Data.getparaname;
-                $scope.user.txtbrancher = '';
-          }else if(Data.taxid){
-            $scope.user.branchselect = 0;
-            $scope.user.txtid = Data.taxid;
-            $scope.user.txtname = Data.cusname;
-            $scope.user.txtbrancher = Data.bracher;
-          }
+          //alert(txtname.length);
+        });
+        GetGPSLocation(function (res) {
+            if (res) {
+                //alert(res.latitude);
+                Data.latitude = res.latitude;
+                Data.longitude = res.longitude;
+            }
+            if($scope.$phase){$scope.$apply();}
         });
         /////////////// Check Txtid ////////////
         $scope.checktxt = function (txtid) {
@@ -3750,7 +3762,7 @@ angular.module('starter.controllers', [])
                         a.filter = filter;
                         var fetch = new MobileCRM.FetchXml.Fetch(a);
                         fetch.execute('array', function (data) {
-                            //alert("data length:"+txtid+' == '+data.length);
+                            alert("data length:"+txtid+' == '+data.length);
                             if (data.length > 0) {
                                 $scope.chk.infocheck = true;
                             } else {
@@ -3810,10 +3822,6 @@ angular.module('starter.controllers', [])
                     a.filter = filter;
                     var fetch = new MobileCRM.FetchXml.Fetch(a);
                     fetch.execute('array', function (data) {
-                        Data.gid = $stateParams.getguid;
-                        Data.taxid = $scope.user.txtid;
-                        Data.cusname = $scope.user.txtname;
-                        Data.bracher = $scope.user.txtbrancher;
                         if (data.length > 0) {
                             var ins = new MobileCRM.DynamicEntity("account", $stateParams.getguid);
                             ins.properties.ivz_taxid = $scope.user.txtid;
@@ -3823,8 +3831,8 @@ angular.module('starter.controllers', [])
                                 ins.properties.ivz_branchdetail = 'สำนักงานใหญ่';
                                 ins.properties.ivz_taxbranch = 'สำนักงานใหญ่';
                             } else {
-                                ins.properties.ivz_branchdetail = $scope.user.txtbrancher;
-                                ins.properties.ivz_taxbranch = $scope.user.txtbrancher;
+                                ins.properties.ivz_branchdetail = 'สำนักงานย่อย';
+                                ins.properties.ivz_taxbranch = 'สำนักงานย่อย';
                             }
                             ins.properties.ivz_empid = Data.Empid; ///get cookies
                             ins.properties.ivz_satatusempid = parseInt($stateParams.mastertype);
@@ -3853,8 +3861,8 @@ angular.module('starter.controllers', [])
                                 ins.properties.ivz_branchdetail = 'สำนักงานใหญ่';
                                 ins.properties.ivz_taxbranch = 'สำนักงานใหญ่';
                             } else {
-                                ins.properties.ivz_branchdetail = $scope.user.txtbrancher;
-                                ins.properties.ivz_taxbranch = $scope.user.txtbrancher;
+                                ins.properties.ivz_branchdetail = 'สำนักงานย่อย';
+                                ins.properties.ivz_taxbranch = 'สำนักงานย่อย';
                             }
                             ins.properties.ivz_empid = Data.Empid; ///get cookies
                             ins.properties.ivz_satatusempid = parseInt($stateParams.mastertype);
@@ -3997,12 +4005,6 @@ angular.module('starter.controllers', [])
         $scope.$on('$ionicView.enter',function(){
           var contact = $scope.user.firstname;
           //alert('account contact '+contact.length);
-          $scope.user.firstname = Data.contactname;
-          $scope.user.lastname = Data.lastcontactname ;
-          $scope.user.telhome = Data.tel;
-          $scope.user.mobile = Data.mobile;
-          $scope.user.fax = Data.fax;
-          $scope.user.emailname = Data.email;
         });
         $scope.chknull = function (idval, chktxt) {
             if (idval == 1) {
@@ -4071,13 +4073,6 @@ angular.module('starter.controllers', [])
                     a.filter = filter;
                     var fetch = new MobileCRM.FetchXml.Fetch(a);
                     fetch.execute('array', function (data) {
-                      Data.contactname = $scope.user.firstname;
-                      Data.lastcontactname =  $scope.user.lastname;
-                      Data.tel = $scope.user.telhome;
-                      Data.mobile = $scope.user.mobile;
-                      Data.fax = $scope.user.fax;
-                      Data.email = $scope.user.emailname;
-                      Data.txtBankAccount =  $scope.user.firstname+' '+$scope.user.lastname;
                         if (data.length > 0) {
                             var ins = new MobileCRM.DynamicEntity("contact", $scope.genguid);
                             ins.properties.parentcustomerid = new MobileCRM.Reference('account', $stateParams.getguid.trim());
@@ -4142,85 +4137,68 @@ angular.module('starter.controllers', [])
             //window.location.href="#/app/accountmeetting/"+$stateParams.getguid;
         }
         $scope.goback = function () {
-            //$ionicHistory.goBack(-1);
+            $ionicHistory.goBack(-1);
         }
     })
     /* --------------------------------- Meetting --------------------------------------- */
-    .controller('AccountMeetingCtrl', function ($scope, $state, $stateParams, $cookies, Data, $ionicHistory, $ionicLoading ,Setting) {
+    .controller('AccountMeetingCtrl', function ($scope, $state, $stateParams, $cookies, Data, $ionicHistory, $ionicLoading) {
         $state.reload();
         Data.showcart = false;
         $scope.Data = Data;
+
+        //Data.dataguid = $stateParams.getguid;
         $scope.user = {
-            actionfn:Data.actionfn,
-            optionDay:Data.optionDay,
-            optionStarttime:Data.optionStarttime,
-            optionEndtime:Data.optionEndtime,
-            optionBillingDay:Data.optionBillingDay,
-            optionStartBilltime:Data.optionStartBilltime,
-            optionEndBilltime:Data.optionEndBilltime,
+            actionfn: false,
+            optionDay: 0,
+            optionStarttime: 917970016, //set default timer option
+            optionEndtime: 917970036, //set default timer option
+            optionBillingDay: 0,
+            optionStartBilltime: 917970016, //set default timer option
+            optionEndBilltime: 917970036, //set default timer option
             ///////////////// option ///////////////////////
-            optionStartNormaltime:Data.optionStartNormaltime,
-            optionEndNormaltime:Data.optionEndNormaltime,
+            optionStartNormaltime: 917970016, //set default timer option
+            optionEndNormaltime: 917970036, //set default timer option
             /////////////////////////////////////////////
-            optionStarttimeAvailable:Data.optionStarttimeAvailable,
-            optionEndtimeAvailable:Data.optionEndtimeAvailable,
-            dataMon:Data.dataMon,
-            dataTue:Data.dataTue,
-            dataWen:Data.dataWen,
-            dataThu:Data.dataThu,
-            dataFri:Data.dataFri,
-            dataSat:Data.dataSat,
-            dataSun:Data.dataSun
+            optionStarttimeAvailable: 917970016, //set default timer option
+            optionEndtimeAvailable: 917970036, //set default timer option
+            dataMon: true,
+            dataTue: true,
+            dataWen: true,
+            dataThu: true,
+            dataFri: true,
+            dataSat: true,
+            dataSun: false
         };
         $scope.chk = {
             infomatoptionDay: true,
             infomatoptionBillingDay: true
         };
-        $scope.$watch('user.actionfn',function(){
-          //alert($scope.user.actionfn);
-          switch ($scope.user.actionfn) {
-            case true:
-                      $scope.user.dataMon = false;
-                      $scope.user.dataTue = false;
-                      $scope.user.dataWen = false;
-                      $scope.user.dataThu = false;
-                      $scope.user.dataFri = false;
-                      $scope.user.dataSat = false;
-              break;
-            default:
-                    $scope.user.dataMon = true;
-                    $scope.user.dataTue = true;
-                    $scope.user.dataWen = true;
-                    $scope.user.dataThu = true;
-                    $scope.user.dataFri = true;
-                    $scope.user.dataSat = true;
-          }
-        });
-        $scope.specialday = Setting.dateday;
+        $scope.specialday = [{
+            id: 0,
+            name: "จันทร์"
+                      }, {
+            id: 1,
+            name: "อังคาร"
+                      }, {
+            id: 2,
+            name: "พุธ"
+                      }, {
+            id: 3,
+            name: "พฤหัส"
+                      }, {
+            id: 4,
+            name: "ศุกร์"
+                      }, {
+            id: 5,
+            name: "เสาร์"
+                      }, {
+            id: 6,
+            name: "อาทิตย์"
+                      }];
         GetAvailablefromtime(function (data) {
             $scope.datetimer = data;
         });
         $scope.insertaccount = function () {
-            Data.actionfn = $scope.user.actionfn;
-            Data.optionDay = $scope.user.optionDay;
-            Data.optionStarttime = $scope.user.optionStarttime;
-            Data.optionEndtime = $scope.user.optionEndtime;
-            Data.optionBillingDay = $scope.user.optionBillingDay;
-            Data.optionStartBilltime = $scope.user.optionStartBilltime;
-            Data.optionEndBilltime = $scope.user.optionEndBilltime;
-            ///////////////// option ///////////////////////
-            Data.optionStartNormaltime = $scope.user.optionStartNormaltime;
-            Data.optionEndNormaltime = $scope.user.optionEndNormaltime;
-            /////////////////////////////////////////////
-            Data.optionStarttimeAvailable = $scope.user.optionStarttimeAvailable;
-            Data.optionEndtimeAvailable = $scope.user.optionEndtimeAvailable;
-            Data.dataMon = $scope.user.dataMon;
-            Data.dataTue = $scope.user.dataTue;
-            Data.dataWen = $scope.user.dataWen;
-            Data.dataThu = $scope.user.dataThu;
-            Data.dataFri = $scope.user.dataFri;
-            Data.dataSat = $scope.user.dataSat;
-            Data.dataSun = $scope.user.dataSun;
             try {
                 var ins = new MobileCRM.DynamicEntity("account", $stateParams.getguid);
                 ins.properties.ivz_specialcheking = converttrue($scope.user.actionfn);
@@ -4270,6 +4248,7 @@ angular.module('starter.controllers', [])
         $state.reload();
         Data.showcart = false;
         $scope.Data = Data;
+
         //Data.dataguid = $stateParams.getguid;
         $scope.user = {
             txtConName: Data.recivename,
@@ -4285,7 +4264,11 @@ angular.module('starter.controllers', [])
             infomatoptionDistrict: true,
             infomattxtPostCode: true
         };
-
+        ////////// Get Province
+        GetProvinceList(function (data) {
+            $scope.ProvinceDataList = data;
+            if($scope.$phase){$scope.$apply();}
+        });
         ////////// Get districtid
         $scope.getdistricttranspot = function (darray) {
                 GetDistrictById(darray, function (data) {
@@ -4314,20 +4297,6 @@ angular.module('starter.controllers', [])
                 }
             }
         }
-        $scope.$on('$ionicView.enter',function(){
-          $scope.user.txtAddressProduct = Data.addressname;
-          $scope.user.optionProvince = Data.provinceid;
-          ////////// Get Province
-          GetProvinceList(function (data) {
-              $scope.ProvinceDataList = data;
-              if($scope.$phase){$scope.$apply();}
-          });
-          if(Data.districtid){
-            $scope.getdistricttranspot(Data.provinceid);
-            $scope.user.optionDistrict = Data.districtid;
-          }
-          $scope.user.txtPostCode = Data.zipcode;
-        });
 
         $scope.insertaccount = function () {
             if ($scope.user.txtConName) {
@@ -4369,15 +4338,6 @@ angular.module('starter.controllers', [])
                 Darray.zipcode = $scope.user.txtPostCode; //Set Parameter
 
                 console.log('Update DB');
-                //user.txtConName
-                // user.txtAddressProduct
-                // user.optionProvince
-                // user.optionDistrict
-                // user.txtPostCode
-                Data.addressname = $scope.user.txtAddressProduct;
-                Data.provinceid = $scope.user.optionProvince;
-                Data.districtid = $scope.user.optionDistrict;
-                Data.zipcode = $scope.user.txtPostCode;
                 try {
                     var ins = new MobileCRM.DynamicEntity("account", $stateParams.getguid);
                     ins.properties.address2_addresstypecode = parseInt(2); //delivery
@@ -4530,8 +4490,7 @@ angular.module('starter.controllers', [])
             $scope.showLoadingProperTimes();
         }
         $scope.goback = function () {
-          $scope.reback();
-            // $ionicHistory.goBack(-1);
+            $ionicHistory.goBack(-1);
         }
     })
 
@@ -4572,24 +4531,8 @@ angular.module('starter.controllers', [])
     $scope.goback = function () {
         $ionicHistory.goBack(-1);
     }
-    $scope.$on('$ionicView.enter',function(){
-      $scope.user.txtConName = Data.othername;
-      $scope.user.txtAddressProduct = Data.otheraddress;
-      $scope.user.optionProvince = Data.otherprovinceid;
-      GetDistrictById(Data.otherprovinceid, function (data) {
-          $scope.DistrictlistTransport = data;
-          if($scope.$phase){$scope.$apply();}
-      });
-      $scope.user.optionDistrict = Data.otherdistrictid;
-      $scope.user.txtPostCode = Data.otherzipcode;
-    });
     $scope.insertaccount = function () {
         if ($scope.user.txtConName) {
-          Data.othername = $scope.user.txtConName;
-          Data.otheraddress = $scope.user.txtAddressProduct;
-          Data.otherprovinceid = $scope.user.optionProvince;
-          Data.otherdistrictid = $scope.user.optionDistrict;
-          Data.otherzipcode = $scope.user.txtPostCode;
             try {
                 var ins = new MobileCRM.DynamicEntity("account", $stateParams.getguid);
                 ins.properties.ivz_address3_name = $scope.user.txtConName;
@@ -4614,16 +4557,16 @@ angular.module('starter.controllers', [])
 })
 
 
-.controller('AccountTransportCtrl', function ($scope, $stateParams, $cookies, Data, $ionicHistory, $state ,Setting) {
+.controller('AccountTransportCtrl', function ($scope, $stateParams, $cookies, Data, $ionicHistory, $state) {
     $state.reload();
     Data.showcart = false;
     $scope.Data = Data;
     //Data.dataguid = $stateParams.getguid;
     $scope.user = {
-        txtTransport: Setting.transportname,
-        telTransport: Setting.transporttel,
-        billvat: Data.billvat,
-        txtRemarkTransport: Data.txtRemarkTransport
+        txtTransport: 'รถ YSS',
+        telTransport: '08XXXXXXX',
+        billvat: false,
+        txtRemarkTransport: ''
     };
     $scope.chk = {
         infomattxtTransport: true,
@@ -4646,10 +4589,6 @@ angular.module('starter.controllers', [])
     }
     $scope.insertaccount = function () {
         if ($scope.chk.infomattxtTransport == true && $scope.chk.infomattelTransport == true) {
-            Data.transname = $scope.user.txtTransport;
-            Data.teltran = $scope.user.telTransport;
-            Data.billvat = $scope.user.billvat;
-            Data.txtRemarkTransport = $scope.user.txtRemarkTransport;
             try {
                 var ins = new MobileCRM.DynamicEntity("account", $stateParams.getguid);
                 ins.properties.ivz_transport = $scope.user.txtTransport;
@@ -4683,20 +4622,20 @@ angular.module('starter.controllers', [])
     $scope.Data = Data;
     //Data.dataguid = $stateParams.getguid;
     $scope.user = {
-        peoplela1:Data.peoplela1,
-        peoplela2:Data.peoplela2,
-        statustype:Data.statustype,
-        bs1:Data.bs1,
-        bs2:Data.bs2,
-        bs3:Data.bs3,
-        bs4:Data.bs4,
-        bs5:Data.bs5
+        peoplela1: false,
+        peoplela2: false,
+        statustype: '',
+        bs1: '',
+        bs2: '',
+        bs3: '',
+        bs4: '',
+        bs5: ''
     };
     $scope.chk = {
-        docStatus:Data.docStatus,
-        doc001:Data.doc001,
-        doc004:Data.doc004,
-        doc005:Data.doc005
+        docStatus: true,
+        doc001: true,
+        doc004: true,
+        doc005: true
     };
 
 
@@ -4966,19 +4905,6 @@ angular.module('starter.controllers', [])
             $scope.chk.docStatus = false;
         }
         // console.log('Status type:'+$scope.user.statustype);
-            Data.peoplela1 = $scope.user.peoplela1;
-            Data.peoplela2 = $scope.user.peoplela2;
-            Data.statustype = $scope.user.statustype;
-            Data.bs1 = $scope.user.bs1;
-            Data.bs2 = $scope.user.bs2;
-            Data.bs3 = $scope.user.bs3;
-            Data.bs4 = $scope.user.bs4;
-            Data.bs5 = $scope.user.bs5;
-            Data.docStatus = $scope.chk.docStatus;
-            Data.doc001 = $scope.chk.doc001;
-            Data.doc004 = $scope.chk.doc004;
-            Data.doc005 = $scope.chk.doc005;
-
     }
     $scope.goback = function () {
         $ionicHistory.goBack(-1);
@@ -4994,67 +4920,43 @@ angular.module('starter.controllers', [])
         });
         $scope.Data = Data;
         //Data.mastertype = $stateParams.getguid;
-
-        $scope.user = {
-            optionPayment:Data.optionPayment,
-            txtCreditlimit:Data.txtCreditlimit,
-            optionPaymentType:Data.optionPaymentType,
-            optionPaymentBank:Data.optionPaymentBank,
-            txtBankAccount: Data.txtBankAccount,
-            txtBankBranch:Data.txtBankBranch,
-            optionPaymentbnkYss:Data.optionPaymentbnkYss
-        };
-        $scope.$on('$ionicView.enter',function(){
-          GetPayMentTerm(function (data) {
-              $scope.PaymentTermOptions = data;
-          });
-          GetPayMentOption(function (data) {
-              $scope.PaymentOptions = data;
-          });
-          GetBankName(function (data) {
-              $scope.bankname = data;
-          });
-          GetBankNameYss(function (data) {
-              $scope.banknameyss = data;
-          });
-          if (actype.actype == 1) {
-              $scope.user.optionPayment = 100000011; //Set SD-cash
-              $scope.user.optionPaymentType = 917970002;
-              $scope.chk.diabledcredit = true;
-          } else if (actype.actype == 2) {
-              $scope.user.optionPayment = 100000014; //Set SD-30 โอน
-              $scope.user.optionPaymentType = 917970000;
-              $scope.chk.diabledcredit = false;
-          }
-          if(Data.cashoption){
-            $scope.user.optionPayment = Data.cashoption;
-          }
-          if(Data.cashcredit){
-            $scope.user.txtCreditlimit = Data.cashcredit;
-          }
-          if(Data.fncash){
-            $scope.user.optionPaymentType = Data.fncash;
-          }
-          if(Data.bankname){
-            $scope.user.optionPaymentBank = Data.bankname;
-          }
-          if(Data.bankaccount){
-            $scope.user.txtBankAccount = Data.bankaccount;
-          }
-          if(Data.banknumber){
-            $scope.user.txtBankBranch = Data.banknumber;
-          }
-          if(Data.bankyss){
-            $scope.user.optionPaymentbnkYss = Data.bankyss;
-          }
+        GetPayMentTerm(function (data) {
+            $scope.PaymentTermOptions = data;
         });
-        $scope.chk = {
-            optionPayment:Data.optionPayment,
-            txtCreditlimit:Data.txtCreditlimit,
-            optionPaymentType:Data.optionPaymentType,
-            optionPaymentbnkYss:Data.optionPaymentbnkYss,
-            diabledcredit:Data.diabledcredit
+        GetPayMentOption(function (data) {
+            $scope.PaymentOptions = data;
+        });
+        GetBankName(function (data) {
+            $scope.bankname = data;
+        });
+        GetBankNameYss(function (data) {
+            $scope.banknameyss = data;
+        });
+        $scope.user = {
+            optionPayment: '', //Set SD-
+            txtCreditlimit: 0,
+            optionPaymentType: '',
+            optionPaymentBank: '',
+            txtBankAccount: '',
+            txtBankBranch: '',
+            optionPaymentbnkYss: 917970001 //yss bank กสิกร ออมทรัพย์
         };
+        $scope.chk = {
+            optionPayment: true,
+            txtCreditlimit: true,
+            optionPaymentType: true,
+            optionPaymentbnkYss: true,
+            diabledcredit: false
+        };
+        if (actype.actype == 1) {
+            $scope.user.optionPayment = 100000011; //Set SD-cash
+            $scope.user.optionPaymentType = 917970002;
+            $scope.chk.diabledcredit = true;
+        } else if (actype.actype == 2) {
+            $scope.user.optionPayment = 100000014; //Set SD-30 โอน
+            $scope.user.optionPaymentType = 917970000;
+            $scope.chk.diabledcredit = false;
+        }
         $scope.chknull = function (txtname) {
             if (txtname > 1) {
                 $scope.chk.txtCreditlimit = true;
@@ -5063,18 +4965,8 @@ angular.module('starter.controllers', [])
             }
         }
         $scope.insertaccount = function () {
-          Data.optionPayment = $scope.user.optionPayment;
-          Data.txtCreditlimit = $scope.user.txtCreditlimit;
-          Data.optionPaymentType = $scope.user.optionPaymentType;
-          Data.optionPaymentBank = $scope.user.optionPaymentBank;
-          Data.txtBankAccount = $scope.user.txtBankAccount;
-          Data.txtBankBranch = $scope.user.txtBankBranch;
-          Data.optionPaymentbnkYss = $scope.user.optionPaymentbnkYss;
-          Data.optionPayment = $scope.chk.optionPayment;
-          Data.txtCreditlimit = $scope.chk.txtCreditlimit;
-          Data.optionPaymentType = $scope.chk.optionPaymentType;
-          Data.optionPaymentbnkYss = $scope.chk.optionPaymentbnkYss;
-          Data.diabledcredit = $scope.chk.diabledcredit;
+            Data.creditlimit = $scope.user.txtCreditlimit;
+            //window.location.href="#/app/infomart/"+$stateParams.getguid;
             if (actype.actype == 1) {
                 try {
                     var ins = new MobileCRM.DynamicEntity("account", $stateParams.getguid);
@@ -5134,47 +5026,27 @@ angular.module('starter.controllers', [])
         $scope.Data = Data;
         //Data.mastertype = $stateParams.getguid;
         $scope.user = {
-            SalePart1:Data.SalePart1,
-            SalePart2:Data.SalePart2,
-            SalePart3:Data.SalePart3,
+            SalePart1: false,
+            SalePart2: false,
+            SalePart3: false,
             //////////////////////////////
-            SalePart4:Data.SalePart4,
-            SalePart5:Data.SalePart5,
-            SalePart6:Data.SalePart6,
-            doc:Data.doc,
-            PlaceStatus1:Data.PlaceStatus1,
-            PlaceStatus2:Data.PlaceStatus2,
-            tatofactory:Data.tatofactory,
-            tatolnumber:Data.tatolnumber
+            SalePart4: false,
+            SalePart5: false,
+            SalePart6: false,
+            doc: [],
+            PlaceStatus1: '',
+            PlaceStatus2: '',
+            tatofactory: '',
+            tatolnumber: ''
         };
         $scope.chk = {
-            SalesPart1:Data.SalesPart1,
-            SalesPart2:Data.SalesPart2,
-            doc006:Data.doc006,
-            PlaceStatus:Data.PlaceStatus,
-            tatofactory:Data.tatofactory,
-            tatolnumber:Data.tatolnumber
+            SalesPart1: true,
+            SalesPart2: true,
+            doc006: true,
+            PlaceStatus: true,
+            tatofactory: true,
+            tatolnumber: true
         };
-        if(Data.doc.length > 0){
-          $('.divimg').remove();
-          // 	console.log(data.length);
-          $scope.user.doc.push(data);
-          var datapush = $scope.user.doc;
-          //console.log(datapush.length);
-          if (datapush.length > 0) {
-              for (var i in datapush) {
-                  var html = '<div class="col col-20 divimg">' +
-                      '<img class="thumbnail" src="data:image/jpeg;base64,' + datapush[i] + '" width="100" height="100" ng-click="removeimg(' + i + ')"/>' +
-                      '</div>';
-                  angular.element(document.getElementById('divspace')).append($compile(html)($scope));
-              }
-          } else {
-              var html = '<div class="col col-20">' +
-                  '<img class="thumbnail" src="data:image/jpeg;base64,' + data + '่" width="100" height="100"  ng-click="removeimg(' + i + ')"/>' +
-                  '</div>';
-              angular.element(document.getElementById('divspace')).append($compile(html)($scope));
-          }
-        }
         $scope.removeimg = function (id) {
             console.log(id);
             $('.divimg').remove();
@@ -5339,24 +5211,6 @@ angular.module('starter.controllers', [])
                     }
                 }
             }
-                Data.SalePart1 = $scope.user.SalePart1;
-                Data.SalePart2 = $scope.user.SalePart2;
-                Data.SalePart3 = $scope.user.SalePart3;
-                //////////////////////////////
-                Data.SalePart4 = $scope.user.SalePart4;
-                Data.SalePart5 = $scope.user.SalePart5;
-                Data.SalePart6 = $scope.user.SalePart6;
-                Data.doc = $scope.user.doc;
-                Data.PlaceStatus1 = $scope.user.PlaceStatus1;
-                Data.PlaceStatus2 = $scope.user.PlaceStatus2;
-                Data.tatofactory = $scope.user.tatofactory;
-                Data.tatolnumber = $scope.user.tatolnumber;
-                Data.SalesPart1 = $scope.chk.SalesPart1;
-                Data.SalesPart2 = $scope.chk.SalesPart2;
-                Data.doc006 = $scope.chk.doc006;
-                Data.PlaceStatus = $scope.chk.PlaceStatus;
-                Data.tatofactory = $scope.chk.tatofactory;
-                Data.tatolnumber = $scope.chk.tatolnumber;
         }
         $scope.goback = function () {
             $ionicHistory.goBack(-1);
@@ -5634,7 +5488,37 @@ angular.module('starter.controllers', [])
                 } else {
                     getTerEmp($scope.territoryid, function (data) {
                         if (data) {
-                            confirmnew(insertTask);
+                            confirmnew(function () {
+                                try {
+                                    insertTask(function () {
+                                        if(Data.creditlimit > 100000){
+                                          var title = 'เปิดบัญชีลูกค้าใหม่';
+                                          var text = "เรียน  Sup./Sales Manger, รบกวนดำเนินการอนุมัติเปิดบัญชีลูกค้าใหม่เขตการขาย " + data[0].name + "  ลูกค้าชื่อ " +
+                                              Data.listregist + " ให้ด้วยครับ  ขอบคุณครับ  (อีเมลฉบับนี้ส่งอัตโนมัติจากระบบ CRM)";
+                                          SendMail(data[0].ivz_leadermail, title, text);
+                                        }else{
+                                          var title = 'เปิดบัญชีลูกค้าใหม่';
+                                          var text = "เรียน  Sup./Sales Manger, รบกวนดำเนินการอนุมัติเปิดบัญชีลูกค้าใหม่เขตการขาย " + data[0].name + "  ลูกค้าชื่อ " +
+                                              Data.listregist + " ให้ด้วยครับ  ขอบคุณครับ  (อีเมลฉบับนี้ส่งอัตโนมัติจากระบบ CRM)";
+                                          SendMail(data[0].ivz_leadermail+';'+data[0].ivz_ccmail, title, text);
+                                        }
+                                        setTimeout(function () {
+                                            $ionicLoading.hide();
+                                            $ionicHistory.nextViewOptions({
+                                                disableBack: true
+                                            });
+                                            $state.go('app.accountlist', {
+                                                terriid: Data.termas,
+                                                mastertype: Data.mastertype
+                                            }, {
+                                                reload: true
+                                            });
+                                        }, 2000);
+                                    });
+                                } catch (er) {
+                                    alert('error 2888 ' + er);
+                                }
+                            });
                         }
                     });
 
@@ -5651,159 +5535,42 @@ angular.module('starter.controllers', [])
             }, 2000);
         }
 
-        var insertTask = function() {
-              if(Data.creditlimit > 100000){
-                var title = 'เปิดบัญชีลูกค้าใหม่';
-                var text = "เรียน  Sup./Sales Manger, รบกวนดำเนินการอนุมัติเปิดบัญชีลูกค้าใหม่เขตการขาย " +
-                data[0].name + "  ลูกค้าชื่อ " +
-                    Data.listregist + " ให้ด้วยครับ  ขอบคุณครับ  (อีเมลฉบับนี้ส่งอัตโนมัติจากระบบ CRM)";
-                SendMail(data[0].ivz_leadermail, title, text);
-              }else{
-                var title = 'เปิดบัญชีลูกค้าใหม่';
-                var text = "เรียน  Sup./Sales Manger, รบกวนดำเนินการอนุมัติเปิดบัญชีลูกค้าใหม่เขตการขาย " +
-                data[0].name + "  ลูกค้าชื่อ " +
-                    Data.listregist + " ให้ด้วยครับ  ขอบคุณครับ  (อีเมลฉบับนี้ส่งอัตโนมัติจากระบบ CRM)";
-                SendMail(data[0].ivz_leadermail+';'+data[0].ivz_ccmail, title, text);
-              }
-              setTimeout(function () {
-                  $ionicLoading.hide();
-                  $ionicHistory.nextViewOptions({
-                      disableBack: true
-                  });
-                  $state.go('app.accountlist', {
-                      terriid: Data.termas,
-                      mastertype: Data.mastertype
-                  }, {
-                      reload: true
-                  });
-              }, 2000);
-              Data.gid = '';//begin data
-              Data.taxid = '';
-              Data.cusname = '';
-              Data.bracher = '';
-              Data.contactname = '';
-              Data.lastcontactname = '';
-              Data.tel = '';
-              Data.mobile = '';
-              Data.fax = '';
-              Data.email = '';
-              Data.actionfn =  false;
-              Data.optionDay =  0;
-              Data.optionStarttime =  917970016; //set default timer option
-              Data.optionEndtime =  917970036; //set default timer option
-              Data.optionBillingDay =  0;
-              Data.optionStartBilltime =  917970016; //set default timer option
-              Data.optionEndBilltime =  917970036; //set default timer option
-              ///////////////// option ///////////////////////
-              Data.optionStartNormaltime =  917970016; //set default timer option
-              Data.optionEndNormaltime =  917970036; //set default timer option
-              /////////////////////////////////////////////
-              Data.optionStarttimeAvailable =  917970016; //set default timer option
-              Data.optionEndtimeAvailable =  917970036; //set default timer option
-              Data.dataMon =  true;
-              Data.dataTue =  true;
-              Data.dataWen =  true;
-              Data.dataThu =  true;
-              Data.dataFri =  true;
-              Data.dataSat =  true;
-              Data.dataSun =  false;
-              Data.recivename = '';
-              Data.addressname = '';
-              Data.provincename = '';
-              Data.provinceid = '';
-              Data.districtname = '';
-              Data.districtid = '';
-              Data.zipcode = '';
-              Data.invname = '';
-              Data.invprovince = '';
-              Data.invprovinceid = '';
-              Data.invdistrict = '';
-              Data.invdistrictid = '';
-              Data.invzipcode = '';
-              Data.othername = '';
-              Data.otheraddress = '';
-              Data.otherprovince = '';
-              Data.otherprovinceid = '';
-              Data.otherdistrict = '';
-              Data.otherdistrictid = '';
-              Data.otherzipcode = '';
-              Data.transname = '';
-              Data.teltran = '';
-              Data.billvat = false;
-              Data.txtRemarkTransport = '';
-              Data.peoplela1 =  false;
-              Data.peoplela2 =  false;
-              Data.statustype =  '';
-              Data.bs1 =  '';
-              Data.bs2 =  '';
-              Data.bs3 =  '';
-              Data.bs4 =  '';
-              Data.bs5 =  '';
-              Data.docStatus =  true;
-              Data.doc001 =  true;
-              Data.doc004 =  true;
-              Data.doc005 =  true;
-              Data.optionPayment =  ''; //Set SD-
-              Data.txtCreditlimit =  0;
-              Data.optionPaymentType =  '';
-              Data.optionPaymentBank =  '';
-              Data.txtBankAccount = '';
-              Data.txtBankBranch =  '';
-              Data.optionPaymentbnkYss =  917970001; //yss bank กสิกร ออมทรัพย์
-              Data.optionPayment =  true;
-              Data.txtCreditlimit =  true;
-              Data.optionPaymentType =  true;
-              Data.optionPaymentbnkYss =  true;
-              Data.diabledcredit =  false;
-              /////////////////////////////
-              Data.SalePart1 =  false;
-              Data.SalePart2 =  false;
-              Data.SalePart3 =  false;
-              //////////////////////////////
-              Data.SalePart4 =  false;
-              Data.SalePart5 =  false;
-              Data.SalePart6 =  false;
-              Data.doc =  [];
-              Data.PlaceStatus1 =  '';
-              Data.PlaceStatus = '';
-              Data.tatofactory =  '';
-              Data.tatolnumber =  '';
-              Data.SalesPart1 =  true;
-              Data.SalesPart2 =  true;
-              Data.doc006 =  true;
-              Data.PlaceStatus =  true;
-              Data.tatofactory =  true;
-              Data.tatolnumber =  true;
-              /////////////////////////
-              Data.datacontact = [];
-              Data.databusiness = [];
-              Data.tersupselect = '';
+        function insertTask(callback) {
+            try {
+                var ins = new MobileCRM.DynamicEntity.createNew("ivz_tasknewaccount");
+                ins.properties.ivz_name = Data.listregist;
+                ins.properties.ivz_customer = new MobileCRM.Reference('account', Data.dataguid);
+                ins.properties.ivz_saletype = parseInt(Data.mastertype);
+                ins.properties.ivz_statusdoc = parseInt(Data.StoreDoc);
+                ins.properties.ivz_statuscustomer = parseInt(Data.custermertype);
+                ins.properties.ivz_territory = new MobileCRM.Reference('territory', Data.termas);
+                ins.properties.ivz_statuscomplete = parseInt(3); //new Account
+                ins.save(function (er) {
+                    if (er) {
+                        alert('error ac 2897 tasknew ' + er);
+                    } else {
+                        callback();
+                    }
+                });
+            } catch (er) {
+                alert("error2919" + er);
+            }
         }
 
         function confirmnew(callback) {
-          $scope.showLoadGPS();
             try {
-              GetGPSLocation(function(res){
-                var getres = setInterval(function(){
-                  if(res){
-                    var ins = new MobileCRM.DynamicEntity("account", $stateParams.getguid);
-                    ins.properties.statuscode = parseInt(917970000);
-                    ins.properties.ivz_statuscomplete = parseInt(2);
-                    ins.properties.address1_latitude = parseFloat(res.latitude);
-                    ins.properties.address1_longitude = parseFloat(res.longitude);
-                    ins.save(function (er) {
-                        if (er) {
-                            alert('error ac 2932 confirm ' + er);
-                        } else {
-                          $ionicLoading.hide();
-                          callback();
-                        }
-                    });
-                    clearInterval(getres);
-                  }
-                },100);
-                if($scope.$phase){$scope.$apply();}
-              });
+                var ins = new MobileCRM.DynamicEntity("account", $stateParams.getguid);
+                ins.properties.statuscode = parseInt(917970000);
+                ins.properties.ivz_statuscomplete = parseInt(2);
+                ins.properties.address1_latitude = parseFloat(Data.latitude);
+                ins.properties.address1_longitude = parseFloat(Data.longitude);
+                ins.save(function (er) {
+                    if (er) {
+                        alert('error ac 2932 confirm ' + er);
+                    } else {
+                        callback();
+                    }
+                });
             } catch (er) {
                 alert("error2938" + er);
             }
@@ -5893,9 +5660,9 @@ angular.module('starter.controllers', [])
             $scope.Data = Data;
             $ionicHistory.clearHistory();
             $scope.territoryid = $stateParams.terriid;
-            //$scope.filtertxt = '';
+            $scope.filtertxt = '';
             $scope.listaccount = [];
-            GetAccount($stateParams.terriid, retername($cookies.get('mastertype')), 1, function (data) {
+            GetAccount($stateParams.terriid, Data.mastertype, 1, function (data) {
                 $scope.showLoadingProperTimesRegter('โหลดข้อมูล');
                 if (data.length > 0) {
                     var x = 0;
@@ -5940,7 +5707,7 @@ angular.module('starter.controllers', [])
                         }
                         setTimeout(function () {
                             callback();
-                        }, 0);
+                        }, 25);
                     }
                 }else{
                   setTimeout(function () {
@@ -5963,7 +5730,7 @@ angular.module('starter.controllers', [])
             $scope.reloaddata = function () {
                     $scope.showLoadingProperTimesRegter('โหลดข้อมูล');
                     $scope.listaccount = [];
-                    GetAccount($cookies.get('territoryid'),retername($cookies.get('mastertype')), 1, function (data) {
+                    GetAccount($cookies.get('territoryid'), Data.mastertype, 1, function (data) {
                         $scope.showLoadingProperTimesRegter('โหลดข้อมูล');
                         if (data.length > 0) {
                             var x = 0;
@@ -6019,10 +5786,10 @@ angular.module('starter.controllers', [])
                     });
                 }
                 //$scope.filtertype = 0 = no,1=complete,2=wait,3=reject,4=yes
-            //$scope.filtertype = '';
+            $scope.filtertype = '';
             $scope.setfilter = function (txtfilter) {
                 $scope.listaccount = [];
-                GetAccount($cookies.get('territoryid'),retername($cookies.get('mastertype')), 1, function (data) {
+                GetAccount($cookies.get('territoryid'), Data.mastertype, 1, function (data) {
                     $scope.showLoadingProperTimesRegter('โหลดข้อมูล');
                     if (data.length > 0) {
                         var x = 0;
@@ -6081,7 +5848,7 @@ angular.module('starter.controllers', [])
                 //alert(txtfilter);
                 $scope.showLoadingProperTimes();
                 $scope.listaccount = [];
-                GetAccount($cookies.get('territoryid'),retername($cookies.get('mastertype')), 1, function (data) {
+                GetAccount($cookies.get('territoryid'), Data.mastertype, 1, function (data) {
                     $scope.showLoadingProperTimesRegter('โหลดข้อมูล');
                     if (data.length > 0) {
                         var x = 0;
@@ -6324,6 +6091,11 @@ angular.module('starter.controllers', [])
           });
         }
         $scope.detailaccount = function(accountid,statustype,balancecredit,territoryid,accountname){
+          // alert(accountid+'\n'+
+          //       statustype+'\n'+
+          //       balancecredit+'\n'+
+          //       territoryid+'\n'+
+          //       accountname);
           $state.go('app.accountdetailnew',{accountid:accountid,statustype:statustype,credit:balancecredit,terid:territoryid,acname:accountname},{reload:true});
         };
     })
@@ -6513,9 +6285,7 @@ angular.module('starter.controllers', [])
             terid: '',
             filetername: '',
             remarkname: '',
-            typego: '',
-            newcredit:0,
-            appcredit:0
+            typego: ''
         };
         $scope.chk = {
             remark: true
@@ -6544,7 +6314,7 @@ angular.module('starter.controllers', [])
                         $scope.listaccount.push({
                             ivz_accountadjustmentid: data[i].ivz_accountadjustmentid,
                             ivz_name: data[i].ivz_name,
-                            ivz_transdate: new Date(data[i].createdon),
+                            ivz_transdate: new Date(data[i].ivz_transdate),
                             ivz_adjcredcloseaccount: data[i].ivz_adjcredcloseaccount,
                             ivz_adjcredclosereason: data[i].ivz_adjcredclosereason,
                             ivz_adjcredit: data[i].ivz_adjcredit,
@@ -6589,7 +6359,7 @@ angular.module('starter.controllers', [])
                     }
                     setTimeout(function () {
                         callback();
-                    }, 0);
+                    }, 50);
                 }
                 if($scope.$phase){$scope.$apply();}
             });
@@ -6640,46 +6410,23 @@ angular.module('starter.controllers', [])
         }).then(function (modal) {
             $scope.modal1 = modal;
         });
-        $ionicModal.fromTemplateUrl('templates/comment/rejectcredit.html', {
+        $ionicModal.fromTemplateUrl('templates/comment/rejectall.html', {
             id: 2,
             scope: $scope,
             animation: 'slide-in-up'
         }).then(function (modal) {
             $scope.modal2 = modal;
         });
-        $ionicModal.fromTemplateUrl('templates/comment/rejectall.html', {
-            id: 3,
-            scope: $scope,
-            animation: 'slide-in-up'
-        }).then(function (modal) {
-            $scope.modal3 = modal;
-        });
 
         // Triggered in the login modal to close it
         $scope.closereject = function () {
-          try {
             $scope.modal1.hide();
-          }
-          try {
-            $scope.modal2.hide();
-          }
-          try {
-            $scope.modal3.hide();
-          }
         };
         $scope.closereject2 = function () {
-          try {
-            $scope.modal1.hide();
-          }
-          try {
             $scope.modal2.hide();
-          }
-          try {
-            $scope.modal3.hide();
-          }
         };
         // Open the login modal
-        $scope.showcomment = function (index, id, txt, ter, contxt ,credit) {
+        $scope.showcomment = function (index, id, txt, ter, contxt) {
             //alert(ter.id);
             $scope.user.id = index;
             $scope.user.adjustid = id;
@@ -6689,27 +6436,10 @@ angular.module('starter.controllers', [])
             $scope.user.filetername = contxt;
             $scope.user.remarkname = '';
             $scope.user.typego = $stateParams.typego;
-            $scope.user.newcredit = credit;
-            $scope.user.appcredit = credit;
             $scope.modal2.show();
         };
         $scope.rejectapprove = function () {
             $scope.modal1.show();
-        };
-
-        $scope.showcommentcredit = function (index, id, txt, ter, contxt ,credit) {
-            //alert(ter.id);
-            $scope.user.id = index;
-            $scope.user.adjustid = id;
-            $scope.user.txtname = txt;
-            $scope.user.tername = ter;
-            $scope.user.terid = ter.id;
-            $scope.user.filetername = contxt;
-            $scope.user.remarkname = '';
-            $scope.user.typego = $stateParams.typego;
-            $scope.user.newcredit = credit;
-            $scope.user.appcredit = credit;
-            $scope.modal3.show();
         };
 
         function updatestatus(id, code, txt, callback) {
@@ -6717,11 +6447,6 @@ angular.module('starter.controllers', [])
                 var ins = new MobileCRM.DynamicEntity('ivz_accountadjustment', id);
                 ins.properties.statuscode = parseInt(code);
                 ins.properties.ivz_remarkcomment = txt;
-                ins.properties.ivz_approvedby = $cookies.get('ivz_empid');
-                ins.properties.ivz_approvaldate = new Date();
-                if($scope.user.appcredit){
-                  ins.ivz_newcredcreditlimitnew = parseInt($scope.user.appcredit);
-                }
                 ins.save(function (er) {
                     if (er) {
                         alert('error 3709 ' + er);
@@ -6741,12 +6466,12 @@ angular.module('starter.controllers', [])
                     //alert(txt);
                     updatestatus(txt, 917970001, null, function () {
                         if ($stateParams.typego === '1' || $stateParams.typego === 1) {
-                            $scope.sendmailtosales($scope.user.terid, 'อนุมัติ'+$scope.user.filetername, 'ได้อนุมัติ' + $scope.user.filetername + ' ร้าน' + $scope.user.txtname + 'แล้ว', function () {
+                            $scope.sendmailtosales($scope.user.terid, 'อนุมัติเปลี่ยนแปลงข้อมูลทั่วไป', 'ได้อนุมัติ' + $scope.user.filetername + ' ร้าน' + $scope.user.txtname + 'แล้ว', function () {
                                 data.splice(id, 1);
                                 $scope.modal2.hide();
                             });
                         } else {
-                            $scope.sendmailtosales($scope.user.terid, 'อนุมัติ'+$scope.user.filetername, 'ได้อนุมัติ' + $scope.user.filetername + ' ร้าน' + $scope.user.txtname + 'แล้ว', function () {
+                            $scope.sendmailtosales($scope.user.terid, 'อนุมัติเปลี่ยนแปลงข้อมูลเครดิต', 'ได้อนุมัติ' + $scope.user.filetername + ' ร้าน' + $scope.user.txtname + 'แล้ว', function () {
                                 data.splice(id, 1);
                                 $scope.modal2.hide();
                             });
@@ -6768,15 +6493,13 @@ angular.module('starter.controllers', [])
                         //alert(txt);
                         updatestatus(txt, 917970002, $scope.user.remarkname, function () {
                             if ($stateParams.typego === '1' || $stateParams.typego === 1) {
-                                $scope.sendmailtosales($scope.user.terid, 'ไม่อนุมัติ'+$scope.user.filetername, 'ไม่สามารถอนุมัติ' + $scope.user.filetername + ' ร้าน' + $scope.user.txtname + 'ได้เนื่องจาก' + $scope.user.remarkname, function () {
+                                $scope.sendmailtosales($scope.user.terid, 'ไม่อนุมัติเปลี่ยนแปลงข้อมูลทั่วไป', 'ไม่สามารถอนุมัติ' + $scope.user.filetername + ' ร้าน' + $scope.user.txtname + 'ได้เนื่องจาก' + $scope.user.remarkname, function () {
                                     data.splice(id, 1);
-                                    $scope.modal2.hide();
                                     $scope.modal2.hide();
                                 });
                             } else {
-                                $scope.sendmailtosales($scope.user.terid, 'ไม่อนุมัต'+$scope.user.filetername, 'ไม่สามารถอนุมัติ' + $scope.user.filetername + ' ร้าน' + $scope.user.txtname + 'ได้เนื่องจาก' + $scope.user.remarkname, function () {
+                                $scope.sendmailtosales($scope.user.terid, 'ไม่อนุมัติเปลี่ยนแปลงข้อมูลเครดิต', 'ไม่สามารถอนุมัติ' + $scope.user.filetername + ' ร้าน' + $scope.user.txtname + 'ได้เนื่องจาก' + $scope.user.remarkname, function () {
                                     data.splice(id, 1);
-                                    $scope.modal2.hide();
                                     $scope.modal2.hide();
                                 });
                             }
@@ -6812,6 +6535,7 @@ angular.module('starter.controllers', [])
                     });
                 }
                 loopArray(data);
+
                 function getUpdate(i, callback) {
                     $scope.showLoadingProperTimesRegter('กำลังทำการบันทึก ' + data[i].ivz_customernumber);
                     setTimeout(function () {
@@ -6823,7 +6547,7 @@ angular.module('starter.controllers', [])
             }
         }
         $scope.reback = function () {
-            $scope.reback();
+            $ionicHistory.goBack(-1);
         }
     })
     ///////////////////////////// order territory /////////////////////////
@@ -7036,7 +6760,7 @@ angular.module('starter.controllers', [])
               }
             if($scope.$phase){$scope.$apply();}
           },function(er){
-            alert("ERROR 6892:"+er);
+            alert("ERROR 6333:"+er);
           },null);
       }
       $scope.addpluss = function (data) {
@@ -7122,17 +6846,17 @@ angular.module('starter.controllers', [])
               txtcomment: '',
               stateture: false
           };
-          var checkstate = $stateParams.statustype;
-          if (checkstate.length > 10) {
-              $scope.user.stateture = true;
-          } else {
-              $scope.user.stateture = false;
-          }
           $scope.annoteable();
         });
         $scope.Data = Data;
         Data.mastertype = $stateParams.mastertype;
         $scope.txtname = $stateParams.acname;
+        var checkstate = $stateParams.statustype;
+        if (checkstate.length > 10) {
+            $scope.user.stateture = true;
+        } else {
+            $scope.user.stateture = false;
+        }
         $scope.annote = [];
 
         $scope.annoteable = function(){
@@ -7214,38 +6938,34 @@ angular.module('starter.controllers', [])
         function updateconfirm(id, callback) {
             $scope.showLoadingProperTimesRegter('กำลังบันทึกข้อมูล');
             var ins = new MobileCRM.DynamicEntity('account', id);
-                ins.properties.statuscode = parseInt(917970001);
-                ins.properties.ivz_balancecredit = parseInt($scope.user.txtresult);
-                ins.properties.creditlimit = parseInt($scope.user.txtresult);
-                ins.properties.ivz_approvedby = $cookies.get('ivz_empid');
-                ins.properties.ivz_approvaldate = new Date();
-                ins.save(function (es) {
-                    if (es) {
-                        alert('error 3613 ' + es);
-                    } else {
-                        setTimeout(function () {
-                            callback();
-                        }, 1000);
-                    }
-                });
+            ins.properties.statuscode = parseInt(917970001);
+            ins.properties.ivz_balancecredit = parseInt($scope.user.txtresult);
+            ins.properties.creditlimit = parseInt($scope.user.txtresult);
+            ins.save(function (es) {
+                if (es) {
+                    alert('error 3613 ' + es);
+                } else {
+                    setTimeout(function () {
+                        callback();
+                    }, 1000);
+                }
+            });
         }
 
         function rejectconfirm(id, txtcomment, callback) {
             $scope.showLoadingProperTimesRegter('กำลังบันทึกข้อมูล');
             var ins = new MobileCRM.DynamicEntity('account', id);
-                ins.properties.statuscode = parseInt(917970002);
-                ins.properties.ivz_remarkreject = txtcomment;
-                ins.properties.ivz_approvedby = $cookies.get('ivz_empid');
-                ins.properties.ivz_approvaldate = new Date();
-                ins.save(function (es) {
-                    if (es) {
-                        alert('error 3613 ' + es);
-                    } else {
-                        setTimeout(function () {
-                            callback();
-                        }, 1000);
-                    }
-                });
+            ins.properties.statuscode = parseInt(917970002);
+            ins.properties.ivz_remarkreject = txtcomment;
+            ins.save(function (es) {
+                if (es) {
+                    alert('error 3613 ' + es);
+                } else {
+                    setTimeout(function () {
+                        callback();
+                    }, 1000);
+                }
+            });
         }
         $scope.cAdjustment = function () {
             //alert($stateParams.accountid);
@@ -7253,24 +6973,11 @@ angular.module('starter.controllers', [])
                 $scope.showLoadingProperTimesRegter('กำลังบันทึกข้อมูล');
                 updateconfirm($stateParams.accountid.trim(), function () {
                     $scope.showLoadingProperTimesRegter('บันทึกข้อมูลเสร็จแล้ว');
-                    getTerEmp($scope.user.territory, function (data) {
-                        if (data) {
-                          if(parseInt(Data.creditlimit) > 99999){
-                            var title = 'อนุมัติเปิดบัญชีลูกค้าใหม่';
-                            var text = "เรียน Director/Manger   Sup./Sales Manger ได้ทำการอนุมัติเปิดบัญชีลูกค้าใหม่เขตการขาย" + data[0].name + " แล้วรบการ Director/Manger ทำการอนุมัติเปิดบัญชีลูกค้าใหม่ในลำดับถัดไปด้วยครับ ขอบคุณครับ  (อีเมลฉบับนี้ส่งอัตโนมัติจากระบบ CRM)";
-                            SendMail(data[0].ivz_ccmail, title, text);
-                          }else{
-                            var title = 'อนุมัติเปิดบัญชีลูกค้าใหม่';
-                            var text = "เรียน พนักงานขายเขต " + data[0].name + " Sup./Sales Manger ได้ทำการอนุมัติเปิดบัญชีลูกค้าใหม่ให้แล้วครับ  ขอบคุณครับ  (อีเมลฉบับนี้ส่งอัตโนมัติจากระบบ CRM)";
-                            SendMail(data[0].ivz_emailcontact, title, text);
-                          }
-                            setTimeout(function () {
-                                $ionicLoading.hide();
-                                $scope.reback();
-                            }, 2000);
-                        }
-                        if($scope.$phase){$scope.$apply();}
-                    });
+                    setTimeout(function () {
+                        //$state.reload(); Data.showcart = false;
+                        $ionicLoading.hide();
+                        $ionicHistory.goBack(-1);
+                    }, 2000);
                 });
             }
         }
@@ -7289,7 +6996,7 @@ angular.module('starter.controllers', [])
                             $scope.closeModal(2);
                             setTimeout(function () {
                                 $ionicLoading.hide();
-                                $scope.reback();
+                                $ionicHistory.goBack(-1);
                             }, 2000);
                         }
                         if($scope.$phase){$scope.$apply();}
@@ -7539,7 +7246,7 @@ angular.module('starter.controllers', [])
         //alert($stateParams.terid);
         $scope.reloader = function () {
             $scope.listaccount = [];
-            GetAccount(Data.territoryadjust,retername($cookies.get('mastertype')), 1, function (data) {
+            GetAccount(Data.territoryadjust, Data.mastertype, 1, function (data) {
               $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล');
                 var x = 0;
                 var loopArray = function (arr) {
@@ -7554,7 +7261,7 @@ angular.module('starter.controllers', [])
                 }
                 loopArray(data);
                 function getPush(i, callback) {
-                    if (data[i].statuscode === '1' || data[i].statuscode === 1 || data[i].statuscode === '0' || data[i].statuscode === 0) {
+                    if (data[i].statuscode === '1' || data[i].statuscode === 1) {
                         // $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล ' + data[i].filtername);
                         $scope.listaccount.push({
                             accountid: data[i].accountid,
@@ -7697,7 +7404,7 @@ angular.module('starter.controllers', [])
         }
         $scope.loaddata = function(){
           try {
-              GetAccountById($stateParams.accountid.trim(),retername($cookies.get('mastertype')), function (data) {
+              GetAccountById($stateParams.accountid.trim(), Data.mastertype, function (data) {
                   $scope.user.accountid = data[0].accountid;
                   $scope.user.name = data[0].name;
                   $scope.user.ivz_addresscountry = data[0].ivz_addresscountry;
@@ -7737,7 +7444,6 @@ angular.module('starter.controllers', [])
         }
         $scope.$on('$ionicView.enter',function(){
           $scope.loaddata();
-          $ionicLoading.hide();
         });
 
         $scope.goop = function (id) {
@@ -7746,23 +7452,23 @@ angular.module('starter.controllers', [])
                     $scope.user.name + '\n' +
                     $stateParams.mastertype + '\n' +
                     $scope.user.territoryid.id;
+
                 $scope.showLoadingProperTimes();
                 $state.go('app.adjustmentname', {
-                                                  accountid: $scope.user.accountid,
-                                                  accountname: $scope.user.name,
-                                                  mastertype: $stateParams.mastertype,
-                                                  terid: $scope.user.territoryid.id,
-                                                  ivz_integrationid: $scope.user.ivz_integrationid
-                                              }, {
-                                                  reload: true
-                                              });
+                    accountid: $scope.user.accountid,
+                    accountname: $scope.user.name,
+                    mastertype: $stateParams.mastertype,
+                    terid: $scope.user.territoryid.id,
+                    ivz_integrationid: $scope.user.ivz_integrationid
+                }, {
+                    reload: true
+                });
             } else if (id == 2 || id == '2') {
                 $scope.showLoadingProperTimes();
                 $state.go('app.adjustmentaddress', {
                     accountid: $scope.user.accountid,
                     statustypecode: $scope.user.statustypecode,
-                    mastertype: $stateParams.mastertype,
-                    terid: $scope.user.territoryid.id
+                    mastertype: $stateParams.mastertype
                 }, {
                     reload: true
                 });
@@ -7825,7 +7531,7 @@ angular.module('starter.controllers', [])
 
         $scope.cAdjustmentCancel = function () {
             console.log('back');
-            $scope.reback();
+            $ionicHistory.goBack(-1);
         }
     })
     .controller('AdjustmentNameCtrl', function ($scope, $stateParams, $cookies, Data, $state, $ionicLoading, $ionicHistory) {
@@ -7963,7 +7669,6 @@ angular.module('starter.controllers', [])
                             $ionicLoading.hide();
                             $scope.sendmailtosup($stateParams.terid, 'เปลี่ยนแปลงข้อมูลชื่อลูกค้า', 'ร้าน'+$scope.user.txtname, function () {
                                 console.log('ok');
-                                $ionicLoading.hide();
                             });
                         }, 3000);
                     }
@@ -8029,8 +7734,7 @@ angular.module('starter.controllers', [])
                 accountid: $stateParams.accountid,
                 statustypecode: $stateParams.statustypecode,
                 mastertype: Data.mastertype,
-                typeinsert: 1,
-                terid:$stateParams.terid
+                typeinsert: 1
             }, {
                 reload: true
             });
@@ -8042,8 +7746,7 @@ angular.module('starter.controllers', [])
                 accountid: $stateParams.accountid,
                 statustypecode: $stateParams.statustypecode,
                 mastertype: Data.mastertype,
-                typeinsert: 2,
-                terid:$stateParams.terid
+                typeinsert: 2
             }, {
                 reload: true
             });
@@ -8057,12 +7760,11 @@ angular.module('starter.controllers', [])
         Data.showcart = false;
         $scope.Data = Data;
         // Data.mastertype = $stateParams.mastertype;
-         //alert($stateParams.accountid);
+        // alert(Data.statustypecode);
         $scope.user = {
             customeraddressid: '',
             txtcode: '',
             txtname: '',
-            txtcustname:'',
             txtaddress: '',
             txtprovice: '',
             provinceid: '',
@@ -8072,14 +7774,13 @@ angular.module('starter.controllers', [])
             addrscode: '',
             addresstypecode: '',
             ivz_integrationid: '',
-            parentid: $stateParams.accountid,
+            parentid: '',
             mastertype: '',
             doc01: '',
             doc02: '',
             doc03: '',
             doc04: '',
-            doc05: '',
-            docmatch:''
+            doc05: ''
         };
         $scope.chk = {
             accounttype: true,
@@ -8092,32 +7793,6 @@ angular.module('starter.controllers', [])
             doc04: true,
             doc05: true
         };
-        Getivz_CustomerAddress(function (data) {
-            $scope.adjusttype = data;
-            if($scope.$phase){$scope.$apply();}
-        });
-
-        GetProvinceList(function (data) {
-            $scope.provincelist = data;
-            if($scope.$phase){$scope.$apply();}
-        });
-        GetDistrict(function (data) {
-            $scope.showLoadingComplete('โหลดข้อมูลเสร็จแล้ว');
-            setTimeout(function () {
-                $ionicLoading.hide();
-            }, 1000);
-            $scope.districtlist = data;
-            if($scope.$phase){$scope.$apply();}
-        });
-        if($stateParams.accountid){
-          GetAccountById($stateParams.accountid,Data.mastertype,function(data){
-            //alert(data.length);
-            $scope.user.txtcustname = data[0].name;
-            if($scope.$phase){
-              $scope.$apply();
-            }
-          });
-        }
         var getCusAds = function (id) {
             if (id) {
                 GetCustomerAddresById(id, function (data) {
@@ -8149,8 +7824,6 @@ angular.module('starter.controllers', [])
                             $scope.user.ivz_integrationid = data[i].ivz_integrationid;
                             $scope.user.parentid = data[i].parentid.id;
                             $scope.user.mastertype = $stateParams.mastertype;
-                            $scope.user.provinceid = data[i].provinceid.id;
-                            $scope.user.districtid = data[i].districtid.id;
                             setTimeout(function () {
                                 callback();
                             }, 1000);
@@ -8185,14 +7858,30 @@ angular.module('starter.controllers', [])
                     alert('error 4396 ' + er);
                 }
             }
+
+            Getivz_CustomerAddress(function (data) {
+                $scope.adjusttype = data;
+                if($scope.$phase){$scope.$apply();}
+            });
+
+            GetProvinceList(function (data) {
+                $scope.provincelist = data;
+                if($scope.$phase){$scope.$apply();}
+            });
+            GetDistrict(function (data) {
+                $scope.showLoadingComplete('โหลดข้อมูลเสร็จแล้ว');
+                setTimeout(function () {
+                    $ionicLoading.hide();
+                }, 1000);
+                $scope.districtlist = data;
+                if($scope.$phase){$scope.$apply();}
+            });
+
         }
         $scope.$on("$ionicView.enter", function () {
             $ionicLoading.hide();
             //console.log('reload complete');
-            if($stateParams.addressid){
-              getCusAds($stateParams.addressid);
-            }
-
+            getCusAds($stateParams.addressid);
             $(function(){
               $('#doc01').change(function () {
                   GetAtt('#doc01', '#idcImg01', 'canvas01', function (data) {
@@ -8242,7 +7931,6 @@ angular.module('starter.controllers', [])
 
         }); //end on view
         $scope.mdSlProv = function (id) {
-          $scope.user.provinceid = id;
             $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล');
             if(id){
               GetDistrictById(id, function (data) {
@@ -8264,7 +7952,7 @@ angular.module('starter.controllers', [])
             }
         }
         $scope.cSetType = function (id, txt) {
-            //alert(id+'::'+txt);
+            console.log(id);
             if (id) {
                 $scope.user.addrscode = id;
                 $scope.user.txtcode = txt;
@@ -8308,7 +7996,6 @@ angular.module('starter.controllers', [])
             }
         }
         $scope.cSetTypeProvince = function (id, txt) {
-          //alert('id, txt:'+id+'=='+txt);
             $scope.user.txtdistrict = null;
             $scope.user.districtid = null;
             if (txt.length > 0) {
@@ -8332,7 +8019,6 @@ angular.module('starter.controllers', [])
             }
         }
         $scope.cSetTypeDistrict = function (id, txt) {
-          //alert('id, txt:'+id+'=='+txt);
             if (txt.length > 0) {
                 $scope.chk.addressdistrict = true;
                 $scope.user.txtdistrict = txt;
@@ -8391,103 +8077,146 @@ angular.module('starter.controllers', [])
             }
         });
         ///////////////////////// End ////////////////////////
-        function insadjustment(id,callback){
-          // var txt = '$scope.user.txtname:'+$scope.user.txtname+'\n'+
-          //           '$stateParams.typeinsert:'+$stateParams.typeinsert+'\n'+
-          //           '$scope.user.addresstypecode:'+$scope.user.addresstypecode+'\n'+
-          //           '$scope.user.ivz_integrationid:'+$scope.user.ivz_integrationid+'\n'+
-          //           '$scope.user.txtname:'+$scope.user.txtname+'\n'+
-          //           '$scope.user.txtaddress:'+$scope.user.txtaddress+'\n'+
-          //           '$scope.user.provinceid:'+$scope.user.provinceid+'\n'+
-          //           '$scope.user.districtid:'+$scope.user.districtid+'\n'+
-          //           '$scope.user.txtzipcode:'+$scope.user.txtzipcode+'\n'+
-          //           '$cookies:'+$cookies.get('ivz_empid')+'\n'+
-          //           'Data.territoryadjust:'+Data.territoryadjust+'\n'+
-          //           '$scope.user.parentid:'+$scope.user.parentid;
-          // alert('Insert db Address:'+txt);
-          try {
-            $scope.showLoadingProperTimesRegter('กำลังทำการบันทึกข้อมูล');
-            var ins = new MobileCRM.DynamicEntity.createNew('ivz_accountadjustment');
-                ins.properties.ivz_accountadjustmentid = id;
-                ins.properties.ivz_name = $scope.user.txtname;
-                ins.properties.ivz_transdate = new Date();
-                ins.properties.ivz_adjgeneral = parseInt(1);
-                ins.properties.ivz_adjgenaddress = parseInt(1);
-                ins.properties.ivz_adjgenaddressoption = parseInt($stateParams.typeinsert);
-                ins.properties.ivz_adjgenaddresstype = parseInt($scope.user.addresstypecode); //set invoice deliverry
-                ins.properties.ivz_refrecid = $scope.user.ivz_integrationid;
-                ins.properties.ivz_newgenaddressname = $scope.user.txtname;
-                ins.properties.ivz_newgenaddressstreet1 = $scope.user.txtaddress;
-                ins.properties.ivz_newgenaddressprovince = new MobileCRM.Reference('ivz_addressprovince', $scope.user.provinceid);
-                ins.properties.ivz_newgenaddressdistrict = new MobileCRM.Reference('ivz_addressdistrict', $scope.user.districtid);
-                ins.properties.ivz_newgenaddresscountry = new MobileCRM.Reference('ivz_addresscountry',Data.countrymaster);
-                ins.properties.ivz_newgenaddresspostalcode = $scope.user.txtzipcode;
-                ins.properties.ivz_empid = $cookies.get('ivz_empid');
-                ins.properties.ivz_statusempid = parseInt(Data.mastertype);
-                ins.properties.ivz_territory = new MobileCRM.Reference('territory', $stateParams.terid);
-                ins.properties.statuscode = parseInt(917970000);
-                ins.properties.ivz_customernumber = new MobileCRM.Reference('account', $scope.user.parentid);
-                ins.save(function (er) {
-                    if (er) {
-                        alert("error 8259 :" + er);
-                    }else{
-                        //alert('complate');
-                        $scope.user.docmatch = [{id:0,doc_annote:$scope.user.doc01},
-                                                {id:1,doc_annote:$scope.user.doc02},
-                                                {id:2,doc_annote:$scope.user.doc03},
-                                                {id:3,doc_annote:$scope.user.doc04},
-                                                {id:4,doc_annote:$scope.user.doc05}];
-                        callback(id);
-                    }
-                });
-          } catch (e) {
-            alert('error 8182 '+e);
-          }
-        }
-        var insertannote = function(gid){
-          var data = $scope.user.docmatch;
-          var x = 0;
-          var loopArray = function(arr){
-            insannote(x,function(){
-              x++;
-              if(x < arr.length){
-                loopArray(arr);
-              }else{
-                setTimeout(function () {
-                  $scope.sendmailtosup($cookies.get('territoryid'), 'ขออนุมัติเปลี่ยนแปลงข้อมูลที่อยู่', 'ร้าน' + $scope.user.txtcustname, function () {
-                      $scope.showLoadingComplete('บันทึกข้อมูลเสร็จแล้ว');
-                      $ionicLoading.hide();
-                      $scope.reback();
-                  });
-              }, 2000);
-              }
-            });
-          }
-          loopArray(data);
-          function insannote(i,callback){
-            if(data[i].doc_annote.length > 0){
-              $scope.InAnnoteAttract('ivz_accountadjustment',gid, data[i].doc_annote, i+'เปลี่ยนแปลงข้อมูลที่อยู่ ' + $scope.user.txtcustname, 1,null);
-            }
-            setTimeout(function(){
-              callback();
-            },3000);
-          }
-        }
         $scope.cAdjustment = function () {
             var type = $stateParams.statustypecode;
-            var doc01 = $scope.user.doc01;
-            var doc02 = $scope.user.doc02;
-            var doc03 = $scope.user.doc03;
-            var doc04 = $scope.user.doc04;
-            var doc05 = $scope.user.doc05;
-            var tPass = 0;
-            if(doc01.length > 0 || doc02.length > 0 || doc03.length > 0){
-              tPass = 1;
-            }
-            if($scope.user.doc04 && $scope.user.doc05 && tPass === 1){
-              insadjustment(guid(),insertannote);
-            }else{
-              alert('กรุณาแนบเอกสารให้ครบด้วย');
+            if (type === 1) {
+                if ($scope.user.doc04 && $scope.user.doc05 && $scope.user.txtcode
+                  && $scope.user.txtname && $scope.user.txtaddress
+                  && $scope.user.txtprovice && $scope.user.txtdistrict
+                  && $scope.user.txtzipcode) {
+                    $scope.showLoadingProperTimesRegter('กำลังทำการบันทึกข้อมูล');
+                    var eid = guid();
+                    try {
+                      $scope.showLoadingProperTimesRegter('กำลังทำการบันทึกข้อมูล');
+                      var ins = new MobileCRM.DynamicEntity.createNew('ivz_accountadjustment');
+                          ins.properties.ivz_accountadjustmentid = (eid).trim();
+                          ins.properties.ivz_name = $scope.user.txtname;
+                          ins.properties.ivz_transdate = new Date();
+                          ins.properties.ivz_adjgeneral = parseInt(1);
+                          ins.properties.ivz_adjgenaddress = parseInt(1);
+                          ins.properties.ivz_adjgenaddressoption = parseInt($stateParams.typeinsert);
+                          ins.properties.ivz_adjgenaddresstype = parseInt($scope.user.addresstypecode); //set invoice deliverry
+                          ins.properties.ivz_refrecid = $scope.user.ivz_integrationid;
+                          ins.properties.ivz_newgenaddressname = $scope.user.txtname;
+                          ins.properties.ivz_newgenaddressstreet1 = $scope.user.txtaddress;
+                          ins.properties.ivz_newgenaddressprovince = new MobileCRM.Reference('ivz_addressprovince', $scope.user.provinceid);
+                          ins.properties.ivz_newgenaddressdistrict = new MobileCRM.Reference('ivz_addressdistrict', $scope.user.districtid);
+                          ins.properties.ivz_newgenaddresspostalcode = $scope.user.txtzipcode;
+                          ins.properties.ivz_empid = $cookies.get('ivz_empid');
+                          ins.properties.ivz_statusempid = parseInt(Data.mastertype);
+                          ins.properties.ivz_territory = new MobileCRM.Reference('territory', Data.territoryadjust);
+                          ins.properties.statuscode = parseInt(917970000);
+                          ins.properties.ivz_customernumber = new MobileCRM.Reference('account', $scope.user.parentid);
+                          ins.save(function (er) {
+                              if (er) {
+                                  alert("error 4682 :" + er);
+                              }else{
+                                alert('complate');
+                              }
+                          });
+                    } catch (e) {
+                      alert('error 8205 '+e);
+                    }finally{
+                      if ($scope.user.doc04) {
+                          $scope.InAnnoteAttract('ivz_accountadjustment',eid, $scope.user.doc04, 'เปลี่ยนแปลงข้อมูลที่อยู่ ' + $scope.user.txtname, 1, function () {
+                              console.log('ok');
+                          });
+                      }
+                      if ($scope.user.doc05) {
+                          setTimeout(function () {
+                              $scope.InAnnoteAttract('ivz_accountadjustment',eid, $scope.user.doc05, 'เปลี่ยนแปลงข้อมูลที่อยู่ ' + $scope.user.txtname, 1, function () {
+                                  console.log('ok');
+                              });
+                          }, 3000);
+                      }
+                      setTimeout(function () {
+                          $scope.sendmailtosup($cookies.get('territoryid'), 'ขออนุมัติเปลี่ยนแปลงข้อมูลที่อยู่', 'ร้าน' + $scope.user.txtname, function () {
+                              $scope.showLoadingComplete('บันทึกข้อมูลเสร็จแล้ว');
+                              $ionicLoading.hide();
+                              $scope.reback();
+                          });
+                      }, 6000);
+                    }
+                }
+            } else {
+                if (invarrible == 1 && $scope.user.doc04 && $scope.user.doc05
+                  && $scope.user.txtcode && $scope.user.txtname
+                  && $scope.user.txtaddress && $scope.user.txtprovice
+                  && $scope.user.txtdistrict && $scope.user.txtzipcode) {
+                    //alert('insert DB 2');
+                    var eid = guid();
+                    try {
+                      $scope.showLoadingProperTimesRegter('กำลังทำการบันทึกข้อมูล');
+                      var ins = new MobileCRM.DynamicEntity.createNew('ivz_accountadjustment');
+                          ins.properties.ivz_accountadjustmentid = (eid).trim();
+                          ins.properties.ivz_name = $scope.user.txtname;
+                          ins.properties.ivz_transdate = new Date();
+                          ins.properties.ivz_adjgeneral = parseInt(1);
+                          ins.properties.ivz_adjgenaddress = parseInt(1);
+                          ins.properties.ivz_adjgenaddressoption = parseInt($stateParams.typeinsert);
+                          ins.properties.ivz_adjgenaddresstype = parseInt($scope.user.addresstypecode); //set invoice deliverry
+                          ins.properties.ivz_refrecid = $scope.user.ivz_integrationid;
+                          ins.properties.ivz_newgenaddressname = $scope.user.txtname;
+                          ins.properties.ivz_newgenaddressstreet1 = $scope.user.txtaddress;
+                          ins.properties.ivz_newgenaddressprovince = new MobileCRM.Reference('ivz_addressprovince', $scope.user.provinceid);
+                          ins.properties.ivz_newgenaddressdistrict = new MobileCRM.Reference('ivz_addressdistrict', $scope.user.districtid);
+                          ins.properties.ivz_newgenaddresspostalcode = $scope.user.txtzipcode;
+                          ins.properties.ivz_empid = $cookies.get('ivz_empid');
+                          ins.properties.ivz_statusempid = parseInt(Data.mastertype);
+                          ins.properties.ivz_territory = new MobileCRM.Reference('territory', Data.territoryadjust);
+                          ins.properties.statuscode = parseInt(917970000);
+                          ins.properties.ivz_customernumber = new MobileCRM.Reference('account', $scope.user.parentid);
+                          ins.save(function (er) {
+                              if (er) {
+                                  alert("error 8259 :" + er);
+                              }
+                          });
+                    } catch (e) {
+                      alert('error 8205 '+e);
+                    }finally{
+                      if ($scope.user.doc01) {
+                          $scope.InAnnoteAttract('ivz_accountadjustment',eid, $scope.user.doc01, 'เปลี่ยนแปลงข้อมูลที่อยู่ ' + $scope.user.txtname, 1, function () {
+                              console.log('ok');
+                          });
+                      }
+                      if ($scope.user.doc02) {
+                          setTimeout(function () {
+                              $scope.InAnnoteAttract('ivz_accountadjustment',eid, $scope.user.doc02, 'เปลี่ยนแปลงข้อมูลที่อยู่ ' + $scope.user.txtname, 1, function () {
+                                  console.log('ok');
+                              });
+                          }, 1000);
+                      }
+                      if ($scope.user.doc03) {
+                          setTimeout(function () {
+                              $scope.InAnnoteAttract('ivz_accountadjustment',eid, $scope.user.doc03, 'เปลี่ยนแปลงข้อมูลที่อยู่ ' + $scope.user.txtname, 1, function () {
+                                  console.log('ok');
+                              });
+                          }, 2000);
+                      }
+                      if ($scope.user.doc04) {
+                          setTimeout(function () {
+                              $scope.InAnnoteAttract('ivz_accountadjustment',eid, $scope.user.doc04, 'เปลี่ยนแปลงข้อมูลที่อยู่ ' + $scope.user.txtname, 1, function () {
+                                  console.log('ok');
+                              });
+                          }, 3000);
+                      }
+                      if ($scope.user.doc05) {
+                          setTimeout(function () {
+                              $scope.InAnnoteAttract('ivz_accountadjustment',eid, $scope.user.doc05, 'เปลี่ยนแปลงข้อมูลที่อยู่ ' + $scope.user.txtname, 1, function () {
+                                  console.log('ok');
+                              });
+                          }, 4000);
+                      }
+                      setTimeout(function () {
+                          //alert($cookies.get('territoryid'));
+                          $scope.sendmailtosup($cookies.get('territoryid'), 'ขออนุมัติเปลี่ยนแปลงข้อมูลที่อยู่', 'ร้าน' + $scope.user.txtname + $scope.user.txtname, function () {
+                              $scope.showLoadingComplete('บันทึกข้อมูลเสร็จแล้ว');
+                              $ionicLoading.hide();
+                              $scope.reback();
+                          });
+                      }, 6000);
+                    }
+                }
             }
         }
         $scope.cAdjustmentCancel = function () {
@@ -8495,7 +8224,6 @@ angular.module('starter.controllers', [])
             $scope.user.customeraddressid = '';
             $scope.user.txtcode = '';
             $scope.user.txtname = '';
-            $scope.user.txtcustname = '';
             $scope.user.txtaddress = '';
             $scope.user.txtprovice = '';
             $scope.user.provinceid = '';
@@ -8581,21 +8309,22 @@ angular.module('starter.controllers', [])
         $scope.Data = Data;
         Data.mastertype = $stateParams.mastertype;
         $ionicLoading.hide();
-        $scope.user = {
-            accountid: '',
-            txtname: '',
-            swCloseAccount: false,
-            slRemark: '',
-            swCredit: false,
-            txtCreditOld: '',
-            txtCreditNew: 0
-        }
         $scope.$on("$ionicView.enter", function () {
+            $scope.user = {
+                accountid: '',
+                txtname: '',
+                swCloseAccount: false,
+                slRemark: '',
+                swCredit: false,
+                txtCreditOld: '',
+                txtCreditNew: 0
+            }
             GetResionStatus(function (data) {
                 $scope.optionRession = data;
                 if($scope.$phase){$scope.$apply();}
             });
-            GetAccountById($stateParams.accountid,retername($cookies.get('mastertype')), function (data) {
+
+            GetAccountById($stateParams.accountid, Data.mastertype, function (data) {
                 $scope.user.accountid = data[0].accountid;
                 $scope.user.txtname = data[0].name;
                 $scope.user.swCloseAccount = false;
@@ -8881,24 +8610,20 @@ angular.module('starter.controllers', [])
             $ionicHistory.goBack(-1);
         }
     })
-    .controller('OrderCtrl', function ($scope, $stateParams, $cookies, Data, $state, $ionicLoading, $ionicHistory ,Setting) {
+    .controller('OrderCtrl', function ($scope, $stateParams, $cookies, Data, $state, $ionicLoading, $ionicHistory) {
         $state.reload();
         Data.showcart = false;
         $scope.Data = Data;
-        $scope.listorderoption = Setting.orderoption;
         Data.mastertype = $stateParams.mastertype; //$stateParams.accountid
         $scope.gooporder = function (id) {
             var getguid = guid();
-            GetAccountById($stateParams.accountid,Data.mastertype,function(data){
-              Data.balancecredit = parseInt(data[0].ivz_balancecredit);
-              $state.go('app.productlist', {
-                  accountid: $stateParams.accountid,
-                  mastertype: $stateParams.mastertype,
-                  ordertype: id,
-                  getguid: getguid
-              }, {
-                  reload: true
-              });
+            $state.go('app.productlist', {
+                accountid: $stateParams.accountid,
+                mastertype: $stateParams.mastertype,
+                ordertype: id,
+                getguid: getguid
+            }, {
+                reload: true
             });
         }
     })
@@ -8907,7 +8632,6 @@ angular.module('starter.controllers', [])
         $scope.Data = Data;
         $scope.filtertxt = '';
         $ionicHistory.clearHistory();
-        $scope.listproduct = [];
         $scope.$on('$ionicView.enter', function () {
             console.log($stateParams.ordertype);
             if ($stateParams.ordertype == 1 || $stateParams.ordertype == 2) {
@@ -8935,7 +8659,7 @@ angular.module('starter.controllers', [])
             uomid: '',
             pricelevel: '',
             tatol: '',
-            matchitem: '',
+            matchitem: 0,
             tatolmatch: 0,
             itemname: '',
             itemnumber: ''
@@ -8946,7 +8670,7 @@ angular.module('starter.controllers', [])
         }
         $scope.minplus = 0;
         $scope.reload = function () {
-            $scope.listproduct.length = 0;
+            $scope.listproduct = [];
             //set show product
             GetProductList(Setting.requestproduct, 1, function (data) {
                 var x = 0;
@@ -8978,7 +8702,7 @@ angular.module('starter.controllers', [])
                     });
                     setTimeout(function () {
                         callback();
-                    }, 1);
+                    }, 10);
                 }
                 if($scope.$phase){$scope.$apply();}
             });
@@ -9069,9 +8793,10 @@ angular.module('starter.controllers', [])
         $scope.searclickitem = function (txtname, itemid) {
             $scope.clearfilter();
             if (txtname.length > 0) {
-              $scope.listproduct.length = 0;
                 //alert('txtname:'+txtname);
                 GetProductListName(txtname, 10000, 1, function (data) {
+                  //alert(data.length);
+                    $scope.listproduct = [];
                     if (data.length > 0) {
                         var x = 0;
                         var loopArray = function (arr) {
@@ -9111,6 +8836,7 @@ angular.module('starter.controllers', [])
             } else if (itemid.length > 0) {
                 //alert('itemid:'+itemid);
                 GetProductListNumber(itemid, 10000, 1, function (data) {
+                    $scope.listproduct = [];
                     if (data) {
                         var x = 0;
                         var loopArray = function (arr) {
@@ -9157,53 +8883,49 @@ angular.module('starter.controllers', [])
         }
         $scope.itemcart = [];
         $scope.additem = function () {
-          if($scope.item.matchitem === 0 || $scope.item.matchitem === '0'){
-            alert('กรุณาระบุจำนวนที่ต้องการด้วย');
-          }else{
-                var minu = 0;
-                      if (DataOrder.order.length > 0) {
-                          for (var i in DataOrder.order) {
-                              if (DataOrder.order[i].productid == $scope.item.productid) {
-                                  console.log('break ' + i);
-                                  minu = parseInt(DataOrder.order[i].tatol) + parseInt($scope.item.tatol);
-                                  DataOrder.order[i].tatol = parseInt(DataOrder.order[i].tatol) + parseInt($scope.item.tatol);
-                                  DataOrder.order[i].quality = parseInt(DataOrder.order[i].quality) + parseInt($scope.item.matchitem);
-                                  break;
-                              }
-                          }
-                          if (!minu) {
-                              DataOrder.order.push({
-                                  getguid: $stateParams.getguid,
-                                  accountid: $stateParams.accountid,
-                                  ordertype: $stateParams.ordertype,
-                                  productid: $scope.item.productid,
-                                  productname: $scope.item.productname,
-                                  priceperunit: $scope.item.priceperunit,
-                                  pricelevelid: $scope.item.pricelevel,
-                                  uomid: $scope.item.uomid,
-                                  tatol: $scope.item.tatol,
-                                  quality: $scope.item.matchitem
-                              });
-                          }
-                      } else {
-                          DataOrder.order.push({
-                              getguid: $stateParams.getguid,
-                              accountid: $stateParams.accountid,
-                              ordertype: $stateParams.ordertype,
-                              productid: $scope.item.productid,
-                              productname: $scope.item.productname,
-                              priceperunit: $scope.item.priceperunit,
-                              pricelevelid: $scope.item.pricelevel,
-                              uomid: $scope.item.uomid,
-                              tatol: $scope.item.tatol,
-                              quality: $scope.item.matchitem
-                          });
-                      }
-                      setTimeout(function () {
-                          Data.tatolmatch = parseInt(Data.tatolmatch) + parseInt($scope.item.tatol);
-                          $scope.modal1.hide();
-                      }, 1000);
-          }
+            var minu = 0;
+            if (DataOrder.order.length > 0) {
+                for (var i in DataOrder.order) {
+                    if (DataOrder.order[i].productid == $scope.item.productid) {
+                        console.log('break ' + i);
+                        minu = parseInt(DataOrder.order[i].tatol) + parseInt($scope.item.tatol);
+                        DataOrder.order[i].tatol = parseInt(DataOrder.order[i].tatol) + parseInt($scope.item.tatol);
+                        DataOrder.order[i].quality = parseInt(DataOrder.order[i].quality) + parseInt($scope.item.matchitem);
+                        break;
+                    }
+                }
+                if (!minu) {
+                    DataOrder.order.push({
+                        getguid: $stateParams.getguid,
+                        accountid: $stateParams.accountid,
+                        ordertype: $stateParams.ordertype,
+                        productid: $scope.item.productid,
+                        productname: $scope.item.productname,
+                        priceperunit: $scope.item.priceperunit,
+                        pricelevelid: $scope.item.pricelevel,
+                        uomid: $scope.item.uomid,
+                        tatol: $scope.item.tatol,
+                        quality: $scope.item.matchitem
+                    });
+                }
+            } else {
+                DataOrder.order.push({
+                    getguid: $stateParams.getguid,
+                    accountid: $stateParams.accountid,
+                    ordertype: $stateParams.ordertype,
+                    productid: $scope.item.productid,
+                    productname: $scope.item.productname,
+                    priceperunit: $scope.item.priceperunit,
+                    pricelevelid: $scope.item.pricelevel,
+                    uomid: $scope.item.uomid,
+                    tatol: $scope.item.tatol,
+                    quality: $scope.item.matchitem
+                });
+            }
+            setTimeout(function () {
+                Data.tatolmatch = parseInt(Data.tatolmatch) + parseInt($scope.item.tatol);
+                $scope.modal1.hide();
+            }, 1000);
         }
         $scope.confirm = function () {}
     })
@@ -9227,8 +8949,7 @@ angular.module('starter.controllers', [])
           provinceid:'',
           shippingmethodcode:'',
           paymenttermscode:'',
-          remark:'',
-          statustypecode:''
+          remark:''
         }
         $scope.item = {
           productid:'',
@@ -9299,15 +9020,7 @@ angular.module('starter.controllers', [])
             }
             return m;
         }
-        $scope.addtatol = function(){
-          var m = 0;
-          for (var i in $scope.listorderdetail) {
-              m += parseInt($scope.listorderdetail[i].quality) + 0;
-          }
-          return m;
-        }
         $scope.removeitem = function(id){
-          DataOrder.order.splice(id,1);
           $scope.listorderdetail.splice(id,1);
         }
         $scope.addplus = function (id) {
@@ -9397,7 +9110,6 @@ angular.module('starter.controllers', [])
             $scope.user.shippingmethodcode = data[0].shippingmethodcode;
             $scope.user.paymenttermscode = data[0].paymenttermscode;
             $scope.user.remark = '';
-            $scope.user.statustypecode = parseInt(data[0].statustypecode);
             if($scope.$phase){$scope.$apply();}
           });
         });
@@ -9432,7 +9144,7 @@ angular.module('starter.controllers', [])
                   ins.properties.name = $scope.user.name;
                   ins.properties.transactioncurrencyid = new MobileCRM.Reference('transactioncurrency',$scope.user.currency);
                   ins.properties.requestdeliveryby = new Date();
-    							ins.properties.pricelevelid = new MobileCRM.Reference('pricelevel',Data.pricelevel);
+    							ins.properties.pricelevelid = new MobileCRM.Reference('pricelevel',$scope.listorderdetail[0].pricelevelid);
                   ins.properties.shippingmethodcode = parseInt($scope.user.shippingmethodcode);
                   ins.properties.paymenttermscode = parseInt($scope.user.paymenttermscode);
                   ins.properties.ivz_province = new MobileCRM.Reference('ivz_addressprovince',$scope.user.provinceid);
@@ -9468,7 +9180,6 @@ angular.module('starter.controllers', [])
                   $ionicLoading.hide();
                   Data.tatolmatch = 0;
                   Data.tatolminplus = 0;
-                  Data.balancecredit = 0;
                   DataOrder.order.length = 0;
                   //$scope.modal1.hide();
                   $ionicHistory.nextViewOptions({
@@ -9503,74 +9214,27 @@ angular.module('starter.controllers', [])
           loopArray($scope.listorderdetail);
           function getPush(i,callback){
             $scope.showLoadingProperTimesRegter('กำลังทำการบันทึกข้อมูล '+$scope.listorderdetail[i].productname);
-            if($scope.listorderdetail[i].uomid.id){
-              //alert('insert order detail '+i +'::'+ $scope.listorderdetail[i].uomid.id);
-              var ins = new MobileCRM.DynamicEntity.createNew('salesorderdetail');
-                  ins.properties.salesorderid = new MobileCRM.Reference('salesorder',id);
-                  ins.properties.productid = new MobileCRM.Reference('product',$scope.listorderdetail[i].productid);
-                  ins.properties.ispriceoverridden = parseInt(0);
-                  ins.properties.priceperunit = $scope.listorderdetail[i].priceperunit;
-                  ins.properties.uomid = new MobileCRM.Reference('uom',$scope.listorderdetail[i].uomid.id);
-                  ins.properties.quantity = $scope.listorderdetail[i].quality;
-                  ins.save(function(er){
-                    if(er){
-                        alert(er);
-                      }else{
-                        setTimeout(function(){
-                          callback();
-                        },1000);
-                      }
-                    });
-            }else{
-              //alert('insert order detail '+i +'::'+ $scope.listorderdetail[i].uomid);
-              var ins = new MobileCRM.DynamicEntity.createNew('salesorderdetail');
-                  ins.properties.salesorderid = new MobileCRM.Reference('salesorder',id);
-                  ins.properties.productid = new MobileCRM.Reference('product',$scope.listorderdetail[i].productid);
-                  ins.properties.ispriceoverridden = parseInt(0);
-                  ins.properties.priceperunit = $scope.listorderdetail[i].priceperunit;
-                  ins.properties.uomid = new MobileCRM.Reference('uom',$scope.listorderdetail[i].uomid);
-                  ins.properties.quantity = $scope.listorderdetail[i].quality;
-                  ins.save(function(er){
-                    if(er){
-                        alert(er);
-                      }else{
-                        setTimeout(function(){
-                          callback();
-                        },1000);
-                      }
-                    });
-            }
+            console.log('insert order detail '+i +'::'+ x);
+            var ins = new MobileCRM.DynamicEntity.createNew('salesorderdetail');
+                ins.properties.salesorderid = new MobileCRM.Reference('salesorder',id);
+                ins.properties.productid = new MobileCRM.Reference('product',$scope.listorderdetail[i].productid);
+                ins.properties.ispriceoverridden = parseInt(0);
+                ins.properties.priceperunit = $scope.listorderdetail[i].priceperunit;
+                ins.properties.uomid = new MobileCRM.Reference('uom',$scope.listorderdetail[i].uomid);
+                ins.properties.quantity = $scope.listorderdetail[i].quality;
+                ins.save(function(er){if(er){
+                  alert(er);
+                }else{
+                  setTimeout(function(){
+                    callback();
+                  },1000);
+                }
+              });
           }
         }
         $scope.confirmordersales = function () {
-          //alert('click');
-          if($scope.listorderdetail[0].ordertype === 1 || $scope.listorderdetail[0].ordertype === '1'){
-            //alert($scope.listorderdetail[0].ordertyp);
-              var tatol = $scope.addpluss();
-              if(parseInt(tatol) > 2999){
-                if($scope.user.paymenttermscode === 100000011|| $scope.user.paymenttermscode === '100000011') {
-                        $scope.modal1.hide();
-                        insertorder(guid(),insertorderdetail);
-                }else{
-                  if(parseInt($scope.user.statustypecode) === 1){
-                    $scope.modal1.hide();
-                    insertorder(guid(),insertorderdetail);
-                  }else{
-                    if(parseInt($scope.user.creditlimit) >= parseInt(tatol)){
-                        $scope.modal1.hide();
-                        insertorder(guid(),insertorderdetail);
-                    }else{
-                        alert('วงเงินเครดิตของลูกค้าไม่พอกรุณาเพิ่มวงเงินเครดิตของลูกค้าด้วย');
-                      }
-                  }
-                }
-              }else{
-                alert('ยอดรวมสั่งซื้อยังน้อยกว่า 3,000');
-              }
-          }else{
-            $scope.modal1.hide();
-            insertorder(guid(),insertorderdetail);
-          }
+          $scope.modal1.hide();
+          insertorder(guid(),insertorderdetail);
         }
     })
     .controller('ListOrderPendingCtrl', function ($scope, $stateParams,Setting, $cookies, Data, $state, $ionicLoading, $ionicHistory, $ionicModal, DataOrder) {
@@ -9628,7 +9292,7 @@ angular.module('starter.controllers', [])
     						});
                 setTimeout(function(){
                   callback();
-                },0);
+                },10);
               }
             }
             if($scope.$phase){$scope.$apply();}
@@ -9734,7 +9398,7 @@ angular.module('starter.controllers', [])
                   }
                   if($scope.$phase){$scope.$apply();}
         		},function(er){
-              alert("ERROR 9560:"+er);
+              alert("ERROR 6333:"+er);
             },null);
         }
 
@@ -9794,16 +9458,7 @@ angular.module('starter.controllers', [])
             return m;
         }
         $scope.removeitem = function(id){
-          $scope.showLoadingProperTimesRegterComplete();
-          MobileCRM.DynamicEntity.deleteById("salesorderdetail",id,
-          function () {
-              $scope.loadData();
-              setTimeout(function(){
-                $ionicLoading.hide();
-              },2000);
-          },function (er) {
-                            MobileCRM.bridge.alert("An error occurred: " + er);
-                          });
+          $scope.listorderdetail.splice(id,1);
         }
         $scope.addplus = function (id) {
             if ($scope.item.matchitem <= 0) {
@@ -9951,68 +9606,13 @@ angular.module('starter.controllers', [])
         $scope.confirmorder = function(){
           switch ($scope.salestype) {
             case true:
-                ///alert('default order');
+                alert('default order');
                 setApproveOrder();
               break;
             case false:
-                //alert('sales order support');
+                alert('sales order support');
                 deleteorderdetail();
               break;
-          }
-        }
-      //});
-        function detids(id,callback){
-          try {
-                var ups = new MobileCRM.DynamicEntity('salesorder',$stateParams.orderid.trim());
-                    ups.properties.statuscode = parseInt(917970001);
-                    ups.save(function(er){
-                      if(er){
-                        alert('error 9779 '+er);
-                      }else{
-                        callback();
-                      }
-                    });
-          } catch (e) {
-            alert('error 9780 '+e);
-          }
-        }
-        var dedetail = function(id){
-            $scope.showLoadingProperTimesRegter('กำลังทำแก้ไขข้อมูล');
-            console.log('delete orderdetail');
-            //call function insert orderdetail
-            var x = 0;
-            var loopArray = function(arr){
-              getDelete(x,function(){
-                x++;
-                if(x < arr.length){
-                  loopArray(arr);
-                }else{
-                  $scope.reback();
-                }
-              });
-            }
-            loopArray($scope.listorderdetail);
-            function getDelete(i,callback){
-                try {
-                  MobileCRM.DynamicEntity.deleteById("salesorderdetail",$scope.listorderdetail[i].salesorderdetail,
-                  function () {
-
-                  },function (er) {
-                                    MobileCRM.bridge.alert("An error occurred: " + er);
-                                	});
-                } catch (e) {
-                  alert('error 6479 '+er);
-                } finally {
-                  setTimeout(function(){
-                    callback();
-                  },10);
-                }
-            }
-        }
-        $scope.delorder = function(){
-          var x = confirm('ยืนยันการลบรายการใบสั่งซื้อ');
-          if(x == true){
-            detids($stateParams.orderid,dedetail);
           }
         }
         /*--------------- end -----------------*/
@@ -10148,7 +9748,9 @@ angular.module('starter.controllers', [])
       });
   }
   $scope.$on('$ionicView.enter',function(){
-    $scope.loaddata();
+    if(!$scope.listresultplanning){
+      $scope.loaddata();
+    }
   });
   $scope.loaddata = function(){
     $scope.showLoading('กำลังโหลดข้อมูล');
@@ -10215,7 +9817,7 @@ angular.module('starter.controllers', [])
       $scope.showLoading('กำลังบันทึกข้อมูล');
       updateresult(3,txtcomment,function(){
         setTimeout(function(){
-          $scope.sendmailtosales($stateParams.territorid,'ไม่อนุมัติร้องขอไม่ทำกิจกรรม','ไม่อนุมัติร้องขอไม่ทำกิจกรรมได้เนื่องจาก'+txtcomment,function(){
+          $scope.sendmailtosales(Data.termas,'ไม่อนุมัติร้องขอไม่ทำกิจกรรม','ไม่อนุมัติร้องขอไม่ทำกิจกรรมได้เนื่องจาก'+txtcomment,function(){
             $ionicLoading.hide();
             $scope.reback();
           });
