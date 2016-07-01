@@ -1,6 +1,66 @@
 angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookies','ngMessages','ngAnimate','ngCordova'])
 
-.run(function($ionicPlatform, $rootScope, $ionicHistory) {
+.run(function($ionicPlatform, $rootScope, $ionicHistory ,Data) {
+  //alert('Data:'+Data.pricelevel);
+  var setprice = setInterval(function(){
+    try {
+      var price = new MobileCRM.FetchXml.Entity('pricelevel');
+          price.addAttribute('pricelevelid');
+          price.filter = new MobileCRM.FetchXml.Filter();
+          price.filter.where('name','eq','THB');
+      var fetch = new MobileCRM.FetchXml.Fetch(price);
+          fetch.execute('array',function(data){
+            if(data.length > 0){
+              Data.pricelevel = data[0][0];
+              clearInterval(setprice);
+            }
+          },alerterror,null);
+    } catch (e) {
+      console.log('error 22 '+e);
+    }
+  },100);
+
+  var setcurrency = setInterval(function(){
+    try {
+      var currency = new MobileCRM.FetchXml.Entity('transactioncurrency');
+          currency.addAttribute('transactioncurrencyid');
+          currency.filter = new MobileCRM.FetchXml.Filter();
+          currency.filter.where('currencyname','eq','บาท');
+      var fetch = new MobileCRM.FetchXml.Fetch(currency);
+          fetch.execute('array',function(data){
+            if(data.length > 0){
+              Data.transactioncurrency = data[0][0];
+              clearInterval(setcurrency);
+            }
+          },alerterror,null);
+    } catch (e) {
+      console.log('error 37 '+e);
+    }
+  },500);
+  var setcountrymaster = setInterval(function(){
+    try {
+      var countrymaster = new MobileCRM.FetchXml.Entity('ivz_addresscountry');
+          countrymaster.addAttribute('ivz_addresscountryid');
+          countrymaster.filter = new MobileCRM.FetchXml.Filter();
+          countrymaster.filter.where('ivz_name','eq','TH');
+      var fetch = new MobileCRM.FetchXml.Fetch(countrymaster);
+          fetch.execute('array',function(data){
+            if(data.length > 0){
+              Data.countrymaster = data[0][0];
+              clearInterval(setcountrymaster);
+            }
+          },alerterror,null);
+    } catch (e) {
+      console.log('error 55 '+e);
+    }
+  },1000);
+  setTimeout(function(){
+    Data.getguid = guid();
+    clearInterval(setprice);
+    clearInterval(setcurrency);
+    clearInterval(setcountrymaster);
+  },1100);
+
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -14,7 +74,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
       StatusBar.styleDefault();
     }
   });
-  $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+  $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams ,Data){
      $ionicHistory.clearCache();
   });
 })
@@ -32,13 +92,13 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     sterritory:'',
     nterritory:'',
     termas:'',//A02
-    pricelevel:'C94B23EA-B0DB-E511-80DF-005056A71F87',//บาท
-    transactioncurrency:'EB87A95C-0D05-E511-80C5-005056A71F87',// บาท
-    countrymaster:'C67D93ED-98D4-E511-80DF-005056A71F87',//address th
+    pricelevel:'',//บาท
+    transactioncurrency:'',// บาท
+    countrymaster:'',//address th
     masname:'',
     Empid:'',
     mailtomail:'',
-    getguid:guid(),
+    getguid:'',
     getparaaccount:'',
     getparaname:'',
     gettxtid:'',
@@ -72,6 +132,26 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     mobile:'',
     fax:'',
     email:'',
+    actionfn: false,
+    optionDay: 0,
+    optionStarttime: 917970016, //set default timer option
+    optionEndtime: 917970036, //set default timer option
+    optionBillingDay: 0,
+    optionStartBilltime: 917970016, //set default timer option
+    optionEndBilltime: 917970036, //set default timer option
+    ///////////////// option ///////////////////////
+    optionStartNormaltime: 917970016, //set default timer option
+    optionEndNormaltime: 917970036, //set default timer option
+    /////////////////////////////////////////////
+    optionStarttimeAvailable: 917970016, //set default timer option
+    optionEndtimeAvailable: 917970036, //set default timer option
+    dataMon: true,
+    dataTue: true,
+    dataWen: true,
+    dataThu: true,
+    dataFri: true,
+    dataSat: true,
+    dataSun: false,
     recivename:'',
     addressname:'',
     provincename:'',
@@ -95,14 +175,51 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     transname:'',
     teltran:'',
     billvat:false,
-    openremark:'',
-    cashoption:'',
-    cashcredit:'',
-    fncash:'',
-    bankname:'',
-    bankaccount:'',
-    banknumber:'',
-    bankyss:'',
+    txtRemarkTransport:'',
+    peoplela1: false,
+    peoplela2: false,
+    statustype: '',
+    bs1: '',
+    bs2: '',
+    bs3: '',
+    bs4: '',
+    bs5: '',
+    docStatus: true,
+    doc001: true,
+    doc004: true,
+    doc005: true,
+    optionPayment: '', //Set SD-
+    txtCreditlimit: 0,
+    optionPaymentType: '',
+    optionPaymentBank: '',
+    txtBankAccount:'',
+    txtBankBranch: '',
+    optionPaymentbnkYss: 917970001, //yss bank กสิกร ออมทรัพย์
+    optionPayment: true,
+    txtCreditlimit: true,
+    optionPaymentType: true,
+    optionPaymentbnkYss: true,
+    diabledcredit: false,
+    /////////////////////////////
+    SalePart1: false,
+    SalePart2: false,
+    SalePart3: false,
+    //////////////////////////////
+    SalePart4: false,
+    SalePart5: false,
+    SalePart6: false,
+    doc: [],
+    PlaceStatus1: '',
+    PlaceStatus2: '',
+    tatofactory: '',
+    tatolnumber: '',
+    SalesPart1: true,
+    SalesPart2: true,
+    doc006: true,
+    PlaceStatus: true,
+    tatofactory: true,
+    tatolnumber: true,
+    /////////////////////////
     datacontact:[],
     databusiness:[],
     tersupselect:''
@@ -646,7 +763,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.adjustmentaddress', {
-  url:'/adjustmentaddress/:accountid/:statustypecode/:mastertype',
+  url:'/adjustmentaddress/:accountid/:statustypecode/:mastertype/:terid',
   views: {
     'menuContent': {
       templateUrl: 'templates/adjustment/optionaddress.html',
@@ -655,7 +772,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.adjustmentaddressform', {
-  url:'/adjustmentaddressform/:addressid/:accountid/:statustypecode/:maste rtype/:typeinsert',
+  url:'/adjustmentaddressform/:addressid/:accountid/:statustypecode/:mastertype/:typeinsert/:terid',
   views: {
     'menuContent': {
       templateUrl: 'templates/adjustment/formaddress.html',

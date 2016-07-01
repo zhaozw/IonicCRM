@@ -11,7 +11,7 @@
         </md-button>
       </div>
       <md-list>
-        <md-list-item class="md-3-line" ng-repeat="n in listproduct | filter:{filtername:filtertxt}"
+        <md-list-item class="md-3-line" ng-repeat="n in listproduct | filter:filtertxt"
           ng-click="open1(n.productid,n.filtername,n.price,n.pricelevelid,n.uomid)">
           <img src="img/ionic.png" class="md-avatar" alt="testt" />
            <div class="md-list-item-text" layout="column">

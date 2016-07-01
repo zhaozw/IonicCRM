@@ -9,6 +9,11 @@
              <div class="md-list-item-text" layout="column">
                <h3>{{n.filtername}}</h3>
                <p>{{n.territoryid.primaryName}}</p>
+               <p ng-show="n.start">
+                 วันที่:&nbsp;<span class="success">{{n.start | date:'dd/MM/yyyy'}}</span>
+                 &nbsp;
+                 เวลา:&nbsp;<span class="success">{{n.start | date:'HH:mm'}}-{{n.end | date:'HH:mm'}}</span>
+               </p>
                <p>
                  <b ng-if="n.ivz_planningstatus == 0" style="color:#E68364;">ยังไม่ได้ส่งแผน</b>
                  <b ng-if="n.ivz_planningstatus == 1" style="color:#A17917;">รอการอนุมัติ</b>
@@ -16,7 +21,7 @@
                  <b ng-if="n.ivz_planningstatus == 3" style="color:#8F1D21;">ไม่อนุมัติ</b>
                </p>
              </div>
-             <a class="md-secondary ion-trash-a text-h1 text-bold error" ng-click="removeplanning($index)"></a>
+             <a class="md-secondary ion-trash-a text-h1 text-bold error" ng-click="removeplanning($index)" ></a>
          </md-list-item>
         </md-list>
       </div>

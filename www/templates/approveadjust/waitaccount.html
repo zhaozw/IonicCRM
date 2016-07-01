@@ -12,7 +12,7 @@
       <md-list>
         <!-- ////////////////////// General -->
         <md-list-item class="md-3-line" ng-repeat="n in listaccount | filter:filtertxt"
-        ng-click="showcomment($index,n.ivz_accountadjustmentid,n.ivz_name,n.ivz_territory,n.ivz_remark)" ng-show="n.ivz_adjgeneral">
+        ng-click="showcommentcredit($index,n.ivz_accountadjustmentid,n.ivz_name,n.ivz_territory,n.ivz_remark ,'')" ng-show="n.ivz_adjgeneral">
           <img src="img/d05.png" class="md-avatar" alt="testt" />
            <div class="md-list-item-text" layout="column">
              <h3>{{n.ivz_customernumber.primaryName}}</h3>
@@ -29,7 +29,7 @@
         </md-list-item>
         <!-- ////////////////////////// Credit //////////////////////////// -->
         <md-list-item class="md-3-line" ng-repeat="n in listaccount | filter:filtertxt"
-        ng-click="showcomment($index,n.ivz_accountadjustmentid,n.ivz_name,n.ivz_territory,n.ivz_remarkcredit)" ng-hide="n.ivz_adjgeneral">
+        ng-click="showcomment($index,n.ivz_accountadjustmentid,n.ivz_name,n.ivz_territory,n.ivz_remarkcredit,n.ivz_newcredcreditlimitnew)" ng-hide="n.ivz_adjgeneral">
           <img src="img/d05.png" class="md-avatar" alt="testt" />
            <div class="md-list-item-text" layout="column">
              <h3>{{n.ivz_customernumber.primaryName}}</h3>

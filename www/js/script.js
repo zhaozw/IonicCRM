@@ -14,7 +14,22 @@ document.writeln('<script src="js/app.js"></script>');
 document.writeln('<script src="js/controllers.js"></script>');
 
 var alerterror = function(er){
-	alert(er);
+	alert('error function '+er);
+}
+var retername = function(tername){
+	switch (tername) {
+		case 'U01':
+		case 'U02':
+		case 'U03':
+		case 'U04':
+							return 2;
+			break;
+		case 'M01':
+							return 3;
+			break;
+		default:
+						return 1;
+	}
 }
 /*--------------------------- Check User --------------------------*/
 function getUserCheck(uid,upwd,callback){
@@ -540,7 +555,7 @@ function GetProvinceList(callback){
 			callback(b);
 		},function(er){alert(er);},null);
 }
-function GetDistrictById(id,callback){
+function GetDistrictBProvicncyId(id,callback){
 	var n = new MobileCRM.FetchXml.Entity('ivz_addressdistrict');
 		n.addAttribute('ivz_addressdistrictid');//0
 		n.addAttribute('ivz_name');//1
@@ -666,7 +681,7 @@ function GetAppointStatus(ivz_leftterritory,ist,typ,callback){
       n.addAttribute('ivz_visitsuggest');//22
       n.addAttribute('ivz_planningstatus');//23
       n.addAttribute('ivz_employeeposition');//24
-			n.orderBy("createdon", false);
+			n.orderBy("scheduledstart", false);
       n.filter = new MobileCRM.FetchXml.Filter();
       n.filter.where('ivz_territoryid','eq',ivz_leftterritory);
     var m = n.addLink('account','accountid','ivz_customer','outer');
@@ -681,9 +696,9 @@ function GetAppointStatus(ivz_leftterritory,ist,typ,callback){
         o.addAttribute('ivz_leadermail');//32
         o.addAttribute('territoryid');//33
         o.addAttribute('ivz_ccmail');//34
-    var fetch = new MobileCRM.FetchXml.Fetch(n,10000,1);
+    var fetch = new MobileCRM.FetchXml.Fetch(n,1000000,1);
       fetch.execute('array',function(data){
-				//alert(data[0][24]);
+				//alert(data[0][24]+'::::'+data[0][23]);
         var b = [];
         for(var i in data){
               if(data[i][23] == ist){
@@ -693,8 +708,8 @@ function GetAppointStatus(ivz_leftterritory,ist,typ,callback){
 													ivz_customer:data[i][1],
 													ivz_territoryid:data[i][2],
 													ivz_empid:data[i][3],
-													start:data[i][4],
-													end:data[i][5],
+													start:new Date(data[i][4]),
+													end:new Date(data[i][5]),
 													ivz_saleprospect:data[i][6],
 													title:data[i][7],
 													ivz_visit:CtoTrue(data[i][10]),
@@ -1198,19 +1213,21 @@ function GetCustomerAddres(byid,callback){
 			fetch.execute('array',function(data){
 	      var b = [];
 	      for(var i in data){
-	        b.push({
-	          customeraddressid:data[i][0],
-	    	    addressname:data[i][1],
-	    	    line1:data[i][2],
-	    	    city:data[i][3],
-	    	    stateorprovince:data[i][4],
-	    	    postalcode:data[i][5],
-	          addrscode:data[i][6],
-	    	    addresstypecode:returnaddresscode(data[i][6]),
-	    	    ivz_integrationid:data[i][7],
-	    	    parentid:data[i][8],
-						addresscode:data[i][6]
-	        });
+					if(data[i][7]){
+						b.push({
+		          customeraddressid:data[i][0],
+		    	    addressname:data[i][1],
+		    	    line1:data[i][2],
+		    	    city:data[i][3],
+		    	    stateorprovince:data[i][4],
+		    	    postalcode:data[i][5],
+		          addrscode:data[i][6],
+		    	    addresstypecode:returnaddresscode(data[i][6]),
+		    	    ivz_integrationid:data[i][7],
+		    	    parentid:data[i][8],
+							addresscode:data[i][6]
+		        });
+					}
 	      }
 				callback(b);
 			},function(er){alert(er);},null);
@@ -1241,20 +1258,22 @@ function GetCustomerAddresById(byid,callback){
 			fetch.execute('array',function(data){
 	      var b = [];
 	      for(var i in data){
-	        b.push({
-	          customeraddressid:data[i][0],
-	    	    addressname:data[i][1],
-	    	    line1:data[i][2],
-	    	    city:data[i][3],
-	    	    stateorprovince:data[i][4],
-	    	    postalcode:data[i][5],
-	          addresscode:data[i][6],
-	    	    addresstypecode:returnaddresscode(data[i][6]),
-	    	    ivz_integrationid:data[i][7],
-	    	    parentid:data[i][8],
-						provinceid:data[i][9],
-						districtid:data[i][10]
-	        });
+					if(data[i][7]){
+						b.push({
+		          customeraddressid:data[i][0],
+		    	    addressname:data[i][1],
+		    	    line1:data[i][2],
+		    	    city:data[i][3],
+		    	    stateorprovince:data[i][4],
+		    	    postalcode:data[i][5],
+		          addresscode:data[i][6],
+		    	    addresstypecode:returnaddresscode(data[i][6]),
+		    	    ivz_integrationid:data[i][7],
+		    	    parentid:data[i][8],
+							provinceid:data[i][9],
+							districtid:data[i][10]
+		        });
+					}
 	      }
 				callback(b);
 			},function(er){alert(er);},null);
@@ -1264,109 +1283,217 @@ function GetCustomerAddresById(byid,callback){
 }
 /*--------------------- Get Product -----------------------*/
 function GetProductList(tatol,page,callback){
-	var n = new MobileCRM.FetchXml.Entity('product');
-			n.addAttribute('productid');//0
-			n.addAttribute('name');//1
-			n.addAttribute('productnumber');//2
-			n.addAttribute('price');//3
-			n.addAttribute('defaultuomid');//4
-			n.addAttribute('pricelevelid');//5
-			n.addAttribute('createdon');//6
-	    n.addAttribute('ivz_stockstatus');//7//real
-	    //n.addAttribute('ivz_statustock');//7//test
-			n.addAttribute('defaultuomscheduleid');//8
-	var fetch = new MobileCRM.FetchXml.Fetch(n,parseInt(tatol),parseInt(page));
-		fetch.execute('array',function(data){
-			var b = [];
-			for(var i in data){
-				b.push({
-					productid:data[i][0],
-					name:data[i][1],
-					productnumber:data[i][2],
-					price:data[i][3],
-					uomid:data[i][4],
-					pricelevelid:data[i][5],
-					createdon:data[i][6],
-			    stockstatus:data[i][7],
-					defaultuomscheduleid:data[i][8],
-					filtername:data[i][2]+','+data[i][1]
-				});
-			}
-			callback(b);
-		},function(er){alert(er);},null);
+	try {
+		var n = new MobileCRM.FetchXml.Entity('product');
+				n.addAttribute('productid');//0
+				n.addAttribute('name');//1
+				n.addAttribute('productnumber');//2
+				n.addAttribute('price');//3
+				n.addAttribute('defaultuomid');//4
+				n.addAttribute('pricelevelid');//5
+				n.addAttribute('createdon');//6
+		    n.addAttribute('ivz_stockstatus');//7//real
+		    //n.addAttribute('ivz_statustock');//7//test
+				n.addAttribute('defaultuomscheduleid');//8
+		var fetch = new MobileCRM.FetchXml.Fetch(n,parseInt(tatol),parseInt(page));
+			fetch.execute('array',function(data){
+				var b = [];
+				for(var i in data){
+					b.push({
+						productid:data[i][0],
+						name:data[i][1],
+						productnumber:data[i][2],
+						price:data[i][3],
+						uomid:data[i][4],
+						pricelevelid:data[i][5],
+						createdon:data[i][6],
+				    stockstatus:data[i][7],
+						defaultuomscheduleid:data[i][8],
+						filtername:data[i][2]+','+data[i][1]
+					});
+				}
+				callback(b);
+			},function(er){alert(er);},null);
+	} catch (e) {
+		var n = new MobileCRM.FetchXml.Entity('product');
+				n.addAttribute('productid');//0
+				n.addAttribute('name');//1
+				n.addAttribute('productnumber');//2
+				n.addAttribute('price');//3
+				n.addAttribute('defaultuomid');//4
+				n.addAttribute('pricelevelid');//5
+				n.addAttribute('createdon');//6
+		    n.addAttribute('ivz_stockstatus');//7//real
+		    n.addAttribute('ivz_statustock');//7//test
+				//n.addAttribute('defaultuomscheduleid');//8
+		var fetch = new MobileCRM.FetchXml.Fetch(n,parseInt(tatol),parseInt(page));
+			fetch.execute('array',function(data){
+				var b = [];
+				for(var i in data){
+					b.push({
+						productid:data[i][0],
+						name:data[i][1],
+						productnumber:data[i][2],
+						price:data[i][3],
+						uomid:data[i][4],
+						pricelevelid:data[i][5],
+						createdon:data[i][6],
+				    stockstatus:data[i][7],
+						defaultuomscheduleid:data[i][8],
+						filtername:data[i][2]+','+data[i][1]
+					});
+				}
+				callback(b);
+			},function(er){alert(er);},null);
+	}
 }
 function GetProductListName(txtname,tatol,page,callback){
-	var n = new MobileCRM.FetchXml.Entity('product');
-			n.addAttribute('productid');//0
-			n.addAttribute('name');//1
-			n.addAttribute('productnumber');//2
-			n.addAttribute('price');//3
-			n.addAttribute('defaultuomid');//4
-			n.addAttribute('pricelevelid');//5
-			n.addAttribute('createdon');//6
-	    n.addAttribute('ivz_stockstatus');//7//real
-	    //n.addAttribute('ivz_statustock');//7//test
-			n.addAttribute('defaultuomscheduleid');//8
-			n.orderBy("createdon", false);
-	var filter = new MobileCRM.FetchXml.Filter();
-			filter.where('name','like','%'+txtname+'%');
-			n.filter = filter;
-	var fetch = new MobileCRM.FetchXml.Fetch(n,parseInt(tatol),parseInt(page));
-		fetch.execute('array',function(data){
-			var b = [];
-			for(var i in data){
-				b.push({
-					productid:data[i][0],
-					name:data[i][1],
-					productnumber:data[i][2],
-					price:data[i][3],
-					uomid:data[i][4],
-					pricelevelid:data[i][5],
-					createdon:data[i][6],
-			    stockstatus:data[i][7],
-					defaultuomscheduleid:data[i][8],
-					filtername:data[i][2]+','+data[i][1]
-				});
-			}
-			callback(b);
-		},function(er){alert(er);},null);
+	try {
+		var n = new MobileCRM.FetchXml.Entity('product');
+				n.addAttribute('productid');//0
+				n.addAttribute('name');//1
+				n.addAttribute('productnumber');//2
+				n.addAttribute('price');//3
+				n.addAttribute('defaultuomid');//4
+				n.addAttribute('pricelevelid');//5
+				n.addAttribute('createdon');//6
+		    n.addAttribute('ivz_stockstatus');//7//real
+		    //n.addAttribute('ivz_statustock');//7//test
+				n.addAttribute('defaultuomscheduleid');//8
+				n.orderBy("createdon", false);
+		var filter = new MobileCRM.FetchXml.Filter();
+				filter.where('name','like','%'+txtname+'%');
+				n.filter = filter;
+		var fetch = new MobileCRM.FetchXml.Fetch(n,parseInt(tatol),parseInt(page));
+			fetch.execute('array',function(data){
+				var b = [];
+				for(var i in data){
+					b.push({
+						productid:data[i][0],
+						name:data[i][1],
+						productnumber:data[i][2],
+						price:data[i][3],
+						uomid:data[i][4],
+						pricelevelid:data[i][5],
+						createdon:data[i][6],
+				    stockstatus:data[i][7],
+						defaultuomscheduleid:data[i][8],
+						filtername:data[i][2]+','+data[i][1]
+					});
+				}
+				callback(b);
+			},function(er){alert(er);},null);
+	} catch (e) {
+		var n = new MobileCRM.FetchXml.Entity('product');
+				n.addAttribute('productid');//0
+				n.addAttribute('name');//1
+				n.addAttribute('productnumber');//2
+				n.addAttribute('price');//3
+				n.addAttribute('defaultuomid');//4
+				n.addAttribute('pricelevelid');//5
+				n.addAttribute('createdon');//6
+		    //n.addAttribute('ivz_stockstatus');//7//real
+		    n.addAttribute('ivz_statustock');//7//test
+				n.addAttribute('defaultuomscheduleid');//8
+				n.orderBy("createdon", false);
+		var filter = new MobileCRM.FetchXml.Filter();
+				filter.where('name','like','%'+txtname+'%');
+				n.filter = filter;
+		var fetch = new MobileCRM.FetchXml.Fetch(n,parseInt(tatol),parseInt(page));
+			fetch.execute('array',function(data){
+				var b = [];
+				for(var i in data){
+					b.push({
+						productid:data[i][0],
+						name:data[i][1],
+						productnumber:data[i][2],
+						price:data[i][3],
+						uomid:data[i][4],
+						pricelevelid:data[i][5],
+						createdon:data[i][6],
+				    stockstatus:data[i][7],
+						defaultuomscheduleid:data[i][8],
+						filtername:data[i][2]+','+data[i][1]
+					});
+				}
+				callback(b);
+			},function(er){alert(er);},null);
+	}
 }
 function GetProductListNumber(txtname,tatol,page,callback){
-	var n = new MobileCRM.FetchXml.Entity('product');
-			n.addAttribute('productid');//0
-			n.addAttribute('name');//1
-			n.addAttribute('productnumber');//2
-			n.addAttribute('price');//3
-			n.addAttribute('defaultuomid');//4
-			n.addAttribute('pricelevelid');//5
-			n.addAttribute('createdon');//6
-	    n.addAttribute('ivz_stockstatus');//7//real
-	    //n.addAttribute('ivz_statustock');//7//test
-			n.addAttribute('defaultuomscheduleid');//8
-			n.orderBy("createdon", false);
-	var filter = new MobileCRM.FetchXml.Filter();
-			filter.where('productnumber','like','%'+txtname+'%');
-			n.filter = filter;
-	var fetch = new MobileCRM.FetchXml.Fetch(n,parseInt(tatol),parseInt(page));
-		fetch.execute('array',function(data){
-			//alert(data.length);
-			var b = [];
-			for(var i in data){
-				b.push({
-					productid:data[i][0],
-					name:data[i][1],
-					productnumber:data[i][2],
-					price:data[i][3],
-					uomid:data[i][4],
-					pricelevelid:data[i][5],
-					createdon:data[i][6],
-			    stockstatus:data[i][7],
-					defaultuomscheduleid:data[i][8],
-					filtername:data[i][2]+','+data[i][1]
-				});
-			}
-			callback(b);
-		},function(er){alert(er);},null);
+	try {
+		var n = new MobileCRM.FetchXml.Entity('product');
+				n.addAttribute('productid');//0
+				n.addAttribute('name');//1
+				n.addAttribute('productnumber');//2
+				n.addAttribute('price');//3
+				n.addAttribute('defaultuomid');//4
+				n.addAttribute('pricelevelid');//5
+				n.addAttribute('createdon');//6
+		    n.addAttribute('ivz_stockstatus');//7//real
+		    //n.addAttribute('ivz_statustock');//7//test
+				n.addAttribute('defaultuomscheduleid');//8
+				n.orderBy("createdon", false);
+		var filter = new MobileCRM.FetchXml.Filter();
+				filter.where('productnumber','like','%'+txtname+'%');
+				n.filter = filter;
+		var fetch = new MobileCRM.FetchXml.Fetch(n,parseInt(tatol),parseInt(page));
+			fetch.execute('array',function(data){
+				//alert(data.length);
+				var b = [];
+				for(var i in data){
+					b.push({
+						productid:data[i][0],
+						name:data[i][1],
+						productnumber:data[i][2],
+						price:data[i][3],
+						uomid:data[i][4],
+						pricelevelid:data[i][5],
+						createdon:data[i][6],
+				    stockstatus:data[i][7],
+						defaultuomscheduleid:data[i][8],
+						filtername:data[i][2]+','+data[i][1]
+					});
+				}
+				callback(b);
+			},function(er){alert(er);},null);
+	} catch (e) {
+		var n = new MobileCRM.FetchXml.Entity('product');
+				n.addAttribute('productid');//0
+				n.addAttribute('name');//1
+				n.addAttribute('productnumber');//2
+				n.addAttribute('price');//3
+				n.addAttribute('defaultuomid');//4
+				n.addAttribute('pricelevelid');//5
+				n.addAttribute('createdon');//6
+		    //n.addAttribute('ivz_stockstatus');//7//real
+		    n.addAttribute('ivz_statustock');//7//test
+				n.addAttribute('defaultuomscheduleid');//8
+				n.orderBy("createdon", false);
+		var filter = new MobileCRM.FetchXml.Filter();
+				filter.where('productnumber','like','%'+txtname+'%');
+				n.filter = filter;
+		var fetch = new MobileCRM.FetchXml.Fetch(n,parseInt(tatol),parseInt(page));
+			fetch.execute('array',function(data){
+				//alert(data.length);
+				var b = [];
+				for(var i in data){
+					b.push({
+						productid:data[i][0],
+						name:data[i][1],
+						productnumber:data[i][2],
+						price:data[i][3],
+						uomid:data[i][4],
+						pricelevelid:data[i][5],
+						createdon:data[i][6],
+				    stockstatus:data[i][7],
+						defaultuomscheduleid:data[i][8],
+						filtername:data[i][2]+','+data[i][1]
+					});
+				}
+				callback(b);
+			},function(er){alert(er);},null);
+	}
 }
 /*----------------------- Get Annote ----------------------*/
 /*------------------------ Get Order ----------------------*/
@@ -1395,10 +1522,10 @@ function GetOrder(terid,setval,setpage,callback){
 				n.addAttribute('createdon');//19
 				n.orderBy("createdon", false);
 		var a = n.addLink('account','accountid','customerid','outer');
-			  a.addAttribute('territory');//20
+			  a.addAttribute('territoryid');//20
 		var filter = new MobileCRM.FetchXml.Filter();
-				filter.where('territory','eq',terid);
-				a.filter = filter;
+				filter.where('ivz_territory','eq',terid);
+				n.filter = filter;
 		var fetch = new MobileCRM.FetchXml.Fetch(n,parseInt(setval),parseInt(setpage));
 				fetch.execute('array',function(data){
 					//alert(data.length);

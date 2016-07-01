@@ -15,6 +15,11 @@
             <img src="{{n.avator}}" class="md-avatar" alt="testt" />
              <div class="md-list-item-text" layout="column">
                <h3>{{n.filtername}}</h3>
+               <p ng-show="n.start">
+                 วันที่:&nbsp;<span class="success">{{n.start | date:'dd/MM/yyyy'}}</span>
+                 &nbsp;
+                 เวลา:&nbsp;<span class="success">{{n.start | date:'HH:mm'}}-{{n.end | date:'HH:mm'}}</span>
+               </p>
                <p ng-show="n.ivz_planningstatus">สถานะ:&nbsp;<span class="success">อนุมัติแผนการดำเนินงานแล้ว</span></p>
                <p>สถานะ:<span style="color:#264348;font-weight:bold;">Actived</span></p>
              </div>
@@ -34,11 +39,11 @@
       <i class="icon ion-calendar warn"></i>
       ลูกค้าตามแผนการดำเนินงาน
     </a>
-    <a class="tab-item" ng-click="loadprocress(2)">
+    <a class="tab-item" ng-click="loadprocress(2)" ng-if="mastertype == 1">
       <i class="icon ion-android-person-add success"></i>
       ลูกค้าค้างชำระ
     </a>
-    <a class="tab-item" ng-click="loadprocress(3)">
+    <a class="tab-item" ng-click="loadprocress(3)" ng-if="mastertype == 1">
       <i class="icon ion-android-person error"></i>
       ลูกค้าปกติ
     </a>

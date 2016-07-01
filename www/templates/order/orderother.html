@@ -19,7 +19,7 @@
                   ยอดรวม:&nbsp;<span class="error" style="font-weight:bold;">{{n.tatol | currency:''}}</span>&nbsp;บาท
                 </p>
               </div>
-              <md-button class="md-secondary" ng-click="removeitem($index)">
+              <md-button class="md-secondary" ng-click="removeitem(n.salesorderdetail)">
                 <i class="icon ion-close-round error text-h1"></i>
               </md-button>
               <md-divider></md-divider>
@@ -38,13 +38,17 @@
     <br /><br />
   </ion-content>
   <div class="tabs tabs-icon-top">
-    <a class="tab-item" ng-click="ordedetail()">
+    <a class="tab-item" myclick="ordedetail()">
       <i class="icon ion-refresh primary"></i>
       เรียกข้อมูลใหม่
     </a>
-    <a class="tab-item" ng-click="confirmorder()" ng-show="salestype">
+    <a class="tab-item" myclick="confirmorder()" ng-show="salestype">
       <i class="icon ion-checkmark-circled success"></i>
      บันทึกเข้า AX
+    </a>
+    <a class="tab-item" myclick="delorder()" ng-show="salestype">
+      <i class="icon ion-trash-a error"></i>
+     ลบใบสั่งซื้อ
     </a>
   </div>
 </ion-view>

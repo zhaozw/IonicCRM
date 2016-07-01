@@ -19,9 +19,10 @@
              <img src="img/d05.png" class="md-avatar" />
              <div class="md-list-item-text" layout="column">
                <h3>{{ item.filtername }}</h3>
-               <!-- <p>{{ item.territoryid.primaryName }}</p> -->
-               <p>
-                 <span>{{item.start | date:'dd/MM/yyyy'}}</span>
+               <p ng-show="n.start">
+                 วันที่:&nbsp;<span class="success">{{n.start | date:'dd/MM/yyyy'}}</span>
+                 &nbsp;
+                 เวลา:&nbsp;<span class="success">{{n.start | date:'HH:mm'}}-{{n.end | date:'HH:mm'}}</span>
                </p>
                <p>
                  <span class="success" ng-show="item.ivz_visitopenaccount">เปิดบัญชีลูกค้าใหม่&nbsp;</span>
@@ -40,10 +41,12 @@
                  <b ng-if="item.ivz_planningstatus == 0" style="color:red;">ยังไม่ได้ส่งแผน</b>
                  <b ng-if="item.ivz_planningstatus == 1" style="color:yellow;">รอการอนุมัติ</b>
                  <b ng-if="item.ivz_planningstatus == 2" style="color:green;">อนุมัติแล้ว</b>
-                 <b ng-if="item.ivz_planningstatus == 3" style="color:red;">ยังไม่อนุมัติ</b>
+                 <b ng-if="item.ivz_planningstatus == 3" style="color:red;">ไม่อนุมัติ</b>
                </p>
              </div>
-              <a class="md-secondary ion-close text-h1 text-bold error" ng-click="removeplanning($index)"></a>
+              <a class="md-secondary ion-close text-h1 text-bold error"
+              ng-click="removeplanning($index,item.activityid)"
+              ng-if="item.ivz_planningstatus == 0 || item.ivz_planningstatus == 3"></a>
              <md-divider></md-divider>
          </md-list-item>
         </md-list>

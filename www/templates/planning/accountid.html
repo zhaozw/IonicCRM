@@ -18,29 +18,36 @@
               <md-list-item class="md-3-line">
                 <div class="row md-list-item-text" layout="column">
                   <div class="col">
-                    <div class="list">
+                    <md-select placeholder="เริ่ม" ng-model="user.mStart">
+                      <md-option ng-value="opt.val" ng-repeat="opt in listtime">{{opt.name}}</md-option>
+                    </md-select>
+                    <!-- <div class="list">
                       <label class="item item-input item-select">
                         <div class="input-label">เริ่มเวลาเข้าพบ</div>
                         <select ng-model="user.mStart">
                           <option ng-value="opt.val" ng-repeat="opt in listtime">{{ opt.name }}</option>
                         </select>
                       </label>
-                    </div>
+                    </div> -->
                   </div>
                   <div class="col">
-                    <div class="list">
+                    <md-select placeholder="เริ่ม" ng-model="user.mEnd">
+                      <md-option ng-value="opt.val" ng-repeat="opt in listtime">{{opt.name}}</md-option>
+                    </md-select>
+                    <!-- <div class="list">
                       <label class="item item-input item-select">
                         <div class="input-label">สิ้นสุดเวลาเข้าพบ</div>
                         <select ng-model="user.mEnd">
                           <option ng-value="opt.val" ng-repeat="opt in listtime">{{ opt.name }}</option>
                         </select>
                       </label>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
               </md-list-item>
               </md-list>
               <md-list ng-cloak>
+                <md-subheader class="error" ng-hide="infoActivities">*เลือกกิจกรรมการตลาดด้วย</md-subheader>
                 <md-list-item class="md-3-line">
                   <div class="row md-list-item-text" layout="column">
                     <h5>เลือกกิจกรรม</h5>
@@ -119,7 +126,7 @@
               <md-divider></md-divider>
             </md-list>
             <md-list ng-cloak>
-              <md-subheader class="error" ng-hide="infoActivities">*เลือกกิจกรรมบังคับด้วย</md-subheader>
+              <!-- <md-subheader class="error" ng-hide="infoActivities">*เลือกกิจกรรมบังคับด้วย</md-subheader> -->
               <md-list-item class="md-3-line">
                 <div class="row md-list-item-text" layout="column">
                   <h5>เลือกกิจกรรมบังคับ</h5>
