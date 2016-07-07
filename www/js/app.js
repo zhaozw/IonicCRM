@@ -259,7 +259,9 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     /////////////////////////
     datacontact:[],
     databusiness:[],
-    tersupselect:''
+    tersupselect:'',
+    selfshare:[],
+    doccomputiter:[]
   }
 })
 .factory('Darray',function(){
@@ -993,7 +995,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.orderlistother', {
-  url:'/orderlistpending/:orderid/:mastertype/:ordertype/:accountname/:terid/:salestype',
+  url:'/orderlistpending/:orderid/:mastertype/:ordertype/:accountname/:terid/:salestype/:typehide',
   views: {
     'menuContent': {
       templateUrl: 'templates/order/orderother.html',
@@ -1208,7 +1210,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
             }
       })
 .state('app.listmarketting', {
-            url:'/listmarketting',
+            url:'/listmarketting/:accountid/:mastertype/:terid/:accountname/:province/:distid',
             views: {
               'menuContent': {
                 templateUrl: 'templates/market/listmarketting.html',
@@ -1217,7 +1219,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
             }
       })
 .state('app.addformmarket', {
-        url:'/addformmarket',
+        url:'/addformmarket/:accountid/:mastertype/:terid/:accountname/:province/:distid',
         views: {
           'menuContent': {
             templateUrl: 'templates/market/form.html',
@@ -1252,6 +1254,15 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   }
 })
+.state('app.optioncomputitorproductscream',{
+  url:'/app.optioncomputitorproductscream/:retype/:accountid/:accountiname',
+  views:{
+    'menuContent':{
+      templateUrl:'templates/computitor/optioncomputitorproductscam.html',
+      controller:'ComputitorProductScamCtrl'
+    }
+  }
+})
 .state('app.optioncomputitorshelfshare',{
   url:'/optioncomputitorshelfshare/:accountid/:accountiname',
   views:{
@@ -1265,13 +1276,21 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   url:'/addformselfshare/:accountid/:accountiname',
   views:{
     'menuContent':{
-      templateUrl:'templates/computitor/addformselfshare.html',
+      templateUrl:'templates/computitor/listslfshare.html',
       controller:'FormShelfShareCtrl'
     }
   }
 })
-
-      ;
+.state('app.addprospect',{
+  url:'/addprospect',
+  views:{
+    'menuContent':{
+      templateUrl:'templates/postpect/option.html',
+      controller:'ProspectCtrl'
+    }
+  }
+})
+;
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/playlists');
 });

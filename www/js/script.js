@@ -400,6 +400,16 @@ function converttrue(idval){
 	}
 	return(ids);
 }
+function GetTypePostpect(callback){
+	MobileCRM.Metadata.getOptionSetValues("ivz_saleprospect","ivz_typepost",function(optionSetValues){
+		var b = [];
+		for (var name in optionSetValues) {
+			 var val = optionSetValues[name];
+			b.push({'val':val,'name':name});
+		}
+	   callback(b);
+	  },function(err){alert(er);},null);
+}
 
 function GetAvailablefromtime(callback){
 	MobileCRM.Metadata.getOptionSetValues("account","ivz_availablefromtime",function(optionSetValues){
@@ -571,6 +581,23 @@ function GetDistrictBProvicncyId(id,callback){
 					ivz_addressdistrictid:data[i][0],
 					ivz_name:data[i][1],
 					ivz_provinceid:data[i][2]
+				});
+			}
+			callback(b);
+		},function(er){alert(er);},null);
+}
+
+function GetGroupPostpect(callback){
+	var n = new MobileCRM.FetchXml.Entity('ivz_grouppostpect');
+		n.addAttribute('ivz_grouppostpectid');//0
+		n.addAttribute('ivz_name');//1
+	var fetch = new MobileCRM.FetchXml.Fetch(n);
+		fetch.execute('array',function(data){
+			var b = [];
+			for(var i in data){
+				b.push({
+					id:data[i][0],
+					name:data[i][1]
 				});
 			}
 			callback(b);
@@ -2080,7 +2107,9 @@ function GetDistrictById(id,callback){
 					b.push({
 						ivz_addressdistrictid:data[i][0],
 						ivz_name:data[i][1],
-						ivz_provinceid:data[i][2]
+						ivz_provinceid:data[i][2],
+						id:data[i][0],
+						name:data[i][1]
 					});
 				}
 				callback(b);
@@ -2198,3 +2227,60 @@ function getcampiagn(callback){
 				},100);
 			},alerterror,null);
 }
+
+function getSituation(terid,callback){
+	var a = new MobileCRM.FetchXml.Entity('ivz_market_situation');
+			a.addAttribute('ivz_market_situationid');//0
+			a.addAttribute('ivz_name');//1
+			a.addAttribute('ivz_customernumber');//2
+			a.addAttribute('ivz_weekly');//3
+			a.addAttribute('ivz_month');//4
+			a.addAttribute('ivz_remarkcomment');//5
+			a.addAttribute('ivz_docannote');//6
+	var filter = new MobileCRM.FetchXml.Filter();
+			filter.where('ivz_territoryid','eq',terid);
+			a.filter = filter;
+	var fetch = new MobileCRM.FetchXml.Fetch(a);
+			fetch.execute('array',function(data){
+				//alert(data.length);
+				var b = [];
+				for(var i in data){
+					b.push({
+							ivz_market_situationid:data[i][0],
+							ivz_name:data[i][1],
+							ivz_customernumber:data[i][2],
+							ivz_weekly:data[i][3],
+							ivz_month:data[i][4],
+							ivz_remarkcomment:data[i][5],
+							docannote:(data[i][6]).toLowerCase()
+					});
+				}
+				callback(b);
+			},alerterror,null);
+}
+
+function InAnnoteAttract(table, id, base64String, title, objid, callback) {
+		try {
+				var note = MobileCRM.DynamicEntity.createNew("annotation");
+				note.properties.objectid = new MobileCRM.Reference(table, id);
+				note.properties.notetext = objid;
+				note.properties.subject = title;
+				note.properties.documentbody = base64String;
+				note.properties.mimetype = fileType;
+				note.properties.isdocument = true;
+				note.properties.filesize = parseInt(sizeKB);
+				note.properties.filename = fileName;
+				note.save(
+						function (er) {
+								if (er) {
+										alert(title + '\n' + er);
+								} else {
+									setTimeout(function(){
+										callback();
+									},3000);
+								}
+						});
+		} catch (er) {
+				alert('insert doc ' + title + '\n' + er);
+		}
+};

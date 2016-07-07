@@ -20,7 +20,7 @@
           <div class="row">
             <div class="col">
               <md-input-container>
-                <label>ประเภทสินค้า</label>
+                <label>ประเภทสินค้า(Auto,Moto)</label>
                 <input type="text" ng-model="user.producttype" md-maxlength="500" maxlength="500" ng-change="settrue(2,user.producttype,user.usertypeproduct)">
               </md-input-container>
               <div class="" ng-hide="user.usertypeproduct">
@@ -61,29 +61,6 @@
             </div>
           </div>
           <br />
-          <hr class="divider"/>
-          <md-list>
-            <md-list-item class="md-3-line" ng-repeat="n in user.listoption">
-               <div class="md-list-item-text" layout="column">
-                 <h3>{{n.accountname}}</h3>
-                 <p>ประเภทสินค้า:{{n.bannerproduct}}</p>
-                 <p>ยี่ห้อ:{{n.bannerproducttype}}</p>
-                 <p>ส่วนแบ่งทางการตลาด:&nbsp;{{n.marketshare}}&nbsp;%</p>
-               </div>
-               <i class="md-secondary icon ion-close-round error-bold" ng-click="deleteitem($index)"></i>
-               <md-divider ng-if="!$last"></md-divider>
-             </md-list-item>
-          </md-list>
-          <br />
-          <hr class="divider"/>
-          <md-list>
-            <md-list-item class="md-3-line">
-               <div class="md-list-item-text" layout="column">
-                 <h3></h3>
-               </div>
-               <i class="md-secondary">ส่วนแบ่งทางการตลาด <span class="error-bold">{{matchmarket()}}</span> %</i>
-             </md-list-item>
-          </md-list>
         </div>
       </div>
       <div class="col"></div>
@@ -98,9 +75,9 @@
       <i class="icon ion-chevron-left error"></i>
       ย้อนกลับ
     </a>
-    <a class="tab-item" ng-click="cInsert()">
+    <a class="tab-item" ng-click="cInsert()" ng-if="Data.selfshare.length > 0">
       <i class="icon ion-checkmark primary"></i>
-      บันทึกข้อมูล
+      ดูข้อมูล
     </a>
     <a class="tab-item" ng-click="cAddCustomer()">
       <i class="icon ion-plus warn"></i>

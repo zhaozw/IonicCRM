@@ -49,11 +49,11 @@
     <input type="file" id="infiles" ng-hide="true"/>
   </ion-content>
   <div class="tabs tabs-icon-top">
-    <a class="tab-item" ng-click="cCancel()">
+    <a class="tab-item" myclick="cCancel()">
       <i class="icon ion-chevron-left error"></i>
       ย้อนกลับ
     </a>
-    <a class="tab-item" ng-click="cAdjustment()">
+    <a class="tab-item" myclick="cAdjustment(user.optionweekly,user.optionmonth,user.remarktxt)">
       <i class="icon ion-checkmark primary"></i>
       บันทึกข้อมูล
     </a>

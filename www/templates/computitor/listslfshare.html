@@ -1,0 +1,48 @@
+<ion-view view-title="Shelf Share">
+  <ion-content>
+    <div class="row">
+      <div class="col"></div>
+      <div class="col col-90">
+        <div>
+          <md-list>
+            <md-list-item class="md-3-line" ng-repeat="n in Data.selfshare">
+               <div class="md-list-item-text" layout="column">
+                 <h3>{{n.accountname}}</h3>
+                 <p>ประเภทสินค้า:{{n.bannerproducttype}}</p>
+                 <p>ยี่ห้อ:{{n.bannerproduct}}</p>
+                 <p>ส่วนแบ่งทางการตลาด:&nbsp;{{n.marketshare}}&nbsp;%</p>
+               </div>
+               <i class="md-secondary icon ion-close-round error-bold" ng-click="deleteitem($index)"></i>
+               <md-divider ng-if="!$last"></md-divider>
+             </md-list-item>
+          </md-list>
+          <br />
+          <hr class="divider"/>
+          <md-list>
+            <md-list-item class="md-3-line">
+               <div class="md-list-item-text" layout="column">
+                 <h3></h3>
+               </div>
+               <i class="md-secondary">ส่วนแบ่งทางการตลาด <span class="error-bold">{{ matchmarkettatol() }}</span> %</i>
+             </md-list-item>
+          </md-list>
+        </div>
+      </div>
+      <div class="col"></div>
+    </div>
+    <br /><br />
+    <br /><br />
+    <canvas width="300" height="300" id="canvas01" ng-hide="true"></canvas>
+    <input type="file" id="infiles" ng-hide="true"/>
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="reback()">
+      <i class="icon ion-chevron-left error"></i>
+      ย้อนกลับ
+    </a>
+    <a class="tab-item" ng-click="cInsert()">
+      <i class="icon ion-checkmark primary"></i>
+      บันทึกข้อมูล
+    </a>
+  </div>
+</ion-view>

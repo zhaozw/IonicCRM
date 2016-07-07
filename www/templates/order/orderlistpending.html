@@ -24,7 +24,13 @@
                   <span style="color:green;font-weight:bold;" ng-if="n.ivz_statussales === '2'">ขาย 2</span>
                 </p>
               </div>
-              <md-button class="md-secondary" ng-click="showdetailorder(n.salesorderid,n.customerid.primaryName,n.ivz_territory.id,n.ivz_statussales)">
+              <md-button class="md-secondary"
+              ng-click="showdetailorder(n.salesorderid,n.customerid.primaryName,n.ivz_territory.id,n.ivz_statussales,true)" ng-if="n.statuscode === 1 || n.statuscode === 2">
+                <i class="icon ion-chevron-right error text-h1"></i>
+              </md-button>
+              <md-button class="md-secondary"
+              ng-click="showdetailorder(n.salesorderid,n.customerid.primaryName,n.ivz_territory.id,n.ivz_statussales,false)"
+              ng-if="n.statuscode === 3 || n.statuscode === 4">
                 <i class="icon ion-chevron-right error text-h1"></i>
               </md-button>
               <md-divider></md-divider>
