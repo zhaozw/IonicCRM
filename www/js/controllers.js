@@ -2077,10 +2077,16 @@ angular.module('starter.controllers', [])
                 ins.properties.ivz_sheduleend = new Date();
                 ins.properties.ivz_resultstatus = parseInt(statc);
                 ins.properties.ivz_statuscomplete = parseInt(stata);
-                ins.properties.ivz_territory = new MobileCRM.Reference('territory', $stateParams.terid);
-                ins.properties.ivz_addressdistrict = new MobileCRM.Reference('ivz_addressdistrict', $stateParams.distid);
-                ins.properties.ivz_addressprovince = new MobileCRM.Reference('ivz_addressprovince', $stateParams.province);
-                ins.properties.ivz_empid = Data.Empid;
+                if($stateParams.terid){
+                  ins.properties.ivz_territory = new MobileCRM.Reference('territory', $stateParams.terid);
+                }
+                if($stateParams.distid){
+                  ins.properties.ivz_addressdistrict = new MobileCRM.Reference('ivz_addressdistrict', $stateParams.distid);
+                }
+                if($stateParams.province){
+                  ins.properties.ivz_addressprovince = new MobileCRM.Reference('ivz_addressprovince', $stateParams.province);
+                }
+                ins.properties.ivz_empid = $cookies.get('ivz_empid');
                 ins.save(function (er) {
                     if (er) {
                         alert(er);
@@ -8020,37 +8026,39 @@ angular.module('starter.controllers', [])
             $scope.listaddressaccount = [];
             GetCustomerAddres(id, function (data) {
                //alert(data.length);
-                var x = 0;
-                var loopArray = function (arr) {
-                    getPush(x, function () {
-                        x++;
-                        if (x < arr.length) {
-                            loopArray(arr);
-                        } else {
-                            $ionicLoading.hide();
-                        }
-                    });
+                if(data.length > 0){
+                  var x = 0;
+                  var loopArray = function (arr) {
+                      getPush(x, function () {
+                          x++;
+                          if (x < arr.length) {
+                              loopArray(arr);
+                          } else {
+                              $ionicLoading.hide();
+                          }
+                      });
+                  }
+                  loopArray(data);
+                  function getPush(i, callback) {
+                      $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล' + data[i].addressname);
+                      $scope.listaddressaccount.push({
+                          customeraddressid: data[i].customeraddressid,
+                          addressname: data[i].addressname,
+                          line1: data[i].line1,
+                          city: data[i].city,
+                          stateorprovince: data[i].stateorprovince,
+                          postalcode: data[i].postalcode,
+                          addrscode: data[i].addrscode,
+                          addresstypecode: data[i].addresstypecode,
+                          ivz_integrationid: data[i].ivz_integrationid,
+                          parentid: data[i].parentid,
+                          addresscode: data[i].addresscode
+                      });
+                      setTimeout(function () {
+                          callback();
+                      }, 10);
+                  };
                 }
-                loopArray(data);
-                function getPush(i, callback) {
-                    $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล' + data[i].addressname);
-                    $scope.listaddressaccount.push({
-                        customeraddressid: data[i].customeraddressid,
-                        addressname: data[i].addressname,
-                        line1: data[i].line1,
-                        city: data[i].city,
-                        stateorprovince: data[i].stateorprovince,
-                        postalcode: data[i].postalcode,
-                        addrscode: data[i].addrscode,
-                        addresstypecode: data[i].addresstypecode,
-                        ivz_integrationid: data[i].ivz_integrationid,
-                        parentid: data[i].parentid,
-                        addresscode: data[i].addresscode
-                    });
-                    setTimeout(function () {
-                        callback();
-                    }, 10);
-                };
                 if($scope.$phase){$scope.$apply();}
             });
         }
@@ -8158,41 +8166,43 @@ angular.module('starter.controllers', [])
             if (id) {
                 GetCustomerAddresById(id, function (data) {
                     //alert(id+'::'+data[0].stateorprovince+'::'+data[0].city);
-                    var x = 0;
-                    var loopArray = function (arr) {
-                        getPush(x, function () {
-                            x++;
-                            if (x < arr.length) {
-                                loopArray(arr);
-                            } else {
-                                $ionicLoading.hide();
-                            }
-                        });
-                    };
-                    loopArray(data);
+                    if(data.length > 0){
+                      var x = 0;
+                      var loopArray = function (arr) {
+                          getPush(x, function () {
+                              x++;
+                              if (x < arr.length) {
+                                  loopArray(arr);
+                              } else {
+                                  $ionicLoading.hide();
+                              }
+                          });
+                      };
+                      loopArray(data);
 
-                    function getPush(i, callback) {
-                        try {
-                            $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล ' + data[i].addressname);
-                            $scope.user.customeraddressid = data[i].customeraddressid;
-                            $scope.user.txtcode = data[i].addresstypecode;
-                            $scope.user.txtname = data[i].addressname;
-                            $scope.user.txtaddress = data[i].line1;
-                            $scope.user.txtprovice = data[i].stateorprovince;
-                            $scope.user.txtdistrict = data[i].city;
-                            $scope.user.txtzipcode = data[i].postalcode;
-                            $scope.user.addresstypecode = data[i].addresscode;
-                            $scope.user.ivz_integrationid = data[i].ivz_integrationid;
-                            $scope.user.parentid = data[i].parentid.id;
-                            $scope.user.mastertype = $stateParams.mastertype;
-                            $scope.user.provinceid = data[i].provinceid.id;
-                            $scope.user.districtid = data[i].districtid.id;
-                            setTimeout(function () {
-                                callback();
-                            }, 1000);
-                        } catch (er) {
-                            alert('error 4375 ' + er);
-                        }
+                      function getPush(i, callback) {
+                          try {
+                              $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล ' + data[i].addressname);
+                              $scope.user.customeraddressid = data[i].customeraddressid;
+                              $scope.user.txtcode = data[i].addresstypecode;
+                              $scope.user.txtname = data[i].addressname;
+                              $scope.user.txtaddress = data[i].line1;
+                              $scope.user.txtprovice = data[i].stateorprovince;
+                              $scope.user.txtdistrict = data[i].city;
+                              $scope.user.txtzipcode = data[i].postalcode;
+                              $scope.user.addresstypecode = data[i].addresscode;
+                              $scope.user.ivz_integrationid = data[i].ivz_integrationid;
+                              $scope.user.parentid = data[i].parentid.id;
+                              $scope.user.mastertype = $stateParams.mastertype;
+                              $scope.user.provinceid = data[i].provinceid.id;
+                              $scope.user.districtid = data[i].districtid.id;
+                              setTimeout(function () {
+                                  callback();
+                              }, 1000);
+                          } catch (er) {
+                              alert('error 4375 ' + er);
+                          }
+                      }
                     }
                     if($scope.$phase){$scope.$apply();}
                 });
@@ -9095,7 +9105,7 @@ angular.module('starter.controllers', [])
         };
         $scope.$watch('item.matchitem', function () {
             if ($scope.item.matchitem <= 0) {
-                $scope.item.matchitem = 0;
+                //$scope.item.matchitem = 0;
                 $scope.item.tatol = parseInt($scope.item.priceperunit) * 0;
                 //Data.tatolmatch =
             } else {
@@ -9372,7 +9382,7 @@ angular.module('starter.controllers', [])
         };
         $scope.$watch('item.matchitem', function () {
             if ($scope.item.matchitem <= 0) {
-                $scope.item.matchitem = 0;
+                //$scope.item.matchitem = 0;
                 $scope.item.tatol = parseInt($scope.item.priceperunit) * 0;
                 //Data.tatolmatch =
             } else {
@@ -9460,7 +9470,7 @@ angular.module('starter.controllers', [])
           $scope.modal2.hide();
         }
         function insertorder(id,callback){
-            $scope.showLoadingProperTimesRegter('กำลังบันทึกข้อมูลออร์เดอร์ร้าน '+'$scope.user.name');
+            $scope.showLoadingProperTimesRegter('กำลังบันทึกข้อมูลออร์เดอร์ร้าน '+$scope.user.name);
             try {
               //alert('pricreid:'+$scope.listorderdetail[0].pricelevelid+'\n'+$scope.listorderdetail[0].getguid+'\n'+$scope.listorderdetail[0].ordertype);
               var ins = new MobileCRM.DynamicEntity.createNew('salesorder');
