@@ -850,6 +850,7 @@ abbr    {
 #footer .credits a  {
     font-weight: normal;
 }
-.imgborder{
-
+.btn-fixed-bottom{
+    position: absolute;
+    right: 90px;
 }

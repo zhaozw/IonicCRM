@@ -7,8 +7,19 @@
           <md-list>
             <md-list-item class="md-3-line" ng-repeat="n in listorder | filter:{statuscode:group.filter}">
               <div class="md-list-item-text">
-                <h3>{{n.ordernumber}}</h3>
-                <h4>{{n.name}}</h4>
+                <h3>
+                    วันที่:&nbsp;<span style="color:#003171;font-weight:bold;">{{n.createdon | date:'dd/MM/yyyy'}}</span>
+                    &nbsp;&nbsp;
+                    ลูกค้า:&nbsp;<span style="color:#003171;font-weight:bold;">{{n.name}}</span>
+                </h3>
+                <h4>
+                    CRM:&nbsp;<span style="color:#003171;font-weight:bold;">{{n.ordernumber}}</span>
+                    &nbsp;&nbsp;
+                    AX:&nbsp;<span style="color:#003171;font-weight:bold;">{{n.ivz_ordernumber}}</span>
+                </h4>
+                <p>
+                  ยอดรวม:&nbsp;<span style="color:red;font-weight:bold;">{{n.totalamount | currency:''}}</span>
+                </p>
                 <p>
                   สถานะ:
                   <span style="color:red;font-weight:bold;" ng-if="!n.ivz_ordernumber.length">กำลังรอซิงค์เข้า AX</span>
@@ -18,7 +29,8 @@
                   <span style="color:#CA6924;font-weight:bold;" ng-if="n.statuscode === 2">Pending || รอดำเนินการ</span>
                   <span style="color:#003171;font-weight:bold;" ng-if="n.statuscode === 3">In Progress || อยู่ในช่วงดำเนินการ</span>
                   <span style="color:#757D75;font-weight:bold;" ng-if="n.statuscode === 4">Submitted || ยืนยันแล้ว</span>
-                  <span style="color:#9D2933;font-weight:bold;" ng-if="n.statuscode === 1">New || ถูกเลิก</span>
+                  <span style="color:#9D2933;font-weight:bold;" ng-if="n.statuscode === 1">New || รายการซิงค์ไม่สมบูรณ์</span>
+                  <span style="color:#9D2933;font-weight:bold;" ng-if="n.statuscode === 9">Deleted || ลบรายการแล้ว</span>
                   ประเภทการขาย:
                   <span style="color:green;font-weight:bold;" ng-if="n.ivz_statussales === '1'">ขาย 1</span>
                   <span style="color:green;font-weight:bold;" ng-if="n.ivz_statussales === '2'">ขาย 2</span>
@@ -42,11 +54,11 @@
     <br /><br />
   </ion-content>
   <div class="tabs tabs-icon-top">
-    <a class="tab-item" ng-click="ordedetail()">
+    <a class="tab-item" myclick="ordedetail()">
       <i class="icon ion-refresh primary"></i>
       เรียกข้อมูลใหม่
     </a>
-    <a class="tab-item" ng-click="showmodal(1)">
+    <a class="tab-item" myclick="showmodal(1)">
       <i class="icon ion-navicon-round success"></i>
      กรองข้อมูล
     </a>

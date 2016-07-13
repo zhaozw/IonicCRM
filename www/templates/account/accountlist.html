@@ -18,7 +18,7 @@
              <p>{{n.territoryid.primaryName}}</p>
              <p ng-if="n.statuscode == 1">สถานะ:<span style="color:#264348;">Actived</span></p>
              <p ng-if="n.statuscode == 917970002">สถานะ:<span style="color:#8F1D21;">ไม่อนุมัติ</span>&nbsp;&nbsp;เนื่องจาก:<span style="color:#8F1D21;">{{n.remarkreject}}</span></p>
-             <p ng-if="n.statuscode == 917970003">สถานะ:<s autocapitalize="     "pan style="color:#003171;">บันทึกข้อมูลยังไม่สมบูรณ์</span></p>
+             <p ng-if="n.statuscode == 917970003">สถานะ:<span style="color:#003171;">บันทึกข้อมูลยังไม่สมบูรณ์</span></p>
              <p ng-if="n.statuscode == 917970000">สถานะ:<span style="color:#A17917;">รอดำเนินงาน</span></p>
            </div>
            <a class="md-secondary ion-chevron-right text-h1 text-bold error" href="#/app/accountdetail/{{n.accountid}}/{{Data.mastertype}}" ng-if="n.statuscode == 1"></a>
@@ -44,7 +44,7 @@
     </a>
     <a class="tab-item" ng-click="setfilterPendding(917970003,917970000)">
       <i class="icon ion-android-contact warning"></i>
-      ลูกค้าที่ยังไม่อนุมัติ
+      ลูกค้าที่ข้อมูลยังไม่ครับ
     </a>
   </div>
 </ion-view>

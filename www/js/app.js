@@ -1290,6 +1290,21 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   }
 })
+.state('app.promote',{
+  url:'/promote/:accountid/:terid/:accountname/:province/:distid',
+  views:{
+    'menuContent':{
+      templateUrl:'templates/promote/option.html',
+      controller:'PromoteCtrl'
+    }
+  }
+  // accountid: $stateParams.accountid,
+  //                        mastertype: Data.mastertype,
+  //                        terid:Data.termas,
+  //                        accountname:$stateParams.accountname,
+  //                        province:$stateParams.province,
+  //                        distid:$stateParams.distid
+})
 ;
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/playlists');

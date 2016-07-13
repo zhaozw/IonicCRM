@@ -1,13 +1,146 @@
-<ion-view view-title="บันทึกลูกค้าค้าดหวัง">
+<ion-view view-title="เคลมสินค้า">
   <ion-content>
     <div class="row">
       <div class="col"></div>
-      <div class="col col-90">
-        <span>{{listpath}}</span>
+      <div class="col col-75">
+        <form name="tranForm" ng-hide="user.aUseGroup">
+          <div>
+            <md-input-container md-no-float>
+              <label>ระบุรหัสสินค้า</label>
+              <input type="text" placeholder="xx-xx-xxxx" name="txtproductnumber" ng-model="user.txtproductnumber" required md-maxlength="50"  maxlength="50">
+              <span class="error" ng-hide="tranForm.txtproductnumber.$valid">*กรุณาระบุรหัสสินค้าด้วย</span>
+            </md-input-container>
+            <md-input-container md-no-float>
+              <label>ระบุจำนวนสินค้า</label>
+              <input type="text" placeholder="xx" ng-model="user.txtTatol" required md-maxlength="6"  maxlength="6">
+              <span class="error" ng-hide="user.txtTatol">*กรุณาระบุจำนวนสินค้าด้วย</span>
+            </md-input-container>
+            <hr class="divider">
+            <md-radio-group ng-model="user.rdUset">
+              <md-radio-button value="0">เคยใช้งานมาแล้ว</md-radio-button>
+              <md-radio-button value="1">ยังไม่เคยใช้งาน</md-radio-button>
+            </md-radio-group>
+          </div>
+        </form>
+        <!--form topline-->
+        <section ng-show="user.aUserUset">
+        <form name="frmTopline">
+          <div>
+            <md-input-container md-no-float ng-if="getType === 0">
+              <label>ระบุ part ที่ต้องการเปลี่ยน</label>
+              <input type="text" placeholder="xx-xx-xxxx" name="txtpartname" ng-model="user.txtpartname" required md-maxlength="50"  maxlength="50">
+              <span class="error" ng-hide="frmTopline.txtpartname.$valid">*กรุณาระบุ part ด้วย</span>
+            </md-input-container>
+            <md-input-container md-no-float>
+              <label>ระบุเลขที่ใบเคลม</label>
+              <input type="text" placeholder="xx-xx-xxxx" name="txtclaim" ng-model="user.txtclaim" required md-maxlength="50"  maxlength="50">
+              <span class="error" ng-hide="frmTopline.txtclaim.$valid">*กรุณาระบุเลขที่ใบเคลมด้วย</span>
+            </md-input-container>
+            <hr class="divider">
+            <md-radio-group ng-model="user.rdUserSet">
+              <md-radio-button value="0">ถือสินค้ามาเอง</md-radio-button>
+              <md-radio-button value="1">ส่ง EMS</md-radio-button>
+            </md-radio-group>
+            <hr class="divider">
+            <div class="row">
+              <div class="col">
+                <md-button class="md-raised md-warn" ng-click="callfile('infiles1')">แนบรูปภาพประกอบ</md-button>
+                <hr class="divider" />
+                <div class="row img01" id="img01"></div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <span class="error-bold">*กดที่รูปเพื่อลบ</span>
+              </div>
+            </div>
+          </div>
+        </form>
+        </section>
+        <!--End Topline-->
+        <!--form serial number-->
+        <section ng-show="user.aUsedSerial">
+        <form name="frmSerialNumber">
+          <div>
+            <md-input-container md-no-float>
+              <label>ระบุ SERIAL NUMBER CODE YSS</label>
+              <input type="text" placeholder="xx-xx-xxxx" name="txtpartserial" ng-model="user.txtpartserial" required md-maxlength="50"  maxlength="50">
+              <span class="error" ng-hide="frmSerialNumber.txtpartserial.$valid">*กรุณาระบุ SERIAL NUMBER CODE YSSด้วย</span>
+            </md-input-container>
+            <md-input-container md-no-float>
+              <label>ระบุระบุ ตามวันที่ซื้อสินค้า(กรณีที่ต้องการตรวจสอบตามวันที่ซื้อ)</label>
+              <input type="date"  id="txtclaimdate" data-ng-model="user.txtclaimdate" required>
+            </md-input-container>
+          </div>
+        </form>
+        </section>
+        <!--End serial number -->
+        <!--form claim-->
+        <section ng-show="user.aUsedClaim">
+          <div>
+            <h1>Claim</h1>
+            <md-radio-group ng-model="user.slRdClaim">
+               <md-list>
+              <md-list-item ng-repeat="n in listclaim">
+                <p> {{ n.name }} </p>
+                <md-radio-button class="md-secondary" value="{{n.id}}" ng-click="slRdioOptionClaim(user.slRdClaim)"></md-radio-button>
+                <md-divider></md-divider>
+               </md-list-item>
+            </md-list>
+            </md-radio-group>
+          </div>
+        </section>
+        <!--End claim -->
+        <!--form not claim-->
+        <section ng-show="user.aUsedNotClaim">
+          <div>
+            <h1>Not Claim</h1>
+              
+          </div>
+        </section>
+        <!--End not claim -->
+        <!--form show scope pic-->
+        <section ng-show="user.aUsedShowScopePic">
+          <div>
+            <h1>show scope pic</h1>
+              
+          </div>
+        </section>
+        <!--End nshow scope pic -->
       </div>
       <div class="col"></div>
     </div>
-    <input type="file" id="fileUpload">
+    <!--<input type="file" id="fileUpload">-->
     <br /><br /><br /><br />
+    <canvas width="300" height="300" id="canvas01" ng-hide="true"></canvas>
+    <input type="file" id="infiles1" ng-hide="true"/>
+    <canvas width="300" height="300" id="canvas02" ng-hide="true"></canvas>
+    <input type="file" id="infiles2" ng-hide="true"/>
   </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="reload()">
+      <i class="icon ion-refresh error"></i>
+      เริ่มใหม่
+    </a>
+    <a class="tab-item" myclick="genNext01(user.txtproductnumber,user.txtTatol,user.rdUset)" ng-hide="user.aUseGroup">
+      <i class="icon ion-checkmark primary"></i>
+      ตรวจสอบกลุ่มสินค้า
+    </a>
+    <a class="tab-item" myclick="genNext02(user.txtpartserial,user.txtclaimdate)" ng-show="user.aUsedSerial">
+      <i class="icon ion-checkmark primary"></i>
+      ตรวจสอบประกันสินค้า
+    </a>
+    <a class="tab-item" myclick="genNext02(user.txtpartserial,user.txtclaimdate)" ng-show="user.aUserUset">
+      <i class="icon ion-checkmark primary"></i>
+      บันทึกข้อมูล
+    </a>
+    <a class="tab-item" myclick="genNext03()" ng-show="user.aUsedShowScopePic">
+      <i class="icon ion-wrench primary"></i>
+      รับเคลม
+    </a>
+    <a class="tab-item" myclick="genNext02(user.txtpartserial,user.txtclaimdate)" ng-show="user.aUsedShowScopePic">
+      <i class="icon ion-alert-circled warn"></i>
+      ไม่รับเคลม
+    </a>
+  </div>
 </ion-view>

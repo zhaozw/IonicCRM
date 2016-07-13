@@ -15,7 +15,7 @@
   <!-- menu app -->
   <ion-side-menu side="left">
     <ion-header-bar class="bar-stable">
-      <h1 class="title">YSS MENU <span class="error">8/7/2016 09.39</span></h1>
+      <h1 class="title">YSS MENU <span class="error">12//7/2016 fix:dle</span></h1>
     </ion-header-bar>
     <ion-content>
       <ion-list>
@@ -77,44 +77,10 @@
         <ion-item menu-close  class="success"  ui-sref="app.exampl">
           <i class="ion-power"></i>&nbsp;Ex
         </ion-item>
+        <ion-item menu-close  class="success"  ui-sref="app.promote">
+          <i class="ion-power"></i>&nbsp;Promote
+        </ion-item>
       </ion-list>
-    </ion-content>
-  </ion-side-menu>
-  <!-- cart app -->
-  <ion-side-menu side="right">
-    <ion-header-bar class="bar-stable">
-      <h1 class="title">ตะกร้าสินค้า</h1>
-    </ion-header-bar>
-    <ion-content>
-      <div class="list">
-        <a class="item item-icon-left">
-          สินค้า:
-          <span class="item-note">
-            <b style="color:red;font-weight:bold;">{{Data.tatolminplus}}</b>&nbsp;ชิ้น
-          </span>
-        </a>
-        <a class="item item-icon-left">
-          รวม:
-          <span class="item-note">
-            <b style="color:red;font-weight:bold;">{{Data.tatolmatch | currency:''}}</b>&nbsp;บาท
-          </span>
-        </a>
-        <a class="item item-icon-left">
-          เครดิต:
-          <span class="item-note">
-            <b style="color:red;font-weight:bold;">{{Data.balancecredit | currency:''}}</b>&nbsp;บาท
-          </span>
-        </a>
-      </div>
-      <br />
-      <br />
-      <div class="row">
-        <div class="col"></div>
-        <div class="col">
-          <md-button class="md-raised md-warn" ng-click="confirmordercart()">ยืนยันสั่งซื้อ</md-button>
-        </div>
-        <div class="col"></div>
-      </div>
     </ion-content>
   </ion-side-menu>
 </ion-side-menus>
