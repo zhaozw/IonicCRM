@@ -1298,12 +1298,15 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
       controller:'PromoteCtrl'
     }
   }
-  // accountid: $stateParams.accountid,
-  //                        mastertype: Data.mastertype,
-  //                        terid:Data.termas,
-  //                        accountname:$stateParams.accountname,
-  //                        province:$stateParams.province,
-  //                        distid:$stateParams.distid
+})
+.state('app.promotex',{
+  url:'/promotex',
+  views:{
+    'menuContent':{
+      templateUrl:'templates/exmpid.html',
+      controller:'PromotexCtrl'
+    }
+  }
 })
 ;
   // if none of the above states are matched, use this as the fallback

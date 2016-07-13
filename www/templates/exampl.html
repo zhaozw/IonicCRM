@@ -1,10 +1,12 @@
-<ion-view view-title="เคลมสินค้า">
+<ion-view view-title="{{title}}">
   <ion-content>
     <div class="row">
       <div class="col"></div>
       <div class="col col-75">
+        <input type="date" id="txtdateorder" ng-model="user.txthistclaimdate">
         <form name="tranForm" ng-hide="user.aUseGroup">
           <div>
+            <md-checkbox md-no-ink ng-true-value="1" ng-false-value="0" ng-model="user.chkfs" ng-change="expr(user.chkfs)">มีการตอก  F/S</md-checkbox>
             <md-input-container md-no-float>
               <label>ระบุรหัสสินค้า</label>
               <input type="text" placeholder="xx-xx-xxxx" name="txtproductnumber" ng-model="user.txtproductnumber" required md-maxlength="50"  maxlength="50">
@@ -78,7 +80,6 @@
         <!--form claim-->
         <section ng-show="user.aUsedClaim">
           <div>
-            <h1>Claim</h1>
             <md-radio-group ng-model="user.slRdClaim">
                <md-list>
               <md-list-item ng-repeat="n in listclaim">
@@ -94,23 +95,97 @@
         <!--form not claim-->
         <section ng-show="user.aUsedNotClaim">
           <div>
-            <h1>Not Claim</h1>
-              
           </div>
         </section>
         <!--End not claim -->
         <!--form show scope pic-->
         <section ng-show="user.aUsedShowScopePic">
           <div>
-            <h1>show scope pic</h1>
-              
+            <div class="row gallery">
+                <div class="col col-50" ng-repeat="img in gallery">
+                    <img src="{{img.src}}" class="thumbnail" alt="{{img.name}}">
+                </div>
+            </div>
           </div>
         </section>
+        <!--End nshow scope pic -->
+        <!--form show maintrain-->
+        <!-- <section ng-show="user.aUsedMaintrain"> -->
+          <div ng-show="user.aUsedMaintrain">
+            <h1>กรอกข้อมูลเพื่อทำการแจ้งซ่อม</h1>
+            <div class="row">
+                <div class="col">
+                  <div class="row">
+                    <div class="col">
+                      <md-input-container>
+                        <label>ระบุข้อมูลชื่อลูกค้า</label>
+                        <input type="text" ng-model="user.custname">
+                      </md-input-container>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <md-input-container>
+                        <label>ที่อยู่</label>
+                        <input type="text" ng-model="user.addressname">
+                      </md-input-container>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <md-input-container>
+                        <label>เลือกจังหวัด</label>
+                        <input type="text" ng-model="user.provincename">
+                      </md-input-container>
+                    </div>
+                    <div class="col">
+                      <md-input-container>
+                        <label>เลือกอำเภอ</label>
+                        <input type="text" ng-model="user.districtname">
+                      </md-input-container>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <md-input-container>
+                        <label>รหัสไปรษณี</label>
+                        <input type="text" ng-model="user.zipname">
+                      </md-input-container>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <md-input-container>
+                        <label>เบอร์โทร</label>
+                        <input type="text" ng-model="user.telname">
+                      </md-input-container>
+                    </div>
+                  </div>
+                  <hr class="divider">
+                  <div class="row">
+                    <div class="col">
+                      <md-button class="md-raised md-warn" ng-click="callfile('infiles2')">แนบรูปภาพประกอบ</md-button>
+                      <hr class="divider" />
+                      <div class="row img02 gallery" id="img02"></div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <span class="error-bold">*กดที่รูปเพื่อลบ</span>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <!-- ระบุข้อมูลลูกค้า
+- ชื่อ  , ที่อยู่  , เบอร์โทร,รูปภาพ -->
         <!--End nshow scope pic -->
       </div>
       <div class="col"></div>
     </div>
     <!--<input type="file" id="fileUpload">-->
+    <br /><br /><br /><br />
+    <br /><br /><br /><br />
     <br /><br /><br /><br />
     <canvas width="300" height="300" id="canvas01" ng-hide="true"></canvas>
     <input type="file" id="infiles1" ng-hide="true"/>
@@ -130,7 +205,7 @@
       <i class="icon ion-checkmark primary"></i>
       ตรวจสอบประกันสินค้า
     </a>
-    <a class="tab-item" myclick="genNext02(user.txtpartserial,user.txtclaimdate)" ng-show="user.aUserUset">
+    <a class="tab-item" myclick="genNext04()" ng-show="user.aUserUset">
       <i class="icon ion-checkmark primary"></i>
       บันทึกข้อมูล
     </a>
@@ -141,6 +216,18 @@
     <a class="tab-item" myclick="genNext02(user.txtpartserial,user.txtclaimdate)" ng-show="user.aUsedShowScopePic">
       <i class="icon ion-alert-circled warn"></i>
       ไม่รับเคลม
+    </a>
+    <a class="tab-item" myclick="genCheckClaim()" ng-show="user.aUsedNotClaim">
+      <i class="icon ion-wrench primary"></i>
+      รับเคลมเศษ
+    </a>
+    <a class="tab-item" myclick="genMainter()" ng-show="user.aUsedMaintrain">
+      <i class="icon ion-alert-circled warn"></i>
+      ส่งซ่อม
+    </a>
+    <a class="tab-item" myclick="genCheckClaim()" ng-show="user.aUsedMaintrain">
+      <i class="icon ion-wrench primary"></i>
+      ยกเลิก
     </a>
   </div>
 </ion-view>

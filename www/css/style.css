@@ -854,3 +854,7 @@ abbr    {
     position: absolute;
     right: 90px;
 }
+.gallery {
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+}

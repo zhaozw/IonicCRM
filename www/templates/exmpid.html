@@ -3,68 +3,19 @@
     <div>
       <div class="row">
         <div class="col">
-            <!-- Begin Wrapper -->
-            <div id="wrapper">
-            <!-- Begin Content Area -->
-            <div id="content">
-            <!-- Begin Header -->
-            <header>
-            <!-- Begin Contact Section -->
-            <section id="contact-details">
-            <!-- Begin Profile Image Section -->
-            <div class="header_1">
-            <img src="img/d06.png" width="250" height="250" alt="Your Name" class="imgborder" id="imgAvator" ng-click="callfile()"/>
-            <p>
-              <span class="error-bold">*กดที่รูปเพื่อเปลี่ยนรูปใหม่</span>
-            </p>
-            </div>
-            <!-- End Profile Image Section -->
-
-            <!-- Begin Profile Information Section -->
-            <div class="header_2">
-
-            <h1><span>{{user.txtname}}</span></h1>
-            <h3>เขตการขาย:<span class="error-bold">{{user.tername}}</span></h3>
-            <hr class="divider" />
-            <ul class="info_2">
-              <li class="phone">รหัสพนักงาน:&nbsp;<span class="error-bold">{{user.txtempid}}</span></li>
-              <li class="phone">ชื่อผู้ใช้งาน:&nbsp;<span class="error-bold">{{user.txtusername}}</span></li>
-              <!-- <li class="phone">โทรศัพท์:&nbsp;<span class="error-bold">{{user.txttel}}</span></li> -->
-              <li class="email">ที่อยู่อีเมล์:&nbsp;<span class="error-bold">{{user.txtemail}}</span></li>
-            </ul>
-
-            </div>
-            <!-- End Profile Information Section -->
-
-            </section>
-            <!-- End Contact Section -->
-
-            </header>
-            <!-- End Header -->
-
-            <div class="clear">&nbsp;</div>
-            <div class="clear">&nbsp;</div>
-
-            </div>
-            <!-- End Content -->
-
-            </div>
-            <!-- End Wrapper -->
+          <input type="text" ng-model="user.txtserial" placeholder="type serail number" ng-change="checkser(user.txtserial)" >
+          <button type="button" name="button" ng-click="checkser(user.txtserial)">คำนวน</button>
         </div>
       </div>
+      <hr class="divider"/>
+      <md-card>
+        <md-card-content>
+          <h2>Debug</h2>
+          <p>{{user.txtdescription}}</p>
+        </md-card-content>
+      </md-card>
     </div>
     <br /><br />
-    <canvas id="canvas01" width="300" height="300" ng-hide="true"></canvas>
-    <input type="file" id="idfile" ng-hide="true">
   </ion-content>
-  <div class="tabs tabs-icon-top">
-    <a class="tab-item" ng-click="nextgender()">
-      <i class="icon ion-android-contact primary"></i>
-      แก้ไขข้อมูลทั่วไป
-    </a>
-    <a class="tab-item" ng-click="opensearch()">
-      <i class="icon ion-android-lock warn"></i>
-      เปลี่ยนรหัสผ่าน
-    </a>
   </div>
 </ion-view>

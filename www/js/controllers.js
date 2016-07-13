@@ -12203,117 +12203,6 @@ angular.module('starter.controllers', [])
     }
   }
 })
-.controller('ExamplCtrl',function ($scope, $stateParams, $cookies, Data, $state, $ionicLoading, $ionicHistory, $ionicModal, DataOrder ,$compile) {
-    $state.reload();
-    var loc = window.location;
-    $scope.listpath = '';
-    $scope.user = {
-       txtproductnumber:'',
-       txtTatol:'',
-       aUseGroup:false,
-       rdUset:0,
-       aUserUset:false,
-       rdUserSet:0,
-       filedoc:[],
-       aUsedSerial:false,
-       txtclaimdate:new Date(),
-       aUsedClaim:false,
-       aUsedNotClaim:false,
-       aUsedShowScopePic:false
-    };
-    $scope.listclaim = [];
-    for(var i = 0;i < 10;i++){
-        $scope.listclaim.push({
-            id:i,name:'list option claim '+i
-        });
-    }
-    $scope.genNext01 = function(txtproductnumber,txtTatol,rdUset){
-        if(txtproductnumber.length > 0 && txtTatol.length > 0){
-            $scope.getType = checktopline(txtproductnumber);
-            $scope.showLoading('กำลังตรวจสอบข้อมูล');
-            $scope.user.aUseGroup = true;
-            console.log('$scope.getType:'+$scope.getType);
-            console.log('$scope.user.rdUset:'+$scope.user.rdUset);
-            if($scope.user.rdUset === '1' || $scope.user.rdUset === 1){
-                $scope.user.aUsedSerial = false;
-                $scope.user.aUserUset = true;
-            }else{
-                $scope.user.aUserUset = false;
-                $scope.user.aUsedSerial = true;
-            }
-            setTimeout(function() {
-                $ionicLoading.hide(); 
-            }, 3000);
-        }else{
-            $scope.user.aUseGroup = false;
-        }
-    };
-    $scope.callfile = function(idarea){
-        $('#'+idarea).trigger('click');
-    }
-    function pushImg(dClass){
-        $('.divimg').remove();
-        if($scope.user.filedoc){
-            for(var i in $scope.user.filedoc){
-                var html =  '<div class="col divimg">' +
-                            '<img class="thumbnail" src="data:image/jpeg;base64,' + $scope.user.filedoc[i].docfile + '" width="150" height="150" ng-click="removeimg(' + i + ')"/>' +
-                            '</div>';
-                angular.element(document.getElementById(dClass)).append($compile(html)($scope));
-            }
-        }
-    }
-    $scope.removeimg = function(id){
-        $scope.user.filedoc.splice(id,1);
-        pushImg('img01');
-    }
-    $scope.$on('$ionicView.enter',function(){
-        $('#infiles1').change(function(){
-            GetAtt('#infiles1', '', 'canvas01', function (data) {
-                console.log(data.length);
-                $scope.user.filedoc.push({docfile:data,title:'รูปภาพงานเคลม'});
-                pushImg('img01');
-            });
-        });
-    });
-    $scope.reload = function(){
-                $scope.user.txtproductnumber ='';
-                $scope.user.txtTatol = '';
-                $scope.user.aUseGroup = false;
-                $scope.user.rdUset = 0;
-                $scope.user.aUserUset = false;
-                $scope.user.rdUserSet = 0;
-                $scope.user.filedoc.length = 0;
-                $scope.user.aUsedSerial = false;
-                $scope.user.txtclaimdate = new Date();
-    }
-    $scope.genNext02 = function(txtpartserial,txtclaimdate){
-        console.log($('#txtclaimdate').val());
-        var n = new Date($('#txtclaimdate').val());
-        var t_date = new Date();
-        var t = (diffDays(n, t_date) / 365);
-        console.log(t);
-        if(t > 2){
-            console.log('ไม่รับเคลม');
-            $scope.user.aUsedSerial = false;
-            $scope.user.aUsedClaim = false;
-            $scope.user.aUsedNotClaim = true;
-        }else{
-            console.log('รับเคลมสินค้า');
-            $scope.user.aUsedSerial = false;
-            $scope.user.aUsedClaim = true;
-            $scope.user.aUsedNotClaim = false;
-        }
-    }
-    $scope.slRdioOptionClaim = function(id){
-        $scope.user.aUsedClaim = false;
-        $scope.user.aUsedShowScopePic = true;
-        console.log(id);
-    }
-    $scope.getNext03 = function(){
-        $scope.user.aUsedShowScopePic = false;
-        genNext01($scope.user.txtproductnumber,$scope.user.txtTatol,$scope.user.rdUset);
-    }
-})
 .controller('PromoteCtrl',function ($scope, $stateParams, $cookies, Data, $state, $ionicLoading, $ionicHistory, $ionicModal, DataOrder ,$compile) {
     $state.reload();
     $scope.user = {
@@ -12351,14 +12240,6 @@ angular.module('starter.controllers', [])
                     }
                 },alerterror,null);
     });
-    // $scope.listpromote = [
-    //     {id:0,name:'Bigbike Catalogue 2016',link:'http://www.yss.co.th/downloads/20160120054322.pdf',avator:'img/ionic.png'},
-    //     {id:1,name:'Master Catalogue 2016',link:'http://www.yss.co.th/downloads/20160120053957.pdf',avator:'img/ionic.png'},
-    //     {id:2,name:'YSS PRODUCT CODE',link:'http://www.yss.co.th/downloads/20151223112723.pdf',avator:'img/ionic.png'},
-    //     {id:3,name:'SPRING CODE',link:'http://www.yss.co.th/downloads/20151223112621.pdf',avator:'img/ionic.png'},
-    //     {id:4,name:'YSS INSTRUCTION TOP LINE 2014',link:'http://www.yss.co.th/downloads/20151223112454.pdf',avator:'img/ionic.png'},
-    //     {id:5,name:'MOTORCYCLE',link:'http://www.yss.co.th/downloads/20160226052050.pdf',avator:'img/ionic.png'}
-    // ];
     function addactivities(txt,callback){
          try {
                 var ins = MobileCRM.DynamicEntity.createNew("ivz_resultappoint");
@@ -12375,7 +12256,7 @@ angular.module('starter.controllers', [])
                 ins.properties.ivz_sheduleend = new Date();
                 ins.properties.ivz_resultstatus = parseInt(0);
                 ins.properties.ivz_statuscomplete = parseInt(2);
-                ins.properties.ivz_territory = new MobileCRM.Reference('territory', $cookies.get('territorid'));
+                ins.properties.ivz_territory = new MobileCRM.Reference('territory', $cookies.get('territoryid'));
                 if($stateParams.distid){
                   ins.properties.ivz_addressdistrict = new MobileCRM.Reference('ivz_addressdistrict', $stateParams.distid);
                 }
@@ -12401,6 +12282,322 @@ angular.module('starter.controllers', [])
         });
     }
 })
+.controller('ExamplCtrl',function ($scope, $stateParams, $cookies, Data, $state, $ionicLoading, $ionicHistory, $ionicModal, DataOrder ,$compile) {
+    $state.reload();
+    var loc = window.location;
+    $scope.title = "เปิดใบเคลม";
+    $scope.listpath = '';
+    $scope.user = {
+       txtproductnumber:'',
+       txtTatol:'',
+       aUseGroup:false,
+       rdUset:0,
+       aUserUset:false,
+       rdUserSet:0,
+       slRdClaim:'',
+       chkfs:0,
+       filedoc:[],
+       txtproductnumber:'',
+       txtTatol:'',
+       txtpartname:'',
+       txtclaim:'',
+       txtpartserial:'',
+       aUsedSerial:false,
+       txtclaimdate:new Date(),
+       txthistclaimdate:new Date(),
+       aUsedClaim:false,
+       aUsedNotClaim:false,
+       aUsedShowScopePic:false,
+       aUsedHistClaim:false,
+       aUsedMaintrain:false,
+       custname:'Mr.Cust Tomer',
+       addressname:'213/34 Moo S',
+       provincename:'ddd',
+       districtname:'yyy',
+       zipname:'12233',
+       telname:'0987864321'
+    };
+    $scope.listclaim = [];
+    for(var i = 0;i < 10;i++){
+        $scope.listclaim.push({
+            id:i,name:'list option claim '+i
+        });
+    }
+    $scope.expr = function(id){
+      if(id){
+        switch (id) {
+          case 1:
+                  alert('ไม่สามารถเปิดใบเคลมสินค้าชิ้นนี้ได้');
+                  $scope.reload();
+            break;
+        }
+      }
+    }
+    $scope.genNext01 = function(txtproductnumber,txtTatol,rdUset){
+        if(txtproductnumber.length > 0 && txtTatol.length > 0){
+            $scope.getType = checktopline(txtproductnumber);
+            $scope.showLoading('กำลังตรวจสอบข้อมูล');
+            $scope.title = "กรอกข้อมูลใบเคลม";
+            $scope.user.aUseGroup = true;
+            console.log('$scope.getType:'+$scope.getType);
+            console.log('$scope.user.rdUset:'+$scope.user.rdUset);
+            if($scope.user.rdUset === '1' || $scope.user.rdUset === 1){
+                $scope.user.aUsedSerial = false;
+                $scope.user.aUserUset = true;
+            }else{
+                $scope.user.aUserUset = false;
+                $scope.user.aUsedSerial = true;
+            }
+            setTimeout(function() {
+                $ionicLoading.hide();
+            }, 3000);
+        }else{
+            $scope.user.aUseGroup = false;
+        }
+    };
+    $scope.callfile = function(idarea){
+        $('#'+idarea).trigger('click');
+    }
+    function pushImg(dClass){
+        $('.divimg').remove();
+        if($scope.user.filedoc){
+            for(var i in $scope.user.filedoc){
+                var html =  '<div class="col divimg">' +
+                            '<img class="thumbnail" src="data:image/jpeg;base64,' + $scope.user.filedoc[i].docfile + '" width="150" height="150" ng-click="removeimg(' + i + ')"/>' +
+                            '</div>';
+                angular.element(document.getElementById(dClass)).append($compile(html)($scope));
+            }
+        }
+    }
+    $scope.removeimg = function(id){
+        $scope.user.filedoc.splice(id,1);
+        pushImg('img01');
+    }
+    function pushImg2(dClass){
+        $('.divimg2').remove();
+        if($scope.user.filedoc){
+            for(var i in $scope.user.filedoc){
+                var html =  '<div class="col col-25 divimg2">' +
+                            '<img class="thumbnail" src="data:image/jpeg;base64,' + $scope.user.filedoc[i].docfile + '" width="150" height="150" ng-click="removeimg2(' + i + ')"/>' +
+                            '</div>';
+                angular.element(document.getElementById(dClass)).append($compile(html)($scope));
+            }
+        }
+    }
+    $scope.removeimg2 = function(id){
+        $scope.user.filedoc.splice(id,1);
+        pushImg2('img02');
+    }
+    $scope.$on('$ionicView.enter',function(){
+        $('#infiles1').change(function(){
+            GetAtt('#infiles1', '', 'canvas01', function (data) {
+                console.log(data.length);
+                $scope.user.filedoc.push({docfile:data,title:'รูปภาพงานเคลม'});
+                pushImg('img01');
+            });
+        });
+        $('#infiles2').change(function(){
+            GetAtt('#infiles2', '', 'canvas02', function (data) {
+                console.log(data.length);
+                $scope.user.filedoc.push({docfile:data,title:'รูปภาพงานเคลม'});
+                pushImg2('img02');
+            });
+        });
+    });
+    $scope.reload = function(){
+      $scope.showLoading('กรุณารอสักครู่');
+      $scope.user.txtproductnumber = '';
+      $scope.user.txtTatol = '';
+      $scope.user.aUseGroup = false;
+      $scope.user.rdUset = 0;
+      $scope.user.chkfs = 0;
+      $scope.user.aUserUset = false;
+      $scope.user.rdUserSet = 0;
+      $scope.user.slRdClaim = '';
+      $scope.user.filedoc.length = 0;
+      $scope.user.txtproductnumber = '';
+      $scope.user.txtTatol = '';
+      $scope.user.txtpartname = '';
+      $scope.user.txtclaim = '';
+      $scope.user.txtpartserial = '';
+      $scope.user.aUsedSerial = false;
+      $scope.user.txtclaimdate = new Date();
+      $scope.user.aUsedClaim = false;
+      $scope.user.aUsedNotClaim = false;
+      $scope.user.aUsedShowScopePic = false;
+      $scope.user.aUsedHistClaim = false;
+      $scope.user.aUsedMaintrain = false;
+      setTimeout(function(){
+        $ionicLoading.hide();
+      },3000);
+    }
+    $scope.genNext02 = function(txtpartserial,txtclaimdate){
+        console.log($('#txtclaimdate').val());
+        var n = new Date($('#txtclaimdate').val());
+        var t_date = new Date();
+        var c_date = parseInt($scope.getType);
+        var t = 0;
+        if(c_date === 3){
+          t = (diffDays(n, t_date) / (365 * 1));//y
+          console.log('t = (diffDays(n, t_date) / (365 * 1))='+t+' = '+(diffDays(n, t_date) +'/'+ (365 * 1)));
+        }else if(c_date === 0){
+          t = (diffDays(n, t_date) / (365 * 2));//2 y
+          console.log('t = (diffDays(n, t_date) / (365 * 2))='+t+' = '+(diffDays(n, t_date) +'/'+ (365 * 2)));
+        }else if(c_date === 1){
+          t = (diffDays(n, t_date) / (365 * 1));//1 y
+          console.log('t = (diffDays(n, t_date) / (365 * 1))='+t+' = '+(diffDays(n, t_date) +'/'+ (365 * 1)));
+        }else if(c_date === 2){
+          t = (diffDays(n, t_date) / (30 * 6));//6 M
+          console.log('t = (diffDays(n, t_date) - (30 * 6))='+t+' = '+(diffDays(n, t_date) +'-'+ (30 * 6)));
+        }
+        console.log('T:'+t+':: c_date:'+c_date);
+        switch (c_date) {
+          case 0:
+                if(t > 2){
+                    console.log('ไม่รับเคลม');
+                    alert('ไม่สามารถเปิดใบเคลมได้เนื่องจากสิ้นสุดระยะประกันสินค้าแล้ว');
+                    $scope.title = "แสดงหน้าจอ ยอดขายย้อนหลัง 12 เดือน";
+                    $scope.user.aUsedSerial = false;
+                    $scope.user.aUsedClaim = false;
+                    $scope.user.aUsedNotClaim = true;
+                }else{
+                    console.log('รับเคลมสินค้า');
+                    $scope.title = "เลือกรายการเคลม";
+                    $scope.user.aUsedSerial = false;
+                    $scope.user.aUsedClaim = true;
+                    $scope.user.aUsedNotClaim = false;
+                }
+            break;
+            case 1:
+                  if(t > 0){
+                      console.log('ไม่รับเคลม');
+                      alert('ไม่สามารถเปิดใบเคลมได้เนื่องจากสิ้นสุดระยะประกันสินค้าแล้ว');
+                      $scope.title = "แสดงหน้าจอ ยอดขายย้อนหลัง 12 เดือน";
+                      $scope.user.aUsedSerial = false;
+                      $scope.user.aUsedClaim = false;
+                      $scope.user.aUsedNotClaim = true;
+                  }else{
+                      console.log('รับเคลมสินค้า');
+                      $scope.title = "เลือกรายการเคลม";
+                      $scope.user.aUsedSerial = false;
+                      $scope.user.aUsedClaim = true;
+                      $scope.user.aUsedNotClaim = false;
+                  }
+              break;
+              case 2:
+                    if(t > 1){
+                        console.log('ไม่รับเคลม');
+                        alert('ไม่สามารถเปิดใบเคลมได้เนื่องจากสิ้นสุดระยะประกันสินค้าแล้ว');
+                        $scope.title = "แสดงหน้าจอ ยอดขายย้อนหลัง 12 เดือน";
+                        $scope.user.aUsedSerial = false;
+                        $scope.user.aUsedClaim = false;
+                        $scope.user.aUsedNotClaim = true;
+                    }else{
+                        console.log('รับเคลมสินค้า');
+                        $scope.title = "เลือกรายการเคลม";
+                        $scope.user.aUsedSerial = false;
+                        $scope.user.aUsedClaim = true;
+                        $scope.user.aUsedNotClaim = false;
+                    }
+                break;
+                case 3:
+                      if(t > 1){
+                          console.log('ไม่รับเคลม');
+                          alert('ไม่สามารถเปิดใบเคลมได้เนื่องจากสิ้นสุดระยะประกันสินค้าแล้ว');
+                          $scope.title = "แสดงหน้าจอ ยอดขายย้อนหลัง 12 เดือน";
+                          $scope.user.aUsedSerial = false;
+                          $scope.user.aUsedClaim = false;
+                          $scope.user.aUsedNotClaim = true;
+                      }else{
+                          console.log('รับเคลมสินค้า');
+                          $scope.title = "เลือกรายการเคลม";
+                          $scope.user.aUsedSerial = false;
+                          $scope.user.aUsedClaim = true;
+                          $scope.user.aUsedNotClaim = false;
+                      }
+                  break;
+          default:
 
+        }
+    }
+    $scope.slRdioOptionClaim = function(id){
+      $scope.title = 'ตัวอย่างไม่รับเคลมสินค้า';
+      $scope.gallery = [
+        {id:0,name:'title 01',src:'http://www.yss.co.th/images/products/thumbs/MG506-305TRW-37I.png'},
+        {id:1,name:'title 02',src:'http://www.yss.co.th/images/products/thumbs/MU456-310TRWL.png'},
+        {id:2,name:'title 03',src:'http://www.yss.co.th/images/products/thumbs/MG506-335TRWL-09I.png'},
+        {id:3,name:'title 04',src:'http://www.yss.co.th/images/products/thumbs/MZ456-295TR-28O.png'},
+        {id:4,name:'title 05',src:'http://www.yss.co.th/images/products/thumbs/MG456-300H1RWL.png'},
+        {id:5,name:'title 06',src:'http://www.yss.co.th/images/products/thumbs/MZ506-330TRL-40.png'},
+        {id:6,name:'title 07',src:'http://www.yss.co.th/images/products/thumbs/MG506-295TRW-30I.png'}
+      ]
+        $scope.user.aUsedClaim = false;
+        $scope.user.aUsedShowScopePic = true;
+        console.log(id);
+    }
+    $scope.genNext03 = function(){
+        $scope.title = "กรอกข้อมูลใบเคลม";
+        $scope.user.aUsedShowScopePic = false;
+        $scope.user.aUserUset = true;
+    }
+    $scope.genNext04 = function(){
+      $scope.showLoading('กำลังบันทึกข้อมูล');
+      console.log('insert db claim');
+      $scope.reload();
+      setTimeout(function(){
+        $ionicLoading.hide();
+      },3000);
+    }
+    $scope.genCheckClaim = function(){
+      console.log('เช็คประวัตการเคลมว่าเคยเคลมมารึยัง > 1 เคลมได้ < 1 ไม่ให้เคลม');
+      $scope.user.aUsedNotClaim = false;
+      var n = new Date($('#txtdateorder').val());//วันที่เคยรับเคลม
+      var t_date = new Date();//วันที่ปัจจุบัน
+      var t = (diffDays(n, t_date) / 365);
+      console.log('t:'+t);
+      if(t <= 1){
+        console.log('ไม่รับเคลม');
+        alert('ไม่สามรถรับเคลมสินค้าได้เนื่องจากเคยเปิดใบเคลมสินค้าไปแล้ว');
+        $scope.title = "กรอกข้อมูลเพื่อส่งซ่อม";
+        $scope.user.aUsedMaintrain = true;
+      }else{
+        console.log('รับเคลม');
+        $scope.title = "กรอกข้อมูลใบเคลม";
+        $scope.user.aUserUset = true;//แสดงหน้า check part status เคลมพิเศษ
+      }
+    }
+    $scope.genMainter = function(){
+      console.log('ส่งซ่อม');
+      $scope.showLoading('กำลังบันทึกข้อมูลส่งซ่อม');
+      console.log('insert db claim');
+      $scope.reload();
+      setTimeout(function(){
+        $ionicLoading.hide();
+      },3000);
+    }
+})
+.controller('PromotexCtrl',function($scope){
+  $scope.user = {
+    txtserial:'',
+    txtdescription:''
+  }
+  $scope.checkser = function(txt){
+    var d = new Date();
+    var g_date = (d.getFullYear()).toString();
+    var f_txt = (txt.substring(0,1)).toUpperCase();
+    var d_txt = (txt.substring(2,1)).toUpperCase();
+    var g_y = ''
+    console.log(isNaN(f_txt)+':'+g_date.substring(0,3)+':'+d_txt);
+    if(isNaN(f_txt) === true){
+      console.log('gas');
+      g_y = g_date.substring(0,3)+d_txt.toString();
+      console.log(g_y);
+    }else{
+      console.log('oil');
+    }
+    $scope.user.txtdescription = f_txt;
+    console.log(f_txt);
+  }
+})
     //////////////////////// End ////////////////////
 ;

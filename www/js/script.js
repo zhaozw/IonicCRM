@@ -2371,15 +2371,37 @@ function InAnnoteAttract(table, id, base64String, title, objid, callback) {
 
 function checktopline(txtproduct){
         if(txtproduct){
-            var st_txt = (txtproduct.substring(1,2)).toUpperCase();
-            console.log('txt:'+st_txt);
-            if(st_txt === 'G'||st_txt === 'X'||st_txt === 'Z'||st_txt === 'U'){
-                console.log('TopLine');
-                return 0;
-            }else{
-                console.log('Not TopLine');
-                return 1;
-            }
+					  var st_auto = (txtproduct.substring(0,6)).toUpperCase();
+						var st_txt = (txtproduct.substring(1,2)).toUpperCase();
+						console.log('txt:'+st_txt+' :: st_auto:'+st_auto);
+						switch (st_auto) {
+							case 'RB3020':
+							case 'FB3020':
+											console.log('type auto');
+											return 3;
+								break;
+							default:
+								switch (st_txt) {
+									case 'G':
+									case 'T':
+									case 'U':
+									case 'X':
+									case 'Z':
+													console.log('TopLine');
+													return 0;
+										break;
+									case 'C':
+									case 'E':
+									case 'K':
+									case 'O':
+													console.log('ECHO Line');
+													return 1;
+										break;
+									default:
+											console.log('STD.,DTG Line');
+											return 2;
+								}
+						}
         }
     }
 function diffDays(d1, d2){
