@@ -1,0 +1,106 @@
+<ion-view view-title="ลูกค้าที่ขออนุมัติเปิดใบเคลม">
+  <ion-content>
+    <div class="row">
+      <div class="col"></div>
+      <div class="col col-90">
+        <div class="row">
+          <div class="col">
+            <h4>
+              เลขที่ใบเคลม:
+              <span class="error">{{claim.claimorder}}</span>
+            </h4>
+          </div>
+          <div class="col">
+            <h4>
+              ชื่อลูกค้า:
+              <span class="error">{{claim.name}}</span>
+            </h4>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <h4>
+              ชื่อ Item:
+              <span class="error">{{claim.productid.primaryName}}</span>
+            </h4>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <h4>ชื่อ Part:
+              <span class="error">{{claim.itempart.primaryName}}</span>
+            </h4>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <h4>ราคาต่อหน่วย:
+              <span class="error">{{claim.priceperunit | currency:''}}</span>
+            </h4>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <h4>จำนวน:
+              <span class="error">{{claim.itemamount | currency:''}}</span>
+            </h4>
+          </div>
+          <div class="col">
+            <h4>ราคารวม:
+              <span class="error">{{claim.amount | currency:''}}</span>
+            </h4>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <h4>
+              รูปแบบการจัดส่ง:
+              <span class="error">{{claim.shipby}}</span>
+            </h4>
+          </div>
+        </div>
+        <hr class="divider">
+        <div class="row">
+          <div class="col">
+            <h4>{{listannote}}</h4>
+            <br />
+            <div class="row" >
+              <div ng-repeat="n in annote" class="imageHolder">
+                  <img src="{{n.documentbody}}" alt="{{n.subject}}" class="thumbnail" width="350" height="270" myclick="opop(n.documentbody,n.subject)">
+                  <div class="caption">Pic.{{$index +'-'+ n.subject}}</div>
+                  <br />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col"></div>
+    </div>
+    <br /><br />
+    <script id="templates/modal-1.html" type="text/ng-template">
+          <div class="modal image-modal transparent" myclick="closeMod(1)">
+              <ion-pane class="transparent">
+                 <img ng-src="{{imageSrc}}" class="fullscreen-image"/>
+              </ion-pane>
+          </div>
+    </script>
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" myclick="reback()">
+      <i class="icon ion-chevron-left error"></i>
+      ย้อนกลับ
+    </a>
+    <a class="tab-item" myclick="loaddata()">
+      <i class="icon ion-ios-reload primary"></i>
+      เรียกข้อมูลใหม่
+    </a>
+    <a class="tab-item" myclick="confirmapprove(claim.claimorderid,917970001)">
+      <i class="icon ion-checkmark-round primary"></i>
+      อนุมัติ
+    </a>
+    <a class="tab-item" myclick="rejectclaim(claim.claimorderid,917970002)">
+      <i class="icon ion-close error"></i>
+      ไม่อนุมัติ
+    </a>
+  </div>
+</ion-view>

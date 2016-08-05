@@ -1,4 +1,4 @@
-<ion-view view-title="บันทึกรายงานสถานการณ์ตลาด">
+<ion-view view-title="บันทึกรายงานสถาพการตลาด">
   <ion-content>
     <div>
       <div class="bar bar-header item-input-inset">
@@ -11,7 +11,7 @@
         data-ng-click="filtertxt == ''">&nbsp;ยกเลิก&nbsp;</md-button>
       </div>
       <md-list>
-        <md-list-item class="md-3-line" ng-repeat="n in ListMarket | filter:filtertxt" ng-if="n.customer.id == user.accountid">
+        <md-list-item class="md-3-line" ng-repeat="n in ListMarket | filter:filtertxt | orderBy:createdon:true">
           <img src="{{n.docimg}}" class="md-avatar" alt="testt" />
            <div class="md-list-item-text" layout="column">
              <h3>
@@ -22,27 +22,25 @@
                 เดือน:<span class="error-bold">{{n.month}}</span>
              </h3>
              <h4>รายละเอียด:<span class="primary-bold">{{n.remarktext}}</span></h4>
-             <!-- <p ng-show="n.annotetype">
-               <a>ดูรูปภาพประกอบ</a>
-             </p> -->
+             <h4>วันที่บันทึก:<span class="primary-bold">{{n.createdon | date:'dd/MM/yyyy'}}</span></h4>
            </div>
-           <a class="md-secondary icon ion-close-round text-h1 text-bold error" myclick="removeitem($index)"></a>
-           <md-divider ng-if="!$last"></md-divider>
+           <a class="md-secondary icon ion-close-round text-h1 text-bold error" myclick="removeitem(n.id)"></a>
+           <md-divider></md-divider>
        </md-list-item>
       </md-list>
     </div>
     <br /><br />
   </ion-content>
   <div class="tabs tabs-icon-top">
-    <a class="tab-item" ng-click="loaddata()">
+    <a class="tab-item" myclick="loaddata()">
       <i class="icon ion-refresh success"></i>
       เรียกข้อมูลใหม่
     </a>
-    <a class="tab-item" ng-click="reback()">
+    <a class="tab-item" myclick="reback()">
       <i class="icon ion-chevron-left error"></i>
       ย้อนกลับ
     </a>
-    <a class="tab-item" ng-click="openform()">
+    <a class="tab-item" myclick="openform()">
       <i class="icon ion-plus primary"></i>
       เพิ่มข้อมูล
     </a>

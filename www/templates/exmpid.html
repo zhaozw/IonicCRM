@@ -3,7 +3,9 @@
     <div>
       <div class="row">
         <div class="col">
-          <input type="text" ng-model="user.txtserial" placeholder="type serail number" ng-change="checkser(user.txtserial)" >
+          <input type="text" ng-model="user.txtserial"
+            placeholder="type serail number" ng-change="checkser(user.txtserial)"
+            maxlength="8">
           <button type="button" name="button" ng-click="checkser(user.txtserial)">คำนวน</button>
         </div>
       </div>

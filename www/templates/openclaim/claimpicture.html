@@ -1,0 +1,34 @@
+<ion-view view-title="ตัวอย่างไม่รับเคลมสินค้า">
+  <ion-content>
+    <br />
+    <div>
+      <div class="row gallery">
+          <div class="col col-50" ng-repeat="img in gallery">
+            <div class="list card">
+              <div class="item item-image">
+                <img src="{{img.src}}">
+              </div>
+              <a class="item item-icon-left assertive">
+                {{img.name}}
+              </a>
+            </div>
+          </div>
+      </div>
+    </div>
+    <br /><br /><br /><br />
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="reback()">
+      <i class="icon ion-chevron-left error"></i>
+      ย้อนกลับ
+    </a>
+    <a class="tab-item" myclick="genNextClaimOrder()">
+      <i class="icon ion-wrench primary"></i>
+      รับเคลม
+    </a>
+    <a class="tab-item" myclick="genNextOrder()">
+      <i class="icon ion-alert-circled warn"></i>
+      ไม่รับเคลม
+    </a>
+  </div>
+</ion-view>

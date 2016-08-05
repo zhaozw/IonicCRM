@@ -1,0 +1,94 @@
+<ion-view view-title="กรอกข้อมูลเพื่อทำการแจ้งซ่อม">
+  <ion-content>
+    <br />
+    <div class="row">
+      <div class="col"></div>
+      <div class="col col-75">
+        <div>
+          <div class="row">
+              <div class="col">
+                <div class="row">
+                  <div class="col">
+                    <md-input-container>
+                      <label>ระบุข้อมูลชื่อลูกค้า</label>
+                      <input type="text" ng-model="user.custname">
+                    </md-input-container>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <md-input-container>
+                      <label>ที่อยู่</label>
+                      <input type="text" ng-model="user.addressname">
+                    </md-input-container>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <md-input-container>
+                      <label>เลือกจังหวัด</label>
+                      <md-select ng-model="user.provincename">
+                        <md-option ng-repeat="n in listprovince" data-ng-value="n.ivz_addressprovinceid"
+                          ng-click="changedistrict()">{{n.ivz_description}}</md-option>
+                      </md-select>
+                    </md-input-container>
+                  </div>
+                  <div class="col">
+                    <md-input-container>
+                      <label>เลือกอำเภอ</label>
+                      <md-select ng-model="user.districtname">
+                        <md-option data-ng-value="n.id" ng-repeat="n in districtlist">{{ n.name }}</md-option>
+                      </md-select>
+                    </md-input-container>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <md-input-container>
+                      <label>รหัสไปรษณี</label>
+                      <input type="text" ng-model="user.zipname">
+                    </md-input-container>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <md-input-container>
+                      <label>เบอร์โทร</label>
+                      <input type="text" ng-model="user.telname">
+                    </md-input-container>
+                  </div>
+                </div>
+                <hr class="divider">
+                <div class="row">
+                  <div class="col">
+                    <md-button class="md-raised md-warn" ng-click="clickfile()">แนบรูปภาพประกอบ</md-button>
+                    <hr class="divider" />
+                    <canvas id="canvas01" width="578" height="400" ng-hide="true"></canvas>
+                    <div class="row img01 gallery" id="img01"></div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <span class="error-bold">*กดที่รูปเพื่อลบ</span>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+      <div class="col"></div>
+    </div>
+    <br /><br /><br /><br />
+    <input type="file" id="filenote" ng-hide="true">
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="reback()">
+      <i class="icon ion-chevron-left error"></i>
+      ยกเลิก
+    </a>
+    <a class="tab-item" myclick="savemantian()">
+      <i class="icon ion-checkmark primary"></i>
+      ส่งซ่อม
+    </a>
+  </div>
+</ion-view>

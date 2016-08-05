@@ -1,0 +1,51 @@
+<ion-view view-title="ระบุ Serial Number">
+  <ion-content>
+    <br />
+    <div class="row">
+      <div class="col"></div>
+      <div class="col col-75">
+        <div>
+          <md-input-container md-no-float>
+            <label>ระบุ SERIAL NUMBER CODE YSS</label>
+            <input type="text" placeholder="YSS SERIALNUMBER" name="txtpartserial" ng-model="user.txtpartserial"
+              required md-maxlength="50"  maxlength="50">
+            <span class="error" ng-hide="user.txtpartserial">*กรุณาระบุ SERIAL NUMBER CODE YSS ด้วย</span>
+          </md-input-container>
+          <br />
+          <md-input-container md-no-float>
+            <label>ระบุระบุ ตามวันที่ซื้อสินค้า(กรณีที่ต้องการตรวจสอบตามวันที่ซื้อ)</label>
+            <input type="date" id="txtclaimdate" ng-model="user.txtclaimdate" required >
+          </md-input-container>
+          <br />
+          <md-button class="md-raised md-warn" ng-click="clickfile()" ng-show="user.txtclaimdate">แนบรูปภาพใบเสร็จรับเงินของลูกค้า</md-button>
+          <br />
+          <hr class="divider"  ng-show="user.txtclaimdate"/>
+          <canvas id="canvas01" width="578" height="400" ng-hide="true"></canvas>
+          <div class="row img01 gallery" id="img01" ng-show="user.txtclaimdate"></div>
+          <br />
+          <div class="row" ng-show="user.txtclaimdate">
+            <div class="col">
+              <span class="error-bold">*กดที่รูปเพื่อลบ</span>
+            </div>
+          </div>
+          <input type="file" id="filenote" ng-hide="true">
+        </div>
+      </div>
+      <div class="col"></div>
+    </div>
+    <!--<input type="file" id="fileUpload">-->
+    <br /><br /><br /><br />
+    <br /><br /><br /><br />
+    <br /><br /><br /><br />
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="reback()">
+      <i class="icon ion-chevron-left error"></i>
+      ย้อนกลับ
+    </a>
+    <a class="tab-item" myclick="genNext02(user.txtpartserial,user.txtclaimdate)">
+      <i class="icon ion-checkmark primary"></i>
+      ตรวจสอบประกันสินค้า
+    </a>
+  </div>
+</ion-view>

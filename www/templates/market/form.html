@@ -1,48 +1,52 @@
 <ion-view view-title="ฟอร์บันทึกข้อมูล">
   <ion-content>
-    <div class="">
-      <div class="row">
-        <div class="col">
-          <md-input-container>
-            <label>สัปดาห์ที่:</label>
-            <md-select ng-model="user.optionweekly"> <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
-                <md-select-label>เลือกข้อมูล</md-select-label>
-                <md-option ng-value="opt.id" ng-repeat="opt in optionsweekly">{{ opt.name }}</md-option>
-            </md-select>
-          </md-input-container>
+    <div class="row">
+      <div class="col"></div>
+      <div class="col col-90">
+        <div class="row">
+          <div class="col">
+            <md-input-container>
+              <label>สัปดาห์ที่:</label>
+              <md-select ng-model="user.optionweekly"> <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
+                  <md-select-label>เลือกข้อมูล</md-select-label>
+                  <md-option ng-value="opt.id" ng-repeat="opt in optionsweekly">{{ opt.name }}</md-option>
+              </md-select>
+            </md-input-container>
+          </div>
+          <div class="col">
+            <md-input-container>
+              <label>เลือกเดือน:</label>
+              <md-select ng-model="user.optionmonth"> <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
+                  <md-select-label>เลื่อกข้อมูล</md-select-label>
+                  <md-option ng-value="opt.id" ng-repeat="opt in optionsmonth">{{ opt.name }}</md-option>
+              </md-select>
+            </md-input-container>
+          </div>
         </div>
-        <div class="col">
-          <md-input-container>
-            <label>เลือกเดือน:</label>
-            <md-select ng-model="user.optionmonth"> <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
-                <md-select-label>เลื่อกข้อมูล</md-select-label>
-                <md-option ng-value="opt.id" ng-repeat="opt in optionsmonth">{{ opt.name }}</md-option>
-            </md-select>
-          </md-input-container>
+        <div class="row">
+          <div class="col">
+            <md-input-container>
+              <label>รายละเอียด:</label>
+              <input type="text" ng-model="user.remarktxt" md-maxlength="500" placeholder="ระบุรายละเอียดด้วย">
+            </md-input-container>
+            <span class="error-bold" ng-hide="user.remarktxt">*กรุณาระบุสาเหตุด้วย</span>
+          </div>
+        </div>
+        <hr class="divider"/>
+        <div class="row">
+          <div class="col">
+            <md-button class="md-raised md-warn" ng-click="callfile(user.optionweekly,user.optionmonth,user.remarktxt)">แนบรูปภาพประกอบ</md-button>
+            <hr class="divider" />
+            <div class="row img01" id="img01"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <span class="error-bold">*กดที่รูปเพื่อลบ</span>
+          </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col">
-          <md-input-container>
-            <label>รายละเอียด:</label>
-            <input type="text" ng-model="user.remarktxt" md-maxlength="500" placeholder="ระบุรายละเอียดด้วย">
-          </md-input-container>
-          <span class="error-bold" ng-hide="user.remarktxt">*กรุณาระบุสาเหตุด้วย</span>
-        </div>
-      </div>
-      <hr class="divider"/>
-      <div class="row">
-        <div class="col">
-          <md-button class="md-raised md-warn" ng-click="callfile(user.optionweekly,user.optionmonth,user.remarktxt)">แนบรูปภาพประกอบ</md-button>
-          <hr class="divider" />
-          <div class="row img01" id="img01"></div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <span class="error-bold">*กดที่รูปเพื่อลบ</span>
-        </div>
-      </div>
+      <div class="col"></div>
     </div>
     <br /><br />
     <canvas width="300" height="300" id="canvas01" ng-hide="true"></canvas>

@@ -1,4 +1,4 @@
-angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookies','ngMessages','ngAnimate','ngCordova'])
+angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookies','ngMessages','ngAnimate'])
 
 .run(function($ionicPlatform, $rootScope, $ionicHistory ,Data) {
   //alert('Data:'+Data.pricelevel);
@@ -261,7 +261,8 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     databusiness:[],
     tersupselect:'',
     selfshare:[],
-    doccomputiter:[]
+    doccomputiter:[],
+    idrpoductclaim:''
   }
 })
 .factory('Darray',function(){
@@ -975,6 +976,33 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   }
 })
+.state('app.waitapproveclaim', {
+  url:'/waitapproveclaim',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/claim/option.html',
+      controller:'WaitClaimCtrl'
+    }
+  }
+})
+.state('app.waitclaimlist', {
+  url:'/waitclaimlist/:terid',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/claim/claimlist.html',
+      controller:'WaitClaimListCtrl'
+    }
+  }
+})
+.state('app.waitclaimdetail', {
+  url:'/waitclaimdetail/:claimid',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/claim/claimdetail.html',
+      controller:'WaitClaimDetailCtrl'
+    }
+  }
+})
 /*------------------- order -----------------------*/
 .state('app.orderlist', {
   url:'/orderlist/:terid/:mastertype/:ordertype',
@@ -995,7 +1023,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.orderlistother', {
-  url:'/orderlistpending/:orderid/:mastertype/:ordertype/:accountname/:terid/:salestype/:typehide',
+  url:'/orderlistother/:orderid/:mastertype/:ordertype/:accountname/:terid/:salestype/:typehide',
   views: {
     'menuContent': {
       templateUrl: 'templates/order/orderother.html',
@@ -1210,7 +1238,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
             }
       })
 .state('app.listmarketting', {
-            url:'/listmarketting/:accountid/:mastertype/:terid/:accountname/:province/:distid',
+            url:'/listmarketting/:mastertype/:terid',
             views: {
               'menuContent': {
                 templateUrl: 'templates/market/listmarketting.html',
@@ -1219,7 +1247,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
             }
       })
 .state('app.addformmarket', {
-        url:'/addformmarket/:accountid/:mastertype/:terid/:accountname/:province/:distid',
+        url:'/addformmarket/:mastertype/:terid',
         views: {
           'menuContent': {
             templateUrl: 'templates/market/form.html',
@@ -1255,7 +1283,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.optioncomputitorproductscream',{
-  url:'/app.optioncomputitorproductscream/:retype/:accountid/:accountiname',
+  url:'/optioncomputitorproductscream/:retype/:accountid/:accountiname',
   views:{
     'menuContent':{
       templateUrl:'templates/computitor/optioncomputitorproductscam.html',
@@ -1308,7 +1336,99 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   }
 })
+.state('app.map',{
+  url:'/map',
+  views:{
+    'menuContent':{
+      controller:'mapCtrl'
+    }
+  }
+})
+//open claim
+.state('app.openclaim', {
+  url: '/openclaim/:accountid/:specailclaim',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/openclaim/claim.html',
+      controller: 'OpenclaimCtrl'
+    }
+  }
+})
+.state('app.openclaimserial', {
+  url: '/openclaimserial/:gettype/:accountid/:itemamount/:productclaim',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/openclaim/claimserial.html',
+      controller: 'ClaimSerialCtrl'
+    }
+  }
+})
+.state('app.showlistorder', {
+  url: '/showlistorder/:gettype/:accountid/:itemamount/:claimtxt/:productclaim/:claimstatus',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/openclaim/showlistorder.html',
+      controller: 'ShowListOrderCtrl'
+    }
+  }
+})
+.state('app.addmantain', {
+  url: '/addmantain/:gettype/:accountid/:itemamount/:claimtxt/:productclaim/:claimstatus',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/openclaim/addmantain.html',
+      controller: 'MaintainancesCtrl'
+    }
+  }
+})
+.state('app.claimoption', {
+  url: '/claimoption/:gettype/:accountid/:itemamount/:productclaim/:claimstatus',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/openclaim/claimoption.html',
+      controller: 'ClaimOptionCtrl'
+    }
+  }
+})
+.state('app.claimpicture', {
+  url: '/claimpicture/:gettype/:accountid/:itemamount/:claimtxt/:productclaim/:claimstatus',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/openclaim/claimpicture.html',
+      controller: 'ClaimPicCtrl'
+     }
+  }
+})
+.state('app.claimdetail', {
+  url: '/claimdetail/:gettype/:accountid/:specailclaim/:itemamount/:claimtxt/:productclaim/:claimstatus',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/openclaim/claimdetail.html',
+      controller: 'ClaimDetailCtrl'
+    }
+  }
+})
+.state('app.productrecall', {
+  url: '/productrecall',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/productrecall/productrecall.html',
+      controller: 'ProductRecallCtrl'
+    }
+  }
+})
+.state('app.salesordertransport', {
+  url: '/salesordertransport',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/transport/salesordertransport.html',
+      controller: 'SalesTransportCtrl'
+    }
+  }
+})
+//end claim
 ;
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/playlists');
+  //$urlRouterProvider.otherwise('/app/productrecall');
 });

@@ -1,6 +1,6 @@
 <ion-modal-view>
   <ion-header-bar>
-    <h1 class="title">ยืนยันไม่อนุมัติ</h1>
+    <h1 class="title">ยืนยันคำสั่ง</h1>
     <div class="buttons">
       <button class="button button-clear" ng-click="closeModal(2)">
         <i class="ion-close error"></i>
@@ -25,7 +25,7 @@
     <div class="row">
       <div class="col">
         <md-input-container>
-          <label>เหตุผลที่ไม่อนุมัติ:</label>
+          <label>ระบุเหตุผล:</label>
           <input type="text" ng-model="user.txtcomment" md-maxlength="500">
         </md-input-container>
       </div>
@@ -33,7 +33,7 @@
     <div class="list">
         <label class="item">
           <button class="button button-block button-positive" type="button"
-            myclick="confirmreject(user.accountid,user.txtcomment)">ยืนยัน</button>
+            ng-click="confirmreject(user.accountid,user.txtcomment)">ยืนยัน</button>
         </label>
       </div>
   </ion-content>

@@ -1,0 +1,26 @@
+<ion-view view-title="เลือกสาเหตุการเคลม">
+  <ion-content>
+    <br />
+    <div>
+      <md-radio-group ng-model="user.slRdClaim">
+         <md-list>
+          <md-list-item ng-repeat="n in listclaim" ng-if="n.pline">
+            <h4>
+                {{ n.name}}
+            </h4>
+            <md-radio-button class="md-secondary" data-ng-value="n.id"
+              ng-click="slRdioOptionClaim(user.slRdClaim,n.pline,n.name)"></md-radio-button>
+            <md-divider></md-divider>
+          </md-list-item>
+        </md-list>
+      </md-radio-group>
+    </div>
+    <br /><br /><br /><br />
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="reback()">
+      <i class="icon ion-chevron-left error"></i>
+      ย้อนกลับ
+    </a>
+  </div>
+</ion-view>

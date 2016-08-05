@@ -1,0 +1,46 @@
+<ion-view view-title="แสดงหน้าจอ ยอดขายย้อนหลัง 12 เดือน">
+  <ion-content>
+    <br />
+    <div class="bar bar-header item-input-inset fixed-top">
+      <label class="item-input-wrapper">
+        <input type="search" placeholder="ค้นหา" ng-model="filtertxt">
+      </label>
+      <button class="button button-positive" data-ng-click="filtertxt = ''">
+        <i class="icon ion-close" ng-show="filtertxt"></i>
+        <i class="icon ion-search" ng-hide="filtertxt"></i>
+      </button>
+    </div>
+    <md-list>
+      <md-list-item class="md-3-line" ng-repeat="n in listorder | filter:filtertxt">
+        <!-- <img src="{{n.avator}}" class="md-avatar" alt="testt" /> -->
+         <div class="md-list-item-text" layout="column">
+           <h4>{{n.ivz_ordernumber}}</h4>
+           <p>
+             ชื่อลูกค้า:<span class="error">{{n.name}}</span>
+             &nbsp;
+             วันที่เปิดใบสั่งขาย:<span class="error">{{n.createdon | date:'dd/MM/yyyy'}}</span>
+           </p>
+           <p>
+             ยอมรวม:<span class="error">{{n.totalamount | currency:''}}</span>
+           </p>
+         </div>
+         <md-divider></md-divider>
+     </md-list-item>
+    </md-list>
+    <br /><br /><br /><br />
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="reback()">
+      <i class="icon ion-chevron-left error"></i>
+      ย้อนกลับ
+    </a>
+    <a class="tab-item" myclick="genNextClaimOrder()">
+      <i class="icon ion-checkmark primary"></i>
+      เคลมสินค้า
+    </a>
+    <a class="tab-item" myclick="clicknext()">
+      <i class="icon ion-close warn"></i>
+      ไม่รับเคลม
+    </a>
+  </div>
+</ion-view>

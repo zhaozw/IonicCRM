@@ -5,7 +5,7 @@
       <div class="col">
         <div>
           <md-list>
-            <md-list-item class="md-3-line" ng-repeat="n in listorder | filter:{statuscode:group.filter}">
+            <md-list-item class="md-3-line" ng-repeat="n in listorder | filter:{statuscode:group.filter} | orderBy:createdon:true">
               <div class="md-list-item-text">
                 <h3>
                     วันที่:&nbsp;<span style="color:#003171;font-weight:bold;">{{n.createdon | date:'dd/MM/yyyy'}}</span>
@@ -34,6 +34,10 @@
                   ประเภทการขาย:
                   <span style="color:green;font-weight:bold;" ng-if="n.ivz_statussales === '1'">ขาย 1</span>
                   <span style="color:green;font-weight:bold;" ng-if="n.ivz_statussales === '2'">ขาย 2</span>
+                </p>
+                <p ng-if="n.description">
+                  รายละเอียดเพิ่มเติม:
+                  <span style="color:#003171;font-weight:bold;">{{n.description}}</span>
                 </p>
               </div>
               <md-button class="md-secondary"

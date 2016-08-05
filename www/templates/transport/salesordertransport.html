@@ -1,0 +1,54 @@
+<ion-view view-title="ตรวจสอบสถานะขนส่ง">
+  <ion-content>
+    <div class="">
+      <div class="">
+        <div class="bar bar-header item-input-inset">
+          <label class="item-input-wrapper">
+            <i class="icon ion-ios-search placeholder-icon"></i>
+            <input type="search" placeholder="Search" ng-model="filtertxt">
+          </label>
+          <md-button class="md-raised button-clear md-warn"
+          aria-label="description" md-ripple-size="auto"
+          data-ng-click="filtertxt = ''" ng-show="filtertxt">&nbsp;ยกเลิก&nbsp;</md-button>
+        </div>
+          <md-list id="mdlist">
+            <md-list-item class="md-3-line" ng-repeat="n in listtransport | filter:filtertxt |orderBy:deliverydate:true">
+              <img ng-src="{{n.face}}?{{$index}}" class="md-avatar" />
+              <div class="md-list-item-text" layout="column">
+                <h3>
+                  เลขที่ออร์เดอร์:
+                  <span ng-show="n.salesid" class="primary-blue">{{n.salesid}}</span>
+                </h3>
+                <h3>
+                  เลขที่เอกสาร:
+                  <span ng-show="n.documentno" class="primary-blue">{{n.documentno}}</span>
+                  <span ng-hide="n.documentno" class="primary-red">ไม่มีเลขที่เอกสาร</span>
+                </h3>
+                <p>ลูกค้า:<span class="primary-blue">{{ n.invoiceaccount+'-'+n.deliveryname }}</span>
+                  &nbsp;
+                  <b>
+                    วันที่ส่ง:<span class="primary-blue">{{n.deliverydate | date:'dd/MM/yyyy'}}</span>
+                  </b>
+                  <!-- &nbsp;
+                  <b ng-show="n.do_date">
+                    วันที่รับสินค้า:<span class="primary">{{n.do_date | date:'dd/MM/yyyy'}}</span>
+                  </b> -->
+                </p>
+                <p>สถานะ:
+                  <span class="primary-red" ng-if="n.dostatus.length <= 12">{{n.dostatus}}</span>
+                  <span class="primary-blue" ng-if="n.dostatus.length > 13">{{n.dostatus}}</span>
+                </p>
+              </div>
+              <md-divider ></md-divider>
+            </md-list-item>
+          </md-list>
+      </div>
+    </div>
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" myclick="reload()">
+      <i class="icon ion-refresh warn showfade"></i>
+      เรียกข้อมูลใหม่
+    </a>
+  </div>
+</ion-view>

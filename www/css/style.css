@@ -43,6 +43,14 @@
   color: #2ABB9B;
   font-weight: bold;
 }
+.primary-blue{
+  color: blue;
+  font-weight: bold;
+}
+.primary-red{
+  color: red;
+  font-weight: bold;
+}
 .warn{
   color: #FFA400;
 }
@@ -857,4 +865,26 @@ abbr    {
 .gallery {
     -webkit-flex-wrap: wrap;
     flex-wrap: wrap;
+}
+.showfade{
+  -webkit-transition: background-color 0.2s,
+  -webkit-transform 0.2s;
+  transition: transform 0.2s;
+}
+.showfade:active,.showfade:focus,.showfade:visited{
+    color: green;
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+}
+.activated>i.showfade{
+    color: green;
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+}
+.ng-hide-add {
+    -webkit-animation: fadeOutLeftBig 0.4s;
+    display: block!important;
+}
+.ng-hide-remove {
+    -webkit-animation: fadeInLeftBig 0.4s;
 }

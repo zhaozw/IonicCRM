@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col"></div>
       <div class="col col-75">
-        <input type="date" id="txtdateorder" ng-model="user.txthistclaimdate">
+        <input type="date" id="txtdateorder" ng-model="user.txthistclaimdate" ng-hide="true">
         <form name="tranForm" ng-hide="user.aUseGroup">
           <div>
             <md-checkbox md-no-ink ng-true-value="1" ng-false-value="0" ng-model="user.chkfs" ng-change="expr(user.chkfs)">มีการตอก  F/S</md-checkbox>

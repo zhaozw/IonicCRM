@@ -15,7 +15,7 @@
   <!-- menu app -->
   <ion-side-menu side="left">
     <ion-header-bar class="bar-stable">
-      <h1 class="title">YSS MENU <span class="error">12//7/2016 fix:dle</span></h1>
+      <h1 class="title">YSS MENU <span class="error">21/7/2016</span></h1>
     </ion-header-bar>
     <ion-content>
       <ion-list>
@@ -59,6 +59,16 @@
           <!-- Sale -->
           <i class="ion-android-calendar"></i>&nbsp;ปรับปรุงข้อมูลลูกค้า
         </ion-item>
+        <ion-item menu-close ui-sref="app.listmarketting({mastertype:Data.mastertype,terid:Data.termas})"
+        class="success"  ui-sref-opts="{reload:true}">
+          <!-- Sale -->
+          <i class="ion-android-calendar"></i>&nbsp;บันทึกสถาวะการตลาด
+        </ion-item>
+        <ion-item menu-close ui-sref="app.productrecall"
+        class="success"  ui-sref-opts="{reload:true}">
+          <!-- Sale -->
+          <i class="ion-android-calendar"></i>&nbsp;บันทึก Product Recall
+        </ion-item>
         <ion-item menu-close ui-sref="app.adjustmentlistsupter({tername:Data.Tername,mastertype:Data.mastertype})"
           ui-sref-opts="{reload:true}"  class="success" ng-show="Data.logontype">
           <i class="ion-android-calendar"></i>&nbsp;ปรับปรุงข้อมูลลูกค้า
@@ -66,6 +76,9 @@
         <!-- productlist/:accountid/:mastertype/:ordertype -->
         <ion-item menu-close class="success" ng-click="orderlink(1)">
           <i class="icon ion-bag"></i>&nbsp;รายการสินค้า</ion-item>
+        <ion-item menu-close class="success" ui-sref="app.salesordertransport"
+          ui-sref-opts="{reload:true}">
+            <i class="icon ion-bag"></i>&nbsp;ตรวจสอบสถานะขนส่ง</ion-item>
         <ion-item menu-close class="success" ng-click="orderlink(2)">
           <i class="icon ion-bag"></i>&nbsp;รายการเปิดใบสั่งขาย</ion-item>
         <ion-item menu-close ui-sref="app.playlists" class="success" ng-show="Data.logonstatus">
@@ -73,12 +86,6 @@
         </ion-item>
         <ion-item menu-close  class="success" ng-hide="Data.logonstatus" ng-click="clicklogout()">
           <i class="ion-power"></i>&nbsp;ออกจากระบบ
-        </ion-item>
-        <ion-item menu-close  class="success"  ui-sref="app.exampl">
-          <i class="ion-power"></i>&nbsp;Ex
-        </ion-item>
-        <ion-item menu-close  class="success"  ui-sref="app.promotex">
-          <i class="ion-power"></i>&nbsp;Promote
         </ion-item>
       </ion-list>
     </ion-content>

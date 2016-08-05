@@ -682,7 +682,100 @@ var GetAccountTxtID = function(id,callback){
 }
 ///////////////// End Option /////////////////////////
 function GetAppointStatus(ivz_leftterritory,ist,typ,callback){
-	//alert(ivz_leftterritory+':'+ist+':'+typ);
+	//alert(ivz_leftterritory+':D'+ist+':'+typ);
+  var n = new MobileCRM.FetchXml.Entity('appointment');
+      n.addAttribute('activityid');//0
+      n.addAttribute('ivz_customer');//1
+      n.addAttribute('ivz_territoryid');//2
+      n.addAttribute('ivz_empid');//3
+      n.addAttribute('scheduledstart');//4
+      n.addAttribute('scheduledend');//5
+      n.addAttribute('ivz_saleprospect');//6
+      n.addAttribute('subject');//7
+      n.addAttribute('ivz_scheduledstarttime');//8
+      n.addAttribute('ivz_scheduledendtime');//9
+      n.addAttribute('ivz_visit');//10
+      n.addAttribute('ivz_visitbilling');//11
+      n.addAttribute('ivz_visitclaimorder');//12
+      n.addAttribute('ivz_visitcollection');//13
+      n.addAttribute('ivz_visitopenaccount');//14
+      n.addAttribute('ivz_visitorder');//15
+      n.addAttribute('ivz_visitadjustment');//16
+      n.addAttribute('ivz_visitcompetitors');//17
+      n.addAttribute('ivz_visitmarket');//18
+      n.addAttribute('ivz_visitpostpect');//19
+      n.addAttribute('ivz_visitproductrecall');//20
+      n.addAttribute('ivz_visitactivities');//21
+      n.addAttribute('ivz_visitsuggest');//22
+      n.addAttribute('ivz_planningstatus');//23
+      n.addAttribute('ivz_employeeposition');//24
+			n.orderBy("scheduledstart", false);
+      n.filter = new MobileCRM.FetchXml.Filter();
+      n.filter.where('ivz_territoryid','eq',ivz_leftterritory);
+    var m = n.addLink('account','accountid','ivz_customer','outer');
+        m.addAttribute('ivz_addressprovince');//25
+        m.addAttribute('ivz_addressdistrict');//26
+        m.addAttribute('territoryid');//27
+        m.addAttribute('accountnumber');//28
+        m.addAttribute('ivz_balancecredit');//29
+				m.addAttribute('ivz_taxid');//txtid//30
+    var o = m.addLink('territory','territoryid','territoryid','outer');
+        o.addAttribute('ivz_emailcontact');//31
+        o.addAttribute('ivz_leadermail');//32
+        o.addAttribute('territoryid');//33
+        o.addAttribute('ivz_ccmail');//34
+    var fetch = new MobileCRM.FetchXml.Fetch(n,1000000,1);
+      fetch.execute('array',function(data){
+        var b = [];
+        for(var i in data){
+              if(data[i][23] == ist){
+								if(data[i][24] == typ){
+									b.push({
+													activityid:data[i][0],
+													ivz_customer:data[i][1],
+													ivz_territoryid:data[i][2],
+													ivz_empid:data[i][3],
+													start:new Date(data[i][4]),
+													end:new Date(data[i][5]),
+													ivz_saleprospect:data[i][6],
+													title:data[i][7],
+													ivz_visit:CtoTrue(data[i][10]),
+													ivz_visitbilling:CtoTrue(data[i][11]),
+													ivz_visitclaimorder:CtoTrue(data[i][12]),
+													ivz_visitcollection:CtoTrue(data[i][13]),
+													ivz_visitopenaccount:CtoTrue(data[i][14]),
+													ivz_visitorder:CtoTrue(data[i][15]),
+													ivz_visitadjustment:CtoTrue(data[i][16]),
+													ivz_visitcompetitors:CtoTrue(data[i][17]),
+													ivz_visitmarket:CtoTrue(data[i][18]),
+													ivz_visitpostpect:CtoTrue(data[i][19]),
+													ivz_visitproductrecall:CtoTrue(data[i][20]),
+													ivz_visitactivities:data[i][21],
+													ivz_visitsuggest:CtoTrue(data[i][22]),
+													ivz_employeeposition:data[i][24],
+													ivz_addressprovince:data[i][25],
+													ivz_addressdistrict:data[i][26],
+													territoryid:data[i][27],
+													accountnumber:data[i][28],
+													ivz_planningstatus:data[i][23],
+													ivz_emailcontact:data[i][31],
+													ivz_leadermail:data[i][32],
+													ivz_ccmail:data[i][34],
+													ivz_balancecredit:data[i][29],
+													filtername:data[i][28]+'-'+data[i][1],
+													mailtomail:data[i][31]+','+data[i][32]+','+data[i][34],
+													ivz_scheduledstarttime:data[i][8],
+													ivz_scheduledendtime:data[i][9],
+													ivz_taxid:data[i][30]
+												});
+								}
+            }
+        }
+        callback(b);
+      },function(er){alert(er);},null);
+}
+function GetAppointUStatus(ivz_leftterritory,ist,typ,callback){
+	//alert(ivz_leftterritory+':U'+ist+':'+typ);
   var n = new MobileCRM.FetchXml.Entity('appointment');
       n.addAttribute('activityid');//0
       n.addAttribute('ivz_customer');//1
@@ -730,7 +823,101 @@ function GetAppointStatus(ivz_leftterritory,ist,typ,callback){
         var b = [];
         for(var i in data){
               if(data[i][23] == ist){
-								if(data[i][24] == typ){
+								if(data[i][24] == 1 || data[i][24] == 2){
+									b.push({
+													activityid:data[i][0],
+													ivz_customer:data[i][1],
+													ivz_territoryid:data[i][2],
+													ivz_empid:data[i][3],
+													start:new Date(data[i][4]),
+													end:new Date(data[i][5]),
+													ivz_saleprospect:data[i][6],
+													title:data[i][7],
+													ivz_visit:CtoTrue(data[i][10]),
+													ivz_visitbilling:CtoTrue(data[i][11]),
+													ivz_visitclaimorder:CtoTrue(data[i][12]),
+													ivz_visitcollection:CtoTrue(data[i][13]),
+													ivz_visitopenaccount:CtoTrue(data[i][14]),
+													ivz_visitorder:CtoTrue(data[i][15]),
+													ivz_visitadjustment:CtoTrue(data[i][16]),
+													ivz_visitcompetitors:CtoTrue(data[i][17]),
+													ivz_visitmarket:CtoTrue(data[i][18]),
+													ivz_visitpostpect:CtoTrue(data[i][19]),
+													ivz_visitproductrecall:CtoTrue(data[i][20]),
+													ivz_visitactivities:data[i][21],
+													ivz_visitsuggest:CtoTrue(data[i][22]),
+													ivz_employeeposition:data[i][24],
+													ivz_addressprovince:data[i][25],
+													ivz_addressdistrict:data[i][26],
+													territoryid:data[i][27],
+													accountnumber:data[i][28],
+													ivz_planningstatus:data[i][23],
+													ivz_emailcontact:data[i][31],
+													ivz_leadermail:data[i][32],
+													ivz_ccmail:data[i][34],
+													ivz_balancecredit:data[i][29],
+													filtername:data[i][28]+'-'+data[i][1],
+													mailtomail:data[i][31]+','+data[i][32]+','+data[i][34],
+													ivz_scheduledstarttime:data[i][8],
+													ivz_scheduledendtime:data[i][9],
+													ivz_taxid:data[i][30]
+												});
+								}
+            }
+        }
+        callback(b);
+      },function(er){alert(er);},null);
+}
+function GetAppointMStatus(ivz_leftterritory,ist,typ,callback){
+	//alert(ivz_leftterritory+':M'+ist+':'+typ);
+  var n = new MobileCRM.FetchXml.Entity('appointment');
+      n.addAttribute('activityid');//0
+      n.addAttribute('ivz_customer');//1
+      n.addAttribute('ivz_territoryid');//2
+      n.addAttribute('ivz_empid');//3
+      n.addAttribute('scheduledstart');//4
+      n.addAttribute('scheduledend');//5
+      n.addAttribute('ivz_saleprospect');//6
+      n.addAttribute('subject');//7
+      n.addAttribute('ivz_scheduledstarttime');//8
+      n.addAttribute('ivz_scheduledendtime');//9
+      n.addAttribute('ivz_visit');//10
+      n.addAttribute('ivz_visitbilling');//11
+      n.addAttribute('ivz_visitclaimorder');//12
+      n.addAttribute('ivz_visitcollection');//13
+      n.addAttribute('ivz_visitopenaccount');//14
+      n.addAttribute('ivz_visitorder');//15
+      n.addAttribute('ivz_visitadjustment');//16
+      n.addAttribute('ivz_visitcompetitors');//17
+      n.addAttribute('ivz_visitmarket');//18
+      n.addAttribute('ivz_visitpostpect');//19
+      n.addAttribute('ivz_visitproductrecall');//20
+      n.addAttribute('ivz_visitactivities');//21
+      n.addAttribute('ivz_visitsuggest');//22
+      n.addAttribute('ivz_planningstatus');//23
+      n.addAttribute('ivz_employeeposition');//24
+			n.orderBy("scheduledstart", false);
+      n.filter = new MobileCRM.FetchXml.Filter();
+      n.filter.where('ivz_territoryid','eq',ivz_leftterritory);
+    var m = n.addLink('account','accountid','ivz_customer','outer');
+        m.addAttribute('ivz_addressprovince');//25
+        m.addAttribute('ivz_addressdistrict');//26
+        m.addAttribute('territoryid');//27
+        m.addAttribute('accountnumber');//28
+        m.addAttribute('ivz_balancecredit');//29
+				m.addAttribute('ivz_taxid');//txtid//30
+    var o = m.addLink('territory','territoryid','territoryid','outer');
+        o.addAttribute('ivz_emailcontact');//31
+        o.addAttribute('ivz_leadermail');//32
+        o.addAttribute('territoryid');//33
+        o.addAttribute('ivz_ccmail');//34
+    var fetch = new MobileCRM.FetchXml.Fetch(n,1000000,1);
+      fetch.execute('array',function(data){
+				//alert(data[0][24]+'::::'+data[0][23]);
+        var b = [];
+        for(var i in data){
+              if(data[i][23] == ist){
+								if(data[i][24] == 1 || data[i][24] == 2 || data[i][24] == 3){
 									b.push({
 													activityid:data[i][0],
 													ivz_customer:data[i][1],
@@ -1029,6 +1216,7 @@ function GetAccount(ivz_leftterritory,stype,page,callback){
 						a.addAttribute('ivz_satatusempid');//21
 						a.addAttribute('creditlimit');//22
 						a.addAttribute('ivz_integrationid');//23
+						a.addAttribute('address1_line1');//24
 						a.orderBy("createdon", false);
         var filter = new MobileCRM.FetchXml.Filter();
       		  filter.where('territoryid','eq',ivz_leftterritory);
@@ -1070,7 +1258,8 @@ function GetAccount(ivz_leftterritory,stype,page,callback){
 												CtoNum(data[i][20])),
 											statusempid:data[i][21],
 											ivz_balancecredit:data[i][22],
-											ivz_integrationid:data[i][23]
+											ivz_integrationid:data[i][23],
+											address1_line:data[i][24]
       							});
       					}
       					callback(b);
@@ -1237,7 +1426,7 @@ function GetCustomerAddres(byid,callback){
 	  var filter = new MobileCRM.FetchXml.Filter();
 	      filter.where('parentid','eq',byid);
 	      n.filter = filter;
-		var fetch = new MobileCRM.FetchXml.Fetch(n);
+		var fetch = new MobileCRM.FetchXml.Fetch(n,100000,1);
 			fetch.execute('array',function(data){
 	      var b = [];
 	      for(var i in data){
@@ -1310,7 +1499,76 @@ function GetCustomerAddresById(byid,callback){
 	}
 }
 /*--------------------- Get Product -----------------------*/
-
+function GetProductListId(id,tatol,page,callback){
+		var n = new MobileCRM.FetchXml.Entity('product');
+				n.addAttribute('productid');//0
+				n.addAttribute('name');//1
+				n.addAttribute('productnumber');//2
+				n.addAttribute('price');//3
+				n.addAttribute('defaultuomid');//4
+				n.addAttribute('pricelevelid');//5
+				n.addAttribute('createdon');//6
+		    n.addAttribute('ivz_stockstatus');//7//real
+		    //n.addAttribute('ivz_statustock');//7//test
+				n.addAttribute('defaultuomscheduleid');//8
+		var filter = new MobileCRM.FetchXml.Filter();
+				filter.where('productid','eq',id);
+				n.filter = filter;
+		var fetch = new MobileCRM.FetchXml.Fetch(n,parseInt(tatol),parseInt(page));
+			fetch.execute('array',function(data){
+				var b = [];
+				for(var i in data){
+					b.push({
+						productid:data[i][0],
+						name:data[i][1],
+						productnumber:data[i][2],
+						price:data[i][3],
+						uomid:data[i][4],
+						pricelevelid:data[i][5],
+						createdon:data[i][6],
+				    stockstatus:data[i][7],
+						defaultuomscheduleid:data[i][8],
+						filtername:data[i][2]+','+data[i][1]
+					});
+				}
+				callback(b);
+			},function(er){
+				/////////////////////
+				var n = new MobileCRM.FetchXml.Entity('product');
+						n.addAttribute('productid');//0
+						n.addAttribute('name');//1
+						n.addAttribute('productnumber');//2
+						n.addAttribute('price');//3
+						n.addAttribute('defaultuomid');//4
+						n.addAttribute('pricelevelid');//5
+						n.addAttribute('createdon');//6
+				  //  n.addAttribute('ivz_stockstatus');//7//real
+				    n.addAttribute('ivz_statustock');//7//test
+						//n.addAttribute('defaultuomscheduleid');//8
+			  var filter = new MobileCRM.FetchXml.Filter();
+					  filter.where('productid','eq',id);
+					  n.filter = filter;
+				var fetch = new MobileCRM.FetchXml.Fetch(n,parseInt(tatol),parseInt(page));
+					fetch.execute('array',function(data){
+						var b = [];
+						for(var i in data){
+							b.push({
+								productid:data[i][0],
+								name:data[i][1],
+								productnumber:data[i][2],
+								price:data[i][3],
+								uomid:data[i][4],
+								pricelevelid:data[i][5],
+								createdon:data[i][6],
+						    stockstatus:data[i][7],
+								defaultuomscheduleid:data[i][8],
+								filtername:data[i][2]+','+data[i][1]
+							});
+						}
+						callback(b);
+					},null,null);
+			},null);
+}
 function GetProductList(tatol,page,callback){
 		var n = new MobileCRM.FetchXml.Entity('product');
 				n.addAttribute('productid');//0
@@ -1730,6 +1988,70 @@ function GetDetailOrder(idorder,callback){
   		// 	callback(b);
       // }
 		},function(er){alert("ERROR4035:"+er);},null);
+}
+function getSalesOrderId(cusid,callback){
+	try {
+		var n = new MobileCRM.FetchXml.Entity('salesorder');
+				n.addAttribute('salesorderid');//0
+				n.addAttribute('customerid');//1
+				n.addAttribute('name');//2
+				n.addAttribute('transactioncurrencyid');//3
+				n.addAttribute('requestdeliveryby');//4
+				n.addAttribute('pricelevelid');//5
+				n.addAttribute('shippingmethodcode');//6
+				n.addAttribute('paymenttermscode');//7
+				n.addAttribute('ivz_province');//8
+				n.addAttribute('ivz_district');//9
+				n.addAttribute('ivz_territory');//10
+				n.addAttribute('ivz_balancecredit');//11
+				n.addAttribute('totalamount');//12
+				n.addAttribute('ivz_empid');//13
+				n.addAttribute('statuscode');//14
+				n.addAttribute('ivz_statussales');//15
+				n.addAttribute('description');//16
+				n.addAttribute('ivz_ordernumber');//17
+				n.addAttribute('ordernumber');//18
+				n.addAttribute('createdon');//19
+				n.orderBy("createdon", false);
+		var a = n.addLink('account','accountid','customerid','outer');
+			  a.addAttribute('territoryid');//20
+		var filter = new MobileCRM.FetchXml.Filter();
+				filter.where('customerid','eq',cusid);
+				n.filter = filter;
+		var fetch = new MobileCRM.FetchXml.Fetch(n,10000,1);
+				fetch.execute('array',function(data){
+					var b = [];
+					if(data.length > 0){
+            for(var i in data){
+  						b.push({
+  							salesorderid:data[i][0],
+  							customerid:data[i][1],
+  							name:data[i][2],
+  							transactioncurrencyid:data[i][3],
+  							requestdeliveryby:data[i][4],
+  							pricelevelid:data[i][5],
+  							shippingmethodcode:data[i][6],
+  							paymenttermscode:data[i][7],
+  							ivz_province:data[i][8],
+  							ivz_district:data[i][9],
+  							ivz_territory:data[i][20],
+  							ivz_balancecredit:data[i][11],
+  							totalamount:data[i][12],
+  							ivz_empid:data[i][13],
+  							statuscode:returnorder(data[i][14]),
+  							ivz_statussales:data[i][15],
+  							description:data[i][16],
+  							ivz_ordernumber:data[i][17],
+  							ordernumber:data[i][18],
+  							createdon:new Date(data[i][19])
+  						});
+  					}
+          }
+					callback(b);
+				},function(er){alert(er);},null);
+	} catch (e) {
+		alert('module salesorder 64 '+e);
+	}
 }
 // function GetDetailOrder(idorder,callback){
 // 	alert('idorder:'+idorder);
@@ -2316,11 +2638,12 @@ function getSituation(terid,callback){
 	var a = new MobileCRM.FetchXml.Entity('ivz_market_situation');
 			a.addAttribute('ivz_market_situationid');//0
 			a.addAttribute('ivz_name');//1
-			a.addAttribute('ivz_customernumber');//2
+			a.addAttribute('ivz_territoryid');//2
 			a.addAttribute('ivz_weekly');//3
 			a.addAttribute('ivz_month');//4
 			a.addAttribute('ivz_remarkcomment');//5
 			a.addAttribute('ivz_docannote');//6
+			a.addAttribute('createdon');//7
 	var filter = new MobileCRM.FetchXml.Filter();
 			filter.where('ivz_territoryid','eq',terid);
 			a.filter = filter;
@@ -2332,11 +2655,12 @@ function getSituation(terid,callback){
 					b.push({
 							ivz_market_situationid:data[i][0],
 							ivz_name:data[i][1],
-							ivz_customernumber:data[i][2],
+							territory:data[i][2],
 							ivz_weekly:data[i][3],
 							ivz_month:data[i][4],
 							ivz_remarkcomment:data[i][5],
-							docannote:(data[i][6]).toLowerCase()
+							docannote:(data[i][6]).toLowerCase(),
+							createdon:data[i][7]
 					});
 				}
 				callback(b);
@@ -2408,7 +2732,392 @@ function diffDays(d1, d2){
 	var ndays;
     var tv1 = d1.valueOf();
     var tv2 = d2.valueOf();
-	ndays = (tv2 - tv1) / 1000 / 86400;
+	  ndays = (tv1 - tv2) / 1000 / 86400;
     ndays = Math.round(ndays - 0.5);
     return ndays;
+}
+function getMonth(expression){
+  switch (expression) {
+    case 'A':
+          return 1;
+    break;
+    case 'B':
+          return 2;
+    break;
+    case 'C':
+          return 3;
+    break;
+    case 'D':
+          return 4;
+    break;
+    case 'E':
+          return 5;
+    break;
+    case 'F':
+          return 6;
+    break;
+    case 'G':
+          return 7;
+    break;
+    case 'H':
+          return 8;
+    break;
+    case 'I':
+          return 9;
+    break;
+    case 'K':
+          return 10;
+    break;
+    case 'L':
+          return 11;
+    break;
+    case 'M':
+          return 12;
+    break;
+  }
+}
+function getDateOfWeek(weekNumber){
+    return (weekNumber-1)*7;
+}
+function chkChok(txt){
+	var us = (txt).toUpperCase();
+  var d = new Date();
+  var to_y = (d.getFullYear()).toString();
+  var week = us.slice(2,4)
+	var sFirst = isNaN(us.slice(1,2));
+  if(sFirst === true){
+    var m = getMonth(us.slice(1,2));
+    var w = us.slice(2,4);
+    var y = parseInt(to_y.slice(0,3)+us.slice(0,1));
+    var t = parseInt(to_y);
+    var nn = new Date((m+'/'+w+'/'+y).toString());
+    var mm = new Date(m+'/'+w+'/'+(parseInt(to_y.slice(0,3) - 1).toString()+us.slice(0,1)));
+    //console.log('type oil');
+    if(y > t){
+      return mm.getMonth()+'/'+mm.getDate()+'/'+mm.getFullYear();
+    }else{
+      return nn.getMonth()+'/'+nn.getDate()+'/'+nn.getFullYear();
+    }
+  }else{
+    var y = parseInt(to_y.slice(0,3)+us.slice(1,2));
+    var t = parseInt(to_y);
+    //console.log('type gas');
+    if(y > t){
+      var t_y = (parseInt(to_y.slice(0,3)) - 1).toString()+us.slice(1,2);
+      var u = getDateOfWeek(week);
+      var n = new Date((parseInt(to_y.slice(0,3)) - 1).toString()+us.slice(1,2), 0, 1+u);
+      var g = (parseInt(n.getMonth()) + 1)+'/'+n.getDate()+'/'+n.getFullYear();
+      return g;
+    }else{
+      var u = getDateOfWeek(week);
+      var n = new Date(to_y.slice(0,3)+us.slice(1,2), 0, 1+u);
+      var g = (parseInt(n.getMonth()) + 1)+'/'+n.getDate()+'/'+n.getFullYear();
+      return g;
+    }
+  }
+};
+
+function getClaimOption(callback){
+	try {
+		var a = new MobileCRM.FetchXml.Entity('ivz_groupclaim');
+				a.addAttribute('ivz_groupclaimid');//0
+				a.addAttribute('ivz_name');//1
+				a.addAttribute('ivz_status_used');//2
+				a.addAttribute('ivz_stddtg');//3
+				a.addAttribute('ivz_ecoline');//4
+				a.addAttribute('ivz_topline');//5
+				a.addAttribute('ivz_bomtype');//7
+		var fetch = new MobileCRM.FetchXml.Fetch(a);
+				fetch.execute('array',function(data){
+					var b = [];
+					for(var i in data){
+						b.push({
+							id:data[i][0],
+							name:data[i][1],
+							status_used:data[i][2],
+							stddtg:data[i][3],
+							ecoline:data[i][4],
+							topline:data[i][5],
+							autoline:data[i][6],
+							bomtype:data[i][7],
+							avator:"img/avatar-6.png"
+						});
+					}
+					callback(b);
+				},alerterror,null);
+	} catch (err) {
+		alerterror('err 2590 '+err);
+	}
+}
+function getClaimpart(txt,callback){
+	try {
+		var a = new MobileCRM.FetchXml.Entity('ivz_yssbom');
+				a.addAttribute('ivz_yssbomid');//0
+				a.addAttribute('ivz_name');//1
+				a.addAttribute('ivz_partname');//2
+		var filter = new MobileCRM.FetchXml.Filter();
+				filter.where('ivz_name','like','%'+txt+'%');
+				a.filter = filter;
+		var fetch = new MobileCRM.FetchXml.Fetch(a,1000000,1);
+				fetch.execute('array',function(data){
+					var b = [];
+					for(var i in data){
+						b.push({
+							id:data[i][0],
+							name:data[i][1],
+							partname:data[i][2],
+							filtername:data[i][1]+','+data[i][2],
+							avator:"img/avatar-6.png"
+						});
+					}
+					callback(b);
+				},alerterror,null);
+	} catch (err) {
+		alerterror('err 2590 '+err);
+	}
+}
+var checkclaim = function(id,callback){
+	var a = new MobileCRM.FetchXml.Entity('ivz_claimorder');
+			a.addAttribute("ivz_claimorderid");//0
+			a.addAttribute("ivz_claimorder");//1
+			a.addAttribute("ivz_name");//2
+			a.addAttribute("ivz_customernumber");//3
+			a.filter = new MobileCRM.FetchXml.Filter();
+			a.filter.where('ivz_customernumber','eq',id);
+	var fetch = new MobileCRM.FetchXml.Fetch(a);
+			fetch.execute('array',function(data){
+						callback(data);
+					},alerterror,null);
+}
+var returntrue = function(txt){
+	var t = parseInt(txt);
+	if(t === 917970000){
+		return  0;
+	}else{
+		return 1;
+	}
+}
+
+function getClaimOrderList(terid,status,callback){
+	try {
+	  var a = new MobileCRM.FetchXml.Entity('ivz_claimorder');
+				a.addAttribute("ivz_claimorderid");//0
+				a.addAttribute("ivz_claimorder");//1
+				a.addAttribute("ivz_name");//2
+				a.addAttribute("ivz_customernumber");//3
+				a.addAttribute("ivz_shiptoname");//4
+				a.addAttribute("ivz_shiptostreet1");//5
+				a.addAttribute("ivz_shiptodistrict");//6
+				a.addAttribute("ivz_shiptoprovince");//7
+				a.addAttribute("ivz_itempart");//8
+				a.addAttribute("ivz_shiptozipcode");//9
+				a.addAttribute("ivz_shipby");//10
+				a.addAttribute("ivz_claimreason");//11
+				a.addAttribute("statuscode");//12
+				a.addAttribute("ivz_typeclaim");//13
+				a.addAttribute("ivz_empid");//14
+				a.addAttribute("ivz_itemamount");//15
+				a.addAttribute("createdon");//16
+		 var c = a.addLink('account','accountid','ivz_customernumber','outer');
+		 		 c.addAttribute('territoryid');//17
+				 c.filter = new MobileCRM.FetchXml.Filter();
+				 c.filter.where('territoryid','eq',terid);
+		 var b = a.addLink('ivz_claimorderdetail','ivz_claimorderid','ivz_claimorderid','outer');
+		 		 b.addAttribute("ivz_name");//18
+				 b.addAttribute("ivz_claimorderid");//19
+				 b.addAttribute("ivz_claimproductid");//20
+				 b.addAttribute("ivz_productid");//21
+				 b.addAttribute("ivz_priceperunit");//22
+				 b.addAttribute("ivz_unit");//23
+				 b.addAttribute("ivz_amount");//24
+		 var fetch = new MobileCRM.FetchXml.Fetch(a);
+		 		 fetch.execute('array',function(data){
+					 var b = [];
+					 if(data){
+						 for(var i in data){
+							 if(data[i][2]){
+								 if(data[i][19]){
+									 if(data[i][22]){
+										 if(data[i][12] == status){
+											 b.push({
+												 	claimorderid:data[i][0],
+									 				claimorder:data[i][1],
+									 				name:data[i][2],
+									 				customernumber:data[i][3],
+									 				shiptoname:data[i][4],
+									 				shiptostreet1:data[i][5],
+									 				shiptodistrict:data[i][6],
+									 				shiptoprovince:data[i][7],
+									 				itempart:data[i][8],
+									 				shiptozipcode:data[i][9],
+									 				shipby:data[i][10],
+									 				claimreason:data[i][11],
+									 				statuscode:data[i][12],
+													status:data[i][12],
+									 				typeclaim:data[i][13],
+									 				empid:data[i][14],
+									 				itemamount:data[i][15],
+													territory:data[i][17],
+									 				claimproductid:data[i][18],
+									 				productid:data[i][19],
+									 				priceperunit:data[i][20],
+									 				unit:data[i][21],
+									 				amount:data[i][22],
+													createdon:data[i][16]
+											 });
+										 }
+									 }
+								 }
+								}
+						 }
+					 }
+					 callback(b);
+				 },alerterror,null);
+	} catch (err) {
+		alerterror('fn 2913 '+err);
+	}
+}
+function getClaimOrderDetail(id,status,callback){
+	var x = 'id:'+id+'\n status:'+status;
+	//alert(x);
+	try {
+	  var a = new MobileCRM.FetchXml.Entity('ivz_claimorder');
+				a.addAttribute("ivz_claimorderid");//0
+				a.addAttribute("ivz_claimorder");//1
+				a.addAttribute("ivz_name");//2
+				a.addAttribute("ivz_customernumber");//3
+				a.addAttribute("ivz_shiptoname");//4
+				a.addAttribute("ivz_shiptostreet1");//5
+				a.addAttribute("ivz_shiptodistrict");//6
+				a.addAttribute("ivz_shiptoprovince");//7
+				a.addAttribute("ivz_itempart");//8
+				a.addAttribute("ivz_shiptozipcode");//9
+				a.addAttribute("ivz_shipby");//10
+				a.addAttribute("ivz_claimreason");//11
+				a.addAttribute("statuscode");//12
+				a.addAttribute("ivz_typeclaim");//13
+				a.addAttribute("ivz_empid");//14
+				a.addAttribute("ivz_itemamount");//15
+				a.addAttribute("createdon");//16
+				a.filter = new MobileCRM.FetchXml.Filter();
+				a.filter.where('ivz_claimorderid','eq',id);
+		 var c = a.addLink('account','accountid','ivz_customernumber','outer');
+		 		 c.addAttribute('territoryid');//17
+		 var b = a.addLink('ivz_claimorderdetail','ivz_claimorderid','ivz_claimorderid','outer');
+		 		 b.addAttribute("ivz_name");//18
+				 b.addAttribute("ivz_claimorderid");//19
+				 b.addAttribute("ivz_claimproductid");//20
+				 b.addAttribute("ivz_productid");//21
+				 b.addAttribute("ivz_priceperunit");//22
+				 b.addAttribute("ivz_unit");//23
+				 b.addAttribute("ivz_amount");//24
+		 var fetch = new MobileCRM.FetchXml.Fetch(a);
+		 		 fetch.execute('array',function(data){
+					 var b = [];
+					 if(data){
+						 for(var i in data){
+							 if(data[i][2]){
+								 if(data[i][21]){
+									 if(data[i][22]){
+										 if(data[i][12] == status){
+											 b.push({
+												 	claimorderid:data[i][0],
+									 				claimorder:data[i][1],
+									 				name:data[i][2],
+									 				customernumber:data[i][3],
+									 				shiptoname:data[i][4],
+									 				shiptostreet1:data[i][5],
+									 				shiptodistrict:data[i][6],
+									 				shiptoprovince:data[i][7],
+									 				itempart:data[i][8],
+									 				shiptozipcode:data[i][9],
+									 				shipby:data[i][10],
+									 				claimreason:data[i][11],
+									 				statuscode:data[i][12],
+													status:data[i][12],
+									 				typeclaim:data[i][13],
+									 				empid:data[i][14],
+									 				itemamount:data[i][15],
+													territory:data[i][17],
+									 				claimproductid:data[i][18],
+									 				productid:data[i][21],
+									 				priceperunit:data[i][22],
+									 				unit:data[i][23],
+									 				amount:data[i][24],
+													createdon:data[i][16]
+											 });
+										 }
+									 }
+								 }
+								}
+						 }
+					 }
+					 callback(b);
+				 },alerterror,null);
+	} catch (err) {
+		alerterror('fn 2913 '+err);
+	}
+}
+
+function updatestatus(table,id,stcode,empid,txt,callback){
+	try {
+		var ins = new MobileCRM.DynamicEntity(table,id);
+				ins.properties.statuscode = parseInt(stcode);
+				ins.properties.modifiedon = new Date();
+				ins.properties.ivz_approvedby = empid;
+				ins.properties.ivz_approvaldate = new Date();
+				ins.properties.ivz_remarkcomment = txt;
+				ins.save(function(er){
+					if(er){
+						alert('error fn 3064 '+er);
+					}else{
+						callback(id);
+					}
+				});
+	} catch (err) {
+		alert('error fn 3070 '+err);
+	}
+}
+
+var getPickingDelivery = function(id,callback){
+	var a = new MobileCRM.FetchXml.Entity('ivz_custpackingslipjour');
+			a.addAttribute("ivz_custpackingslipjourid");//0
+			a.addAttribute("ivz_name");//1
+			a.addAttribute("ivz_deliverydate");//2
+			a.addAttribute("ivz_deliveryname");//3
+			a.addAttribute("ivz_diliverytime");//4
+			a.addAttribute("ivz_do_date");//5
+			a.addAttribute("ivz_documentno");//6
+			a.addAttribute("ivz_dostatus");//7
+			a.addAttribute("ivz_integrationid");//8
+			a.addAttribute("ivz_invoiceaccount");//9
+			a.addAttribute("ivz_packingslipid");//10
+			a.addAttribute("ivz_salesid");//11
+			a.addAttribute("ivz_territory");//12
+			a.filter = new MobileCRM.FetchXml.Filter();
+			a.filter.where('ivz_territory','eq',id);
+	var fetch = new MobileCRM.FetchXml.Fetch(a,10000,1);
+			fetch.execute('array',function(data){
+				var b = [];
+				if(data){
+					for(var i in data){
+						b.push({
+							id:data[i][0],
+							name:data[i][1],
+							deliverydate:data[i][2],
+							deliveryname:data[i][3],
+							diliverytime:data[i][4],
+							do_date:data[i][5],
+							documentno:data[i][6],
+							dostatus:data[i][7],
+							integrationid:data[i][8],
+							invoiceaccount:data[i][9],
+							packingslipid:data[i][10],
+							salesid:data[i][11],
+							territory:data[i][12]
+						});
+					}
+				}
+				callback(b);
+			},alerterror,null);
 }

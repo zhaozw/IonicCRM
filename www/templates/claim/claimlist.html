@@ -1,0 +1,45 @@
+<ion-view view-title="ลูกค้าที่ขออนุมัติเปิดใบเคลม">
+  <ion-content>
+    <div>
+      <div class="bar bar-header item-input-inset">
+        <label class="item-input-wrapper">
+          <i class="icon ion-ios-search placeholder-icon"></i>
+          <input type="search" placeholder="Search" data-ng-model="filtertxt">
+        </label>
+        <md-button class="md-raised button-clear md-warn"
+        aria-label="description" md-ripple-size="auto" data-ng-click="filtertxt = ''">&nbsp;ยกเลิก&nbsp;</md-button>
+      </div>
+      <md-list>
+        <!-- ////////////////////// General -->
+        <md-subheader class="md-no-sticky" ng-show="loader">{{loaderlog}}</md-subheader>
+        <md-list-item class="md-3-line" ng-repeat="n in listcliamorder | filter:filtertxt"
+          ng-click="showdetail(n.claimorderid)">
+          <img src="img/d05.png" class="md-avatar" alt="testt" />
+           <div class="md-list-item-text" layout="column">
+             <h3>{{n.claimorder+'-'+n.name}}</h3>
+             <p>รวมยอดเคลม:<span style="color:red;font-weight:bold;">{{n.amount | currency:''}}</span></p>
+             <p>วันที่ร้องขอเปิดใบเคลม:<span style="color:red;font-weight:bold;">{{n.createdon | date:'dd/MM/yyyy'}}</span></p>
+             <p>
+               สถานะ:
+               <span style="color:red;font-weight:bold;" ng-if="n.statuscode === '917970000'">รออนุมัติ</span>
+               <span style="color:green;font-weight:bold;" ng-if="n.statuscode === '917970001'">อนุมัติแล้ว</span>
+             </p>
+           </div>
+           <a class="md-secondary ion-chevron-right text-h1 text-bold error" ng-click="showdetail(n.claimorderid)"></a>
+           <md-divider ng-if="!$last"></md-divider>
+        </md-list-item>
+      </md-list>
+    </div>
+    <br /><br />
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="reback()">
+      <i class="icon ion-chevron-left error"></i>
+      ย้อนกลับ
+    </a>
+    <a class="tab-item" ng-click="loaddata()">
+      <i class="icon ion-ios-reload primary"></i>
+      เรียกข้อมูลใหม่
+    </a>
+  </div>
+</ion-view>
