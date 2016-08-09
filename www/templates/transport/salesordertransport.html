@@ -22,7 +22,11 @@
                 <h3>
                   เลขที่เอกสาร:
                   <span ng-show="n.documentno" class="primary-blue">{{n.documentno}}</span>
-                  <span ng-hide="n.documentno" class="primary-red">ไม่มีเลขที่เอกสาร</span>
+                  <span ng-hide="n.documentno" class="primary-red">ไม่ระบุเลขที่เอกสาร</span>
+                </h3>
+                <h3>
+                  packingslip:
+                  <span class="primary-blue">{{n.packingslipid}}</span>
                 </h3>
                 <p>ลูกค้า:<span class="primary-blue">{{ n.invoiceaccount+'-'+n.deliveryname }}</span>
                   &nbsp;
@@ -33,6 +37,9 @@
                   <b ng-show="n.do_date">
                     วันที่รับสินค้า:<span class="primary">{{n.do_date | date:'dd/MM/yyyy'}}</span>
                   </b> -->
+                </p>
+                <p>ขนส่งโดย:
+                  <span class="primary-red">{{n.deliverby}}</span>
                 </p>
                 <p>สถานะ:
                   <span class="primary-red" ng-if="n.dostatus.length <= 12">{{n.dostatus}}</span>

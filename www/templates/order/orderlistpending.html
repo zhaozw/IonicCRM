@@ -29,11 +29,12 @@
                   <span style="color:#CA6924;font-weight:bold;" ng-if="n.statuscode === 2">Pending || รอดำเนินการ</span>
                   <span style="color:#003171;font-weight:bold;" ng-if="n.statuscode === 3">In Progress || อยู่ในช่วงดำเนินการ</span>
                   <span style="color:#757D75;font-weight:bold;" ng-if="n.statuscode === 4">Submitted || ยืนยันแล้ว</span>
-                  <span style="color:#9D2933;font-weight:bold;" ng-if="n.statuscode === 1">New || รายการซิงค์ไม่สมบูรณ์</span>
+                  <span style="color:#9D2933;font-weight:bold;" ng-if="n.statuscode === 1">New || รายการซิงค์ไม่สมบูรณ์กรุณายืนยันอีกครั้ง</span>
                   <span style="color:#9D2933;font-weight:bold;" ng-if="n.statuscode === 9">Deleted || ลบรายการแล้ว</span>
                   ประเภทการขาย:
                   <span style="color:green;font-weight:bold;" ng-if="n.ivz_statussales === '1'">ขาย 1</span>
                   <span style="color:green;font-weight:bold;" ng-if="n.ivz_statussales === '2'">ขาย 2</span>
+                  <span style="color:green;font-weight:bold;" ng-if="n.ivz_statussales === '3'">ขาย 3</span>
                 </p>
                 <p ng-if="n.description">
                   รายละเอียดเพิ่มเติม:

@@ -9115,9 +9115,89 @@ angular.module('starter.controllers', [])
         $scope.filtertxt = '';
         $ionicHistory.clearHistory();
         $scope.listproduct = [];
+        $scope.reload = function () {
+            $scope.listproduct.length = 0;
+            if ($stateParams.ordertype == 1 || $stateParams.ordertype == 2) {
+              //set show product
+              GetProductList(Setting.requestproduct, 1, function (data) {
+                  var x = 0;
+                  var loopArray = function (arr) {
+                      getPush(x, function () {
+                          x++;
+                          if (x < arr.length) {
+                              loopArray(arr);
+                          } else {
+                              $ionicLoading.hide();
+                          }
+                      });
+                  }
+                  loopArray(data);
+
+                  function getPush(i, callback) {
+                      $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล ' + data[i].filtername);
+                      $scope.listproduct.push({
+                          productid: data[i].productid,
+                          name: data[i].name,
+                          productnumber: data[i].productnumber,
+                          price: data[i].price,
+                          uomid: data[i].uomid.id,
+                          pricelevelid: data[i].pricelevelid.id,
+                          createdon: data[i].createdon,
+                          stockstatus: data[i].stockstatus,
+                          defaultuomscheduleid: data[i].defaultuomscheduleid,
+                          filtername: data[i].filtername
+                      });
+                      setTimeout(function () {
+                          callback();
+                      }, 1);
+                  }
+                  if($scope.$phase){$scope.$apply();}
+              });
+            } else {
+              //set show product
+              getItemChockCaign(function (data) {
+                  var x = 0;
+                  var loopArray = function (arr) {
+                      getPush(x, function () {
+                          x++;
+                          if (x < arr.length) {
+                              loopArray(arr);
+                          } else {
+                              $ionicLoading.hide();
+                          }
+                      });
+                  }
+                  loopArray(data);
+
+                  function getPush(i, callback) {
+                      if(data[i].name){
+                        $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล ' + data[i].filtername);
+                        $scope.listproduct.push({
+                            productid: data[i].productid,
+                            name: data[i].name,
+                            productnumber: data[i].productnumber,
+                            price: data[i].price,
+                            uomid: data[i].uomid.id,
+                            pricelevelid: data[i].pricelevelid.id,
+                            createdon: data[i].createdon,
+                            stockstatus: data[i].stockstatus,
+                            defaultuomscheduleid: data[i].defaultuomscheduleid,
+                            filtername: data[i].filtername
+                        });
+                      }else{
+                        $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล');
+                      }
+                      callback();
+                  }
+                  if($scope.$phase){$scope.$apply();}
+              });
+            }
+
+        }
+        $scope.reload();
         $scope.$on('$ionicView.enter', function () {
             console.log($stateParams.ordertype);
-            if ($stateParams.ordertype == 1 || $stateParams.ordertype == 2) {
+            if ($stateParams.ordertype == 1 || $stateParams.ordertype == 2 || $stateParams.ordertype == 3) {
                 Data.showcart = true;
             } else {
                 Data.showcart = false;
@@ -9152,45 +9232,7 @@ angular.module('starter.controllers', [])
             $scope.filtertxt.length = 0;
         }
         $scope.minplus = 0;
-        $scope.reload = function () {
-            $scope.listproduct.length = 0;
-            //set show product
-            GetProductList(Setting.requestproduct, 1, function (data) {
-                var x = 0;
-                var loopArray = function (arr) {
-                    getPush(x, function () {
-                        x++;
-                        if (x < arr.length) {
-                            loopArray(arr);
-                        } else {
-                            $ionicLoading.hide();
-                        }
-                    });
-                }
-                loopArray(data);
 
-                function getPush(i, callback) {
-                    $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล ' + data[i].filtername);
-                    $scope.listproduct.push({
-                        productid: data[i].productid,
-                        name: data[i].name,
-                        productnumber: data[i].productnumber,
-                        price: data[i].price,
-                        uomid: data[i].uomid.id,
-                        pricelevelid: data[i].pricelevelid.id,
-                        createdon: data[i].createdon,
-                        stockstatus: data[i].stockstatus,
-                        defaultuomscheduleid: data[i].defaultuomscheduleid,
-                        filtername: data[i].filtername
-                    });
-                    setTimeout(function () {
-                        callback();
-                    }, 1);
-                }
-                if($scope.$phase){$scope.$apply();}
-            });
-        }
-        $scope.reload();
         $ionicModal.fromTemplateUrl('templates/comment/productdetail.html', {
             id: 1,
             scope: $scope,
@@ -14004,23 +14046,45 @@ $ionicModal.fromTemplateUrl('templates/modal-1.html', {
           });
         }
         var loopA = function(i,callback){
-            $scope.listtransport.push({
-              face : imagePath,
-              id:data[i].id,
-							name:data[i].name,
-							deliverydate:new Date(data[i].deliverydate),
-							deliveryname:data[i].deliveryname,
-							diliverytime:new Date(data[i].diliverytime),
-							do_date:new Date(data[i].do_date),
-							documentno:data[i].documentno,
-							dostatus:data[i].dostatus,
-							integrationid:data[i].integrationid,
-							invoiceaccount:data[i].invoiceaccount,
-							packingslipid:data[i].packingslipid,
-							salesid:data[i].salesid,
-							territory:data[i].territory,
-              notes:data[i].name
-            });
+            if(data[i].documentno){
+              $scope.listtransport.push({
+                face : imagePath,
+                id:data[i].id,
+  							name:data[i].name,
+  							deliverydate:new Date(data[i].deliverydate),
+  							deliveryname:data[i].deliveryname,
+  							diliverytime:new Date(data[i].diliverytime),
+  							do_date:new Date(data[i].do_date),
+  							documentno:data[i].documentno.toString(),
+  							dostatus:data[i].dostatus,
+  							integrationid:data[i].integrationid,
+  							invoiceaccount:data[i].invoiceaccount,
+  							packingslipid:data[i].packingslipid,
+  							salesid:data[i].salesid,
+  							territory:data[i].territory,
+                notes:data[i].name,
+                deliverby:data[i].deliverby
+              });
+            }else{
+              $scope.listtransport.push({
+                face : imagePath,
+                id:data[i].id,
+  							name:data[i].name,
+  							deliverydate:new Date(data[i].deliverydate),
+  							deliveryname:data[i].deliveryname,
+  							diliverytime:new Date(data[i].diliverytime),
+  							do_date:new Date(data[i].do_date),
+  							documentno:data[i].documentno,
+  							dostatus:data[i].dostatus,
+  							integrationid:data[i].integrationid,
+  							invoiceaccount:data[i].invoiceaccount,
+  							packingslipid:data[i].packingslipid,
+  							salesid:data[i].salesid,
+  							territory:data[i].territory,
+                notes:data[i].name,
+                deliverby:data[i].deliverby
+              });
+            }
           callback();
         }
         loopArray(data);
