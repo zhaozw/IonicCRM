@@ -2817,7 +2817,8 @@ function chkChok(txt){
   }
 };
 
-function getClaimOption(callback){
+function getClaimOption(id,callback){
+	//alert('getID:'+id);
 	try {
 		var a = new MobileCRM.FetchXml.Entity('ivz_groupclaim');
 				a.addAttribute('ivz_groupclaimid');//0
@@ -2826,7 +2827,10 @@ function getClaimOption(callback){
 				a.addAttribute('ivz_stddtg');//3
 				a.addAttribute('ivz_ecoline');//4
 				a.addAttribute('ivz_topline');//5
+				a.addAttribute('ivz_autoline');//6
 				a.addAttribute('ivz_bomtype');//7
+				a.filter = new MobileCRM.FetchXml.Filter();
+				a.filter.where('ivz_status_used','eq',id);
 		var fetch = new MobileCRM.FetchXml.Fetch(a);
 				fetch.execute('array',function(data){
 					var b = [];
@@ -2840,6 +2844,35 @@ function getClaimOption(callback){
 							topline:data[i][5],
 							autoline:data[i][6],
 							bomtype:data[i][7],
+							avator:"img/avatar-6.png"
+						});
+					}
+					callback(b);
+				},alerterror,null);
+	} catch (err) {
+		alerterror('err 2590 '+err);
+	}
+}
+function getClaimpartNamne(txt,callback){
+	try {
+		var a = new MobileCRM.FetchXml.Entity('ivz_partname');
+				a.addAttribute('ivz_partnameid');//0
+				a.addAttribute('ivz_name');//1
+				a.addAttribute('ivz_claimoption');//2
+				a.addAttribute('ivz_used');//3
+		var filter = new MobileCRM.FetchXml.Filter();
+				filter.where('ivz_claimoption','eq',txt);
+				a.filter = filter;
+		var fetch = new MobileCRM.FetchXml.Fetch(a,1000000,1);
+				fetch.execute('array',function(data){
+					var b = [];
+					for(var i in data){
+						b.push({
+							id:data[i][0],
+							name:data[i][1],
+							claimoption:data[i][2],
+							partname:data[i][1],
+							used:data[i][3],
 							avator:"img/avatar-6.png"
 						});
 					}
@@ -2882,11 +2915,26 @@ var checkclaim = function(id,callback){
 			a.addAttribute("ivz_claimorder");//1
 			a.addAttribute("ivz_name");//2
 			a.addAttribute("ivz_customernumber");//3
+			a.addAttribute("ivz_typeclaim");//4
 			a.filter = new MobileCRM.FetchXml.Filter();
 			a.filter.where('ivz_customernumber','eq',id);
 	var fetch = new MobileCRM.FetchXml.Fetch(a);
 			fetch.execute('array',function(data){
-						callback(data);
+						var b = [];
+						if(data){
+							for(var i in data){
+								if(data[i][4] == 1){
+									b.push({
+										claimorderid:data[i][0],
+										claimorder:data[i][1],
+										name:data[i][2],
+										customernumber:data[i][3],
+										ivz_typeclaim:data[i][4]
+									});
+								}
+							}
+						}
+						callback(b);
 					},alerterror,null);
 }
 var returntrue = function(txt){
@@ -2918,10 +2966,9 @@ function getClaimOrderList(terid,status,callback){
 				a.addAttribute("ivz_empid");//14
 				a.addAttribute("ivz_itemamount");//15
 				a.addAttribute("createdon");//16
-		 var c = a.addLink('account','accountid','ivz_customernumber','outer');
-		 		 c.addAttribute('territoryid');//17
-				 c.filter = new MobileCRM.FetchXml.Filter();
-				 c.filter.where('territoryid','eq',terid);
+		    a.addAttribute('ivz_territory');//17
+				 a.filter = new MobileCRM.FetchXml.Filter();
+				 a.filter.where('ivz_territory','eq',terid);
 		 var b = a.addLink('ivz_claimorderdetail','ivz_claimorderid','ivz_claimorderid','outer');
 		 		 b.addAttribute("ivz_name");//18
 				 b.addAttribute("ivz_claimorderid");//19

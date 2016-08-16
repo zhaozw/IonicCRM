@@ -4,12 +4,12 @@
     <div>
       <md-radio-group ng-model="user.slRdClaim">
          <md-list>
-          <md-list-item ng-repeat="n in listclaim" ng-if="n.pline">
+          <md-list-item ng-repeat="n in listclaim">
             <h4>
                 {{ n.name}}
             </h4>
             <md-radio-button class="md-secondary" data-ng-value="n.id"
-              ng-click="slRdioOptionClaim(user.slRdClaim,n.pline,n.name)"></md-radio-button>
+              ng-click="slRdioOptionClaim(user.slRdClaim,n.pline,n.name,n.id)"></md-radio-button>
             <md-divider></md-divider>
           </md-list-item>
         </md-list>

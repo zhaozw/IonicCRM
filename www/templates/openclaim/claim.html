@@ -5,8 +5,10 @@
       <div class="col"></div>
       <div class="col col-75">
         <div>
-          <md-checkbox md-no-ink ng-true-value="1" ng-false-value="0" ng-model="user.chkfs" ng-change="expr(user.chkfs)">มีการตอก  F/S</md-checkbox>
-          <br>
+          <!-- <md-checkbox md-no-ink ng-true-value="1" ng-false-value="0" ng-model="user.chkfs" ng-change="expr(user.chkfs)">มีการตอก  F/S</md-checkbox> -->
+          <!-- <md-checkbox md-no-ink ng-true-value="1" ng-false-value="0" ng-model="user.chkfs">มีการตอก  F/S</md-checkbox> -->
+          <span class="error">*สินค้าที่มีการตอก F/S จะไม่มีการรับเคลมทุกกรณี</span>
+          <hr class="divider" />
           <md-input-container md-no-float>
             <label>ระบุรหัสสินค้า</label>
             <input type="text" placeholder="YSS ITEM CODE" name="txtproductnumber" ng-model="user.txtproductnumber"
@@ -27,8 +29,8 @@
           </md-input-container>
           <hr class="divider">
           <md-radio-group ng-model="user.rdUset">
-            <md-radio-button value="0">เคยใช้งานมาแล้ว</md-radio-button>
-            <md-radio-button value="1">ยังไม่เคยใช้งาน</md-radio-button>
+            <md-radio-button value="0">ยังไม่เคยใช้งาน</md-radio-button>
+            <md-radio-button value="1">เคยใช้งานมาแล้ว</md-radio-button>
           </md-radio-group>
         </div>
       </div>
