@@ -5,23 +5,25 @@
       <div class="col"></div>
       <div class="col col-75">
         <div>
-          <!-- <md-checkbox md-no-ink ng-true-value="1" ng-false-value="0" ng-model="user.chkfs" ng-change="expr(user.chkfs)">มีการตอก  F/S</md-checkbox> -->
-          <!-- <md-checkbox md-no-ink ng-true-value="1" ng-false-value="0" ng-model="user.chkfs">มีการตอก  F/S</md-checkbox> -->
           <span class="error">*สินค้าที่มีการตอก F/S จะไม่มีการรับเคลมทุกกรณี</span>
           <hr class="divider" />
-          <md-input-container md-no-float>
-            <label>ระบุรหัสสินค้า</label>
-            <input type="text" placeholder="YSS ITEM CODE" name="txtproductnumber" ng-model="user.txtproductnumber"
-              required md-maxlength="50"  maxlength="50" ng-change="exproduct(user.txtproductnumber)">
-            <span class="error" ng-hide="user.txtproductnumber">*กรุณาระบุรหัสสินค้าด้วย</span>
-          </md-input-container>
-          <md-list ng-cloak ng-show="user.productplace">
-            <md-subheader class="md-no-sticky">เลือกรหัสสินค้า</md-subheader>
-            <md-list-item ng-repeat="n in user.productlist | filter:user.txtproductnumber" ng-click="setexp(n.productnumber,n.productid)">
-              <p> {{ n.filtername }} </p>
-            </md-list-item>
-            <md-divider></md-divider>
-          </md-list>
+          <div class="item-input-inset">
+            <md-input-container md-no-float>
+              <label>ระบุรหัสสินค้า</label>
+              <input type="text" placeholder="YSS ITEM CODE" name="txtproductnumber" ng-model="user.txtproductnumber"
+                required md-maxlength="50"  maxlength="50">
+              <span class="error" ng-hide="user.txtproductnumber">*กรุณาระบุรหัสสินค้าด้วย</span>
+            </md-input-container>
+            <md-button class="md-raised button-clear md-warn"
+            aria-label="description" md-ripple-size="auto" ng-show="user.txtproductnumber" ng-click="exproduct(user.txtproductnumber)">&nbsp;ค้นหา&nbsp;</md-button>
+          </div>
+          <div ng-show="user.productplace">
+            <md-list ng-cloak>
+              <md-list-item ng-repeat="n in user.productlist | filter:user.txtproductnumber" ng-click="setexp(n.productnumber,n.productid)">
+                <p> {{ n.filtername }} </p>
+              </md-list-item>
+            </md-list>
+          </div>
           <md-input-container md-no-float>
             <label>ระบุจำนวนสินค้า</label>
             <input type="text" ng-model="user.txtTatol" required md-maxlength="6"  maxlength="6">

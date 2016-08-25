@@ -1355,6 +1355,66 @@ function GetAccountById(id,stype,callback){
 								});
         		},function(er){alert(er);},null);
 }
+function GetAccountOrderById(id,callback){
+  try {
+		var a = new MobileCRM.FetchXml.Entity('ivz_accountspringtable');
+				a.addAttribute('ivz_accountspringtableid');//0
+				a.addAttribute('ivz_custname');//1
+				a.addAttribute('ivz_custaccount');//2
+				a.addAttribute('ivz_fortuner');//3
+				a.addAttribute('ivz_remainfortuner');//4
+				a.addAttribute('ivz_allnewfortuner');//5
+				a.addAttribute('ivz_remainallnewfortuner');//6
+				a.addAttribute('ivz_pajero');//7
+				a.addAttribute('ivz_remainpajero');//8
+				a.addAttribute('ivz_fortunerfront');//9
+				a.addAttribute('ivz_fortunerrear');//10
+				a.addAttribute('ivz_allnewfortunerfront');//11
+				a.addAttribute('ivz_allnewfortonerrear');//12
+				a.addAttribute('ivz_pajerofront');//13
+				a.addAttribute('ivz_pajerorear');//14
+				a.addAttribute('ivz_allnewpajerofront');//15
+				a.addAttribute('ivz_allnewpajerorear');//16
+				a.addAttribute('ivz_integrationid');//17
+				a.addAttribute('ivz_discount');//18
+				a.addAttribute('ivz_accountname');//19
+				a.orderBy("createdon", false);
+		var filter = new MobileCRM.FetchXml.Filter();
+				filter.where('ivz_accountname','eq',id);
+				a.filter = filter;
+		 var fetch = new MobileCRM.FetchXml.Fetch(a,100000,1);
+				 fetch.execute('array',function(data){
+						var b = [];
+							if(data.length > 0){
+								b.push({
+									accountspringtableid:data[0][0],
+									custname:data[0][1],
+									custaccount:data[0][2],
+									fortuner:data[0][3],
+									remainfortuner:data[0][4],
+									allnewfortuner:data[0][5],
+									remainallnewfortuner:data[0][6],
+									pajero:data[0][7],
+									remainpajero:data[0][8],
+									fortunerfront:data[0][9],
+									fortunerrear:data[0][10],
+									allnewfortunerfront:data[0][11],
+									allnewfortonerrear:data[0][12],
+									pajerofront:data[0][13],
+									pajerorear:data[0][14],
+									allnewpajerofront:data[0][15],
+									allnewpajerorear:data[0][16],
+									integrationid:data[0][17],
+									discount:data[0][18],
+									accountname:data[0][19]
+								});
+							}
+							callback(b);
+				},function(er){alert(er);},null);
+  } catch (e) {
+  	alert('err fn 1413 '+e);
+  }
+}
 function CtoChkDoc(t1,t2,t3,t4,t5,t6){
 	if(t1 === '1' || t1 === 1){
 		if(t5 == 1 && t6 == 1){
@@ -1410,7 +1470,7 @@ function returnaddresscode(idtype){
       break;
   }
 }
-function GetCustomerAddres(byid,callback){
+function GetCustomerAddres(byid,typecode,callback){
 	try {
 		var n = new MobileCRM.FetchXml.Entity('customeraddress');
 		    n.addAttribute('customeraddressid');//0
@@ -1431,19 +1491,37 @@ function GetCustomerAddres(byid,callback){
 	      var b = [];
 	      for(var i in data){
 					if(data[i][7]){
-						b.push({
-		          customeraddressid:data[i][0],
-		    	    addressname:data[i][1],
-		    	    line1:data[i][2],
-		    	    city:data[i][3],
-		    	    stateorprovince:data[i][4],
-		    	    postalcode:data[i][5],
-		          addrscode:data[i][6],
-		    	    addresstypecode:returnaddresscode(data[i][6]),
-		    	    ivz_integrationid:data[i][7],
-		    	    parentid:data[i][8],
-							addresscode:data[i][6]
-		        });
+						if(typecode == 0){
+							b.push({
+								customeraddressid:data[i][0],
+								addressname:data[i][1],
+								line1:data[i][2],
+								city:data[i][3],
+								stateorprovince:data[i][4],
+								postalcode:data[i][5],
+								addrscode:data[i][6],
+								addresstypecode:returnaddresscode(data[i][6]),
+								ivz_integrationid:data[i][7],
+								parentid:data[i][8],
+								addresscode:data[i][6]
+							});
+						}else{
+							if(data[i][6] == typecode){
+								b.push({
+				          customeraddressid:data[i][0],
+				    	    addressname:data[i][1],
+				    	    line1:data[i][2],
+				    	    city:data[i][3],
+				    	    stateorprovince:data[i][4],
+				    	    postalcode:data[i][5],
+				          addrscode:data[i][6],
+				    	    addresstypecode:returnaddresscode(data[i][6]),
+				    	    ivz_integrationid:data[i][7],
+				    	    parentid:data[i][8],
+									addresscode:data[i][6]
+				        });
+							}
+						}
 					}
 	      }
 				callback(b);
@@ -1453,6 +1531,7 @@ function GetCustomerAddres(byid,callback){
 	}
 }
 function GetCustomerAddresById(byid,callback){
+	//alert('byid:'+byid);
 	try {
 		var n = new MobileCRM.FetchXml.Entity('customeraddress');
 		    n.addAttribute('customeraddressid');//0
@@ -1642,7 +1721,7 @@ function GetProductListNameNumber(txtname,txtnumber,tatol,page,callback){
 			n.addAttribute('defaultuomid');//4
 			n.addAttribute('pricelevelid');//5
 			n.addAttribute('createdon');//6
-		    n.addAttribute('ivz_stockstatus');//7//real
+		  n.addAttribute('ivz_stockstatus');//7//real
 		    //n.addAttribute('ivz_statustock');//7//test
 			n.addAttribute('defaultuomscheduleid');//8
 			n.orderBy("createdon", false);
@@ -1682,8 +1761,8 @@ function GetProductListNameNumber(txtname,txtnumber,tatol,page,callback){
 					n.addAttribute('defaultuomid');//4
 					n.addAttribute('pricelevelid');//5
 					n.addAttribute('createdon');//6
-				    //n.addAttribute('ivz_stockstatus');//7//real
-				    n.addAttribute('ivz_statustock');//7//test
+				  //n.addAttribute('ivz_stockstatus');//7//real
+				  n.addAttribute('ivz_statustock');//7//test
 					n.addAttribute('defaultuomscheduleid');//8
 					n.orderBy("createdon", false);
 				var filter1 = new MobileCRM.FetchXml.Filter();
@@ -1988,6 +2067,60 @@ function GetDetailOrder(idorder,callback){
   		// 	callback(b);
       // }
 		},function(er){alert("ERROR4035:"+er);},null);
+}
+var returnMonth = function(i){
+	var id = parseInt(i);
+	if(id == 1){ return 'ม.ค.';}
+	else if(id == 2){ return 'ก.พ.';}
+	else if(id == 3){ return 'มี.ค.';}
+	else if(id == 4){ return 'เม.ย.';}
+	else if(id == 5){ return 'พ.ค.';}
+	else if(id == 6){ return 'มิ.ย.';}
+	else if(id == 7){ return 'ก.ค.';}
+	else if(id == 8){ return 'ส.ค.';}
+	else if(id == 9){ return 'ก.ย.';}
+	else if(id == 10){ return 'ต.ค.';}
+	else if(id == 11){ return 'พ.ย.';}
+	else if(id == 12){ return 'ธ.ค.';}
+}
+function getSalesPerYear(id,callback){
+	try {
+		var n = new MobileCRM.FetchXml.Entity('ivz_salesmonth');
+    		n.addAttribute('ivz_salesmonthid');//0
+    		n.addAttribute('ivz_name');//1
+    		n.addAttribute('ivz_customer');//2
+    		n.addAttribute('ivz_month');//3
+    		n.addAttribute('ivz_year');//4
+    		n.addAttribute('ivz_territory');//5
+    		n.addAttribute('ivz_amount');//6
+    		n.addAttribute('ivz_yssmonth');//7
+    		n.addAttribute('ivz_yssyear');//8
+			var filter = new MobileCRM.FetchXml.Filter();
+					filter.where('ivz_customer','eq',id);
+					n.filter = filter;
+			var fetch = new MobileCRM.FetchXml.Fetch(n,100000,1);
+					fetch.execute('array',function(data){
+						var b = [];
+						if(data.length > 0){
+	            for(var i in data){
+	  						b.push({
+									salesmonthid:data[i][0],
+					    		name:data[i][1],
+					    		customer:data[i][2],
+					    		month:data[i][3],
+					    		year:data[i][4],
+					    		territory:data[i][5],
+					    		amount:data[i][6],
+					    		yssmonth:returnMonth(data[i][7])+' '+data[i][8],
+					    		yssyear:data[i][8]
+	  						});
+	  					}
+	          }
+						callback(b);
+					},function(er){alert(er);},null);
+	} catch (e) {
+		alert('fn 2015 '+e);
+	}
 }
 function getSalesOrderId(cusid,callback){
 	try {
@@ -2711,15 +2844,15 @@ function checktopline(txtproduct){
 									case 'U':
 									case 'X':
 									case 'Z':
-													console.log('TopLine');
-													return 0;
+												console.log('TopLine');
+												return 0;
 										break;
 									case 'C':
 									case 'E':
 									case 'K':
 									case 'O':
-													console.log('ECHO Line');
-													return 1;
+												console.log('ECHO Line');
+												return 1;
 										break;
 									default:
 											console.log('STD.,DTG Line');
@@ -2737,45 +2870,32 @@ function diffDays(d1, d2){
     return ndays;
 }
 function getMonth(expression){
-  switch (expression) {
-    case 'A':
+       if(expression == 'A'){
           return 1;
-    break;
-    case 'B':
+				}else if(expression == 'B'){
           return 2;
-    break;
-    case 'C':
+				}else if(expression == 'C'){
           return 3;
-    break;
-    case 'D':
+				}else if(expression == 'D'){
           return 4;
-    break;
-    case 'E':
+				}else if(expression == 'E'){
           return 5;
-    break;
-    case 'F':
+				}else if(expression == 'F'){
           return 6;
-    break;
-    case 'G':
+				}else if(expression == 'G'){
           return 7;
-    break;
-    case 'H':
+				}else if(expression == 'H'){
           return 8;
-    break;
-    case 'I':
+				}else if(expression == 'I'){
           return 9;
-    break;
-    case 'K':
+				}else if(expression == 'K'){
           return 10;
-    break;
-    case 'L':
+				}else if(expression == 'L'){
           return 11;
-    break;
-    case 'M':
+				}else if(expression == 'M'){
           return 12;
-    break;
-  }
-}
+				}
+			}
 function getDateOfWeek(weekNumber){
     return (weekNumber-1)*7;
 }
@@ -2786,17 +2906,19 @@ function chkChok(txt){
   var week = us.slice(2,4)
 	var sFirst = isNaN(us.slice(1,2));
   if(sFirst === true){
-    var m = getMonth(us.slice(1,2));
+		var str = us.slice(1,2);
+		//alert('str:'+str);
+    var m = getMonth(str.toUpperCase());
     var w = us.slice(2,4);
     var y = parseInt(to_y.slice(0,3)+us.slice(0,1));
     var t = parseInt(to_y);
-    var nn = new Date((m+'/'+w+'/'+y).toString());
-    var mm = new Date(m+'/'+w+'/'+(parseInt(to_y.slice(0,3) - 1).toString()+us.slice(0,1)));
+		//alert('m:'+m+' /w:'+w+'/y:'+y+'--t:'+t+'::nn:'+nn+':::mm:'+mm);
     //console.log('type oil');
     if(y > t){
-      return mm.getMonth()+'/'+mm.getDate()+'/'+mm.getFullYear();
+			var yy = parseInt(to_y.slice(0,3) - 1).toString()+us.slice(0,1);
+      return m+'/'+w+'/'+yy;
     }else{
-      return nn.getMonth()+'/'+nn.getDate()+'/'+nn.getFullYear();
+      return m+'/'+w+'/'+y;
     }
   }else{
     var y = parseInt(to_y.slice(0,3)+us.slice(1,2));
@@ -2860,6 +2982,11 @@ function getClaimpartNamne(txt,callback){
 				a.addAttribute('ivz_name');//1
 				a.addAttribute('ivz_claimoption');//2
 				a.addAttribute('ivz_used');//3
+				a.addAttribute('ivz_typeline');//4
+				a.addAttribute('ivz_autoline');//5
+				a.addAttribute('ivz_stddtg');//6
+				a.addAttribute('ivz_echoline');//7
+				a.addAttribute('ivz_topline');//8
 		var filter = new MobileCRM.FetchXml.Filter();
 				filter.where('ivz_claimoption','eq',txt);
 				a.filter = filter;
@@ -2873,6 +3000,11 @@ function getClaimpartNamne(txt,callback){
 							claimoption:data[i][2],
 							partname:data[i][1],
 							used:data[i][3],
+							typeline:data[i][4],
+							autoline:CtoNum(data[i][5]),
+							stddtg:CtoNum(data[i][6]),
+							echoline:CtoNum(data[i][7]),
+							topline:CtoNum(data[i][8]),
 							avator:"img/avatar-6.png"
 						});
 					}
@@ -2880,6 +3012,166 @@ function getClaimpartNamne(txt,callback){
 				},alerterror,null);
 	} catch (err) {
 		alerterror('err 2590 '+err);
+	}
+}
+function getClaimpartAllTopLine(callback){
+	try {
+		var a = new MobileCRM.FetchXml.Entity('ivz_partname');
+				a.addAttribute('ivz_partnameid');//0
+				a.addAttribute('ivz_name');//1
+				a.addAttribute('ivz_claimoption');//2
+				a.addAttribute('ivz_used');//3
+				a.addAttribute('ivz_typeline');//4
+				a.addAttribute('ivz_autoline');//5
+				a.addAttribute('ivz_stddtg');//6
+				a.addAttribute('ivz_echoline');//7
+				a.addAttribute('ivz_topline');//8
+		var filter = new MobileCRM.FetchXml.Filter();
+				filter.where('ivz_topline','eq',1);
+				a.filter = filter;
+		var fetch = new MobileCRM.FetchXml.Fetch(a,1000000,1);
+				fetch.execute('array',function(data){
+					var b = [];
+					for(var i in data){
+						b.push({
+							id:data[i][0],
+							name:data[i][1],
+							claimoption:data[i][2],
+							partname:data[i][1],
+							used:data[i][3],
+							typeline:data[i][4],
+							autoline:CtoNum(data[i][5]),
+							stddtg:CtoNum(data[i][6]),
+							echoline:CtoNum(data[i][7]),
+							topline:CtoNum(data[i][8]),
+							yssline:0,
+							avator:"img/avatar-6.png"
+						});
+					}
+					callback(b);
+				},alerterror,null);
+	} catch (err) {
+		alerterror('err 2593 '+err);
+	}
+}
+function getClaimpartAllEchoLine(callback){
+	try {
+		var a = new MobileCRM.FetchXml.Entity('ivz_partname');
+				a.addAttribute('ivz_partnameid');//0
+				a.addAttribute('ivz_name');//1
+				a.addAttribute('ivz_claimoption');//2
+				a.addAttribute('ivz_used');//3
+				a.addAttribute('ivz_typeline');//4
+				a.addAttribute('ivz_autoline');//5
+				a.addAttribute('ivz_stddtg');//6
+				a.addAttribute('ivz_echoline');//7
+				a.addAttribute('ivz_topline');//8
+		var filter = new MobileCRM.FetchXml.Filter();
+				filter.where('ivz_echoline','eq',1);
+				a.filter = filter;
+		var fetch = new MobileCRM.FetchXml.Fetch(a,1000000,1);
+				fetch.execute('array',function(data){
+					var b = [];
+					for(var i in data){
+						b.push({
+							id:data[i][0],
+							name:data[i][1],
+							claimoption:data[i][2],
+							partname:data[i][1],
+							used:data[i][3],
+							typeline:data[i][4],
+							autoline:CtoNum(data[i][5]),
+							stddtg:CtoNum(data[i][6]),
+							echoline:CtoNum(data[i][7]),
+							topline:CtoNum(data[i][8]),
+							yssline:1,
+							avator:"img/avatar-6.png"
+						});
+					}
+					callback(b);
+				},alerterror,null);
+	} catch (err) {
+		alerterror('err 2593 '+err);
+	}
+}
+function getClaimpartAllSTD(callback){
+	try {
+		var a = new MobileCRM.FetchXml.Entity('ivz_partname');
+				a.addAttribute('ivz_partnameid');//0
+				a.addAttribute('ivz_name');//1
+				a.addAttribute('ivz_claimoption');//2
+				a.addAttribute('ivz_used');//3
+				a.addAttribute('ivz_typeline');//4
+				a.addAttribute('ivz_autoline');//5
+				a.addAttribute('ivz_stddtg');//6
+				a.addAttribute('ivz_echoline');//7
+				a.addAttribute('ivz_topline');//8
+		var filter = new MobileCRM.FetchXml.Filter();
+				filter.where('ivz_stddtg','eq',1);
+				a.filter = filter;
+		var fetch = new MobileCRM.FetchXml.Fetch(a,1000000,1);
+				fetch.execute('array',function(data){
+					var b = [];
+					for(var i in data){
+						b.push({
+							id:data[i][0],
+							name:data[i][1],
+							claimoption:data[i][2],
+							partname:data[i][1],
+							used:data[i][3],
+							typeline:data[i][4],
+							autoline:CtoNum(data[i][5]),
+							stddtg:CtoNum(data[i][6]),
+							echoline:CtoNum(data[i][7]),
+							topline:CtoNum(data[i][8]),
+							yssline:2,
+							avator:"img/avatar-6.png"
+						});
+					}
+					callback(b);
+				},alerterror,null);
+	} catch (err) {
+		alerterror('err 2593 '+err);
+	}
+}
+function getClaimpartAllAutoLine(callback){
+	try {
+		var a = new MobileCRM.FetchXml.Entity('ivz_partname');
+				a.addAttribute('ivz_partnameid');//0
+				a.addAttribute('ivz_name');//1
+				a.addAttribute('ivz_claimoption');//2
+				a.addAttribute('ivz_used');//3
+				a.addAttribute('ivz_typeline');//4
+				a.addAttribute('ivz_autoline');//5
+				a.addAttribute('ivz_stddtg');//6
+				a.addAttribute('ivz_echoline');//7
+				a.addAttribute('ivz_topline');//8
+		var filter = new MobileCRM.FetchXml.Filter();
+				filter.where('ivz_autoline','eq',1);
+				a.filter = filter;
+		var fetch = new MobileCRM.FetchXml.Fetch(a,1000000,1);
+				fetch.execute('array',function(data){
+					var b = [];
+					for(var i in data){
+						b.push({
+							id:data[i][0],
+							name:data[i][1],
+							claimoption:data[i][2],
+							partname:data[i][1],
+							used:data[i][3],
+							typeline:data[i][4],
+							autoline:CtoNum(data[i][5]),
+							stddtg:CtoNum(data[i][6]),
+							echoline:CtoNum(data[i][7]),
+							topline:CtoNum(data[i][8]),
+							yssline:3,
+							avator:"img/avatar-6.png"
+						});
+					}
+					callback(b);
+				},alerterror,null);
+	} catch (err) {
+		alerterror('err 2593 '+err);
 	}
 }
 function getClaimpart(txt,callback){
@@ -3208,4 +3500,36 @@ function getItemChockCaign(callback){
 				}
 				callback(b);
 			},alerterror,null);
+}
+var uu = function(txt){
+ 	return txt.substring(1,txt.length);
+}
+function getMarkingCode(id,callback){
+	try {
+		var a = new MobileCRM.FetchXml.Entity('ivz_makingcode');
+				a.addAttribute("ivz_makingcodeid");//0
+				a.addAttribute("ivz_name");//1
+				a.addAttribute("ivz_itemid");//2
+				a.addAttribute("ivz_datemarking");//3
+				a.orderBy("ivz_datemarking", false);
+				a.filter = new MobileCRM.FetchXml.Filter();
+				a.filter.where('ivz_itemid','like','%'+id+'%');
+		var fetch = new MobileCRM.FetchXml.Fetch(a,100000,1);
+				fetch.execute('array',function(data){
+					var b = [];
+					if(data){
+						for(var i in data){
+							b.push({
+								makingcodeid:data[i][0],
+								name:'Y'+uu(data[i][1]),
+								itemid:data[i][2],
+								datemarking:data[i][3],
+							});
+						}
+					}
+					callback(b);
+				},alerterror,null);
+	} catch (e) {
+		alert('fn 3489 '+e);
+	}
 }

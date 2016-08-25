@@ -215,6 +215,7 @@ md-progress-linear.md-default-theme .md-bar, md-progress-linear .md-bar {
 
 #login fieldset input {
   border-radius: 3px;
+  box-shadow: 0 2px 4px 0 rgba(1,1,1,0.5);
 }
 
 #login fieldset input[type="text"], #login fieldset input[type="password"] {
@@ -223,7 +224,7 @@ md-progress-linear.md-default-theme .md-bar, md-progress-linear .md-bar {
     padding: 4px 10px;
     width: 100%;
     height: 60px;
-    font-size: 15px;
+    font-size: x-large;
 }
 
 #login fieldset input[type="submit"] {
@@ -233,8 +234,11 @@ md-progress-linear.md-default-theme .md-bar, md-progress-linear .md-bar {
   margin: 0 auto;
   padding: 4px 0;
   width: 100%;
-  height: 50px;
-  font-size: 25px;
+  height: 60px;
+  transform: rotate(0deg);
+}
+#login fieldset input[type="submit"]:active{
+  transform: rotate(90deg);
 }
 
 #login fieldset input[type="submit"]:hover {
@@ -887,4 +891,46 @@ abbr    {
 }
 .ng-hide-remove {
     -webkit-animation: fadeInLeftBig 0.4s;
+}
+.item-input-inset{
+
+}
+.imgborder{
+  border-radius: 3px;
+  box-shadow: 0 2px 4px 0 rgba(1,1,1,0.5);
+}
+.loader {
+  border: 16px solid rgba(245, 243, 243, 0.03);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  -webkit-animation: spin 1s linear infinite;
+  animation: spin 1s linear infinite;
+  -webkit-transition:border-top 1s infinite;
+  transition:border-top 1s infinite;
+}
+@-webkit-keyframes spin {
+  0% { transform: rotate(0deg);border-top: 16px solid #19B5FE;}
+  100% { transform: rotate(360deg);border-top: 16px solid #9D2933;}
+}
+@keyframes spin {
+  0% { transform: rotate(0deg);border-top: 16px solid #19B5FE;}
+  100% { transform: rotate(360deg);border-top: 16px solid #9D2933;}
+}
+.row-center{
+  text-align: center;
+}
+.card-list{
+  display:block;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.5);
+}
+.card-select {
+  position: fixed;
+  display: block;
+  background-color: rgb(250,250,250);
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.5);
+  top: 80px;
+  right: 15%;
+  font-size: medium;
+  font-weight: bolder;
 }

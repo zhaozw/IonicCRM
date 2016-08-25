@@ -6,7 +6,7 @@
         <div>
           <md-list>
             <md-list-item class="md-3-line" ng-repeat="n in listorderdetail"
-            ng-click="opendetail(n.productid,n.productname,n.priceperunit,n.tatol,n.quality)">
+            ng-click="opendetail(n.productid,n.productname,n.priceperunit,n.tatol,n.quality)" ng-hide="ordertype == 4">
               <div class="md-list-item-text">
                 <h3>{{n.productname}}</h3>
                 <h4>
@@ -22,6 +22,22 @@
               <md-button class="md-secondary" ng-click="removeitem(n.salesorderdetail)" ng-if="item.typehide.length == 4">
                 <i class="icon ion-close-round error text-h1"></i>
               </md-button>
+              <md-divider></md-divider>
+            </md-list-item>
+            <!-- order 4 -->
+            <md-list-item class="md-3-line" ng-repeat="n in listorderdetail" ng-show="ordertype == 4">
+              <div class="md-list-item-text">
+                <h3>{{n.productname}}</h3>
+                <h4>
+                  ราคา/หน่วย:&nbsp;
+                  <span class="error" style="font-weight:bold;">{{n.priceperunit |currency:''}}</span>
+                  &nbsp;บาท
+                </h4>
+                <p>
+                  สินค้า:&nbsp;<span class="error" style="font-weight:bold;">{{n.quality}}</span>&nbsp;
+                  ยอดรวม:&nbsp;<span class="error" style="font-weight:bold;">{{n.tatol | currency:''}}</span>&nbsp;บาท
+                </p>
+              </div>
               <md-divider></md-divider>
             </md-list-item>
           </md-list>

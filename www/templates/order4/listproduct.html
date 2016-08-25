@@ -1,0 +1,60 @@
+<ion-view view-title="รายการสินค้า">
+  <ion-content>
+    <div>
+      <!-- list Product -->
+      <md-list>
+        <md-list-item class="md-3-line" ng-repeat="n in listproduct">
+          <img src="img/ionic.png" class="md-avatar" alt="testt" />
+           <div class="md-list-item-text" layout="column">
+             <h5>{{n.filtername}}</h5>
+             <h5>{{n.price | currency:''}}</h5>
+             <p  ng-if="n.stockstatus.length > 9" style="color:red;font-weight:bold;">{{n.stockstatus}}</p>
+             <p  ng-if="n.stockstatus.length < 9" style="color:green;font-weight:bold;">{{n.stockstatus}}</p>
+           </div>
+           <md-divider ng-if="!$last"></md-divider>
+       </md-list-item>
+      </md-list>
+      <!-- end list Product -->
+      <hr class="divider"/>
+      <div class="row row-center">
+        <div class="col">
+          <h3>จำนวนสินค้าที่กำหนด &nbsp;<b class="text-danger">{{ctrl.itemtatol}}</b>&nbsp; ชุด</h3>
+        </div>
+        <div class="col">
+          <h3>คงเหลือ &nbsp;<b class="text-danger">{{ctrl.resulttatol}}</b>&nbsp; ชุด</h3>
+        </div>
+      </div>
+      <div class="row row-center">
+        <div class="col">
+            <h4>เลือกจำนวนสินค้า</h4>
+        </div>
+        <div class="col">
+            <md-input-container>
+              <md-select ng-model="ctrl.usergettatol">
+                <md-option><em>0</em></md-option>
+                <md-option ng-repeat="n in ctrl.tatol" ng-value="n.tatol">
+                  {{n.tatol}}
+                </md-option>
+              </md-select>
+            </md-input-container>
+        </div>
+        <div class="col">
+            <h4>ชุด</h4>
+        </div>
+      </div>
+    </div>
+    <br /><br />
+    <br /><br />
+    <br /><br />
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" myclick="reloaddefualt()">
+      <i class="icon ion-ios-reload primary"></i>
+      เรียกข้อมูลใหม่
+    </a>
+    <a class="tab-item" myclick="additem()">
+      <i class="icon ion-plus success"></i>
+      เพิ่มสินค้า
+    </a>
+  </div>
+</ion-view>

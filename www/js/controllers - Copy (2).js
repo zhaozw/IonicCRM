@@ -56,3 +56,7 @@ $scope.showLoadingComplete = function(txt) {
  $scope.InAnnoteAttract = function(table,id,base64String,title,objid,callback)
  var text = "เรียน  Sup./Sales Manger, รบกวนดำเนินการอนุมัติ" + title+"เขตการขาย " + data[0].name+txt + "ให้ด้วยครับ  ขอบคุณครับ  (อีเมลฉบับนี้ส่งอัตโนมัติจากระบบ CRM)";
  if($scope.$phase){$scope.$apply();}
+
+ {
+   $state.go('app.playlists',{},{reload:true});//go to home
+ }

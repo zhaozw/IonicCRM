@@ -9,9 +9,9 @@
             <p ng-hide="chk.check"><span class="error">ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง</span></p>
             <p ng-hide="chk.checknull"><span class="error">กรุณากรอกข้อมูลให้ครบด้วย</span></p>
             <p><label for="email">ชื่อผู้ใช้งาน</label></p>
-            <p><input class="input" type="text" id="email" placeholder="ชื่อผู้ใช้งาน" ng-model="user.txtname"></p>
+            <p><input class="input" type="text" id="email" placeholder="User Name" ng-model="user.txtname"></p>
             <p><label for="password">รหัสผ่าน</label></p>
-            <p><input class="input" type="password" id="password" placeholder="รหัสผ่าน" ng-model="user.pwdname"></p>
+            <p><input class="input" type="password" id="password" placeholder="Password" ng-model="user.pwdname"></p>
             <p><input class="input" type="submit" value="เข้าสู่ระบบ" ng-click="checkuser(user.txtname,user.pwdname)"></p>
           </fieldset>
         </form>

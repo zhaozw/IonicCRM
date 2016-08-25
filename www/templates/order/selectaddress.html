@@ -1,4 +1,4 @@
-<ion-view view-title="ข้อมูลที่อยู่">
+<ion-view view-title="กรุณาเลือกที่อยู่ในการส่งของ">
   <ion-content>
     <div>
       <div class="bar bar-header item-input-inset">
@@ -14,7 +14,7 @@
           <div class="col">
             <md-radio-group ng-model="group.accountid">
               <md-list>
-                <md-list-item class="md-3-line" ng-repeat="n in listaddressaccount" ng-if="n.ivz_integrationid != ''">
+                <md-list-item class="md-3-line" ng-repeat="n in listorderaddress" ng-if="n.ivz_integrationid != ''">
                   <img src="img/d05.png" class="md-avatar" alt="testt" />
                    <div class="md-list-item-text" layout="column">
                       <h3>{{n.addressname}}</h3>
@@ -27,7 +27,7 @@
                       <!-- <p>{{n.ivz_integrationid}}</p> -->
                       <p>ประเภทที่อยู่:<span style="color:blue;">{{n.addresstypecode}}</span></p>
                    </div>
-                  <a class="md-secondary ion-edit text-h1 text-bold error" ng-click="goaddress(n.customeraddressid)"></a>
+                  <a class="md-secondary ion-chevron-right text-h1 text-bold error" ng-click="orderaddress(n.ivz_integrationid)"></a>
                    <md-divider ng-if="!$last"></md-divider>
                  </md-list-item>
               </md-list>
@@ -40,14 +40,6 @@
     <a class="tab-item" ng-click="reloaddata()">
       <i class="icon ion-ios-reload primary"></i>
       เรียกข้อมูลใหม่
-    </a>
-    <a class="tab-item" ng-click="cAdjustment()">
-      <i class="icon ion-checkmark-circled primary"></i>
-      เพิ่มที่อยู่
-    </a>
-    <a class="tab-item" ng-click="reback()">
-      <i class="icon ion-android-cancel error"></i>
-      ยกเลิก
     </a>
   </div>
 </ion-view>

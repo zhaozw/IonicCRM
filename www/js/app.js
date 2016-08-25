@@ -262,7 +262,8 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     tersupselect:'',
     selfshare:[],
     doccomputiter:[],
-    idrpoductclaim:''
+    idrpoductclaim:'',
+    listitem:[]
   }
 })
 .factory('Darray',function(){
@@ -309,9 +310,15 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     user:[]
   }
 })
+.factory('DataOrderSpec',function(){
+  return {
+    order:[]
+  }
+})
 .factory('DataOrder',function(){
   return {
     order:[],
+    account:[],
     tatol:0,
     matcher:0
   }
@@ -331,7 +338,11 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
              {id: 6,name: "อาทิตย์"}],
     orderoption:[{id:0,orderlink:1,ordername:"ขาย 1",avator:"img/ionic.png"},
                  {id:1,orderlink:2,ordername:"ขาย 2",avator:"img/ionic.png"},
-                 {id:2,orderlink:3,ordername:"ขาย 3",avator:"img/ionic.png"}]
+                 {id:2,orderlink:3,ordername:"ขาย 3",avator:"img/ionic.png"}],
+    orderoptionspec:[{id:0,orderlink:1,ordername:"ขาย 1",avator:"img/ionic.png"},
+                 {id:1,orderlink:2,ordername:"ขาย 2",avator:"img/ionic.png"},
+                 {id:2,orderlink:3,ordername:"ขาย 3",avator:"img/ionic.png"},
+                 {id:3,orderlink:4,ordername:"ขาย 4",avator:"img/ionic.png"}]
   }
 })
 .factory('Dtest',function(){
@@ -859,8 +870,17 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
 })
 ///////////////////// End ///////////////////////////////
 ///////////////////// Order ////////////////////////
+.state('app.selectaddressorder', {
+  url:'/selectaddressorder/:accountid/:mastertype',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/order/selectaddress.html',
+      controller:'OrderAddressCtrl'
+    }
+  }
+})
 .state('app.order', {
-  url:'/order/:accountid/:mastertype',
+  url:'/order/:accountid/:mastertype/:addressid',
   views: {
     'menuContent': {
       templateUrl: 'templates/order/option.html',
@@ -869,7 +889,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.productlist', {
-  url:'/productlist/:accountid/:mastertype/:ordertype/:getguid',
+  url:'/productlist/:accountid/:mastertype/:ordertype/:getguid/:addressid',
   views: {
     'menuContent': {
       templateUrl: 'templates/productlist/productlist.html',
@@ -1356,7 +1376,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.openclaimserial', {
-  url: '/openclaimserial/:gettype/:accountid/:itemamount/:productclaim/:rduset',
+  url: '/openclaimserial/:gettype/:accountid/:itemamount/:productclaim/:productname/:rduset',
   views: {
     'menuContent': {
       templateUrl: 'templates/openclaim/claimserial.html',
@@ -1427,9 +1447,36 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     }
   }
 })
+.state('app.listfilter', {
+  url: '/listfilter',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/exmpid.html',
+      controller: 'ExamplCtrl'
+    }
+  }
+})
+.state('app.neworder', {
+  url: '/neworder/:accountid/:mastertype/:ordertype/:getguid/:addressid',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/order4/option.html',
+      controller: 'NewOrderCtrl'
+    }
+  }
+})
+.state('app.orderitem', {
+  url: '/orderitem/:accountid/:mastertype/:ordertype/:getguid/:addressid/:itemid',
+  views: {
+    'menuContent': {
+      templateUrl: 'templates/order4/listproduct.html',
+      controller: 'OrderItemCtrl'
+    }
+  }
+})
 //end claim
 ;
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/playlists');
-  //$urlRouterProvider.otherwise('/app/productrecall');
+  //$urlRouterProvider.otherwise('/app/neworder/////');
 });

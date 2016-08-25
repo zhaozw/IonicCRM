@@ -10,12 +10,12 @@
   <ion-content>
       <div class="list">
         <label class="item item-input">
-          <span class="input-label">ชื่อผู้ใช้</span>
-          <input type="text" ng-model="loginData.username">
+          <span class="input-label">User Name</span>
+          <input type="text" ng-model="loginData.username" placeholder="user name">
         </label>
         <label class="item item-input">
-          <span class="input-label">รหัสผ่าน</span>
-          <input type="password" ng-model="loginData.password">
+          <span class="input-label">Password</span>
+          <input type="password" ng-model="loginData.password" placeholder="password">
         </label>
         <label class="item">
           <button class="button button-block button-positive" type="submit" ng-click="doLogin()">เข้าสู่ระบบ</button>

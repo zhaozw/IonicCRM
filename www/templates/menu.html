@@ -6,7 +6,8 @@
       <ion-nav-buttons side="left">
         <button class="button button-icon button-clear" menu-toggle="left">เมนู</button>
       </ion-nav-buttons>
-      <ion-nav-buttons side="right" ng-show="Data.showcart">
+      <ion-nav-buttons side="right">
+        <!-- <button class="button button-icon icon ion-search warn" ng-click="confirmsearch()"></button> -->
         <button class="button button-icon icon ion-ios-cart warn" ng-click="confirmordercart()" ng-show="Data.showcart"></button>
       </ion-nav-buttons>
     </ion-nav-bar>
@@ -86,6 +87,9 @@
         </ion-item>
         <ion-item menu-close  class="success" ng-hide="Data.logonstatus" ng-click="clicklogout()">
           <i class="ion-power"></i>&nbsp;ออกจากระบบ
+        </ion-item>
+        <ion-item menu-close  class="success" ui-sref="app.listfilter">
+          <i class="ion-power"></i>&nbsp;exlist
         </ion-item>
       </ion-list>
     </ion-content>

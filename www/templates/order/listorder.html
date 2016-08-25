@@ -15,7 +15,7 @@
                   ยอดรวม:<span class="error">{{n.tatol | currency:''}}</span>
                 </p>
               </div>
-              <md-button class="md-secondary" ng-click="removeitem($index)">
+              <md-button class="md-secondary" ng-click="removeitem($index)" ng-hide="ordertypehide == 4">
                 <i class="icon ion-close-round error text-h1"></i>
               </md-button>
               <md-divider></md-divider>

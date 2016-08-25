@@ -4,7 +4,7 @@
     <div>
       <md-radio-group ng-model="user.slRdClaim">
          <md-list>
-          <md-list-item ng-repeat="n in listclaim">
+          <md-list-item ng-repeat="n in listclaim" ng-if="n.pline">
             <h4>
                 {{ n.name}}
             </h4>
