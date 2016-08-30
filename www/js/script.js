@@ -1378,6 +1378,15 @@ function GetAccountOrderById(id,callback){
 				a.addAttribute('ivz_integrationid');//17
 				a.addAttribute('ivz_discount');//18
 				a.addAttribute('ivz_accountname');//19
+				a.addAttribute('ivz_resultfortuner');//20
+				a.addAttribute('ivz_resultallnewfortuner');//21
+				a.addAttribute('ivz_resultpajero');//22
+				a.addAttribute('ivz_onhandfortuner');//23
+				a.addAttribute('ivz_onhandallnewfortuner');//24
+				a.addAttribute('ivz_onhandpajero');//25
+				a.addAttribute('ivz_newonhandfortuner');//26
+				a.addAttribute('ivz_newonhandallnewfortuner');//27
+				a.addAttribute('ivz_newonhandpajero');//28
 				a.orderBy("createdon", false);
 		var filter = new MobileCRM.FetchXml.Filter();
 				filter.where('ivz_accountname','eq',id);
@@ -1406,7 +1415,16 @@ function GetAccountOrderById(id,callback){
 									allnewpajerorear:data[0][16],
 									integrationid:data[0][17],
 									discount:data[0][18],
-									accountname:data[0][19]
+									accountname:data[0][19],
+									resultfortuner:data[0][20],
+									resultallnewfortuner:data[0][21],
+									resultpajero:data[0][22],
+									onhandfortuner:data[0][23],
+									onhandallnewfortuner:data[0][24],
+									onhandpajero:data[0][25],
+									newonhandfortuner:data[0][26],
+									newonhandallnewfortuner:data[0][27],
+									newonhandpajero:data[0][28]
 								});
 							}
 							callback(b);
@@ -1965,6 +1983,9 @@ function GetOrder(terid,setval,setpage,callback){
 				n.addAttribute('ivz_ordernumber');//17
 				n.addAttribute('ordernumber');//18
 				n.addAttribute('createdon');//19
+				n.addAttribute('ivz_resultfortuner');//20
+				n.addAttribute('ivz_resultallnewfortuner');//21
+				n.addAttribute('ivz_resultpajero');//22
 				n.orderBy("createdon", false);
 		var a = n.addLink('account','accountid','customerid','outer');
 			  a.addAttribute('territoryid');//20
@@ -1996,7 +2017,10 @@ function GetOrder(terid,setval,setpage,callback){
 							description:data[i][16],
 							ivz_ordernumber:data[i][17],
 							ordernumber:data[i][18],
-							createdon:data[i][19]
+							createdon:data[i][19],
+							resultfortuner:data[i][20],
+							resulallnewfortuner:data[i][21],
+							resultpajero:data[i][22]
 						});
 					}
 					callback(b);
@@ -2145,6 +2169,9 @@ function getSalesOrderId(cusid,callback){
 				n.addAttribute('ivz_ordernumber');//17
 				n.addAttribute('ordernumber');//18
 				n.addAttribute('createdon');//19
+				n.addAttribute('ivz_resultfortuner');//20
+				n.addAttribute('ivz_resultallnewfortuner');//21
+				n.addAttribute('ivz_resultpajero');//22
 				n.orderBy("createdon", false);
 		var a = n.addLink('account','accountid','customerid','outer');
 			  a.addAttribute('territoryid');//20
@@ -2176,7 +2203,81 @@ function getSalesOrderId(cusid,callback){
   							description:data[i][16],
   							ivz_ordernumber:data[i][17],
   							ordernumber:data[i][18],
-  							createdon:new Date(data[i][19])
+  							createdon:new Date(data[i][19]),
+								resultfortuner:data[i][20],
+								resultallnewfortuner:data[i][21],
+								resultpajero:data[i][22]
+  						});
+  					}
+          }
+					callback(b);
+				},function(er){alert(er);},null);
+	} catch (e) {
+		alert('module salesorder 64 '+e);
+	}
+}
+
+function getSalesOrderById(orderid,callback){
+	try {
+		var n = new MobileCRM.FetchXml.Entity('salesorder');
+				n.addAttribute('salesorderid');//0
+				n.addAttribute('customerid');//1
+				n.addAttribute('name');//2
+				n.addAttribute('transactioncurrencyid');//3
+				n.addAttribute('requestdeliveryby');//4
+				n.addAttribute('pricelevelid');//5
+				n.addAttribute('shippingmethodcode');//6
+				n.addAttribute('paymenttermscode');//7
+				n.addAttribute('ivz_province');//8
+				n.addAttribute('ivz_district');//9
+				n.addAttribute('ivz_territory');//10
+				n.addAttribute('ivz_balancecredit');//11
+				n.addAttribute('totalamount');//12
+				n.addAttribute('ivz_empid');//13
+				n.addAttribute('statuscode');//14
+				n.addAttribute('ivz_statussales');//15
+				n.addAttribute('description');//16
+				n.addAttribute('ivz_ordernumber');//17
+				n.addAttribute('ordernumber');//18
+				n.addAttribute('createdon');//19
+				n.addAttribute('ivz_resultfortuner');//20
+				n.addAttribute('ivz_resultallnewfortuner');//21
+				n.addAttribute('ivz_resultpajero');//22
+				n.orderBy("createdon", false);
+		var a = n.addLink('account','accountid','customerid','outer');
+			  a.addAttribute('territoryid');//20
+		var filter = new MobileCRM.FetchXml.Filter();
+				filter.where('salesorderid','eq',orderid);
+				n.filter = filter;
+		var fetch = new MobileCRM.FetchXml.Fetch(n,10000,1);
+				fetch.execute('array',function(data){
+					var b = [];
+					if(data.length > 0){
+            for(var i in data){
+  						b.push({
+  							salesorderid:data[i][0],
+  							customerid:data[i][1],
+  							name:data[i][2],
+  							transactioncurrencyid:data[i][3],
+  							requestdeliveryby:data[i][4],
+  							pricelevelid:data[i][5],
+  							shippingmethodcode:data[i][6],
+  							paymenttermscode:data[i][7],
+  							ivz_province:data[i][8],
+  							ivz_district:data[i][9],
+  							ivz_territory:data[i][20],
+  							ivz_balancecredit:data[i][11],
+  							totalamount:data[i][12],
+  							ivz_empid:data[i][13],
+  							statuscode:returnorder(data[i][14]),
+  							ivz_statussales:data[i][15],
+  							description:data[i][16],
+  							ivz_ordernumber:data[i][17],
+  							ordernumber:data[i][18],
+  							createdon:new Date(data[i][19]),
+								resultfortuner:data[i][20],
+								resultallnewfortuner:data[i][21],
+								resultpajero:data[i][22]
   						});
   					}
           }
@@ -3000,7 +3101,7 @@ function getClaimpartNamne(txt,callback){
 							claimoption:data[i][2],
 							partname:data[i][1],
 							used:data[i][3],
-							typeline:data[i][4],
+							typeline:parseInt(data[i][4]),
 							autoline:CtoNum(data[i][5]),
 							stddtg:CtoNum(data[i][6]),
 							echoline:CtoNum(data[i][7]),
@@ -3039,7 +3140,7 @@ function getClaimpartAllTopLine(callback){
 							claimoption:data[i][2],
 							partname:data[i][1],
 							used:data[i][3],
-							typeline:data[i][4],
+							typeline:parseInt(data[i][4]),
 							autoline:CtoNum(data[i][5]),
 							stddtg:CtoNum(data[i][6]),
 							echoline:CtoNum(data[i][7]),
@@ -3079,7 +3180,7 @@ function getClaimpartAllEchoLine(callback){
 							claimoption:data[i][2],
 							partname:data[i][1],
 							used:data[i][3],
-							typeline:data[i][4],
+							typeline:parseInt(data[i][4]),
 							autoline:CtoNum(data[i][5]),
 							stddtg:CtoNum(data[i][6]),
 							echoline:CtoNum(data[i][7]),
@@ -3119,7 +3220,7 @@ function getClaimpartAllSTD(callback){
 							claimoption:data[i][2],
 							partname:data[i][1],
 							used:data[i][3],
-							typeline:data[i][4],
+							typeline:parseInt(data[i][4]),
 							autoline:CtoNum(data[i][5]),
 							stddtg:CtoNum(data[i][6]),
 							echoline:CtoNum(data[i][7]),
@@ -3159,7 +3260,7 @@ function getClaimpartAllAutoLine(callback){
 							claimoption:data[i][2],
 							partname:data[i][1],
 							used:data[i][3],
-							typeline:data[i][4],
+							typeline:parseInt(data[i][4]),
 							autoline:CtoNum(data[i][5]),
 							stddtg:CtoNum(data[i][6]),
 							echoline:CtoNum(data[i][7]),
@@ -3512,19 +3613,21 @@ function getMarkingCode(id,callback){
 				a.addAttribute("ivz_itemid");//2
 				a.addAttribute("ivz_datemarking");//3
 				a.orderBy("ivz_datemarking", false);
-				a.filter = new MobileCRM.FetchXml.Filter();
-				a.filter.where('ivz_itemid','like','%'+id+'%');
-		var fetch = new MobileCRM.FetchXml.Fetch(a,100000,1);
+		 var filter = new MobileCRM.FetchXml.Filter();
+				filter.where('ivz_itemid','like','%MG506-330%');
+				a.filter = filter;
+		var fetch = new MobileCRM.FetchXml.Fetch(a,100000000,1);
 				fetch.execute('array',function(data){
+					//alert(data.length);
 					var b = [];
 					if(data){
 						for(var i in data){
-							b.push({
-								makingcodeid:data[i][0],
-								name:'Y'+uu(data[i][1]),
-								itemid:data[i][2],
-								datemarking:data[i][3],
-							});
+								b.push({
+									makingcodeid:data[i][0],
+									name:'Y'+uu(data[i][1]),
+									itemid:data[i][2],
+									datemarking:data[i][3]
+								});
 						}
 					}
 					callback(b);

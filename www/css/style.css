@@ -192,6 +192,7 @@ md-progress-linear.md-default-theme .md-bar, md-progress-linear .md-bar {
     font-size: 28px;
     padding: 20px 26px;
     font-weight: bold;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.5);
 }
 
 #login h2 span[class*="fontawesome-"] {
@@ -202,6 +203,7 @@ md-progress-linear.md-default-theme .md-bar, md-progress-linear .md-bar {
   background: #fff;
   border-radius: 0 0 20px 20px;
   padding: 20px 26px;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.5);
 }
 
 #login fieldset p {
@@ -236,6 +238,7 @@ md-progress-linear.md-default-theme .md-bar, md-progress-linear .md-bar {
   width: 100%;
   height: 60px;
   transform: rotate(0deg);
+  font-size: xx-large;
 }
 #login fieldset input[type="submit"]:active{
   transform: rotate(90deg);
@@ -899,15 +902,22 @@ abbr    {
   border-radius: 3px;
   box-shadow: 0 2px 4px 0 rgba(1,1,1,0.5);
 }
+
 .loader {
-  border: 16px solid rgba(245, 243, 243, 0.03);
+  border: 16px solid rgba(245, 243, 243, 0.03) !important;
   border-radius: 50%;
   width: 50px;
   height: 50px;
   -webkit-animation: spin 1s linear infinite;
   animation: spin 1s linear infinite;
-  -webkit-transition:border-top 1s infinite;
-  transition:border-top 1s infinite;
+  -webkit-transition: border-top 1s infinite;
+  transition: border-top 1s infinite;
+  background-color: rgba(0,0,0,0.19) !important;
+}
+.loading-container>.loading>.loader {
+    text-align: center;
+    text-overflow: ellipsis;
+    font-size: 15px;
 }
 @-webkit-keyframes spin {
   0% { transform: rotate(0deg);border-top: 16px solid #19B5FE;}
@@ -933,4 +943,152 @@ abbr    {
   right: 15%;
   font-size: medium;
   font-weight: bolder;
+}
+.loaderomplate {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: block;
+      margin: auto;
+      width: 250px;
+      height: 300px;
+      background-color: white;
+      box-shadow: 0 2px 4px 0 rgba(0,0,0,0.5);
+  }
+.fa-75{
+ font-size: 100px;
+}
+.fa-success{
+text-shadow: 2px 2px 1px rgba(0,0,0,0.5);
+color:#26A65B;
+}
+.fa-warn{
+text-shadow: 2px 2px 1px rgba(0,0,0,0.5);
+color:#F9690E;
+}
+.fa-error{
+text-shadow: 2px 2px 1px rgba(0,0,0,0.5);
+color:#CF000F;
+}
+.fa-info{
+text-shadow: 2px 2px 1px rgba(0,0,0,0.5);
+color:#757D75;
+}
+.fa-primary{
+text-shadow: 2px 2px 1px rgba(0,0,0,0.5);
+color:#22A7F0;
+}
+
+.div-center{
+ text-align: center;
+}
+.div-center>h2{
+ color:black !important;
+ position: relative;
+ top: 20px;
+}
+.hr-clean{
+  border:1px solid rgba(0,0,0,0.2);
+  width: 70%;
+}
+.btn-com-success{
+    position: absolute;
+    bottom: 10px;
+    /* left: 40%; */
+    right: 30%;
+    display: block;
+    background-color: #19B5FE;
+    border: none;
+    height: 50px;
+    width: 80px;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.5);
+    text-shadow: 0 2px 4px rgba(1,1,1,0.7);
+    font-size: large;
+    color: white;
+}
+.btn-com-success:hover{
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+    font-size: large;
+    color: white;
+}
+.btn-com-success:active{
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+    font-size: large;
+    color: white;
+}
+.loaderomplate2 {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: block;
+      margin: auto;
+      width: 400px;
+      height: 300px;
+      background-color: white;
+      box-shadow: 0 2px 4px 0 rgba(0,0,0,0.5);
+  }
+.div-center{
+ text-align: center;
+}
+.div-center>h2{
+ color:black !important;
+ position: relative;
+ top: 20px;
+}
+.hr-clean{
+  border:1px solid rgba(0,0,0,0.2);
+  width: 70%;
+}
+.btn-com-success-y{
+    position: absolute;
+    bottom: 10px;
+    left: 20%;
+    display: block;
+    background-color: #19B5FE;
+    border: none;
+    height: 50px;
+    width: 80px;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.5);
+    text-shadow: 0 2px 4px rgba(1,1,1,0.7);
+    font-size: large;
+    color: white;
+}
+.btn-com-success-y:hover{
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+    font-size: large;
+    color: white;
+}
+.btn-com-success-y:active{
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+    font-size: large;
+    color: white;
+}
+
+.btn-com-error{
+    position: absolute;
+    bottom: 10px;
+    right: 20%;
+    display: block;
+    background-color: #CF000F;
+    border: none;
+    height: 50px;
+    width: 80px;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.5);
+    text-shadow: 0 2px 4px rgba(1,1,1,0.7);
+    font-size: large;
+    color: white;
+}
+.btn-com-error:hover{
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+    font-size: large;
+    color: white;
+}
+.btn-com-error:active{
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+    font-size: large;
+    color: white;
 }

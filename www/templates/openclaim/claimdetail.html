@@ -7,46 +7,50 @@
         <div class="col col-75">
             <span class="primary-blue">{{txt}}</span>
             <hr class="divider"/>
-            <md-input-container md-no-float>
-              <label>ระบุ part ที่ต้องการเปลี่ยน</label>
-              <input type="text" placeholder="YSS PARTNAME" name="txtpartname"
-                ng-model="user.txtpartname" required md-maxlength="50"  maxlength="50">
-              <span class="error" ng-hide="user.txtpartname">*กรุณาระบุ part ด้วย</span>
-            </md-input-container>
-            <md-input-container md-no-float ng-if="listpartname.length > 0">
-              <label>ระบุ part ที่ต้องการเปลี่ยน</label>
-              <md-select ng-model="user.txtpartname">
-                <md-option><em>None</em></md-option>
-                <md-option ng-repeat="n in listpartname | filter:name:user.txtpartname" ng-value="n.name">
-                  {{n.name}}
-                </md-option>
-              </md-select>
-            </md-input-container>
-            <md-input-container md-no-float>
-              <label>ระบุเลขที่ใบเคลม</label>
-              <input type="text" placeholder="CLAIM NUMBER" name="txtclaim" ng-model="user.txtclaim" required md-maxlength="50" maxlength="50">
-              <span class="error" ng-hide="user.txtclaim">*กรุณาระบุเลขที่ใบเคลมด้วย</span>
-            </md-input-container>
-            <hr class="divider">
-            <md-radio-group ng-model="user.rdUserSet">
-              <md-radio-button value="0">ถือสินค้ามาเอง</md-radio-button>
-              <md-radio-button value="1">ส่ง EMS</md-radio-button>
-            </md-radio-group>
-            <hr class="divider">
-              <div class="row">
-                <div class="col">
-                  <md-button class="md-raised md-warn" ng-click="clickfile()">แนบรูปภาพประกอบ</md-button>
-                  <hr class="divider"/>
-                  <canvas id="canvas01" width="578" height="400" ng-hide="true"></canvas>
-                  <div class="row img01 gallery" id="img01"></div>
-                  <br />
-                  <div class="row">
-                    <div class="col">
-                      <span class="error-bold">*กดที่รูปเพื่อลบ</span>
+            <div ng-show="user.rduset == 1">
+              <md-input-container md-no-float ng-show="user.txtpartname">
+                <label>ระบุ part ที่ต้องการเปลี่ยน</label>
+                <input type="text" placeholder="YSS PARTNAME" name="txtpartname"
+                  ng-model="user.txtpartname" required md-maxlength="50"  maxlength="50">
+                <span class="error" ng-hide="user.txtpartname">*กรุณาระบุ part ด้วย</span>
+              </md-input-container>
+              <md-input-container md-no-float ng-hide="user.txtpartname">
+                <label>ระบุ part ที่ต้องการเปลี่ยน</label>
+                <md-select ng-model="user.txtpartname">
+                  <md-option><em>None</em></md-option>
+                  <md-option ng-repeat="n in listpartname | filter:name:user.txtpartname" ng-value="n.name" ng-click="seteoption(n.typeline)">
+                    {{n.name}}
+                  </md-option>
+                </md-select>
+              </md-input-container>
+            </div>
+            <div>
+              <md-input-container md-no-float>
+                <label>ระบุเลขที่ใบเคลม</label>
+                <input type="text" placeholder="CLAIM NUMBER" name="txtclaim" ng-model="user.txtclaim" required md-maxlength="50" maxlength="50">
+                <span class="error" ng-hide="user.txtclaim">*กรุณาระบุเลขที่ใบเคลมด้วย</span>
+              </md-input-container>
+              <hr class="divider">
+              <md-radio-group ng-model="user.rdUserSet">
+                <md-radio-button value="0">ถือสินค้ามาเอง</md-radio-button>
+                <md-radio-button value="1">ส่ง EMS</md-radio-button>
+              </md-radio-group>
+              <hr class="divider">
+                <div class="row">
+                  <div class="col">
+                    <md-button class="md-raised md-warn" ng-click="clickfile()">แนบรูปภาพประกอบ</md-button>
+                    <hr class="divider"/>
+                    <canvas id="canvas01" width="578" height="400" ng-hide="true"></canvas>
+                    <div class="row img01 gallery" id="img01"></div>
+                    <br />
+                    <div class="row">
+                      <div class="col">
+                        <span class="error-bold">*กดที่รูปเพื่อลบ</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+            </div>
               <input type="file" id="filenote" ng-hide="true">
           </div>
         <div class="col"></div>

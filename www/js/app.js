@@ -263,7 +263,15 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     selfshare:[],
     doccomputiter:[],
     idrpoductclaim:'',
-    listitem:[]
+    listitem:[],
+    accountspring:0,
+    spingid:0,
+    onhandpajero:0,
+    onhandfortuner:0,
+    onhandallnewfortuner:0,
+    remainfortuner:0,
+    remainallnewfortuner:0,
+    remainpajero:0
   }
 })
 .factory('Darray',function(){
@@ -320,7 +328,12 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     order:[],
     account:[],
     tatol:0,
-    matcher:0
+    matcher:0,
+    fortuner:0,
+    allnewfortuner:0,
+    pajero:0,
+    allnewpajero:0,
+    resultallnewpajero:0
   }
 })
 .factory('Setting',function(){
@@ -1376,7 +1389,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.openclaimserial', {
-  url: '/openclaimserial/:gettype/:accountid/:itemamount/:productclaim/:productname/:rduset',
+  url: '/openclaimserial/:gettype/:accountid/:itemamount/:productclaim/:productname/:productid/:rduset',
   views: {
     'menuContent': {
       templateUrl: 'templates/openclaim/claimserial.html',

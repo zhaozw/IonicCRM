@@ -5327,7 +5327,8 @@ ion-tabs.tabs-striped.tabs-color-active-dark .tab-item.tab-item-active, ion-tabs
   overflow: hidden;
   min-height: 100%;
   width: 100%;
-  background-color: #fff; }
+  background-color: #fff;
+}
 
 @media (min-width: 680px) {
   .modal {
