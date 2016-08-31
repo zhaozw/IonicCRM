@@ -37,6 +37,20 @@
               <span style="color:red;font-weight:bold;" ng-hide="user.slRemark">กรุณาระบุเหตุผลที่ปิดบัญชีด้วย</span>
             </div>
           </div>
+
+          <hr class="divider" ng-show="user.statustype == 2" />
+          <div class="row" ng-show="user.statustype == 2">
+            <div class="col">
+              <md-input-container>
+                <label><h3>วิธีการชำระเงิน</h3></label>
+                <md-select ng-model="user.paymentype">
+                    <md-option ng-repeat="n in PaymentTermOptions" ng-value="n.val">{{n.name}}</md-option>
+                </md-select>
+              </md-input-container>
+              <span style="color:red;font-weight:bold;" ng-hide="user.slRemark">กรุณาระบุวิธีการชำระเงินด้วย</span>
+            </div>
+          </div>
+
           <br ng-show="user.swCredit" />
           <div class="row" ng-show="user.swCredit">
             <div class="col">

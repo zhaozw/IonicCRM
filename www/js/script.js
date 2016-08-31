@@ -2,7 +2,6 @@
 document.writeln('<script src="lib/ionic/js/ionic.bundle.js"></script>');
 document.writeln('<script src="js/jquery.js"></script>');
 document.writeln('<script src="js/JSBridge.min.js"></script>');
-document.writeln('<script src="js/alasql.min.js"></script>');
 document.writeln('<script src="lib/ionic/js/angular/angular-animate.min.js"></script>');
 document.writeln('<script src="lib/ionic/js/angular/angular-aria.min.js"></script>');
 document.writeln('<script src="lib/ionic/js/angular/angular-messages.min.js"></script>');
@@ -3613,14 +3612,13 @@ function getMarkingCode(id,callback){
 				a.addAttribute("ivz_itemid");//2
 				a.addAttribute("ivz_datemarking");//3
 				a.orderBy("ivz_datemarking", false);
-		 var filter = new MobileCRM.FetchXml.Filter();
-				filter.where('ivz_itemid','like','%MG506-330%');
-				a.filter = filter;
+				a.filter = new MobileCRM.FetchXml.Filter();
+				a.filter.where('ivz_itemid','like',id.trim()+'%');
 		var fetch = new MobileCRM.FetchXml.Fetch(a,100000000,1);
 				fetch.execute('array',function(data){
 					//alert(data.length);
 					var b = [];
-					if(data){
+					if(data.length > 0){
 						for(var i in data){
 								b.push({
 									makingcodeid:data[i][0],
