@@ -2951,10 +2951,12 @@ function checktopline(txtproduct){
 									case 'E':
 									case 'K':
 									case 'O':
-												console.log('ECHO Line');
+												console.log('ECO Line');
 												return 1;
 										break;
-									default:
+									case 'B':
+									case 'D':
+									case 'S':
 											console.log('STD.,DTG Line');
 											return 2;
 								}
@@ -3632,5 +3634,35 @@ function getMarkingCode(id,callback){
 				},alerterror,null);
 	} catch (e) {
 		alert('fn 3489 '+e);
+	}
+}
+
+function getpicclaim(id,callback){
+	try {
+		var a = new MobileCRM.FetchXml.Entity('ivz_claimpic');
+				a.addAttribute("ivz_claimpicid");//0
+				a.addAttribute("ivz_name");//1
+				a.addAttribute("ivz_pathimg");//2
+				a.addAttribute("ivz_cliamtype");//3
+				a.filter = new MobileCRM.FetchXml.Filter();
+				a.filter.where('ivz_cliamtype','eq',id.trim());
+		var fetch = new MobileCRM.FetchXml.Fetch(a,100000000,1);
+				fetch.execute('array',function(data){
+					//alert(data.length);
+					var b = [];
+					if(data.length > 0){
+						for(var i in data){
+								b.push({
+									id:i,
+									name:data[i][1],
+									src:data[i][2],
+									status:1
+								});
+						}
+					}
+					callback(b);
+				},alerterror,null);
+	} catch (e) {
+		alert('error fn 3645 '+e);
 	}
 }

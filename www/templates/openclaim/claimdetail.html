@@ -7,7 +7,7 @@
         <div class="col col-75">
             <span class="primary-blue">{{txt}}</span>
             <hr class="divider"/>
-            <div ng-show="user.getType == 0">
+            <div ng-show="user.getType == 0 || user.getType == 1">
               <md-input-container md-no-float>
                 <label>ระบุ part ที่ต้องการเปลี่ยน</label>
                 <input type="text" placeholder="YSS PARTNAME" name="txtpartname"
@@ -26,15 +26,20 @@
             </div>
             <div>
               <md-input-container md-no-float>
-                <label>ระบุเลขที่ใบเคลม</label>
+                <label>ระบุเลขที่เอกสาร</label>
                 <input type="text" placeholder="CLAIM NUMBER" name="txtclaim" ng-model="user.txtclaim" required md-maxlength="50" maxlength="50">
-                <span class="error" ng-hide="user.txtclaim">*กรุณาระบุเลขที่ใบเคลมด้วย</span>
+                <span class="error" ng-hide="user.txtclaim">*กรุณาระบุเลขที่เอกสารด้วย</span>
               </md-input-container>
               <hr class="divider">
               <md-radio-group ng-model="user.rdUserSet">
                 <md-radio-button value="0">ถือสินค้ามาเอง</md-radio-button>
                 <md-radio-button value="1">ส่ง EMS</md-radio-button>
               </md-radio-group>
+              <md-input-container md-no-float>
+                <label>ระบุอาการที่พบ</label>
+                <input type="text"
+                  ng-model="user.txtpartnamecomment" required md-maxlength="500"  maxlength="500">
+              </md-input-container>
               <hr class="divider">
                 <div class="row">
                   <div class="col">

@@ -9,10 +9,35 @@
               <div class="col">
                 <div class="row">
                   <div class="col">
+                    <md-input-container md-no-float>
+                      <label>ระบุเลขที่เอกสาร</label>
+                      <input type="text" placeholder="CLAIM NUMBER" name="txtclaim" ng-model="user.txtclaim" required md-maxlength="50" maxlength="50">
+                      <span class="error" ng-hide="user.txtclaim">*กรุณาระบุเลขที่เอกสารด้วย</span>
+                    </md-input-container>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
                     <md-input-container>
                       <label>ระบุข้อมูลชื่อลูกค้า</label>
                       <input type="text" ng-model="user.custname">
                     </md-input-container>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <md-input-container>
+                      <label>ระบุสาเหตุที่ส่งซ่อม</label>
+                      <input type="text" ng-model="user.txtmantainance">
+                    </md-input-container>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <md-radio-group ng-model="user.rdUserSet">
+                      <md-radio-button value="0">ถือสินค้ามาเอง</md-radio-button>
+                      <md-radio-button value="1">ส่ง EMS</md-radio-button>
+                    </md-radio-group>
                   </div>
                 </div>
                 <div class="row">
