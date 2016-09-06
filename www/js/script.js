@@ -3452,6 +3452,9 @@ function getClaimOrderDetail(id,status,callback){
 				 b.addAttribute("ivz_priceperunit");//22
 				 b.addAttribute("ivz_unit");//23
 				 b.addAttribute("ivz_amount");//24
+		var d = b.addLink('product','productid','ivz_productid','outer');
+		 		d.addAttribute("name");//25
+				d.addAttribute("productnumber");//26
 		 var fetch = new MobileCRM.FetchXml.Fetch(a);
 		 		 fetch.execute('array',function(data){
 					 var b = [];
@@ -3482,6 +3485,8 @@ function getClaimOrderDetail(id,status,callback){
 													territory:data[i][17],
 									 				claimproductid:data[i][18],
 									 				productid:data[i][21],
+													productname:data[i][25],
+													productnumber:data[i][26],
 									 				priceperunit:data[i][22],
 									 				unit:data[i][23],
 									 				amount:data[i][24],
@@ -3637,15 +3642,53 @@ function getMarkingCode(id,callback){
 	}
 }
 
-function getpicclaim(id,callback){
+function getpicclaim(id,type,callback){
 	try {
 		var a = new MobileCRM.FetchXml.Entity('ivz_claimpic');
 				a.addAttribute("ivz_claimpicid");//0
 				a.addAttribute("ivz_name");//1
 				a.addAttribute("ivz_pathimg");//2
 				a.addAttribute("ivz_cliamtype");//3
+				a.addAttribute("ivz_typeline");//4
+				a.addAttribute("ivz_display");//5
 				a.filter = new MobileCRM.FetchXml.Filter();
 				a.filter.where('ivz_cliamtype','eq',id.trim());
+		var fetch = new MobileCRM.FetchXml.Fetch(a,100000000,1);
+				fetch.execute('array',function(data){
+					//alert(data.length);
+					var b = [];
+					if(data.length > 0){
+						for(var i in data){
+							if(data[i][4] == type){
+								b.push({
+									id:i,
+									name:data[i][1],
+									src:data[i][2],
+									status:CtoNum(data[i][5]),
+									typeline:data[i][4]
+								});
+							}
+						}
+					}
+					callback(b);
+				},alerterror,null);
+	} catch (e) {
+		alert('error fn 3645 '+e);
+	}
+}
+
+function getSpeClaimCredit(id,callback){
+	try {
+		var a = new MobileCRM.FetchXml.Entity('ivz_salelimitclainspecialcredit');
+				a.addAttribute("ivz_salelimitclainspecialcreditid");//0
+				a.addAttribute("ivz_name");//1
+				a.addAttribute("ivz_todate");//2
+				a.addAttribute("ivz_fromdate");//3
+				a.addAttribute("ivz_credit");//4
+				a.addAttribute("ivz_usecredit");//5
+				a.addAttribute("ivz_territory");//6
+				a.filter = new MobileCRM.FetchXml.Filter();
+				a.filter.where('ivz_territory','eq',id.trim());
 		var fetch = new MobileCRM.FetchXml.Fetch(a,100000000,1);
 				fetch.execute('array',function(data){
 					//alert(data.length);
@@ -3655,14 +3698,17 @@ function getpicclaim(id,callback){
 								b.push({
 									id:i,
 									name:data[i][1],
-									src:data[i][2],
-									status:1
+									todate:data[i][2],
+									fromdate:data[i][3],
+									credit:data[i][4],
+									usecredit:data[i][5],
+									territory:data[i][6]
 								});
 						}
 					}
 					callback(b);
 				},alerterror,null);
 	} catch (e) {
-		alert('error fn 3645 '+e);
+		alert('error fn 3712 '+e);
 	}
 }

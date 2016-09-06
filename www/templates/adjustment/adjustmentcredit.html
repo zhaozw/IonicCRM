@@ -23,6 +23,10 @@
                 <h4>แก้ไขข้อมูลเครดิต</h4>
                 <md-switch class="md-secondary md-warn" ng-model="user.swCredit" ng-change="chkSwitchCredit(user.swCredit)"></md-switch>
               </md-list-item>
+              <md-list-item>
+                <h4>เปลี่ยนแปลงแก้ไขเครดิต</h4>
+                <md-switch class="md-secondary md-warn" ng-model="user.swCreditType" ng-change="chkSwitchCreditType(user.swCreditType)"></md-switch>
+              </md-list-item>
             </md-list>
           </div>
           <hr class="divider" />
@@ -38,7 +42,7 @@
             </div>
           </div>
 
-          <hr class="divider" ng-show="user.statustype == 2" />
+          <!-- <hr class="divider" ng-show="user.statustype == 2" />
           <div class="row" ng-show="user.statustype == 2">
             <div class="col">
               <md-input-container>
@@ -49,7 +53,7 @@
               </md-input-container>
               <span style="color:red;font-weight:bold;" ng-hide="user.slRemark">กรุณาระบุวิธีการชำระเงินด้วย</span>
             </div>
-          </div>
+          </div> -->
 
           <br ng-show="user.swCredit" />
           <div class="row" ng-show="user.swCredit">
@@ -64,17 +68,30 @@
               </md-input-container>
             </div>
           </div>
+          <br ng-show="user.swCreditType" />
+          <div class="row" ng-show="user.swCreditType">
+            <div class="col">
+              <md-input-container>
+                <label><h4>เลือกรูปแบบเครดิต</h4></label>
+                <md-select ng-model="user.optionPayment">
+  									<md-option ng-value="opt.val"
+  									ng-repeat="opt in PaymentTermOptions|filter:{name:'SD-'}">
+  									{{ opt.name }}</md-option>
+  							</md-select>
+              </md-input-container>
+            </div>
+          </div>
         </div>
         <div class="col"></div>
       </div>
     </div>
   </ion-content>
   <div class="tabs tabs-icon-top">
-    <a class="tab-item" ng-click="cAdjustmentCancel()">
+    <a class="tab-item" myclick="cAdjustmentCancel()">
       <i class="icon ion-chevron-left error"></i>
       ย้อนกลับ
     </a>
-    <a class="tab-item" ng-click="cAdjustment()">
+    <a class="tab-item" myclick="cAdjustment()">
       <i class="icon ion-checkmark success"></i>
       บันทึกข้อมูล
     </a>

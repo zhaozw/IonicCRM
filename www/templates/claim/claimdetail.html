@@ -20,15 +20,35 @@
         <div class="row">
           <div class="col">
             <h4>
-              ชื่อ Item:
-              <span class="error">{{claim.productid.primaryName}}</span>
+              รหัสสินค้า:
+              <span class="error">{{claim.productname}}</span>
+            </h4>
+          </div>
+          <div class="col">
+            <h4>ชื่อสินค้า:
+              <span class="error">{{claim.productnumber}}</span>
             </h4>
           </div>
         </div>
         <div class="row">
           <div class="col">
-            <h4>ชื่อ Part:
-              <span class="error">{{claim.itempart.primaryName}}</span>
+            <h4>อาการที่พบ:
+              <span class="error">{{claim.claimreason}}</span>
+            </h4>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <h4>ระบบตรวจสอบให้เปลี่ยน:
+              <span class="error" ng-show="claim.itempart">{{claim.itempart}}</span>
+              <span class="error" ng-hide="claim.itempart">เปลี่ยนตัว</span>
+            </h4>
+          </div>
+        </div>
+        <div class="row" ng-show="claim.itempart">
+          <div class="col">
+            <h4>ชื่อ Part ที่ขอเปลี่ยน:
+              <span class="error">{{claim.itempart}}</span>
             </h4>
           </div>
         </div>

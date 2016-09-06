@@ -1483,7 +1483,7 @@ angular.module('starter.controllers', [])
                     ins.properties.ivz_visitbilling = parseInt(CtoNum(data[i].ivz_visitbilling));
                     ins.properties.ivz_visitsuggest = parseInt(CtoNum(data[i].ivz_visitsuggest));
                     ins.properties.ivz_visitactivities = data[i].ivz_visitactivities;
-                    ins.properties.ivz_empid = Data.Empid;
+                    ins.properties.ivz_empid = $cookies.get('ivz_empid');
                     ins.properties.location = Data.latitude, Data.longitude;
                     ins.properties.ivz_latilong = Data.latitude, Data.longitude;
                     ins.properties.ivz_state = new MobileCRM.Reference('ivz_addressprovince', data[i].ivz_addressprovince.id);
@@ -4177,7 +4177,7 @@ angular.module('starter.controllers', [])
                                 ins.properties.ivz_branchdetail = $scope.user.txtbrancher;
                                 ins.properties.ivz_taxbranch = $scope.user.txtbrancher;
                             }
-                            ins.properties.ivz_empid = Data.Empid; ///get cookies
+                            ins.properties.ivz_empid = $cookies.get('ivz_empid'); ///get cookies
                             ins.properties.ivz_satatusempid = parseInt($stateParams.mastertype);
                             ins.properties.territoryid = new MobileCRM.Reference('territory', $stateParams.territoryid); //A02
                             ins.properties.transactioncurrencyid = new MobileCRM.Reference('transactioncurrency', $stateParams.transactioncurrency); //บาท
@@ -4207,7 +4207,7 @@ angular.module('starter.controllers', [])
                                 ins.properties.ivz_branchdetail = $scope.user.txtbrancher;
                                 ins.properties.ivz_taxbranch = $scope.user.txtbrancher;
                             }
-                            ins.properties.ivz_empid = Data.Empid; ///get cookies
+                            ins.properties.ivz_empid = $cookies.get('ivz_empid'); ///get cookies
                             ins.properties.ivz_satatusempid = parseInt($stateParams.mastertype);
                             ins.properties.territoryid = new MobileCRM.Reference('territory', $stateParams.territoryid); //A02
                             ins.properties.transactioncurrencyid = new MobileCRM.Reference('transactioncurrency', $stateParams.transactioncurrency); //บาท
@@ -8958,10 +8958,12 @@ angular.module('starter.controllers', [])
             swCloseAccount: false,
             slRemark: '',
             swCredit: false,
+            swCreditType: false,
             txtCreditOld: '',
             txtCreditNew: 0,
             statustype:0,
-            paymentype:0
+            paymentype:0,
+            optionPayment:''
         }
         $scope.$on("$ionicView.enter", function () {
             GetResionStatus(function (data) {
@@ -8971,6 +8973,7 @@ angular.module('starter.controllers', [])
 
             GetPayMentTerm(function (data) {
                 $scope.PaymentTermOptions = data;
+                if($scope.$phase){$scope.$apply();}
             });
             //8961
 
@@ -8997,12 +9000,17 @@ angular.module('starter.controllers', [])
             }
             $scope.chkSwitchCredit = function (id) {
                 console.log(id);
+                $scope.user.swCreditType = false;
                 $scope.user.swCredit = id;
                 if ($scope.user.swCloseAccount == true) {
                     $scope.user.swCloseAccount = !(id);
                 } else {
                     $scope.user.swCloseAccount = false;
                 }
+            }
+            $scope.chkSwitchCreditType = function (id) {
+                $scope.user.swCredit = false;
+                $scope.user.swCloseAccount = false;
             }
         });
 
@@ -9031,9 +9039,12 @@ angular.module('starter.controllers', [])
                 }
                 ins.properties.ivz_newcredcreditlimitold = parseInt($scope.user.txtCreditOld);
                 ins.properties.ivz_newcredcreditlimitnew = parseInt($scope.user.txtCreditNew);
-            } else {
+            } else if($scope.user.swCloseAccount === true) {
                 ins.properties.ivz_adjcredcloseaccount = retrue($scope.user.swCloseAccount);
                 ins.properties.ivz_adjcredclosereason = parseInt($scope.user.slRemark);
+            }else if($scope.user.swCreditType === true) {
+                ins.properties.ivz_adjpaymterm = retrue($scope.user.swCreditType);
+                ins.properties.ivz_paymtermid = parseInt($scope.user.optionPayment);
             }
             ins.properties.ivz_name = $scope.user.txtname;
             ins.properties.ivz_transdate = new Date();
@@ -9045,7 +9056,7 @@ angular.module('starter.controllers', [])
             ins.properties.ivz_customernumber = new MobileCRM.Reference('account', $stateParams.accountid);
             ins.save(function (er) {
                 if (er) {
-                    alert("ADJUSTMENT4920:" + er);
+                    alert("ADJUSTMENT 4920:" + er);
                 } else {
                     callback();
                 }
@@ -9064,7 +9075,7 @@ angular.module('starter.controllers', [])
 
         $scope.cAdjustment = function () {
             //alert('insert adjustment credit :'+$scope.user.swCloseAccount+':::'+$scope.user.swCredit);
-            if($scope.user.swCloseAccount === false && $scope.user.swCredit === false){
+            if($scope.user.swCloseAccount === false && $scope.user.swCredit === false && $scope.user.swCreditType === false){
               console.log('null data');
             }else{
               if($scope.user.swCloseAccount === true){
@@ -9085,8 +9096,7 @@ angular.module('starter.controllers', [])
                   alert('กรุณาเลือกเหตุผลที่ปิดบัญชีด้วย');
                 }
               }else if($scope.user.swCredit === true){
-                //alert($scope.user.swCredit);
-                $scope.showLoadingProperTimesRegAll();
+                $scope.Load();
                 insertcredit(function () {
                     setTimeout(function () {
                       $scope.sendmailtosup($cookies.get('territoryid'), 'ขออนุมัติเปลี่ยนแปลงข้อมูลเครดิต', 'ร้าน' + $scope.user.txtname, function () {
@@ -9097,6 +9107,23 @@ angular.module('starter.controllers', [])
                       });
                     }, 2000);
                 });
+              }else if($scope.user.swCreditType === true){
+                //alert($scope.user.swCredit);
+                $scope.Load();
+                if($scope.user.optionPayment){
+                  insertcredit(function () {
+                      setTimeout(function () {
+                        $scope.sendmailtosup($cookies.get('territoryid'), 'ขออนุมัติเปลี่ยนแปลงรูปแบบเครดิต', 'ร้าน' + $scope.user.txtname, function () {
+                            $scope.showLoadingComplete('บันทึกข้อมูลเสร็จแล้ว');
+                            $ionicLoading.hide();
+                            setclear();
+                            $scope.reback();
+                        });
+                      }, 2000);
+                  });
+                }else{
+                  alert('กรุณาเลือกรูปแบบเครดิตด้วย');
+                }
               }
             }
         }
@@ -13790,7 +13817,8 @@ angular.module('starter.controllers', [])
     custname:'',
     addressname:'',
     zipname:'',
-    telname:'',
+    telphone:'',
+    otherphone:'',
     provincename:'',
     districtname:'',
     txtmantainance:'',
@@ -13837,7 +13865,8 @@ angular.module('starter.controllers', [])
           $scope.user.custname = data[0].name;
           $scope.user.addressname = data[0].address1_name;
           $scope.user.zipname = data[0].address1_postalcode;
-          $scope.user.telname = data[0].telephone1;
+          $scope.user.telphone = data[0].telephone1;
+          $scope.user.otherphone = data[0].telephone2;
           $scope.user.provincename = data[0].ivz_addressprovince.id;
           $scope.user.districtname = data[0].ivz_addressdistrict.id;
           setTimeout(function(){
@@ -13922,8 +13951,10 @@ angular.module('starter.controllers', [])
           ins.properties.ivz_statusclaim = parseInt(1);
           ins.properties.ivz_typeclaim = parseInt(2);
           ins.properties.ivz_shipby = parseInt($scope.user.rdUserSet);
-          ins.properties.ivz_empid = $cookies.get('empid');
+          ins.properties.ivz_empid = $cookies.get('ivz_empid');
           ins.properties.ivz_itemamount = parseInt($stateParams.itemamount);
+          ins.properties.ivz_phone = $scope.user.telphone;
+          ins.properties.ivz_mobile = $scope.user.otherphone;
           ins.save(function(er){
             if(er){
               alert('claim 13044 '+er);
@@ -13966,6 +13997,7 @@ angular.module('starter.controllers', [])
               }else{
                 ins.properties.ivz_warranty = parseInt(0);
               }
+              ins.properties.ivz_txtid = id;
               ins.save(function(er){
                 if(er){
                   alert('claim 13067 '+er);
@@ -14179,7 +14211,11 @@ angular.module('starter.controllers', [])
   $scope.Load();
   $scope.gallery = [];
   $scope.loaddata = function(){
-    getpicclaim($stateParams.claimid,function(data){
+    var ui = 0;
+    if($stateParams.gettype == 3){
+      ui = 1;
+    }
+    getpicclaim($stateParams.claimid,ui,function(data){
       if(data.length > 0){
         $scope.Load();
         var x = 0;
@@ -14208,6 +14244,9 @@ angular.module('starter.controllers', [])
         }
         loopArray(data);
       }else{
+        setTimeout(function(){
+          $ionicLoading.hide();
+        },3000);
         alert('ไม่พบข้อมูลรูปภาพ');
       }
       if($scope.$phase){
@@ -14364,13 +14403,16 @@ angular.module('starter.controllers', [])
     zipname:'',
     itempartid:'',
     itempart:'',
+    telphone:'',
+    otherphone:'',
     itemamount:$stateParams.itemamount,
     rduset:$stateParams.rduset,
     getType:$stateParams.gettype,
     accountid:$stateParams.accountid,
     optiontype:$stateParams.optiontype,
     shtypeline:false,
-    txtpartnamecomment:$stateParams.claimtxt
+    txtpartnamecomment:$stateParams.claimtxt,
+    empid:$cookies.get('ivz_empid')
   };
   setTimeout(function(){
     $ionicLoading.hide();
@@ -14478,7 +14520,8 @@ angular.module('starter.controllers', [])
           $scope.user.custname = data[0].name;
           $scope.user.addressname = data[0].address1_name;
           $scope.user.zipname = data[0].address1_postalcode;
-          $scope.user.telname = data[0].telephone1;
+          $scope.user.telphone = data[0].telephone1;
+          $scope.user.otherphone = data[0].telephone2;
           $scope.user.provincename = data[0].ivz_addressprovince.id;
           $scope.user.districtname = data[0].ivz_addressdistrict.id;
           $scope.user.territoryid = data[0].territoryid.id;
@@ -14525,6 +14568,7 @@ angular.module('starter.controllers', [])
     $ionicHistory.goBack(-1);
   }
   function insertmaintenace(id,callback){
+    //alert('empid:'+$cookies.get('empid'));
     try {
       var ins = new MobileCRM.DynamicEntity.createNew('ivz_claimorder');
           ins.properties.ivz_claimorderid = id;
@@ -14540,11 +14584,17 @@ angular.module('starter.controllers', [])
           ins.properties.ivz_shiptozipcode = $scope.user.zipname;
           ins.properties.ivz_shipby = parseInt($scope.user.rdUserSet);
           ins.properties.ivz_claimreason = $stateParams.claimtxt;
-          ins.properties.statuscode = parseInt($stateParams.claimstatus);
           ins.properties.ivz_statusclaim = parseInt(1);
+          if($stateParams.specailclaim == 1){
+            ins.properties.statuscode = parseInt(917970000);
+          }else{
+            ins.properties.statuscode = parseInt(917970001);
+          }
           ins.properties.ivz_typeclaim = parseInt($stateParams.specailclaim);
-          ins.properties.ivz_empid = $cookies.get('empid');
+          ins.properties.ivz_empid = $cookies.get('ivz_empid');
           ins.properties.ivz_itemamount = parseInt($stateParams.itemamount);
+          ins.properties.ivz_phone = $scope.user.telphone;
+          ins.properties.ivz_mobile = $scope.user.otherphone;
           ins.save(function(er){
             if(er){
               alert('claim 12835 '+er);
@@ -14641,6 +14691,7 @@ angular.module('starter.controllers', [])
               }else{
                 ins.properties.ivz_warranty = parseInt(0);
               }
+              ins.properties.ivz_txtid = id;
               ins.save(function(er){
                 if(er){
                   alert('claim 13405 '+er);
@@ -14855,8 +14906,11 @@ angular.module('starter.controllers', [])
     empid:'',
     itemamount:'',
     territory:'',
+    territoryid:'',
     claimproductid:'',
     productid:'',
+    productname:'',
+    productnumber:'',
     priceperunit:'',
     unit:'',
     amount:'',
@@ -14875,6 +14929,7 @@ angular.module('starter.controllers', [])
     }
   }
   $scope.loaddata = function(){
+    //alert($stateParams.claimid);
     getClaimOrderDetail($stateParams.claimid,917970000,function(data){
       if(data){
         angular.forEach(data,function(val,i){
@@ -14896,8 +14951,11 @@ angular.module('starter.controllers', [])
           $scope.claim.empid = val.empid;
           $scope.claim.itemamount = val.itemamount;
           $scope.claim.territory = val.territory;
+          $scope.claim.territoryid = val.territory.id;
           $scope.claim.claimproductid = val.claimproductid;
           $scope.claim.productid = val.productid;
+          $scope.claim.productname = val.productname;
+          $scope.claim.productnumber = val.productnumber;
           $scope.claim.priceperunit = val.priceperunit;
           $scope.claim.unit = val.unit;
           $scope.claim.amount = val.amount;
@@ -14959,17 +15017,70 @@ angular.module('starter.controllers', [])
   $scope.$on('$ionicView.enter',function(){
     $scope.loaddata();
   });
+
+  function updatecredit(id,amount){
+    try {
+      var up = new MobileCRM.DynamicEntity('ivz_salelimitclainspecialcredit',id);
+          up.properties.ivz_usecredit = parseInt(amount);
+          up.save(function(er){
+            if(er){
+              alert('error 15000 '+er);
+            }
+          });
+    } catch (e) {
+      alert('error 15000 '+er);
+    }finally{
+      $ionicLoading.hide();
+    }
+  }
+
+  function upclaimstatus(id,callback){
+    try {
+      var up = new MobileCRM.DynamicEntity('ivz_claimorder',id);
+          up.properties.ivz_statusclaim = parseInt(0);
+          up.properties.statuscode = parseInt(917970001);
+          up.save(function(er){
+            if(er){
+              alert('error 15000 '+er);
+            }else{
+              callback();
+            }
+          });
+    } catch (e) {
+      alert('error 15000 '+er);
+    }finally{
+      $ionicLoading.hide();
+    }
+  }
+  var xdmatch = function(i,x){
+    return parseInt(x) - parseInt(i);
+  }
   $scope.confirmapprove = function(id,stcode){
-    //alert($scope.claim.territory.id);
-    $scope.Load();
-    $scope.sendmailtosales($scope.claim.territory.id,'อนุมัติเคลมพิเศษ','อนุมัติเคลมพิเศษร้าน '+$scope.claim.customernumber.primaryName,function(){
-      setTimeout(function () {
-        updatestatus('ivz_claimorder',id,stcode,$cookies.get('empid'),'',function(data){
-          $scope.reback();
-          $ionicLoading.hide();
+    //alert('ter:'+$scope.claim.territoryid);
+    getSpeClaimCredit($scope.claim.territoryid,function(result){
+      if($scope.claim.amount <= result[0].usecredit){
+        $scope.sendmailtosales($scope.claim.territory.id,'อนุมัติเคลมพิเศษ','อนุมัติเคลมพิเศษร้าน '+$scope.claim.customernumber.primaryName,function(){
+          setTimeout(function () {
+            updatestatus('ivz_claimorder',id,stcode,$cookies.get('empid'),'',function(data){
+              $scope.reback();
+              updatecredit(result[0].usecredit.id,xdmatch($scope.claim.amount,result[0].usecredit));
+            });
+          }, 3000);
         });
-      }, 3000);
+      }else{
+        //mail to director
+        upclaimstatus($stateParams.claimid,function(){
+          $scope.sendmailtosup($cookies.get('territoryid'),'อนุมัติเคลมพิเศษ','อนุมัติเคลมพิเศษร้าน '+$scope.claim.customernumber.primaryName, function(){
+            $scope.reback();
+            $ionicLoading.hide();
+          });
+        });
+      }
+      if($scope.$phase){
+        $scope.$apply();
+      }
     });
+    $scope.Load();
   }
   $ionicModal.fromTemplateUrl('templates/comment/commentall.html', {
       id: 1,
