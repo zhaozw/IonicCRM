@@ -485,7 +485,7 @@ function GetResionStatus(callback){
 	  },function(err){MsgBox(er);},null);
 }
 
-var returnmastername = function(id){
+var returngetmastername = function(id,callback){
 	try {
 		var n = new MobileCRM.FetchXml.Entity('ivz_territorymaster');
 				n.addAttribute('ivz_territorymasterid');//0
@@ -496,8 +496,12 @@ var returnmastername = function(id){
         n.filter = filter;
     var fetch = new MobileCRM.FetchXml.Fetch(n);
 		    fetch.execute('array',function(data){
-		//	alert(data.length+'::'+data[0][0]);
-			return data[0][0];
+	      //alert(data.length+'::'+data[0][0]);
+			if(data.length > 0){
+				callback(data);
+			}else{
+				callback(0);
+			}
 		},function(er){alert(er);},null);
 	} catch (err) {
 		alert('error turn 446 '+err);
@@ -3341,6 +3345,7 @@ var returntrue = function(txt){
 }
 
 function getClaimOrderList(terid,status,callback){
+	//alert('terid:'+terid);
 	try {
 	  var a = new MobileCRM.FetchXml.Entity('ivz_claimorder');
 				a.addAttribute("ivz_claimorderid");//0
@@ -3361,8 +3366,8 @@ function getClaimOrderList(terid,status,callback){
 				a.addAttribute("ivz_itemamount");//15
 				a.addAttribute("createdon");//16
 		    a.addAttribute('ivz_territory');//17
-				 a.filter = new MobileCRM.FetchXml.Filter();
-				 a.filter.where('ivz_territory','eq',terid);
+				a.filter = new MobileCRM.FetchXml.Filter();
+				a.filter.where('ivz_territory','eq',terid);
 		 var b = a.addLink('ivz_claimorderdetail','ivz_claimorderid','ivz_claimorderid','outer');
 		 		 b.addAttribute("ivz_name");//18
 				 b.addAttribute("ivz_claimorderid");//19
@@ -3403,7 +3408,7 @@ function getClaimOrderList(terid,status,callback){
 									 				productid:data[i][19],
 									 				priceperunit:data[i][20],
 									 				unit:data[i][21],
-									 				amount:data[i][22],
+									 				amount:data[i][24],
 													createdon:data[i][16]
 											 });
 										 }
@@ -3452,11 +3457,14 @@ function getClaimOrderDetail(id,status,callback){
 				 b.addAttribute("ivz_priceperunit");//22
 				 b.addAttribute("ivz_unit");//23
 				 b.addAttribute("ivz_amount");//24
+				 b.addAttribute("ivz_typepart");//25
+				 b.addAttribute("ivz_partname");//26
 		var d = b.addLink('product','productid','ivz_productid','outer');
-		 		d.addAttribute("name");//25
-				d.addAttribute("productnumber");//26
+		 		d.addAttribute("name");//27
+				d.addAttribute("productnumber");//28
 		 var fetch = new MobileCRM.FetchXml.Fetch(a);
 		 		 fetch.execute('array',function(data){
+					 //alert(data[0][25]);
 					 var b = [];
 					 if(data){
 						 for(var i in data){
@@ -3485,12 +3493,14 @@ function getClaimOrderDetail(id,status,callback){
 													territory:data[i][17],
 									 				claimproductid:data[i][18],
 									 				productid:data[i][21],
-													productname:data[i][25],
-													productnumber:data[i][26],
+													productname:data[i][27],
+													productnumber:data[i][28],
 									 				priceperunit:data[i][22],
 									 				unit:data[i][23],
 									 				amount:data[i][24],
-													createdon:data[i][16]
+													createdon:data[i][16],
+													partname:data[i][25],
+													part:data[i][26]
 											 });
 										 }
 									 }
@@ -3696,7 +3706,7 @@ function getSpeClaimCredit(id,callback){
 					if(data.length > 0){
 						for(var i in data){
 								b.push({
-									id:i,
+									id:data[i][0],
 									name:data[i][1],
 									todate:data[i][2],
 									fromdate:data[i][3],
@@ -3710,5 +3720,80 @@ function getSpeClaimCredit(id,callback){
 				},alerterror,null);
 	} catch (e) {
 		alert('error fn 3712 '+e);
+	}
+}
+
+function getSpeClaimCreditById(id,callback){
+	try {
+		var a = new MobileCRM.FetchXml.Entity('ivz_salelimitclainspecialcredit');
+				a.addAttribute("ivz_salelimitclainspecialcreditid");//0
+				a.addAttribute("ivz_name");//1
+				a.addAttribute("ivz_todate");//2
+				a.addAttribute("ivz_fromdate");//3
+				a.addAttribute("ivz_credit");//4
+				a.addAttribute("ivz_usecredit");//5
+				a.addAttribute("ivz_territory");//6
+				a.filter = new MobileCRM.FetchXml.Filter();
+				a.filter.where('ivz_salelimitclainspecialcreditid','eq',id.trim());
+		var fetch = new MobileCRM.FetchXml.Fetch(a,100000000,1);
+				fetch.execute('array',function(data){
+					//alert(data.length);
+					var b = [];
+					if(data.length > 0){
+						for(var i in data){
+								b.push({
+									id:data[i][0],
+									name:data[i][1],
+									todate:data[i][2],
+									fromdate:data[i][3],
+									credit:data[i][4],
+									usecredit:data[i][5],
+									territory:data[i][6]
+								});
+						}
+					}
+					callback(b);
+				},alerterror,null);
+	} catch (e) {
+		alert('error fn 3712 '+e);
+	}
+}
+
+function getPartItemnumber(id,item,callback){
+	try {
+		var a = new MobileCRM.FetchXml.Entity('ivz_yssitempartchange');
+			  a.addAttribute('ivz_yssitempartchangeid');//0
+				a.addAttribute('ivz_name');//1
+				a.addAttribute('ivz_typepart');//2
+				a.addAttribute('ivz_partitemid');//3
+				a.addAttribute('ivz_partprice');//4
+				a.addAttribute('ivz_unitid');//5
+				a.addAttribute('ivz_partname');//6
+				a.addAttribute('ivz_fgitemid');//7
+				a.filter = new MobileCRM.FetchXml.Filter();
+				a.filter.where('ivz_fgitemid','eq',item.trim());
+				// a.filter.where('ivz_typepart','eq',id.trim());
+		var fetch = new MobileCRM.FetchXml.Fetch(a,100000000,1);
+				fetch.execute('array',function(data){
+					//alert('item part '+id.trim());
+					var b = [];
+					if(data.length > 0){
+						for(var i in data){
+								b.push({
+									id:data[i][0],
+									name:data[i][1],
+									typepart:data[i][2],
+									partitemid:data[i][3],
+									partprice:data[i][4],
+									unitid:data[i][5],
+									partname:data[i][6],
+									fgitemid:data[i][7]
+								});
+						}
+					}
+					callback(b);
+				},alerterror,null);
+	} catch (e) {
+		alert('fn 3752 '+e);
 	}
 }

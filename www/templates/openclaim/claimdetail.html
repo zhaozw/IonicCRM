@@ -7,7 +7,7 @@
         <div class="col col-75">
             <span class="primary-blue">{{txt}}</span>
             <hr class="divider"/>
-            <div ng-show="user.getType == 0 || user.getType == 1">
+            <div ng-show="user.getTypeHide">
               <md-input-container md-no-float>
                 <label>ระบุ part ที่ต้องการเปลี่ยน</label>
                 <input type="text" placeholder="YSS PARTNAME" name="txtpartname"
@@ -18,7 +18,7 @@
                 <label>ระบุ part ที่ต้องการเปลี่ยน</label>
                 <md-select ng-model="user.txtpartname">
                   <md-option><em>None</em></md-option>
-                  <md-option ng-repeat="n in listpartname | filter:name:user.txtpartname" ng-value="n.name" ng-click="seteoption(n.typeline)">
+                  <md-option ng-repeat="n in listpartname | filter:name:user.txtpartname" ng-value="n.name" ng-click="seteoption(n.typeline,n.id)">
                     {{n.name}}
                   </md-option>
                 </md-select>

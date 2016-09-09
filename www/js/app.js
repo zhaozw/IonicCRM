@@ -1389,7 +1389,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.openclaimserial', {
-  url: '/openclaimserial/:gettype/:accountid/:itemamount/:productclaim/:productname/:productid/:rduset/:specailclaim',
+  url: '/openclaimserial/:gettype/:accountid/:itemamount/:productclaim/:productname/:productid/:rduset',
   views: {
     'menuContent': {
       templateUrl: 'templates/openclaim/claimserial.html',
@@ -1398,7 +1398,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.showlistorder', {
-  url: '/showlistorder/:gettype/:accountid/:itemamount/:claimtxt/:productclaim/:claimstatus/:rduset/:claimserial/:specailclaim/:cdateby',
+  url: '/showlistorder/:gettype/:accountid/:itemamount/:claimtxt/:productclaim/:claimstatus/:rduset/:claimserial/:specailclaim/:cdateby/:claimid/:optiontype',
   views: {
     'menuContent': {
       templateUrl: 'templates/openclaim/showlistorder.html',

@@ -21,12 +21,12 @@
           <div class="col">
             <h4>
               รหัสสินค้า:
-              <span class="error">{{claim.productname}}</span>
+              <span class="error">{{claim.productnumber}}</span>
             </h4>
           </div>
           <div class="col">
             <h4>ชื่อสินค้า:
-              <span class="error">{{claim.productnumber}}</span>
+              <span class="error">{{claim.productname}}</span>
             </h4>
           </div>
         </div>
@@ -40,15 +40,15 @@
         <div class="row">
           <div class="col">
             <h4>ระบบตรวจสอบให้เปลี่ยน:
-              <span class="error" ng-show="claim.itempart">{{claim.itempart}}</span>
-              <span class="error" ng-hide="claim.itempart">เปลี่ยนตัว</span>
+              <span class="error" ng-if="claim.partname == 0">เปลี่ยนตัว</span>
+              <span class="error" ng-if="claim.partname == 1">เปลี่ยนชิ้นส่วน</span>
             </h4>
           </div>
         </div>
-        <div class="row" ng-show="claim.itempart">
+        <div class="row" ng-show="claim.partname == 1">
           <div class="col">
             <h4>ชื่อ Part ที่ขอเปลี่ยน:
-              <span class="error">{{claim.itempart}}</span>
+              <span class="error">{{claim.part}}</span>
             </h4>
           </div>
         </div>
