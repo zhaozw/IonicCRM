@@ -12,7 +12,7 @@
              </md-list-item>
              <md-divider></md-divider>
              <md-list-item>
-               <h4>ระบุ ตามวันที่ซื้อสินค้า(กรณีที่ต้องการตรวจสอบตามวันที่ซื้อ)</h4>
+               <h4>ระบุตามวันที่ซื้อสินค้า/วันที่ผลิต</h4>
                <md-switch class="md-secondary" ng-model="setting.dateto" ng-change="expx(setting.dateto)"></md-switch>
              </md-list-item>
              <md-divider></md-divider>
@@ -29,7 +29,7 @@
               <md-list-item ng-repeat="n in listserialname | filter:{name:user.txtpartserial}" ng-click="setexp(n.name)">
                 <h3>{{ n.name}}</h3>
               </md-list-item>
-              <md-divider></md-divider>
+               <md-divider></md-divider>
             </md-list>
           </section>
           <section ng-show="setting.dateto">

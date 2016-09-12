@@ -2147,7 +2147,6 @@ angular.module('starter.controllers', [])
                               ivz_statuscomplete: data[i].ivz_statuscomplete,
                               remarkreject: data[i].remarkreject,
                               ivz_taxid: data[i].ivz_taxid,
-                              customertypecode: data[i].customertypecode,
                               avator:'img/avatar-5.png'
                           });
                       }
@@ -2427,10 +2426,17 @@ angular.module('starter.controllers', [])
                               reload: true
                           });
                     }else{
-                      var d = confirm('ไม่สามารถเปิดใบสั่งขายได้ \n เนื่องจากไม่พบข้อมูลที่อยู่ของลูกค้ากรุณาเพิ่มข้อมูลที่อยู่ลูกค้าด้วย');
-                      if(d == true){
-                        $state.go('app.playlists',{},{reload:true});
-                      }
+                      $state.go('app.order', {
+                          accountid: $stateParams.accountid,
+                          mastertype: Data.mastertype,
+                          addressid:'00000000'
+                      }, {
+                          reload: true
+                      });
+                      // var d = confirm('ไม่สามารถเปิดใบสั่งขายได้ \n เนื่องจากไม่พบข้อมูลที่อยู่ของลูกค้ากรุณาเพิ่มข้อมูลที่อยู่ลูกค้าด้วย');
+                      // if(d == true){
+                      //   $state.go('app.playlists',{},{reload:true});
+                      // }
                     }
                     if($scope.$phase){$scope.$apply();}
                   });
@@ -13152,8 +13158,6 @@ angular.module('starter.controllers', [])
        slRdClaim:'',
        chkfs:0,
        filedoc:[],
-       txtproductnumber:'',
-       txtTatol:0,
        txtpartname:'',
        txtclaim:'',
        txtpartserial:'',
@@ -13247,19 +13251,13 @@ angular.module('starter.controllers', [])
                 if($scope.user.rdUset === '0' || $scope.user.rdUset === 0){
                     $scope.user.aUsedSerial = false;
                     $scope.user.aUserUset = true;
-                    $state.go('app.claimdetail',{
+                     $state.go('app.openclaimserial',{
                       gettype:$scope.getType,
                       accountid:$stateParams.accountid,
-                      specailclaim:0,
                       itemamount:$scope.user.txtTatol,
-                      claimtxt:'',
                       productclaim:$scope.user.poductclaimid,
-                      claimstatus:917970001,
-                      rduset:$scope.user.rdUset,
-                      claimid:'',
-                      optiontype:'',
-                      claimserial:'',
-                      cdateby:''
+                      productid:$scope.user.txtproductnumber,
+                      rduset:$scope.user.rdUset
                     },{reload:true});
                 }else{
                     $scope.user.aUserUset = false;
@@ -13294,8 +13292,6 @@ angular.module('starter.controllers', [])
   $scope.title = "ระบุ Serial Number";
   // $scope.showLoading('กรุณารอสักครู่');
   $scope.user = {
-     txtproductnumber:'',
-     txtTatol:'',
      aUseGroup:false,
      rdUset:0,
      aUserUset:false,
@@ -13743,12 +13739,46 @@ angular.module('starter.controllers', [])
             $scope.Load();
             gh = chkChok(txtpartserial);
             t_date = new Date(gh);
-            getCheckClaim(new Date(gh),parseInt($stateParams.gettype));
+            if($stateParams.rduset == 0){
+              $state.go('app.claimdetail',{
+                      gettype:$stateParams.gettype,
+                      accountid:$stateParams.accountid,
+                      specailclaim:0,
+                      itemamount:$stateParams.itemamount,
+                      claimtxt:'',
+                      productclaim:$stateParams.productclaim,
+                      claimstatus:917970001,
+                      rduset:$stateParams.rduset,
+                      claimid:'',
+                      optiontype:'',
+                      claimserial:$scope.user.txtpartserial,
+                      cdateby:$scope.user.txtclaimdate
+              },{reload:true});
+            }else{
+              getCheckClaim(new Date(gh),parseInt($stateParams.gettype));
+            } 
           }
         }else{
           gh = chkChok(txtpartserial);
           t_date = new Date(gh);
-          getCheckClaim(new Date(gh),parseInt($stateParams.gettype));
+          if($stateParams.rduset == 0){
+              $state.go('app.claimdetail',{
+                      gettype:$stateParams.gettype,
+                      accountid:$stateParams.accountid,
+                      specailclaim:0,
+                      itemamount:$stateParams.itemamount,
+                      claimtxt:'',
+                      productclaim:$stateParams.productclaim,
+                      claimstatus:917970001,
+                      rduset:$stateParams.rduset,
+                      claimid:'',
+                      optiontype:'',
+                      claimserial:$scope.user.txtpartserial,
+                      cdateby:$scope.user.txtclaimdate
+              },{reload:true});
+            }else{
+              getCheckClaim(new Date(gh),parseInt($stateParams.gettype));
+            } 
         }
       }else if($scope.setting.dateto == true){
         var filename = $scope.user.filedoc;
@@ -13758,7 +13788,24 @@ angular.module('starter.controllers', [])
         }else{
           var dte = $('#txtclaimdate').val();
           t_date = new Date(dte);
-          getCheckClaim(new Date(dte),parseInt($stateParams.gettype));
+          if($stateParams.rduset == 0){
+              $state.go('app.claimdetail',{
+                      gettype:$stateParams.gettype,
+                      accountid:$stateParams.accountid,
+                      specailclaim:0,
+                      itemamount:$stateParams.itemamount,
+                      claimtxt:'',
+                      productclaim:$stateParams.productclaim,
+                      claimstatus:917970001,
+                      rduset:$stateParams.rduset,
+                      claimid:'',
+                      optiontype:'',
+                      claimserial:$scope.user.txtpartserial,
+                      cdateby:$scope.user.txtclaimdate
+              },{reload:true});
+            }else{
+              getCheckClaim(new Date(gh),parseInt($stateParams.gettype));
+            } 
         }
       }
   }
@@ -13854,7 +13901,6 @@ angular.module('starter.controllers', [])
       claimid:$stateParams.claimid,
       optiontype:$stateParams.optiontype,
       claimserial:$stateParams.claimserial,
-      specailclaim:$stateParams.specailclaim,
       cdateby:$stateParams.cdateby
     },{reload:true});
   }
@@ -14446,7 +14492,6 @@ angular.module('starter.controllers', [])
         claimid:$stateParams.claimid,
         optiontype:$stateParams.optiontype,
         claimserial:$stateParams.claimserial,
-        specailclaim:$stateParams.specailclaim,
         cdateby:$stateParams.cdateby
       },{reload:true});
     }else if($stateParams.gettype == 2 || $stateParams.gettype == 3){
@@ -14462,7 +14507,6 @@ angular.module('starter.controllers', [])
         claimid:$stateParams.claimid,
         optiontype:$stateParams.optiontype,
         claimserial:$stateParams.claimserial,
-        specailclaim:$stateParams.specailclaim,
         cdateby:$stateParams.cdateby
       },{reload:true});
     }
@@ -14508,12 +14552,13 @@ angular.module('starter.controllers', [])
     //alert($scope.user.itemamount);
     if($stateParams.productclaim){
       getPartItemnumber(id,$stateParams.productclaim,function(data){
-        alert(data.length);
+        //alert(data.length);
         if(data.length > 0){
           for(var i in data){
             try {
               if(data[i].typepart.id == id.trim()){
-                $scope.user.partprice = parseFloat(data[0].partprice);
+                $scope.user.partprice = parseFloat(data[i].partprice);
+                //alert('match:'+data[i].partprice);
                 break;
               }
             } catch (e) {
@@ -14615,7 +14660,20 @@ angular.module('starter.controllers', [])
     }
 
   }
-
+ function pushImg(dClass){
+      $('.divimg').remove();
+      if($scope.user.filedoc){
+          for(var i in $scope.user.filedoc){
+              var html =  '<div class="col divimg">' +
+                          '<img class="thumbnail" src="data:image/jpeg;base64,' + $scope.user.filedoc[i].docfile + '" width="150" height="150" ng-click="removeimg(' + i + ')"/>' +
+                          '</div>';
+              angular.element(document.getElementById(dClass)).append($compile(html)($scope));
+          }
+      }
+    }
+  $scope.clickfile = function(){
+      $('#filenote').trigger('click');
+  }
   $scope.$on('$ionicView.enter',function(){
     try {
       GetAccountById($stateParams.accountid,Data.mastertype,function(data){
@@ -14643,20 +14701,6 @@ angular.module('starter.controllers', [])
       });
     } catch (e) {
       alert('13244 '+e);
-    }
-    $scope.clickfile = function(){
-      $('#filenote').trigger('click');
-    }
-    function pushImg(dClass){
-      $('.divimg').remove();
-      if($scope.user.filedoc){
-          for(var i in $scope.user.filedoc){
-              var html =  '<div class="col divimg">' +
-                          '<img class="thumbnail" src="data:image/jpeg;base64,' + $scope.user.filedoc[i].docfile + '" width="150" height="150" ng-click="removeimg(' + i + ')"/>' +
-                          '</div>';
-              angular.element(document.getElementById(dClass)).append($compile(html)($scope));
-          }
-      }
     }
     $('#filenote').change(function(e){
       GetAtt('#filenote', '', 'canvas01', function (data) {
@@ -14725,6 +14769,7 @@ angular.module('starter.controllers', [])
     }
   }
   var rerunmatch = function(txt1,txt2){
+    //alert(parseInt(txt1) * parseFloat(txt2));
     return parseInt(txt1) * parseFloat(txt2);
   }
   function insertannoteanooo(g){
@@ -14778,7 +14823,7 @@ angular.module('starter.controllers', [])
   var insertdetail = function(id){
     try {
       var dd = $scope.user.itemamount+'::'+$scope.user.partprice;
-      alert(dd);
+      // alert(dd);
       GetProductListId($stateParams.productclaim,1,1,function(data){
         try {
           var ins = new MobileCRM.DynamicEntity.createNew('ivz_claimorderdetail');
@@ -14788,7 +14833,11 @@ angular.module('starter.controllers', [])
               ins.properties.ivz_productid = new MobileCRM.Reference('product',$stateParams.productclaim);
               ins.properties.ivz_priceperunit = parseInt(data[0].price);
               ins.properties.ivz_unit = new MobileCRM.Reference('uom',data[0].uomid.id);
-              ins.properties.ivz_amount = rerunmatch($scope.user.itemamount,$scope.user.partprice);
+              if($scope.user.getTypeHide == true){
+                ins.properties.ivz_amount = rerunmatch($scope.user.itemamount,$scope.user.partprice);
+              }else{
+                ins.properties.ivz_amount = parseFloat(data[0].price);
+              }
               ins.properties.ivz_used = parseInt($stateParams.rduset);
               ins.properties.ivz_serialno = $stateParams.claimserial;
               ins.properties.ivz_txtremark = $scope.user.txtpartnamecomment;
