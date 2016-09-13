@@ -1455,40 +1455,28 @@ function returnaddresscode(idtype){
   switch (idtype) {
     case '0':
       return "NONE";
-      break;
     case '1':
       return "INVOICE";
-      break;
 		case '2':
 			return "DELIVERY";
-			break;
     case '3':
       return "Alt. Delivery";
-      break;
     case '4':
       return "SWIFT";
-      break;
     case '5':
       return "Payment";
-      break;
     case '6':
       return "Service";
-      break;
     case '7':
       return "Home";
-      break;
     case '8':
       return "Other";
-      break;
     case '9':
       return "Business";
-      break;
     case '10':
       return "Remit-10";
-      break;
     case '101':
       return "Document";
-      break;
   }
 }
 function GetCustomerAddres(byid,typecode,callback){
@@ -1503,7 +1491,7 @@ function GetCustomerAddres(byid,typecode,callback){
 		    n.addAttribute('addresstypecode');//6
 		    n.addAttribute('ivz_integrationid');//7
 		    n.addAttribute('parentid');//8
-				n.orderBy("createdon", false);
+			n.orderBy("createdon", false);
 	  var filter = new MobileCRM.FetchXml.Filter();
 	      filter.where('parentid','eq',byid);
 	      n.filter = filter;
@@ -1529,18 +1517,18 @@ function GetCustomerAddres(byid,typecode,callback){
 						}else{
 							if(data[i][6] == typecode){
 								b.push({
-				          customeraddressid:data[i][0],
-				    	    addressname:data[i][1],
-				    	    line1:data[i][2],
-				    	    city:data[i][3],
-				    	    stateorprovince:data[i][4],
-				    	    postalcode:data[i][5],
-				          addrscode:data[i][6],
-				    	    addresstypecode:returnaddresscode(data[i][6]),
-				    	    ivz_integrationid:data[i][7],
-				    	    parentid:data[i][8],
-									addresscode:data[i][6]
-				        });
+										customeraddressid:data[i][0],
+										addressname:data[i][1],
+										line1:data[i][2],
+										city:data[i][3],
+										stateorprovince:data[i][4],
+										postalcode:data[i][5],
+										addrscode:data[i][6],
+										addresstypecode:returnaddresscode(data[i][6]),
+										ivz_integrationid:data[i][7],
+										parentid:data[i][8],
+										addresscode:data[i][6]
+									});
 							}
 						}
 					}

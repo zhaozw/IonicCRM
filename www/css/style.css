@@ -992,9 +992,6 @@ abbr {
 .ng-hide-remove {
   -webkit-animation: fadeInLeftBig 0.4s;
 }
-
-.item-input-inset {}
-
 .imgborder {
   border-radius: 3px;
   box-shadow: 0 2px 4px 0 rgba(1, 1, 1, 0.5);
@@ -1145,7 +1142,32 @@ abbr {
   font-size: large;
   color: white;
 }
+.btn-success {
+  position: absolute;
+  bottom: 10px;
+  left: 45%;
+  display: block;
+  background-color: #19B5FE;
+  border: none;
+  height: 50px;
+  width: 80px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+  text-shadow: 0 2px 4px rgba(1, 1, 1, 0.7);
+  font-size: large;
+  color: white;
+}
 
+.btn-success:hover {
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  font-size: large;
+  color: white;
+}
+
+.btn-success:active {
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  font-size: large;
+  color: white;
+}
 .loaderomplate2 {
   position: fixed;
   top: 0;
@@ -1178,7 +1200,7 @@ abbr {
 .btn-com-success-y {
   position: absolute;
   bottom: 10px;
-  left: 20%;
+  left: 30%;
   display: block;
   background-color: #19B5FE;
   border: none;
@@ -1205,12 +1227,12 @@ abbr {
 .btn-com-error {
   position: absolute;
   bottom: 10px;
-  right: 20%;
+  right: 30%;
   display: block;
   background-color: #CF000F;
   border: none;
   height: 50px;
-  width: 80px;
+  width: 90px;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
   text-shadow: 0 2px 4px rgba(1, 1, 1, 0.7);
   font-size: large;
@@ -1227,4 +1249,17 @@ abbr {
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
   font-size: large;
   color: white;
+}
+.loadermodal {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: block;
+    margin: auto;
+    width: 100%;
+    height: 300px;
+    /* background-color: white; */
+    /* box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5); */
 }

@@ -1,0 +1,32 @@
+<ion-modal-view>
+   <div class="loadermodal">
+      <div class="div-center">
+        <span class="icon ion-android-checkmark-circle fa-75 fa-success"></span>
+        <hr class="hr-clean"/>
+        <h2>{{titlemodal}}</h2>
+        <div class="row">
+           <div class="col col-45"></div>
+           <div class="col">
+               <button class="btn-success" myclick="closesuccess()">ตกลง</button>
+           </div>
+           <div class="col col-45"></div>
+         </div>
+      </div>
+   </div>
+</ion-modal-view>
+
+<!--
+$ionicModal.fromTemplateUrl('templates/comment/completed.html',{
+    scope:$scope,
+    animation:'slide-in-up'
+}).then(function(modal){
+    $scope.modalsuccess = modal;
+});
+$scope.opensuccess = function(){
+   $scope.titlemodal = "บันทึกข้อมูลเสร็จแล้ว";
+   $scope.modalsuccess.show();
+}
+$scope.closesuccess = function(){
+   $scope.modalsuccess.hide();
+}
+-->

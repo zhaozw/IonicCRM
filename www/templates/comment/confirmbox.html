@@ -1,0 +1,46 @@
+<ion-modal-view>
+        <div class="loadermodal">
+           <div class="div-center">
+              <span class="icon ion-alert-circled fa-75 fa-error"></span>
+                <hr class="hr-clean"/>
+                <div class="row">
+                    <div class="col">
+                        <h2>&nbsp;{{titlemodal}}</h2>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                  <button class="btn-com-error" myclick="closeload()">ยกเลิก</button>
+                  <button class="btn-com-success-y" myclick="confirmload()">ตกลง</button>
+                </div>
+            </div>
+        </div>
+</ion-modal-view>
+<!--$ionicModal.fromTemplateUrl('templates/comment/confirmbox.html',{
+    scope:$scope,
+    animation:'slide-in-up'
+  }).then(function(modal){
+    $scope.modal = modal;
+  });
+  $scope.confirmload = function(){
+    $scope.modal.show();
+  }
+  $scope.closeload = function(){
+    $scope.modal.hide();
+  }-->
+<!--$scope.titlemodal = 'สินค้าค้าอยู่ในระยะประกันต้องการที่จะเคลมสินค้าหรือไม่';
+$ionicModal.fromTemplateUrl('templates/comment/confirmbox.html',{
+    scope:$scope,
+    animation:'slide-in-up'
+}).then(function(modal){
+    $scope.modalclaim = modal;
+});
+$scope.modalclaim.show();
+$scope.confirmload = function(){
+    $scope.modalclaim.hide();
+    
+};
+$scope.closeload = function(){
+   $scope.modalclaim.hide();
+   $scope.reback();
+};-->

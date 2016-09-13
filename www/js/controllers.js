@@ -1185,7 +1185,7 @@ angular.module('starter.controllers', [])
         }
         $scope.loaddata();
     })
-    .controller('PlanAccuntDetailCtrl', function ($scope, $stateParams, $cookies, Data, $ionicHistory, $state, $ionicLoading) {
+    .controller('PlanAccuntDetailCtrl', function ($scope, $stateParams, $cookies, Data, $ionicHistory, $state, $ionicLoading,$ionicModal) {
         $state.reload();
         Data.showcart = false;
         $scope.Data = Data;
@@ -1210,6 +1210,12 @@ angular.module('starter.controllers', [])
             vBilling: Data.sBilling,
             vSuggust: 0
         };
+        $ionicModal.fromTemplateUrl('templates/comment/completed.html',{
+            scope:$scope,
+            animation:'slide-in-up'
+        }).then(function(modal){
+            $scope.modalsuccess = modal;
+        });
         GetAvailablefromtime(function (data) {
             $scope.listtime = data;
         });
@@ -1296,14 +1302,16 @@ angular.module('starter.controllers', [])
                                     //     }
                                     // });
                                 } else {
-                                  alert("บันทึกข้อมูลเสร็จแล้ว");
+                                  //alert("บันทึกข้อมูลเสร็จแล้ว");
+                                  $scope.titlemodal = "บันทึกข้อมูลเสร็จแล้ว";
+                                  $scope.modalsuccess.show();
                                   $ionicHistory.goBack(-1);
-                                    // insertcodeex('บันทึกข้อมูล exappointment', 'controller.js PlanAccuntDetailCtrl scope.cbnAppoint', 'บันทึกข้อมูล appointment account:' + accountname, '243', 'ไม่พบข้อผิดพลาด', Data.masname, 0, function (data) {
-                                    //     if (data) {
-                                    //         alert("บันทึกข้อมูลเสร็จแล้ว");
-                                    //         $ionicHistory.goBack(-1);
-                                    //     }
-                                    // });
+                                  $scope.closesuccess = function(){
+                                    $scope.modalsuccess.hide();
+                                  }
+                                  setTimeout(function() {
+                                    $scope.modalsuccess.hide();
+                                  }, 3000);
                                 }
                             });
                         } else {
@@ -2275,13 +2283,25 @@ angular.module('starter.controllers', [])
         }
 
     })
-    .controller('PlanedDetailCtrl', function ($scope, $stateParams, $cookies, Data, $ionicHistory, $ionicLoading, $state) {
+    .controller('PlanedDetailCtrl', function ($scope, $stateParams, $cookies, Data, $ionicHistory, $ionicLoading, $state ,$ionicModal) {
         $scope.Data = Data;
         Data.showcart = false;
         Data.mastertype = $stateParams.mastertype;
         Data.getparaaccount = $stateParams.accountid;
         Data.getparaname = $stateParams.accountname;
         Data.gettxtid = $stateParams.txtid;
+        $ionicModal.fromTemplateUrl('templates/comment/confirmbox.html',{
+                        scope:$scope,
+                        animation:'slide-up'
+                      }).then(function(modal){
+                        $scope.modal = modal;
+                      });
+        $ionicModal.fromTemplateUrl('templates/comment/confirmbox2.html',{
+                        scope:$scope,
+                        animation:'slide-up'
+                      }).then(function(modal){
+                        $scope.modal2 = modal;
+                      });
         var tct = '$stateParams.accountid:'+$stateParams.accountid+'\n'+
                   '$stateParams.accountname:'+$stateParams.accountname+'\n'+
                   '$stateParams.txtid:'+$stateParams.txtid + '\n' +
@@ -2401,18 +2421,8 @@ angular.module('starter.controllers', [])
                 console.log('insert activities');
 
                 insertactivities(3, 0, 2, null, function () {
-                  //real code
-                  // $state.go('app.order', {
-                  //         accountid: $stateParams.accountid,
-                  //         mastertype: Data.mastertype,
-                  //         addressid:'123456'
-                  //     }, {
-                  //         reload: true
-                  //     });
-
-
-                  //test code
                   GetCustomerAddres($stateParams.accountid,2,function(data){
+                   //alert(data.length);
                     if(data.length > 1){
                       $state.go('app.selectaddressorder',
                                 {accountid: $stateParams.accountid,mastertype: Data.mastertype},
@@ -2426,17 +2436,28 @@ angular.module('starter.controllers', [])
                               reload: true
                           });
                     }else{
-                      $state.go('app.order', {
-                          accountid: $stateParams.accountid,
-                          mastertype: Data.mastertype,
-                          addressid:'00000000'
-                      }, {
-                          reload: true
-                      });
-                      // var d = confirm('ไม่สามารถเปิดใบสั่งขายได้ \n เนื่องจากไม่พบข้อมูลที่อยู่ของลูกค้ากรุณาเพิ่มข้อมูลที่อยู่ลูกค้าด้วย');
-                      // if(d == true){
-                      //   $state.go('app.playlists',{},{reload:true});
-                      // }
+                      $scope.titlemodal = 'ไม่สามารถเปิดใบสั่งขายได้เนื่องจากไม่พบข้อมูลที่อยู่ของลูกค้ากรุณาเพิ่มข้อมูลที่อยู่ลูกค้าด้วย ';
+                      $scope.modal.show();
+                      $scope.confirmload = function(){
+                        $scope.modal.hide();
+                        $scope.titlemodal2 = 'คุณต้องการที่จะเพิ่มข้อมูลที่อยู่หรือไม่';
+                        $scope.modal2.show();
+                        $scope.confirm = function(){
+                          $scope.modal2.hide();
+                          $state.go('app.adjustmentlist',{
+                            terid:Data.termas,
+                            mastertype:Data.mastertype
+                          },{reload:true});
+                        }
+                        $scope.close = function(){
+                          $scope.modal2.hide();
+                          $state.go('app.playlists',{},{reload:true});
+                        }
+                      }
+                      $scope.closeload = function(){
+                        $scope.modal.hide();
+                        $state.go('app.playlists',{},{reload:true});
+                      }
                     }
                     if($scope.$phase){$scope.$apply();}
                   });
@@ -2574,7 +2595,7 @@ angular.module('starter.controllers', [])
             }
             loopA(result);
           }else{
-            var x = confirm('ไม่สามารถเปิดใบสั่งขายได้ \n เนื่องจากไม่พบข้อมูลที่อยู่ของลูกค้ากรุณาเพิ่มข้อมูลที่อยู่ลูกค้าด้วย');
+            var x = confirm('ไม่สามารถเปิดใบสั่งขายได้เนื่องจากไม่พบข้อมูลที่อยู่ของลูกค้ากรุณาเพิ่มข้อมูลที่อยู่ลูกค้าด้วย');
             if(x == true){
               setTimeout(function(){
                 $ionicLoading.hide();
@@ -10480,7 +10501,7 @@ angular.module('starter.controllers', [])
            remainallnewfortuner:0,
            remainpajero:0
         }
-
+        $scope.titlemodal = 'ยืนยันลบใบสั่งขาย';
         $scope.salestype = true;
         $scope.$on('$ionicView.enter',function(){
           Data.showcart = false;
@@ -10557,6 +10578,21 @@ angular.module('starter.controllers', [])
         }).then(function (modal) {
             $scope.modal2 = modal;
         });
+        $ionicModal.fromTemplateUrl('templates/comment/confirm3.html', {
+            id: 3,
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function (modal) {
+            $scope.modal3 = modal;
+        });
+        $ionicModal.fromTemplateUrl('templates/comment/orderdetail.html', {
+            id: 4,
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function (modal) {
+            $scope.modal4 = modal;
+        });
+
         $scope.showmodal = function (id) {
             $scope.idmodal = id;
             if (id == 1) {
@@ -10672,10 +10708,14 @@ angular.module('starter.controllers', [])
                     }
                   });
             }else{
-              var x = confirm('ไม่สามารถยืนยันใบสั่งขายได้ \n ต้องการที่จะลบใบสั่งขายหรือไม่');
-              if(x == true){
+              $scope.titlemodal = 'ไม่สามารถยืนยันใบสั่งขายได้ \n ต้องการที่จะลบใบสั่งขายหรือไม่';
+              $scope.modal3.show();
+              $scope.confirmload = function(){
+                $scope.modal3.hide();
                 callback(917970001);
-              }else{
+              }
+              $scope.closeload = function(){
+                $scope.modal3.hide();
                 callback(2);
               }
             }
@@ -10933,8 +10973,11 @@ angular.module('starter.controllers', [])
 
         $scope.delorder = function(){
           //$scope.LoadConfirm();
-          var x = confirm('ยืนยันการลบรายการใบสั่งซื้อ');
-          if(x == true){
+          $scope.titlemodal = 'ยืนยันการลบรายการใบสั่งซื้อ';
+          $scope.modal3.show();
+          //var x = confirm('ยืนยันการลบรายการใบสั่งซื้อ');
+          $scope.confirmload = function(){
+            $scope.modal3.hide();
             if($stateParams.salestype == 4){
               checkorderandsales($stateParams.orderid,function(){
                 detids($stateParams.orderid,dedetail);
@@ -10942,6 +10985,9 @@ angular.module('starter.controllers', [])
             }else{
               detids($stateParams.orderid,dedetail);
             }
+          }
+          $scope.closeload = function(){
+            $scope.modal3.hide();
           }
         }
         /*--------------- end -----------------*/
@@ -13148,6 +13194,16 @@ angular.module('starter.controllers', [])
 .controller('OpenclaimCtrl',function ($scope, $stateParams,Data, $state, $ionicLoading, $ionicHistory, $ionicModal ,$compile) {
     $state.reload();
     $ionicHistory.clearHistory();
+    $ionicModal.fromTemplateUrl('templates/comment/confirmbox.html',{
+         id:1,scope:$scope,animation:'slide-in-up'
+    }).then(function(modal){
+         $scope.modalclaim = modal;
+    });
+    $ionicModal.fromTemplateUrl('templates/comment/confirmbox.html',{
+        id:2,scope:$scope,animation:'slide-in-up'
+    }).then(function(modal){
+        $scope.modalclaim2 = modal;
+    });
     $scope.user = {
        txtproductnumber:'',
        txtTatol:0,
@@ -13291,6 +13347,16 @@ angular.module('starter.controllers', [])
   $state.reload();
   $scope.title = "ระบุ Serial Number";
   // $scope.showLoading('กรุณารอสักครู่');
+  $ionicModal.fromTemplateUrl('templates/comment/confirmbox.html',{
+              id:1,scope:$scope,animation:'slide-in-up'
+        }).then(function(modal){
+              $scope.modalclaim = modal;
+        });
+  $ionicModal.fromTemplateUrl('templates/comment/confirmbox.html',{
+            id:2,scope:$scope,animation:'slide-in-up'
+        }).then(function(modal){
+          $scope.modalclaim2 = modal;
+  });
   $scope.user = {
      aUseGroup:false,
      rdUset:0,
@@ -13473,9 +13539,15 @@ angular.module('starter.controllers', [])
       case 0:
             $ionicLoading.hide();
             if(t > 1){
+              $scope.title = "แสดงหน้าจอ ยอดขายย้อนหลัง 12 เดือน";
+              $scope.user.aUsedSerial = false;
+              $scope.user.aUsedClaim = false;
+              $scope.user.aUsedNotClaim = true;
+              $scope.titlemodal = 'ไม่สามารถเปิดใบเคลมได้เนื่องจากสิ้นสุดระยะประกันสินค้าแล้วต้องการที่จะเคลมสินค้าเพื่อส่งเสริมการขายหรือไม่';
                 if($stateParams.gettype == 0){ //check top
-                  var x = confirm('ไม่สามารถเปิดใบเคลมได้เนื่องจากสิ้นสุดระยะประกันสินค้าแล้ว \n ต้องการที่จะเคลมสินค้าเพื่อส่งเสริมการขายหรือไม่');
-                  if(x == true){
+                  $scope.modalclaim.show();
+                  $scope.confirmload = function(){
+                    $scope.modalclaim.hide();
                     $state.go('app.showlistorder',{
                       gettype:$stateParams.gettype,
                       accountid:$stateParams.accountid,
@@ -13490,77 +13562,13 @@ angular.module('starter.controllers', [])
                       claimid:'',
                       optiontype:''
                     },{reload:true});
-                  }else{
-                    var t = confirm('ต้องการที่จะส่งซ่อมหรื่อไม่ ?');
-                    if(t == true){
-                      $state.go('app.addmantain',{
-                        gettype:$stateParams.gettype,
-                        accountid:$stateParams.accountid,
-                        itemamount:$stateParams.itemamount,
-                        claimtxt:'หมดอายุรับประกัน ส่งซ่อม',
-                        productclaim:$stateParams.productclaim,
-                        claimstatus:$stateParams.claimstatus,
-                        rduset:$stateParams.rduset,
-                        claimserial:$scope.user.txtpartserial,
-                        specailclaim:2,
-                        cdateby:t_date
-                      },{reload:true});
-                    }else{
-                      $ionicHistory.clearHistory();
-                      $ionicHistory.nextViewOptions({
-                          disableBack: true
-                      });
-                      $state.go('app.openclaim',{accountid:$stateParams.accountid,specailclaim:0},{reload:true});
-                    }
                   }
-                }
-
-                $scope.title = "แสดงหน้าจอ ยอดขายย้อนหลัง 12 เดือน";
-                $scope.user.aUsedSerial = false;
-                $scope.user.aUsedClaim = false;
-                $scope.user.aUsedNotClaim = true;
-            }else{
-                $scope.title = "เลือกรายการเคลม";
-                $scope.user.aUsedSerial = false;
-                $scope.user.aUsedClaim = true;
-                $scope.user.aUsedNotClaim = false;
-                alert('สินค้าค้าอยู่ในระยะประกัน \n ต้องการที่จะเคลมสินค้าหรือไม่');
-                $state.go('app.claimoption',{
-                  gettype:$stateParams.gettype,
-                  accountid:$stateParams.accountid,
-                  itemamount:$stateParams.itemamount,
-                  productclaim:$stateParams.productclaim,
-                  claimstatus:917970001,
-                  rduset:$stateParams.rduset,
-                  claimserial:$scope.user.txtpartserial,
-                  specailclaim:0,
-                  cdateby:t_date
-                },{reload:true});
-            }
-        break;
-        case 1:
-        $ionicLoading.hide();
-              if(t > 1){
-                  if($stateParams.gettype == 1 || $stateParams.gettype == 0){ //check  echo top
-                    var x = confirm('ไม่สามารถเปิดใบเคลมได้เนื่องจากสิ้นสุดระยะประกันสินค้าแล้ว \n ต้องการที่จะเคลมสินค้าเพื่อสงเสริมการขายหรือไม่');
-                    if(x == true){
-                      $state.go('app.showlistorder',{
-                        gettype:$stateParams.gettype,
-                        accountid:$stateParams.accountid,
-                        itemamount:$stateParams.itemamount,
-                        claimtxt:'หมดอายุรับประกัน',
-                        productclaim:$stateParams.productclaim,
-                        claimstatus:917970000,
-                        rduset:$stateParams.rduset,
-                        claimserial:$scope.user.txtpartserial,
-                        specailclaim:1,
-                        cdateby:t_date,
-                        claimid:'',
-                        optiontype:''
-                      },{reload:true});
-                    }else{
-                      var t = confirm('ต้องการที่จะส่งซ่อมหรือไม่ ?');
-                      if(t == true){
+                  $scope.closeload = function(){
+                      $scope.modalclaim.hide();
+                      $scope.titlemodal ='ต้องการที่จะส่งซ่อมหรื่อไม่ ?';
+                      $scope.modalclaim2.show();
+                      $scope.confirmload = function(){
+                        $scope.modalclaim2.hide();
                         $state.go('app.addmantain',{
                           gettype:$stateParams.gettype,
                           accountid:$stateParams.accountid,
@@ -13573,27 +13581,26 @@ angular.module('starter.controllers', [])
                           specailclaim:2,
                           cdateby:t_date
                         },{reload:true});
-                      }else{
+                      }
+                      $scope.closeload = function(){
+                        $scope.modalclaim2.hide();
                         $ionicHistory.clearHistory();
                         $ionicHistory.nextViewOptions({
                             disableBack: true
                         });
                         $state.go('app.openclaim',{accountid:$stateParams.accountid,specailclaim:0},{reload:true});
                       }
-                    }
                   }
-
-
-                  $scope.title = "แสดงหน้าจอ ยอดขายย้อนหลัง 12 เดือน";
-                  $scope.user.aUsedSerial = false;
-                  $scope.user.aUsedClaim = false;
-                  $scope.user.aUsedNotClaim = true;
-              }else{
-                  $scope.title = "เลือกรายการเคลม";
-                  $scope.user.aUsedSerial = false;
-                  $scope.user.aUsedClaim = true;
-                  $scope.user.aUsedNotClaim = false;
-                  alert('สินค้าค้าอยู่ในระยะประกัน \n ต้องการที่จะเคลมสินค้าหรือไม่');
+                }
+            }else{
+                $scope.title = "เลือกรายการเคลม";
+                $scope.user.aUsedSerial = false;
+                $scope.user.aUsedClaim = true;
+                $scope.user.aUsedNotClaim = false;
+                $scope.titlemodal = 'สินค้าค้าอยู่ในระยะประกันต้องการที่จะเคลมสินค้าหรือไม่';
+                $scope.modalclaim.show();
+                $scope.confirmload = function(){
+                  $scope.modalclaim.hide();
                   $state.go('app.claimoption',{
                     gettype:$stateParams.gettype,
                     accountid:$stateParams.accountid,
@@ -13605,18 +13612,25 @@ angular.module('starter.controllers', [])
                     specailclaim:0,
                     cdateby:t_date
                   },{reload:true});
-              }
-          break;
-          case 2:
-          $ionicLoading.hide();
-                if(t > 1){
-                  $scope.title = "แสดงหน้าจอ ยอดขายย้อนหลัง 12 เดือน";
-                  $scope.user.aUsedSerial = false;
-                  $scope.user.aUsedClaim = false;
-                  $scope.user.aUsedNotClaim = true;
-                    console.log('ไม่รับเคลม');
-                    var x = confirm('ไม่สามารถเปิดใบเคลมได้เนื่องจากสิ้นสุดระยะประกันสินค้าแล้ว \n ต้องการที่จะเคลมสินค้าเพื่อสงเสริมการขายหรือไม่');
-                    if(x == true){
+                };
+                $scope.closeload = function(){
+                   $scope.modalclaim.hide();
+                   $scope.reback();
+                };
+            }
+        break;
+        case 1:
+        $ionicLoading.hide();
+              if(t > 1){
+                  if($stateParams.gettype == 1 || $stateParams.gettype == 0){ //check  echo top
+                    $scope.title = "แสดงหน้าจอ ยอดขายย้อนหลัง 12 เดือน";
+                    $scope.user.aUsedSerial = false;
+                    $scope.user.aUsedClaim = false;
+                    $scope.user.aUsedNotClaim = true;
+                    $scope.titlemodal =  'ไม่สามารถเปิดใบเคลมได้เนื่องจากสิ้นสุดระยะประกันสินค้าแล้วต้องการที่จะเคลมสินค้าเพื่อสงเสริมการขายหรือไม่';
+                    $scope.modalclaim.show();
+                    $scope.confirmload = function(){
+                      $scope.modalclaim.hide();
                       $state.go('app.showlistorder',{
                         gettype:$stateParams.gettype,
                         accountid:$stateParams.accountid,
@@ -13631,7 +13645,92 @@ angular.module('starter.controllers', [])
                         claimid:'',
                         optiontype:''
                       },{reload:true});
-                    }else{
+                    }
+                    $scope.closeload = function(){
+                      $scope.modalclaim.hide();
+                      $scope.modalclaim.remove();
+                      $scope.titlemodal = 'ต้องการที่จะส่งซ่อมหรือไม่ ?';
+                      $scope.modalclaim2.show();
+                      $scope.confirmload = function(){
+                        $scope.modalclaim2.hide();
+                        $state.go('app.addmantain',{
+                          gettype:$stateParams.gettype,
+                          accountid:$stateParams.accountid,
+                          itemamount:$stateParams.itemamount,
+                          claimtxt:'หมดอายุรับประกัน ส่งซ่อม',
+                          productclaim:$stateParams.productclaim,
+                          claimstatus:$stateParams.claimstatus,
+                          rduset:$stateParams.rduset,
+                          claimserial:$scope.user.txtpartserial,
+                          specailclaim:2,
+                          cdateby:t_date
+                        },{reload:true});
+                      }
+                      $scope.closeload = function(){
+                        $scope.modalclaim2.hide();
+                        $ionicHistory.clearHistory();
+                        $ionicHistory.nextViewOptions({
+                            disableBack: true
+                        });
+                        $state.go('app.openclaim',{accountid:$stateParams.accountid,specailclaim:0},{reload:true});
+                      }
+                    }
+                  }
+              }else{
+                  $scope.title = "เลือกรายการเคลม";
+                  $scope.user.aUsedSerial = false;
+                  $scope.user.aUsedClaim = true;
+                  $scope.user.aUsedNotClaim = false;
+                  $scope.titlemodal =  'สินค้าค้าอยู่ในระยะประกันต้องการที่จะเคลมสินค้าหรือไม่';
+                  $scope.modalclaim.show();
+                  $scope.confirmload = function(){
+                      $scope.modalclaim.hide();
+                      $state.go('app.claimoption',{
+                        gettype:$stateParams.gettype,
+                        accountid:$stateParams.accountid,
+                        itemamount:$stateParams.itemamount,
+                        productclaim:$stateParams.productclaim,
+                        claimstatus:917970001,
+                        rduset:$stateParams.rduset,
+                        claimserial:$scope.user.txtpartserial,
+                        specailclaim:0,
+                        cdateby:t_date
+                      },{reload:true});
+                  }
+                  $scope.closeload = function(){
+                    $scope.modalclaim.hide();
+                    $scope.reback();
+                  };
+              }
+          break;
+          case 2:
+          $ionicLoading.hide();
+                if(t > 1){
+                  $scope.title = "แสดงหน้าจอ ยอดขายย้อนหลัง 12 เดือน";
+                  $scope.user.aUsedSerial = false;
+                  $scope.user.aUsedClaim = false;
+                  $scope.user.aUsedNotClaim = true;
+                  $scope.titlemodal = 'ไม่สามารถเปิดใบเคลมได้เนื่องจากสิ้นสุดระยะประกันสินค้าแล้วต้องการที่จะเคลมสินค้าเพื่อสงเสริมการขายหรือไม่';
+                  $scope.modalclaim.show();
+                  $scope.confirmload = function(){
+                      $scope.modalclaim.hide();
+                      $state.go('app.showlistorder',{
+                        gettype:$stateParams.gettype,
+                        accountid:$stateParams.accountid,
+                        itemamount:$stateParams.itemamount,
+                        claimtxt:'หมดอายุรับประกัน',
+                        productclaim:$stateParams.productclaim,
+                        claimstatus:917970000,
+                        rduset:$stateParams.rduset,
+                        claimserial:$scope.user.txtpartserial,
+                        specailclaim:1,
+                        cdateby:t_date,
+                        claimid:'',
+                        optiontype:''
+                      },{reload:true});
+                    }
+                    $scope.closeload = function(){
+                      $scope.modalclaim.hide();
                       $ionicHistory.clearHistory();
                       $ionicHistory.nextViewOptions({
                           disableBack: true
@@ -13644,8 +13743,10 @@ angular.module('starter.controllers', [])
                     $scope.user.aUsedSerial = false;
                     $scope.user.aUsedClaim = true;
                     $scope.user.aUsedNotClaim = false;
-                    var x = confirm('สินค้าค้าอยู่ในระยะประกัน \n ต้องการที่จะเคลมสินค้าหรือไม่');
-                    if(x == true){
+                    $scope.titlemodal = 'สินค้าค้าอยู่ในระยะประกันต้องการที่จะเคลมสินค้าหรือไม่';
+                    $scope.modalclaim.show();
+                    $scope.confirmload = function(){
+                      $scope.modalclaim.hide();
                       $state.go('app.claimoption',{
                         gettype:$stateParams.gettype,
                         accountid:$stateParams.accountid,
@@ -13657,7 +13758,9 @@ angular.module('starter.controllers', [])
                         specailclaim:0,
                         cdateby:t_date
                       },{reload:true});
-                    }else{
+                    }
+                    $scope.closeload = function(){
+                      $scope.modalclaim.hide();
                       $ionicHistory.clearHistory();
                       $ionicHistory.nextViewOptions({
                           disableBack: true
@@ -13674,8 +13777,10 @@ angular.module('starter.controllers', [])
                       $scope.user.aUsedSerial = false;
                       $scope.user.aUsedClaim = false;
                       $scope.user.aUsedNotClaim = true;
-                      var x = confirm('ไม่สามารถเปิดใบเคลมได้เนื่องจากสิ้นสุดระยะประกันสินค้าแล้ว \n ต้องการที่จะเคลมสินค้าเพื่อสงเสริมการขายหรือไม่');
-                      if(x == true){
+                      $scope.titlemodal = 'ไม่สามารถเปิดใบเคลมได้เนื่องจากสิ้นสุดระยะประกันสินค้าแล้วต้องการที่จะเคลมสินค้าเพื่อสงเสริมการขายหรือไม่';
+                      $scope.modalclaim.show();
+                      $scope.confirmload = function(){
+                        $scope.modalclaim.hide();
                         $state.go('app.showlistorder',{
                           gettype:$stateParams.gettype,
                           accountid:$stateParams.accountid,
@@ -13690,17 +13795,22 @@ angular.module('starter.controllers', [])
                           claimid:'',
                           optiontype:''
                         },{reload:true});
-                      }else{
+                      }
+                      $scope.closeload = function(){
+                        $scope.modalclaim.hide();
                         $state.go('app.playlists',{},{reload:true});//go to home
                       }
+
                   }else{
                       //alert('รับเคลมสินค้า 3');
                       $scope.title = "เลือกรายการเคลม";
                       $scope.user.aUsedSerial = false;
                       $scope.user.aUsedClaim = true;
                       $scope.user.aUsedNotClaim = false;
-                      var x = confirm('สินค้าค้าอยู่ในระยะประกัน \n ต้องการที่จะเคลมสินค้าหรือไม่');
-                      if(x == true){
+                      $scope.titlemodal = 'สินค้าค้าอยู่ในระยะประกันต้องการที่จะเคลมสินค้าหรือไม่';
+                      $scope.modalclaim.show();
+                      $scope.confirmload = function(){
+                        $scope.modalclaim.hide();
                         $state.go('app.claimoption',{
                           gettype:$stateParams.gettype,
                           accountid:$stateParams.accountid,
@@ -13712,7 +13822,9 @@ angular.module('starter.controllers', [])
                           specailclaim:0,
                           cdateby:t_date
                         },{reload:true});
-                      }else{
+                      }
+                      $scope.closeload = function(){
+                        $scope.modalclaim.hide();
                         $ionicHistory.clearHistory();
                         $ionicHistory.nextViewOptions({
                             disableBack: true
@@ -13817,6 +13929,23 @@ angular.module('starter.controllers', [])
   $state.reload();
   $scope.title = "แสดงหน้าจอ ยอดขายย้อนหลัง 12 เดือน";
   //$scope.Load();
+  $ionicModal.fromTemplateUrl('templates/comment/confirmbox.html',{
+       id:1,scope:$scope,animation:'slide-in-up'
+  }).then(function(modal){
+       $scope.modalclaim = modal;
+  });
+  $ionicModal.fromTemplateUrl('templates/comment/confirmbox.html',{
+       id:2,scope:$scope,animation:'slide-in-up'
+  }).then(function(modal){
+       $scope.modalclaim2 = modal;
+  });
+  $ionicModal.fromTemplateUrl('templates/comment/completed.html',{
+      id:3,
+      scope:$scope,
+      animation:'slide-in-up'
+  }).then(function(modal){
+      $scope.modalsuccess = modal;
+  });
   $scope.listorder = [];
   try {
     getSalesPerYear($stateParams.accountid,function(data){
@@ -13862,8 +13991,10 @@ angular.module('starter.controllers', [])
     alert('sales ctrl 12927 '+e);
   }
   $scope.clicknext = function(){
-    var x = confirm('ต้องการที่จะส่งซ่อมสินค้านี้หรือไม่');
-    if(x == true){
+    $scope.titlemodal = 'ต้องการที่จะส่งซ่อมสินค้านี้หรือไม่';
+    $scope.modalclaim.show();
+    $scope.confirmload = function(){
+      $scope.modalclaim.hide();
       $state.go('app.addmantain',{
         gettype:$stateParams.gettype,
         accountid:$stateParams.accountid,
@@ -13876,7 +14007,9 @@ angular.module('starter.controllers', [])
         specailclaim:2,
         cdateby:$stateParams.cdateby
       },{reload:true});
-    }else{
+    }
+    $scope.closeload = function(){
+      $scope.modalclaim.hide();
       $scope.Load();
       $ionicHistory.clearHistory();
       $ionicHistory.nextViewOptions({
@@ -13909,19 +14042,25 @@ angular.module('starter.controllers', [])
     checkclaim($stateParams.accountid,function(data){
       if($stateParams.gettype == 0 || $stateParams.gettype == 1){//check top echo
         if(data.length > 0){
-          alert('ลูกค้าเคยมีประวัติเคลมสงเสริมการขายแล้ว \n ไม่สามารถเปิดใบเคลมได้');
-          $scope.clicknext();
+          $scope.titlemodal =  'ลูกค้าเคยมีประวัติเคลมสงเสริมการขายแล้วไม่สามารถเปิดใบเคลมได้';
+          $scope.modalsuccess.show();
+          $scope.closesuccess = function(){
+            $scope.clicknext();
+          }
         }else{
           gonextclaim();
         }
       }else if($stateParams.gettype == 2 || $stateParams.gettype == 3){//check std auto
         if(data.length > 0){
-          alert('ลูกค้าเคยมีประวัติเคลมสงเสริมการขายแล้ว \n ไม่สามารถเปิดใบเคลมได้');
-          $ionicHistory.clearHistory();
-          $ionicHistory.nextViewOptions({
-              disableBack: true
-          });
-          $state.go('app.openclaim',{accountid:$stateParams.accountid,specailclaim:0},{reload:true});
+          $scope.titlemodal = 'ลูกค้าเคยมีประวัติเคลมสงเสริมการขายแล้วไม่สามารถเปิดใบเคลมได้';
+          $scope.modalsuccess.show();
+          $scope.closesuccess = function(){
+            $ionicHistory.clearHistory();
+            $ionicHistory.nextViewOptions({
+                disableBack: true
+            });
+            $state.go('app.openclaim',{accountid:$stateParams.accountid,specailclaim:0},{reload:true});
+          }
         }else{
           gonextclaim();
         }
@@ -13935,6 +14074,23 @@ angular.module('starter.controllers', [])
 .controller('MaintainancesCtrl',function ($scope, $stateParams,  Data, $state, $ionicLoading, $ionicHistory, $ionicModal ,$compile , $cookies) {
   $state.reload();
   $scope.title = "กรอกข้อมูลเพื่อทำการแจ้งซ่อม";
+  $ionicModal.fromTemplateUrl('templates/comment/confirmbox.html',{
+              id:1,scope:$scope,animation:'slide-in-up'
+        }).then(function(modal){
+              $scope.modalclaim = modal;
+        });
+  $ionicModal.fromTemplateUrl('templates/comment/confirmbox.html',{
+            id:2,scope:$scope,animation:'slide-in-up'
+        }).then(function(modal){
+          $scope.modalclaim2 = modal;
+  });
+  $ionicModal.fromTemplateUrl('templates/comment/completed.html',{
+      id:3,
+      scope:$scope,
+      animation:'slide-in-up'
+  }).then(function(modal){
+      $scope.modalsuccess = modal;
+  });
   $scope.Load();
   $scope.user = {
     filedoc:[],
@@ -14138,8 +14294,12 @@ angular.module('starter.controllers', [])
                     $ionicHistory.nextViewOptions({
                         disableBack: true
                     });
-                    alert('ส่งข้อมูลเข้าสู่ระบบรับเคลมเรียบร้อยแล้ว');
-                    $state.go('app.openclaim',{accountid:$stateParams.accountid,specailclaim:0},{reload:true});
+                    $scope.titlemodal = 'ส่งข้อมูลเข้าสู่ระบบรับเคลมเรียบร้อยแล้ว';
+                    $scope.modalsuccess.show();
+                    $scope.closesuccess = function(){
+                      $scope.modalsuccess.hide();
+                      $state.go('app.openclaim',{accountid:$stateParams.accountid,specailclaim:0},{reload:true});
+                    }
                   }
                 }
               });
@@ -14209,6 +14369,16 @@ angular.module('starter.controllers', [])
   $state.reload();
   //alert($stateParams.gettype);
   $scope.title = "เลือกสาเหตุการเคลม";
+  $ionicModal.fromTemplateUrl('templates/comment/confirmbox.html',{
+              id:1,scope:$scope,animation:'slide-in-up'
+        }).then(function(modal){
+              $scope.modalclaim = modal;
+        });
+  $ionicModal.fromTemplateUrl('templates/comment/confirmbox.html',{
+            id:2,scope:$scope,animation:'slide-in-up'
+        }).then(function(modal){
+          $scope.modalclaim2 = modal;
+  });
   $scope.listclaim = [];
   $scope.user = {
     slRdClaim:'',
@@ -14336,6 +14506,23 @@ angular.module('starter.controllers', [])
 .controller('ClaimPicCtrl',function ($scope, $stateParams,   $state, $ionicLoading, $ionicHistory, $ionicModal ,$compile) {
   $state.reload();
   $scope.title = 'ตัวอย่างไม่รับเคลมสินค้า';
+  $ionicModal.fromTemplateUrl('templates/comment/confirmbox.html',{
+              id:1,scope:$scope,animation:'slide-in-up'
+        }).then(function(modal){
+              $scope.modalclaim = modal;
+  });
+  $ionicModal.fromTemplateUrl('templates/comment/confirmbox.html',{
+            id:2,scope:$scope,animation:'slide-in-up'
+        }).then(function(modal){
+          $scope.modalclaim2 = modal;
+  });
+  $ionicModal.fromTemplateUrl('templates/comment/completed.html',{
+      id:3,
+      scope:$scope,
+      animation:'slide-in-up'
+  }).then(function(modal){
+      $scope.modalsuccess = modal;
+  });
   $scope.Load();
   $scope.gallery = [];
   $scope.loaddata = function(){
@@ -14375,7 +14562,11 @@ angular.module('starter.controllers', [])
         setTimeout(function(){
           $ionicLoading.hide();
         },3000);
-        alert('ไม่พบข้อมูลรูปภาพ');
+        $scope.titlemodal = "ไม่พบข้อมูลรูปภาพ";
+        $scope.modalsuccess.show();
+        $scope.closesuccess = function(){
+          $scope.modalsuccess.hide();
+        }
       }
       if($scope.$phase){
         $scope.$apply();
@@ -14390,12 +14581,18 @@ angular.module('starter.controllers', [])
   $scope.loaddata();
   $scope.genNextOrder = function(){
     if($stateParams.gettype == 0 || $stateParams.gettype == 1){
-      var x = confirm('คุณต้องการที่จะเคลมส่งเสริมการขายหรือไม่');
-      if(x == true){//14117
+      $scope.titlemodal = 'คุณต้องการที่จะเคลมส่งเสริมการขายหรือไม่';
+      $scope.modalclaim.show();
+      $scope.confirmload = function(){
+        $scope.modalclaim.hide();
         checkclaim($stateParams.accountid,function(data){
           if(data.length > 0){
-            alert('ขอ อภัยไม่สามารถรับเคลมพิเศษได้เนื่องจากเคยรับเคลมพิเศษไปแล้ว');
-            $state.go('app.openclaim',{accountid:$stateParams.accountid,specailclaim:0},{reload:true});
+            $scope.titlemodal = 'ขอ อภัยไม่สามารถรับเคลมพิเศษได้เนื่องจากเคยรับเคลมพิเศษไปแล้ว';
+            $scope.modalsuccess.show();
+            $scope.closesuccess = function(){
+              $scope.modalsuccess.hide();
+              $state.go('app.openclaim',{accountid:$stateParams.accountid,specailclaim:0},{reload:true});
+            }
           }else{
             $state.go('app.showlistorder',{
               gettype:$stateParams.gettype,
@@ -14416,11 +14613,18 @@ angular.module('starter.controllers', [])
             $scope.$apply();
           }
         });
-      }else {
-        var gui = confirm('ต้องการที่จะส่งซ่อมหรือไม่ ?');
-        if(gui == true){
+
+      }
+      $scope.closeload = function(){
+        $scope.modalclaim.hide();
+        $scope.modalclaim2.show();
+        $scope.titlemodal = 'ต้องการที่จะส่งซ่อมหรือไม่ ?';
+        $scope.confirmload = function(){
+        $scope.modalclaim2.hide();
           $scope.genNextOrderMain();
-        }else{
+        }
+        $scope.closeload = function(){
+          $scope.modalclaim2.hide();
           $ionicHistory.clearHistory();
           $ionicHistory.nextViewOptions({
               disableBack: true
@@ -14429,12 +14633,18 @@ angular.module('starter.controllers', [])
         }
       }
     }else if($stateParams.gettype == 2 || $stateParams.gettype == 3){
-      var x = confirm('คุณต้องการที่จะเคลมส่งเสริมการขายหรือไม่');
-      if(x == true){//14117
+      $scope.titlemodal = 'คุณต้องการที่จะเคลมส่งเสริมการขายหรือไม่';
+      $scope.modalclaim.show();
+      $scope.confirmload = function(){
+        $scope.modalclaim.hide();
         checkclaim($stateParams.accountid,function(data){
           if(data.length > 0){
-            alert('ขอ อภัยไม่สามารถรับเคลมพิเศษได้เนื่องจากเคยรับเคลมพิเศษไปแล้ว');
-            $state.go('app.openclaim',{accountid:$stateParams.accountid,specailclaim:0},{reload:true});
+            $scope.titlemodal = 'ขอ อภัยไม่สามารถรับเคลมพิเศษได้เนื่องจากเคยรับเคลมพิเศษไปแล้ว';
+            $scope.modalsuccess.show();
+            $scope.closesuccess = function(){
+              $scope.modalsuccess.hide();
+              $state.go('app.openclaim',{accountid:$stateParams.accountid,specailclaim:0},{reload:true});
+            }
           }else{
             $state.go('app.showlistorder',{
               gettype:$stateParams.gettype,
@@ -14455,7 +14665,9 @@ angular.module('starter.controllers', [])
             $scope.$apply();
           }
         });
-      }else {
+      }
+      $scope.closeload = function(){
+        $scope.modalclaim.hide();
         $ionicHistory.clearHistory();
         $ionicHistory.nextViewOptions({
             disableBack: true
@@ -14515,6 +14727,23 @@ angular.module('starter.controllers', [])
 .controller('ClaimDetailCtrl',function ($scope, $stateParams, Data, $cookies ,  $state, $ionicLoading, $ionicHistory, $ionicModal ,$compile) {
   $state.reload();
   $scope.title = 'รายละเอียดรับเคลมสินค้า';
+  $ionicModal.fromTemplateUrl('templates/comment/confirmbox.html',{
+              id:1,scope:$scope,animation:'slide-in-up'
+        }).then(function(modal){
+              $scope.modalclaim = modal;
+        });
+  $ionicModal.fromTemplateUrl('templates/comment/confirmbox.html',{
+            id:2,scope:$scope,animation:'slide-in-up'
+        }).then(function(modal){
+          $scope.modalclaim2 = modal;
+  });
+  $ionicModal.fromTemplateUrl('templates/comment/completed.html',{
+      id:3,
+      scope:$scope,
+      animation:'slide-in-up'
+  }).then(function(modal){
+      $scope.modalsuccess = modal;
+  });
   $scope.listpartname = '';
   $scope.Load();
   $scope.user = {
@@ -14802,17 +15031,24 @@ angular.module('starter.controllers', [])
                 $ionicHistory.nextViewOptions({
                     disableBack: true
                 });
-                alert('ส่งข้อมูลเข้าสู่ระบบรับเคลมเรียบร้อยแล้ว');
-                $state.go('app.openclaim',{accountid:$stateParams.accountid,specailclaim:0},{reload:true});
-              },3000);
+                $scope.titlemodal = 'ส่งข้อมูลเข้าสู่ระบบรับเคลมเรียบร้อยแล้ว';
+                $scope.modalsuccess.show();
+                $scope.closesuccess = function(){
+                  $scope.modalsuccess.hide();
+                  $state.go('app.openclaim',{accountid:$stateParams.accountid,specailclaim:0},{reload:true});
+                }
+              },2000);
             }else{
               $ionicHistory.clearHistory();
               $ionicHistory.nextViewOptions({
                   disableBack: true
               });
-              alert('ส่งข้อมูลเข้าสู่ระบบรับเคลมเรียบร้อยแล้ว');
-              $state.go('app.openclaim',{accountid:$stateParams.accountid,specailclaim:0},{reload:true});
-              //$state.go('app.playlists',{},{reload:true});//go to home
+              $scope.titlemodal = 'ส่งข้อมูลเข้าสู่ระบบรับเคลมเรียบร้อยแล้ว';
+              $scope.modalsuccess.show();
+              $scope.closesuccess = function(){
+                $scope.modalsuccess.hide();
+                $state.go('app.openclaim',{accountid:$stateParams.accountid,specailclaim:0},{reload:true});
+              }
             }
           },1000);
         }
@@ -16451,6 +16687,7 @@ $ionicModal.fromTemplateUrl('templates/modal-1.html', {
            loopArray(arr);
          }else{
            setTimeout(function(){
+             
              $scope.LoadCompleted('บันทึกข้อมูลเสร็จแล้ว');
              setTimeout(function(){
                $ionicLoading.hide();
@@ -16497,11 +16734,18 @@ $ionicModal.fromTemplateUrl('templates/modal-1.html', {
       $scope.user.stateproduct = false;
     }
   }
-  $scope.genNext01 = function(){
-    $scope.LoadConfirm();
+  $ionicModal.fromTemplateUrl('templates/comment/completed.html',{
+    scope:$scope,
+    animation:'slide-in-up'
+  }).then(function(modal){
+    $scope.modalsuccess = modal;
+  });
+  $scope.opensuccess = function(){
+    $scope.titlemodal = "บันทึกข้อมูลเสร็จแล้ว";
+    $scope.modalsuccess.show();
   }
-  $scope.closeload = function(){
-    $ionicLoading.hide();
+  $scope.closesuccess = function(){
+    $scope.modalsuccess.hide();
   }
 })
     //////////////////////// End ////////////////////
