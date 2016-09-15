@@ -1,4 +1,4 @@
-angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookies','ngMessages','ngAnimate'])
+angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookies','ngMessages','ngAnimate','ngSanitize'])
 
 .run(function($ionicPlatform, $rootScope, $ionicHistory ,Data) {
   //alert('Data:'+Data.pricelevel);
@@ -884,7 +884,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
 ///////////////////// End ///////////////////////////////
 ///////////////////// Order ////////////////////////
 .state('app.selectaddressorder', {
-  url:'/selectaddressorder/:accountid/:mastertype',
+  url:'/selectaddressorder/:accountid/:mastertype/:typelnk',
   views: {
     'menuContent': {
       templateUrl: 'templates/order/selectaddress.html',
@@ -1380,7 +1380,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
 })
 //open claim
 .state('app.openclaim', {
-  url: '/openclaim/:accountid/:specailclaim',
+  url: '/openclaim/:accountid/:specailclaim/:intid',
   views: {
     'menuContent': {
       templateUrl: 'templates/openclaim/claim.html',
@@ -1389,7 +1389,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.openclaimserial', {
-  url: '/openclaimserial/:gettype/:accountid/:itemamount/:productclaim/:productname/:productid/:rduset',
+  url: '/openclaimserial/:gettype/:accountid/:itemamount/:productclaim/:productname/:productid/:rduset/:intid',
   views: {
     'menuContent': {
       templateUrl: 'templates/openclaim/claimserial.html',
@@ -1398,7 +1398,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.showlistorder', {
-  url: '/showlistorder/:gettype/:accountid/:itemamount/:claimtxt/:productclaim/:claimstatus/:rduset/:claimserial/:specailclaim/:cdateby/:claimid/:optiontype',
+  url: '/showlistorder/:gettype/:accountid/:itemamount/:claimtxt/:productclaim/:claimstatus/:rduset/:claimserial/:specailclaim/:cdateby/:claimid/:optiontype/:intid',
   views: {
     'menuContent': {
       templateUrl: 'templates/openclaim/showlistorder.html',
@@ -1407,7 +1407,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.addmantain', {
-  url: '/addmantain/:gettype/:accountid/:itemamount/:claimtxt/:productclaim/:claimstatus/:rduset/:claimid/:claimserial/:specailclaim/:cdateby',
+  url: '/addmantain/:gettype/:accountid/:itemamount/:claimtxt/:productclaim/:claimstatus/:rduset/:claimid/:claimserial/:specailclaim/:cdateby/:intid',
   views: {
     'menuContent': {
       templateUrl: 'templates/openclaim/addmantain.html',
@@ -1416,7 +1416,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.claimoption', {
-  url: '/claimoption/:gettype/:accountid/:itemamount/:productclaim/:claimstatus/:rduset/:claimserial/:specailclaim/:cdateby',
+  url: '/claimoption/:gettype/:accountid/:itemamount/:productclaim/:claimstatus/:rduset/:claimserial/:specailclaim/:cdateby/:intid',
   views: {
     'menuContent': {
       templateUrl: 'templates/openclaim/claimoption.html',
@@ -1425,7 +1425,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.claimpicture', {
-  url: '/claimpicture/:gettype/:accountid/:itemamount/:claimtxt/:productclaim/:claimstatus/:rduset/:claimid/:optiontype/:claimserial/:specailclaim/:cdateby',
+  url: '/claimpicture/:gettype/:accountid/:itemamount/:claimtxt/:productclaim/:claimstatus/:rduset/:claimid/:optiontype/:claimserial/:specailclaim/:cdateby/:intid',
   views: {
     'menuContent': {
       templateUrl: 'templates/openclaim/claimpicture.html',
@@ -1434,7 +1434,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.claimdetail', {
-  url: '/claimdetail/:gettype/:accountid/:specailclaim/:itemamount/:claimtxt/:productclaim/:claimstatus/:rduset/:claimid/:optiontype/:claimserial/:cdateby',
+  url: '/claimdetail/:gettype/:accountid/:specailclaim/:itemamount/:claimtxt/:productclaim/:claimstatus/:rduset/:claimid/:optiontype/:claimserial/:cdateby/:intid',
   views: {
     'menuContent': {
       templateUrl: 'templates/openclaim/claimdetail.html',

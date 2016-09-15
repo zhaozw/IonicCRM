@@ -7,6 +7,7 @@ document.writeln('<script src="lib/ionic/js/angular/angular-aria.min.js"></scrip
 document.writeln('<script src="lib/ionic/js/angular/angular-messages.min.js"></script>');
 document.writeln('<script src="lib/ionic/js/angular/angular-material.min.js"></script>');
 document.writeln('<script src="lib/ionic/js/angular/angular-cookies.min.js"></script>');
+document.writeln('<script src="lib/ionic/js/angular/angular-sanitize.min.js"></script>');
 document.writeln('<script src="lib/ionic/js/ng-cordova.min.js"></script>');
 document.writeln('<script src="lib/ionic/js/ng-cordova-mocks.min.js"></script>');
 document.writeln('<script src="js/app.js"></script>');
@@ -1552,10 +1553,10 @@ function GetCustomerAddresById(byid,callback){
 		    n.addAttribute('addresstypecode');//6
 		    n.addAttribute('ivz_integrationid');//7
 		    n.addAttribute('parentid');//8
-				n.orderBy("createdon", false);
+			n.orderBy("createdon", false);
 		var l = n.addLink('account','accountid','parentid','outer');
-				l.addAttribute('ivz_addressprovince');//9
-				l.addAttribute('ivz_addressdistrict');//10
+			l.addAttribute('ivz_addressprovince');//9
+			l.addAttribute('ivz_addressdistrict');//10
 	  var filter = new MobileCRM.FetchXml.Filter();
 	      filter.where('customeraddressid','eq',byid);
 	      n.filter = filter;
@@ -1565,22 +1566,71 @@ function GetCustomerAddresById(byid,callback){
 	      for(var i in data){
 					if(data[i][7]){
 						b.push({
-		          customeraddressid:data[i][0],
-		    	    addressname:data[i][1],
-		    	    line1:data[i][2],
-		    	    city:data[i][3],
-		    	    stateorprovince:data[i][4],
-		    	    postalcode:data[i][5],
-		          addresscode:data[i][6],
-		    	    addresstypecode:returnaddresscode(data[i][6]),
-		    	    ivz_integrationid:data[i][7],
-		    	    parentid:data[i][8],
-							provinceid:data[i][9],
-							districtid:data[i][10]
+						customeraddressid:data[i][0],
+						addressname:data[i][1],
+						line1:data[i][2],
+						city:data[i][3],
+						stateorprovince:data[i][4],
+						postalcode:data[i][5],
+						addresscode:data[i][6],
+						addresstypecode:returnaddresscode(data[i][6]),
+						ivz_integrationid:data[i][7],
+						parentid:data[i][8],
+						provinceid:data[i][9],
+						districtid:data[i][10]
 		        });
 					}
 	      }
 				callback(b);
+			},function(er){alert(er);},null);
+	} catch (e) {
+		alert('error 1204 '+e);
+	}
+}
+function GetCustomerAddresByInt(byid,callback){
+	//alert('byid:'+byid);
+	try {
+		var n = new MobileCRM.FetchXml.Entity('customeraddress');
+		    n.addAttribute('customeraddressid');//0
+		    n.addAttribute('name');//1
+		    n.addAttribute('line1');//2
+		    n.addAttribute('city');//3
+		    n.addAttribute('stateorprovince');//4
+		    n.addAttribute('postalcode');//5
+		    n.addAttribute('addresstypecode');//6
+		    n.addAttribute('ivz_integrationid');//7
+		    n.addAttribute('parentid');//8
+			n.orderBy("createdon", false);
+		var l = n.addLink('account','accountid','parentid','outer');
+			l.addAttribute('ivz_addressprovince');//9
+			l.addAttribute('ivz_addressdistrict');//10
+	  var filter = new MobileCRM.FetchXml.Filter();
+	      filter.where('ivz_integrationid','like','%'+byid+'%');
+	      n.filter = filter;
+		var fetch = new MobileCRM.FetchXml.Fetch(n);
+			fetch.execute('array',function(data){
+	      var b = [];
+		  //alert(data.length);
+	      for(var i in data){
+					if(data[i][7])
+					{
+						b.push({
+								customeraddressid:data[i][0],
+								addressname:data[i][1],
+								line1:data[i][2],
+								city:data[i][3],
+								stateorprovince:data[i][4],
+								postalcode:data[i][5],
+								addresscode:data[i][6],
+								addresstypecode:returnaddresscode(data[i][6]),
+								ivz_integrationid:data[i][7],
+								parentid:data[i][8],
+								provinceid:data[i][9],
+								districtid:data[i][10]
+							});
+					}
+	      }
+			callback(b);
 			},function(er){alert(er);},null);
 	} catch (e) {
 		alert('error 1204 '+e);
