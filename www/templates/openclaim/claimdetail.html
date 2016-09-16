@@ -60,10 +60,13 @@
               <hr class="divider">
                 <div class="row">
                   <div class="col">
-                    <h3>ที่อยูที่ส่งของ</h3>
-                    <!--<md-button class="md-raised md-warn" ng-click="clickfile()">แนบรูปภาพประกอบ</md-button>-->
-                    <hr class="divider"/>
-                    <h4>{{user.addresstransport}}</h4>
+                    <md-button class="md-raised md-warn">ข้อมูลเพิ่มเติม</md-button>
+                    <div>
+                      <hr class="divider"/>
+                      <h4>สินค้าที่ต้องการเคลม: {{user.productitem}} จำนวน: {{user.itemamount}} ตัว</h4>
+                      <br />
+                      <h4>ที่อยูที่ส่งของ {{user.addresstransport}}</h4>
+                    </div>
                   </div>
                 </div>
             </div>

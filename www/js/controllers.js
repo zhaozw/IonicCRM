@@ -13522,7 +13522,8 @@ angular.module('starter.controllers', [])
   }
   $scope.$on('$ionicView.enter',function(){
     $scope.Load();
-    getMarkingCode($stateParams.productid,function(data){
+    if( $stateParams.gettype == 3 || $stateParams.gettype == '3'){
+       getMarkingCodeCar($stateParams.productid,function(data){
       //alert(data.length);
       if(data.length > 0){
         var x = 0;
@@ -13558,6 +13559,44 @@ angular.module('starter.controllers', [])
       }
       if($scope.$phase){$scope.$apply();}
     });
+    }else{
+       getMarkingCode($stateParams.productid,function(data){
+      //alert(data.length);
+      if(data.length > 0){
+        var x = 0;
+        var looparray = function(arr){
+          getpush(x,function(){
+            x++;
+            if(x < arr.length){
+              looparray(arr);
+            }else{
+              $ionicLoading.hide();
+            }
+          });
+        }
+        function getpush(i,callback){
+          if(data){
+            if(data[i].name){
+              $scope.LoadInfo('กำลังโหลดข้อมูล '+data[i].name,i);
+              $scope.listserialname.push({
+                makingcodeid:data[i].makingcodeid,
+                name:data[i].name,
+                itemid:data[i].itemid,
+                datemarking:new Date(data[i].datemarking)
+              });
+            }
+            setTimeout(function(){
+              callback();
+            },50);
+          }else{
+            callback();
+          }
+        }
+        looparray(data);
+      }
+      if($scope.$phase){$scope.$apply();}
+    });
+    }
     $scope.exp = function(x){
       $scope.setting.serail = x;
       if(x == true){
@@ -13940,63 +13979,150 @@ angular.module('starter.controllers', [])
     }
   }
   $scope.genNext02 = function(txtpartserial,txtclaimdate){
+      
       var n = new Date();
       var t_date = '';
       var c_date = parseInt($stateParams.gettype);//get form $stateParams $scope.getType
       if($scope.setting.serail == true){
         var gh = '';
         if(c_date === 2){
-          var sFirst = isNaN(txtpartserial.slice(1,2));
+          if(txtpartserial.length < 5){
+            var sFirst = isNaN(txtpartserial.slice(1,2));
           if(sFirst == false){
             alert("กรุณาระบุหมายเลขซีเรียลให้ถูกต้องด้วย");
             $scope.user.txtpartserial = '';
             return;
           }else{
-            $scope.Load();
+            var us = (txtpartserial).toUpperCase();
+            var week = getMonthDTG(us.slice(1,2));
+            if(week == false){
+              alert("กรุณาระบุหมายเลขซีเรียลให้ถูกต้องด้วย");
+              $scope.user.txtpartserial = '';
+              return;
+            }else{
+              var us = (txtpartserial).toUpperCase();
+              var wdate = us.slice(2,4);
+              var monthdate = getMonth(us.slice(1,2));
+              var today = new Date();
+              var lastDayOfMonth = new Date(today.getFullYear(), parseInt(monthdate), 0);
+              var lastDate = parseInt(lastDayOfMonth.getDate());
+              if(wdate > lastDate){
+                alert("กรุณาระบุวันที่ให้ถูกต้องด้วย");
+                $scope.user.txtpartserial = '';
+                return;
+              }else{
+                $scope.Load();
+                gh = chkChok(txtpartserial);
+                t_date = new Date(gh);
+                if($stateParams.rduset == 0){
+                  $state.go('app.claimdetail',{
+                          gettype:$stateParams.gettype,
+                          accountid:$stateParams.accountid,
+                          specailclaim:0,
+                          itemamount:$stateParams.itemamount,
+                          claimtxt:'',
+                          productclaim:$stateParams.productclaim,
+                          claimstatus:917970001,
+                          rduset:$stateParams.rduset,
+                          claimid:'',
+                          optiontype:'',
+                          claimserial:$scope.user.txtpartserial,
+                          cdateby:$scope.user.txtclaimdate,
+                          intid:$stateParams.intid
+                  },{reload:true});
+                }else{
+                  getCheckClaim(new Date(gh),parseInt($stateParams.gettype));
+                } 
+              }
+            }
+          }
+          }else{
+              alert("รูปแบบหมายเลขซีเรียลไม่ถูกต้อง");
+              $scope.user.txtpartserial = '';
+              return;
+          }
+        }else if(c_date === 3){
+          if(txtpartserial.length === 9){
+            var sFirst = isNaN(txtpartserial.slice(0,2));
+          if(sFirst == false){
+            alert("กรุณาระบุหมายเลขซีเรียลให้ถูกต้องด้วย");
+            $scope.user.txtpartserial = '';
+            return;
+          }else{
+            var us = (txtpartserial).toUpperCase();
+            var week = getMonthDTG(us.slice(1,2));
+            if(week == false){
+              alert("กรุณาระบุหมายเลขซีเรียลให้ถูกต้องด้วย");
+              $scope.user.txtpartserial = '';
+              return;
+            }else{
+              var us = (txtpartserial).toUpperCase();
+              var wdate = parseInt(us.slice(3,5));
+              var monthdate = getMonth(us.slice(1,2));
+              if(wdate > 52){
+                alert("กรุณาระบุหมายเลขซีเรียลให้ถูกต้องด้วย");
+                $scope.user.txtpartserial = '';
+                return;
+              }else{
+                $scope.Load();
+                  var s = txtpartserial.slice(0,1)+txtpartserial.slice(2,9);
+                  gh = chkChok(s);
+                  t_date = new Date(gh);
+                  if($stateParams.rduset == 0){
+                    $state.go('app.claimdetail',{
+                            gettype:$stateParams.gettype,
+                            accountid:$stateParams.accountid,
+                            specailclaim:0,
+                            itemamount:$stateParams.itemamount,
+                            claimtxt:'',
+                            productclaim:$stateParams.productclaim,
+                            claimstatus:917970001,
+                            rduset:$stateParams.rduset,
+                            claimid:'',
+                            optiontype:'',
+                            claimserial:$scope.user.txtpartserial,
+                            cdateby:$scope.user.txtclaimdate,
+                            intid:$stateParams.intid
+                    },{reload:true});
+                  }else{
+                    getCheckClaim(new Date(gh),parseInt($stateParams.gettype));
+                  } 
+              }
+            }
+          }
+          }else{
+              alert("รูปแบบหมายเลขซีเรียลไม่ถูกต้อง");
+              $scope.user.txtpartserial = '';
+              return;
+          }
+        }else{
+          if($scope.user.txtpartserial.length  === 8){
             gh = chkChok(txtpartserial);
             t_date = new Date(gh);
             if($stateParams.rduset == 0){
-              $state.go('app.claimdetail',{
-                      gettype:$stateParams.gettype,
-                      accountid:$stateParams.accountid,
-                      specailclaim:0,
-                      itemamount:$stateParams.itemamount,
-                      claimtxt:'',
-                      productclaim:$stateParams.productclaim,
-                      claimstatus:917970001,
-                      rduset:$stateParams.rduset,
-                      claimid:'',
-                      optiontype:'',
-                      claimserial:$scope.user.txtpartserial,
-                      cdateby:$scope.user.txtclaimdate,
-                      intid:$stateParams.intid
-              },{reload:true});
-            }else{
-              getCheckClaim(new Date(gh),parseInt($stateParams.gettype));
-            } 
+                $state.go('app.claimdetail',{
+                        gettype:$stateParams.gettype,
+                        accountid:$stateParams.accountid,
+                        specailclaim:0,
+                        itemamount:$stateParams.itemamount,
+                        claimtxt:'',
+                        productclaim:$stateParams.productclaim,
+                        claimstatus:917970001,
+                        rduset:$stateParams.rduset,
+                        claimid:'',
+                        optiontype:'',
+                        claimserial:$scope.user.txtpartserial,
+                        cdateby:$scope.user.txtclaimdate,
+                        intid:$stateParams.intid
+                },{reload:true});
+              }else{
+                getCheckClaim(new Date(gh),parseInt($stateParams.gettype));
+              } 
+          }else{
+            alert("รูปแบบหมายเลขซีเรียลไม่ถูกต้อง");
+            $scope.user.txtpartserial = '';
+            return;
           }
-        }else{
-          gh = chkChok(txtpartserial);
-          t_date = new Date(gh);
-          if($stateParams.rduset == 0){
-              $state.go('app.claimdetail',{
-                      gettype:$stateParams.gettype,
-                      accountid:$stateParams.accountid,
-                      specailclaim:0,
-                      itemamount:$stateParams.itemamount,
-                      claimtxt:'',
-                      productclaim:$stateParams.productclaim,
-                      claimstatus:917970001,
-                      rduset:$stateParams.rduset,
-                      claimid:'',
-                      optiontype:'',
-                      claimserial:$scope.user.txtpartserial,
-                      cdateby:$scope.user.txtclaimdate,
-                      intid:$stateParams.intid
-              },{reload:true});
-            }else{
-              getCheckClaim(new Date(gh),parseInt($stateParams.gettype));
-            } 
         }
       }else if($scope.setting.dateto == true){
         var filename = $scope.user.filedoc;
@@ -14919,7 +15045,8 @@ angular.module('starter.controllers', [])
     txtpartnamecomment:$stateParams.claimtxt,
     empid:$cookies.get('ivz_empid'),
     partprice:0,
-    addresstransport:''
+    addresstransport:'',
+    productitem:''
   };
   setTimeout(function(){
     $ionicLoading.hide();
@@ -15037,6 +15164,12 @@ angular.module('starter.controllers', [])
 
   }
   $scope.$on('$ionicView.enter',function(){
+    GetProductListId($stateParams.productclaim,1,1,function(data){
+      $scope.user.productitem = data[0].productnumber +','+data[0].name;
+      if($scope.$phase){
+        $scope.$apply();
+      }
+    });
     GetCustomerAddresByInt($stateParams.intid,function(rq){
       $scope.user.addresstransport =  rq[0].addressname  +' '
                                     + rq[0].line1 +' '

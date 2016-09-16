@@ -3013,14 +3013,24 @@ function diffDays(d1, d2){
     ndays = Math.round(ndays - 0.5);
     return ndays;
 }
+function getMonthDTG(expression){
+       	  if(expression == 'A' || expression == 'B' || expression == 'C'|| 
+			 expression == 'D' || expression == 'E' || expression == 'F'|| 
+			 expression == 'G' || expression == 'H' || expression == 'I'||
+			 expression == 'K' || expression == 'L' || expression == 'M'){
+         		    return true;
+				}else{
+					return false;
+				}
+			}
 function getMonth(expression){
-       if(expression == 'A'){
-          return 1;
-				}else if(expression == 'B'){
-          return 2;
-				}else if(expression == 'C'){
-          return 3;
-				}else if(expression == 'D'){
+       	  if(expression == 'A'){
+          		return 1;
+		  }else if(expression == 'B'){
+                return 2;
+		  }else if(expression == 'C'){
+                return 3;
+		  }else if(expression == 'D'){
           return 4;
 				}else if(expression == 'E'){
           return 5;
@@ -3044,13 +3054,13 @@ function getDateOfWeek(weekNumber){
     return (weekNumber-1)*7;
 }
 function chkChok(txt){
-	var us = (txt).toUpperCase();
+  var us = (txt).toUpperCase();
   var d = new Date();
   var to_y = (d.getFullYear()).toString();
   var week = us.slice(2,4)
 	var sFirst = isNaN(us.slice(1,2));
   if(sFirst === true){
-		var str = us.slice(1,2);
+	var str = us.slice(1,2);
 		//alert('str:'+str);
     var m = getMonth(str.toUpperCase());
     var w = us.slice(2,4);
@@ -3678,6 +3688,36 @@ function getMarkingCode(id,callback){
 								b.push({
 									makingcodeid:data[i][0],
 									name:'Y'+uu(data[i][1]),
+									itemid:data[i][2],
+									datemarking:data[i][3]
+								});
+						}
+					}
+					callback(b);
+				},alerterror,null);
+	} catch (e) {
+		alert('fn 3489 '+e);
+	}
+}
+function getMarkingCodeCar(id,callback){
+	try {
+		var a = new MobileCRM.FetchXml.Entity('ivz_yssmarkingcodecar');
+				a.addAttribute("ivz_yssmarkingcodecarid");//0
+				a.addAttribute("ivz_markingcode");//1
+				a.addAttribute("ivz_itemid");//2
+				a.addAttribute("ivz_datemark");//3
+				a.orderBy("ivz_datemark", false);
+				a.filter = new MobileCRM.FetchXml.Filter();
+				a.filter.where('ivz_itemid','like',id.trim()+'%');
+		var fetch = new MobileCRM.FetchXml.Fetch(a,100000000,1);
+				fetch.execute('array',function(data){
+					//alert(data.length);
+					var b = [];
+					if(data.length > 0){
+						for(var i in data){
+								b.push({
+									makingcodeid:data[i][0],
+									name:'YA'+uu(data[i][1]),
 									itemid:data[i][2],
 									datemarking:data[i][3]
 								});
