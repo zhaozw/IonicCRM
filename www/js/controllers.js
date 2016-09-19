@@ -13644,7 +13644,8 @@ angular.module('starter.controllers', [])
     }else if(c_date === 0){
       t = (diffDays(n, t_date) / (365 * 2));//2 y
     }else if(c_date === 1){
-      t = (diffDays(n, t_date) / (365 * 1));//1 y
+      // t = (diffDays(n, t_date) / (365 * 1));//1 y
+      t = (diffDays(n, t_date) / (30 * 6));//6 M
     }else if(c_date === 2){
       t = (diffDays(n, t_date) / (30 * 6));//6 M
     }
