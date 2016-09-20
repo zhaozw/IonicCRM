@@ -2978,7 +2978,6 @@ function checktopline(txtproduct){
 							case 'FB3020':
 											console.log('type auto');
 											return 3;
-								break;
 							default:
 								switch (st_txt) {
 									case 'G':
@@ -2988,14 +2987,12 @@ function checktopline(txtproduct){
 									case 'Z':
 												console.log('TopLine');
 												return 0;
-										break;
 									case 'C':
 									case 'E':
 									case 'K':
 									case 'O':
 												console.log('ECO Line');
 												return 1;
-										break;
 									case 'B':
 									case 'D':
 									case 'S':
@@ -3012,6 +3009,14 @@ function diffDays(d1, d2){
 	  ndays = (tv1 - tv2) / 1000 / 86400;
     ndays = Math.round(ndays - 0.5);
     return ndays;
+}
+function getDateNumber(ymd){
+var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
+var firstDate = new Date(ymd);
+var secondDate = new Date();
+
+var diffDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay)));
+return diffDays;
 }
 function getMonthDTG(expression){
        	  if(expression == 'A' || expression == 'B' || expression == 'C'|| 
@@ -3699,6 +3704,12 @@ function getMarkingCode(id,callback){
 		alert('fn 3489 '+e);
 	}
 }
+
+var returnMark = function(code){
+	var us = (code).toUpperCase();//YA16120001
+	var ys = us.slice(3,4);
+	return us.slice(0,2)+ys+us.slice(4,10);
+};
 function getMarkingCodeCar(id,callback){
 	try {
 		var a = new MobileCRM.FetchXml.Entity('ivz_yssmarkingcodecar');
@@ -3717,7 +3728,7 @@ function getMarkingCodeCar(id,callback){
 						for(var i in data){
 								b.push({
 									makingcodeid:data[i][0],
-									name:'YA'+uu(data[i][1]),
+									name:returnMark(data[i][1]),
 									itemid:data[i][2],
 									datemarking:data[i][3]
 								});

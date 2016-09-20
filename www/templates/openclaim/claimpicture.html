@@ -3,7 +3,7 @@
     <br />
     <div>
       <div class="row gallery">
-          <div class="col col-50" ng-repeat="img in gallery" ng-if="img.status == 1">
+          <div class="col col-50" ng-repeat="img in gallery" ng-if="img.status == 1" myclick="opop(img.src,img.name)">
             <div class="list card">
               <div class="item item-image">
                 <img src="{{img.src}}">
@@ -16,6 +16,13 @@
       </div>
     </div>
     <br /><br /><br /><br />
+    <script id="templates/modal-1.html" type="text/ng-template">
+          <div class="modal image-modal transparent" ng-click="closeModal()">
+              <ion-pane class="transparent">
+                 <img ng-src="{{imageSrc}}" class="fullscreen-image"/>
+              </ion-pane>
+          </div>
+    </script>
   </ion-content>
   <div class="tabs tabs-icon-top">
     <a class="tab-item" ng-click="reback()">
@@ -27,12 +34,16 @@
       รับเคลม
     </a>
     <a class="tab-item" myclick="genNextOrder()">
-      <i class="icon ion-alert-circled warn"></i>
+      <i class="icon ion-social-usd warn"></i>
       เคลมพิเศษ
     </a>
-    <!-- <a class="tab-item" myclick="genNextOrderMain()">
-      <i class="icon ion-settings warn"></i>
+    <a class="tab-item" myclick="genNextOrderMain()" ng-if="gettype == 0 || gettype == 1">
+      <i class="icon ion-settings success"></i>
       ส่งซ่อม
-    </a> -->
+    </a>
+    <a class="tab-item" myclick="genHome()">
+      <i class="icon ion-close-circled error"></i>
+      ไม่รับเคลม
+    </a>
   </div>
 </ion-view>

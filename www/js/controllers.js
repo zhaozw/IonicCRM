@@ -1671,13 +1671,10 @@ angular.module('starter.controllers', [])
           switch (p) {
             case 2:
                     return 1;
-              break;
             case 3:
                     return 2;
-              break;
             case 4:
                    return 3;
-                break;
             default:
                   return 1;
           }
@@ -13640,19 +13637,23 @@ angular.module('starter.controllers', [])
     var n = new Date();
     var t = 0;
     if(c_date === 3){
-      t = (diffDays(n, t_date) / (365 * 1));//y
+      t = ((365 * 1) - getDateNumber(t_date));//1 y
+      alert('วันรับประกัน auto y:'+t+' :: '+(365 * 1)+' \n dateon:'+t_date);
     }else if(c_date === 0){
-      t = (diffDays(n, t_date) / (365 * 2));//2 y
+       t = ((365 * 2) - getDateNumber(t_date));//2 y
+      alert('วันรับประกัน top 2y:'+t+' :: '+(365 * 2)+' \n dateon:'+t_date);
     }else if(c_date === 1){
       // t = (diffDays(n, t_date) / (365 * 1));//1 y
-      t = (diffDays(n, t_date) / (30 * 6));//6 M
+      t = ((31 * 6) - getDateNumber(t_date));//6 M
+      alert('วันรับประกัน eco 6M:'+t+' :: '+(31 * 6)+' \n dateon:'+t_date);
     }else if(c_date === 2){
-      t = (diffDays(n, t_date) / (30 * 6));//6 M
+      t = ((31 * 6) - getDateNumber(t_date));//6 M
+      alert('วันรับประกัน dtg 6M:'+t+' :: '+(31 * 6)+' \n dateon:'+t_date);
     }
     switch (c_date) {
       case 0:
             $ionicLoading.hide();
-            if(t > 1){
+            if(t <= 0){
               $scope.title = "แสดงหน้าจอ ยอดขายย้อนหลัง 12 เดือน";
               $scope.user.aUsedSerial = false;
               $scope.user.aUsedClaim = false;
@@ -13742,8 +13743,7 @@ angular.module('starter.controllers', [])
         break;
         case 1:
         $ionicLoading.hide();
-              if(t > 1){
-                  if($stateParams.gettype == 1 || $stateParams.gettype == 0){ //check  echo top
+              if(t <= 0){
                     $scope.title = "แสดงหน้าจอ ยอดขายย้อนหลัง 12 เดือน";
                     $scope.user.aUsedSerial = false;
                     $scope.user.aUsedClaim = false;
@@ -13802,7 +13802,6 @@ angular.module('starter.controllers', [])
                         },{reload:true});
                       }
                     }
-                  }
               }else{
                   $scope.title = "เลือกรายการเคลม";
                   $scope.user.aUsedSerial = false;
@@ -13833,7 +13832,7 @@ angular.module('starter.controllers', [])
           break;
           case 2:
           $ionicLoading.hide();
-                if(t > 1){
+                if(t <= 0){
                   $scope.title = "แสดงหน้าจอ ยอดขายย้อนหลัง 12 เดือน";
                   $scope.user.aUsedSerial = false;
                   $scope.user.aUsedClaim = false;
@@ -13909,7 +13908,7 @@ angular.module('starter.controllers', [])
             break;
             case 3:
             $ionicLoading.hide();
-                  if(t > 1){
+                  if(t <= 0){
                       console.log('ไม่รับเคลม');
                       $scope.title = "แสดงหน้าจอ ยอดขายย้อนหลัง 12 เดือน";
                       $scope.user.aUsedSerial = false;
@@ -14015,6 +14014,7 @@ angular.module('starter.controllers', [])
                 $scope.Load();
                 gh = chkChok(txtpartserial);
                 t_date = new Date(gh);
+                alert(t_date);
                 if($stateParams.rduset == 0){
                   $state.go('app.claimdetail',{
                           gettype:$stateParams.gettype,
@@ -14050,26 +14050,83 @@ angular.module('starter.controllers', [])
             $scope.user.txtpartserial = '';
             return;
           }else{
+            /////////////////
+
+
             var us = (txtpartserial).toUpperCase();
             var week = getMonthDTG(us.slice(1,2));
-            if(week == false){
-              alert("กรุณาระบุหมายเลขซีเรียลให้ถูกต้องด้วย");
-              $scope.user.txtpartserial = '';
-              return;
-            }else{
-              var us = (txtpartserial).toUpperCase();
-              var wdate = parseInt(us.slice(3,5));
-              var monthdate = getMonth(us.slice(1,2));
-              if(wdate > 52){
+            var firstTxt = us.slice(0,1);
+            var secoundTxt = us.slice(1,2);
+            if(firstTxt == 'Y'){
+              if(secoundTxt == 'A'){
+                if(week == false){
+                  alert("กรุณาระบุหมายเลขซีเรียลให้ถูกต้องด้วย");
+                  $scope.user.txtpartserial = '';
+                  return;
+                }else{
+                  var us = (txtpartserial).toUpperCase();
+                  var wdate = parseInt(us.slice(3,5));
+                  var monthdate = getMonth(us.slice(1,2));
+                  //alert('week:'+wdate);
+                  if(wdate > 52){
+                    alert("กรุณาระบุหมายเลขซีเรียลให้ถูกต้องด้วย");
+                    $scope.user.txtpartserial = '';
+                    return;
+                  }else{
+                    $scope.Load();
+                      var s = txtpartserial.slice(0,1)+txtpartserial.slice(2,9);
+                      gh = chkChok(s);
+                      t_date = new Date(gh);
+                      if($stateParams.rduset == 0){
+                        $state.go('app.claimdetail',{
+                                gettype:$stateParams.gettype,
+                                accountid:$stateParams.accountid,
+                                specailclaim:0,
+                                itemamount:$stateParams.itemamount,
+                                claimtxt:'',
+                                productclaim:$stateParams.productclaim,
+                                claimstatus:917970001,
+                                rduset:$stateParams.rduset,
+                                claimid:'',
+                                optiontype:'',
+                                claimserial:$scope.user.txtpartserial,
+                                cdateby:$scope.user.txtclaimdate,
+                                intid:$stateParams.intid
+                        },{reload:true});
+                      }else{
+                        var s = txtpartserial.slice(0,1)+txtpartserial.slice(2,9);
+                        gh = chkChok(s);
+                        t_date = new Date(gh);
+                        //alert(t_date);
+                        getCheckClaim(t_date,parseInt($stateParams.gettype));
+                      } 
+                  }
+                }
+              }else{
                 alert("กรุณาระบุหมายเลขซีเรียลให้ถูกต้องด้วย");
                 $scope.user.txtpartserial = '';
                 return;
-              }else{
-                $scope.Load();
-                  var s = txtpartserial.slice(0,1)+txtpartserial.slice(2,9);
-                  gh = chkChok(s);
-                  t_date = new Date(gh);
-                  if($stateParams.rduset == 0){
+              }
+            }else{
+                alert("กรุณาระบุหมายเลขซีเรียลให้ถูกต้องด้วย");
+                $scope.user.txtpartserial = '';
+                return;
+              }
+            /////////
+          }
+          }else{
+              alert("รูปแบบหมายเลขซีเรียลไม่ถูกต้อง");
+              $scope.user.txtpartserial = '';
+              return;
+          }
+        }else{
+          var us = (txtpartserial).toUpperCase();
+          var wdate = parseInt(us.slice(2,4));
+            if($scope.user.txtpartserial.length  === 8){
+              if(wdate <= 52){
+                gh = chkChok(txtpartserial);
+                t_date = new Date(gh);
+                if($stateParams.rduset == 0){
                     $state.go('app.claimdetail',{
                             gettype:$stateParams.gettype,
                             accountid:$stateParams.accountid,
@@ -14086,44 +14143,21 @@ angular.module('starter.controllers', [])
                             intid:$stateParams.intid
                     },{reload:true});
                   }else{
+                    gh = chkChok(txtpartserial);
+                    t_date = new Date(gh);
                     getCheckClaim(new Date(gh),parseInt($stateParams.gettype));
                   } 
+              }else{
+                alert("รูปแบบหมายเลขซีเรียลไม่ถูกต้อง");
+                $scope.user.txtpartserial = '';
+                return;
               }
-            }
-          }
-          }else{
+            }else{
               alert("รูปแบบหมายเลขซีเรียลไม่ถูกต้อง");
               $scope.user.txtpartserial = '';
               return;
-          }
-        }else{
-          if($scope.user.txtpartserial.length  === 8){
-            gh = chkChok(txtpartserial);
-            t_date = new Date(gh);
-            if($stateParams.rduset == 0){
-                $state.go('app.claimdetail',{
-                        gettype:$stateParams.gettype,
-                        accountid:$stateParams.accountid,
-                        specailclaim:0,
-                        itemamount:$stateParams.itemamount,
-                        claimtxt:'',
-                        productclaim:$stateParams.productclaim,
-                        claimstatus:917970001,
-                        rduset:$stateParams.rduset,
-                        claimid:'',
-                        optiontype:'',
-                        claimserial:$scope.user.txtpartserial,
-                        cdateby:$scope.user.txtclaimdate,
-                        intid:$stateParams.intid
-                },{reload:true});
-              }else{
-                getCheckClaim(new Date(gh),parseInt($stateParams.gettype));
-              } 
-          }else{
-            alert("รูปแบบหมายเลขซีเรียลไม่ถูกต้อง");
-            $scope.user.txtpartserial = '';
-            return;
-          }
+            }
+          
         }
       }else if($scope.setting.dateto == true){
         var filename = $scope.user.filedoc;
@@ -14216,48 +14250,59 @@ angular.module('starter.controllers', [])
         loopArray(data);
         $ionicLoading.hide();
       }else{
+        $ionicLoading.hide();
+        $scope.titlemodal = 'จากการตรวจสอบยอดขายย้อนหลัง 12 เดือนไม่มีการซื้อขาย';
+        $scope.modalsuccess.show();
         setTimeout(function(){
-          $ionicLoading.hide();
-        },3000);
+          $scope.modalsuccess.hide();
+        },2000);
       }
     });
   } catch (e) {
     alert('sales ctrl 12927 '+e);
   }
   $scope.clicknext = function(){
-    $scope.titlemodal = 'ต้องการที่จะส่งซ่อมสินค้านี้หรือไม่';
-    $scope.modalclaim.show();
-    $scope.confirmload = function(){
-      $scope.modalclaim.hide();
-      $state.go('app.addmantain',{
-        gettype:$stateParams.gettype,
-        accountid:$stateParams.accountid,
-        itemamount:$stateParams.itemamount,
-        claimtxt:$stateParams.claimtxt,
-        productclaim:$stateParams.productclaim,
-        claimstatus:$stateParams.claimstatus,
-        rduset:$stateParams.rduset,
-        claimserial:$stateParams.claimserial,
-        specailclaim:2,
-        cdateby:$stateParams.cdateby,
-        intid:$stateParams.intid
-      },{reload:true});
-    }
-    $scope.closeload = function(){
-      $scope.modalclaim.hide();
-      $scope.Load();
-      $ionicHistory.clearHistory();
-      $ionicHistory.nextViewOptions({
-          disableBack: true
-      });
+    if($stateParams.gettype == 2 || $stateParams.gettype == 3){//dtg auto
       $state.go('app.openclaim',{
-        accountid:$stateParams.accountid,
-        specailclaim:0,
-        intid:$stateParams.intid
-      },{reload:true});
-      setTimeout(function(){
-        $ionicLoading.hide();
-      },3000);
+          accountid:$stateParams.accountid,
+          specailclaim:0,
+          intid:$stateParams.intid
+        },{reload:true});
+    }else{
+      $scope.titlemodal = 'ต้องการที่จะส่งซ่อมสินค้านี้หรือไม่';
+      $scope.modalclaim.show();
+      $scope.confirmload = function(){
+        $scope.modalclaim.hide();
+        $state.go('app.addmantain',{
+          gettype:$stateParams.gettype,
+          accountid:$stateParams.accountid,
+          itemamount:$stateParams.itemamount,
+          claimtxt:$stateParams.claimtxt,
+          productclaim:$stateParams.productclaim,
+          claimstatus:$stateParams.claimstatus,
+          rduset:$stateParams.rduset,
+          claimserial:$stateParams.claimserial,
+          specailclaim:2,
+          cdateby:$stateParams.cdateby,
+          intid:$stateParams.intid
+        },{reload:true});
+      }
+      $scope.closeload = function(){
+        $scope.modalclaim.hide();
+        $scope.Load();
+        $ionicHistory.clearHistory();
+        $ionicHistory.nextViewOptions({
+            disableBack: true
+        });
+        $state.go('app.openclaim',{
+          accountid:$stateParams.accountid,
+          specailclaim:0,
+          intid:$stateParams.intid
+        },{reload:true});
+        setTimeout(function(){
+          $ionicLoading.hide();
+        },3000);
+      }
     }
   }
   function gonextclaim(){
@@ -14720,7 +14765,7 @@ angular.module('starter.controllers', [])
       $scope.$apply();
     }
   });
-  $scope.slRdioOptionClaim = function(id,type,name,id){
+  $scope.slRdioOptionClaim = function(id,type,name,nameid){
       var typetxt = parseInt(type);
       if($stateParams.gettype == 0 || $stateParams.gettype == 1){
           $state.go('app.claimpicture',{
@@ -14731,7 +14776,7 @@ angular.module('starter.controllers', [])
               productclaim:$stateParams.productclaim,
               claimstatus:$stateParams.claimstatus,
               rduset:$stateParams.rduset,
-              claimid:id,
+              claimid:nameid,
               optiontype:type,
               claimserial:$stateParams.claimserial,
               specailclaim:$stateParams.specailclaim,
@@ -14747,7 +14792,7 @@ angular.module('starter.controllers', [])
               productclaim:$stateParams.productclaim,
               claimstatus:$stateParams.claimstatus,
               rduset:$stateParams.rduset,
-              claimid:id,
+              claimid:nameid,
               optiontype:type,
               claimserial:$stateParams.claimserial,
               specailclaim:$stateParams.specailclaim,
@@ -14777,8 +14822,16 @@ angular.module('starter.controllers', [])
   }).then(function(modal){
       $scope.modalsuccess = modal;
   });
+  $ionicModal.fromTemplateUrl('templates/modal-1.html', {
+            id: '4',
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function (modal) {
+            $scope.oModal1 = modal;
+        });
   $scope.Load();
   $scope.gallery = [];
+  $scope.gettype = $stateParams.gettype;
   $scope.loaddata = function(){
     var ui = 0;
     if($stateParams.gettype == 3){
@@ -14995,6 +15048,23 @@ angular.module('starter.controllers', [])
       },{reload:true});
     }
   }
+  $scope.genHome = function(){
+    $state.go('app.openclaim',{
+                  accountid:$stateParams.accountid,
+                  specailclaim:0,
+                  intid:$stateParams.intid
+                },{reload:true});
+  }
+  $scope.opop = function (baby, title) {
+    $scope.imageSrc = baby;
+    $scope.titlem = title;
+    $scope.oModal1.show();
+ };
+ $scope.closeModal = function(){
+   $scope.imageSrc = '';
+    $scope.titlem = '';
+   $scope.oModal1.hide();
+ }
 })
 .controller('ClaimDetailCtrl',function ($scope, $stateParams, Data, $cookies ,  $state, $ionicLoading, $ionicHistory, $ionicModal ,$compile) {
   $state.reload();
