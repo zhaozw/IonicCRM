@@ -1,0 +1,78 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">ยืนยันเปิดใบเคลม</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closeModalDetail()">
+        <i class="ion-close error"></i>
+      </button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <div class="row">
+      <div class="col"></div>
+      <div class="col col-90">
+        <div class="row">
+          <div class="col">
+            <h4>
+              เลขที่ใบเคลม:
+              <span class="error">{{user.txtclaim}}</span>
+            </h4>
+          </div>
+          <div class="col">
+            <h4>
+              ชื่อลูกค้า:
+              <span class="error">{{user.txtname}}</span>
+            </h4>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <h4>
+              รหัสสินค้า:
+              <span class="error">{{user.itemnumber}}</span>
+            </h4>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <h4>ชื่อสินค้า:
+              <span class="error">{{user.partitem}}</span>
+            </h4>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <h4>จำนวนสินค้า:
+              <span class="error">{{user.itemamount | currency:''}}</span>
+            </h4>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <h4>อาการที่พบ:
+              <span class="error">{{user.txtpartnamecomment}}</span>&nbsp;
+              <span class="error">{{txt}}</span>
+            </h4>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <h4>
+              วิธีการที่จะส่งสินค้ามาที่บริษัท:
+              <!--<span class="error">{{claim.shipby}}</span>-->
+              <span class="error" ng-if="user.rdUserSet == 0">ถือสินค้ามาเอง</span>
+              <span class="error" ng-if="user.rdUserSet == 1">ส่ง EMS</span>
+            </h4>
+          </div>
+        </div>
+      </div>
+      <div class="col"></div>
+    </div>
+    <div class="list">
+        <label class="item">
+          <button class="button button-block button-positive" type="button"
+            ng-click="confirmreject()">ยืนยัน</button>
+        </label>
+      </div>
+  </ion-content>
+</ion-modal-view>

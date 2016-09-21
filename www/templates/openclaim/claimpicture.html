@@ -3,9 +3,9 @@
     <br />
     <div>
       <div class="row gallery">
-          <div class="col col-50" ng-repeat="img in gallery" ng-if="img.status == 1" myclick="opop(img.src,img.name)">
+          <div class="col col-50" ng-repeat="img in gallery" ng-if="img.status == 1" >
             <div class="list card">
-              <div class="item item-image">
+              <div class="item item-image" myclick="opop(img.src,img.name)">
                 <img src="{{img.src}}">
               </div>
               <a class="item item-icon-left assertive">

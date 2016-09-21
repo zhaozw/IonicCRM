@@ -34,12 +34,15 @@
                 </div>
                 <div class="row">
                   <div class="col">
+                    <h4>วิธีการที่จะส่งสินค้ามาที่บริษัท</h4>
                     <md-radio-group ng-model="user.rdUserSet">
                       <md-radio-button value="0">ถือสินค้ามาเอง</md-radio-button>
                       <md-radio-button value="1">ส่ง EMS</md-radio-button>
                     </md-radio-group>
                   </div>
                 </div>
+                <hr class="divider"/>
+                <h4>ระบุที่อยู่ที่จะส่งสินค้าคืนลูกค้า</h4>
                 <div class="row">
                   <div class="col">
                     <md-input-container>
@@ -89,7 +92,9 @@
                     <md-button class="md-raised md-warn" ng-click="clickfile()">แนบรูปภาพประกอบ</md-button>
                     <hr class="divider" />
                     <canvas id="canvas01" width="578" height="400" ng-hide="true"></canvas>
-                    <div class="row img01 gallery" id="img01"></div>
+                    <div class="row" id="img01">
+                      <div class="img01 gallery" ng-repeat="n in user.appendoc" ng-bind-html ="n.doc"></div>
+                    </div>
                   </div>
                 </div>
                 <div class="row">

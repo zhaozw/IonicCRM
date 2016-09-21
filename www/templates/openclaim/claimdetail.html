@@ -5,7 +5,7 @@
       <div class="row gallery">
         <div class="col"></div>
         <div class="col col-75">
-            <span class="primary-blue">{{txt}}</span>
+            <span class="primary-blue">{{txt+'  '+user.txttitle}}</span>
             <hr class="divider"/>
             <div ng-show="user.getTypeHide">
               <md-input-container md-no-float>
@@ -31,6 +31,7 @@
                 <span class="error" ng-hide="user.txtclaim">*กรุณาระบุเลขที่เอกสารด้วย</span>
               </md-input-container>
               <hr class="divider">
+              <h4>วิธีการที่จะส่งสินค้ามาที่บริษัท</h4>
               <md-radio-group ng-model="user.rdUserSet">
                 <md-radio-button value="0">ถือสินค้ามาเอง</md-radio-button>
                 <md-radio-button value="1">ส่ง EMS</md-radio-button>
@@ -63,9 +64,9 @@
                     <md-button class="md-raised md-warn">ข้อมูลเพิ่มเติม</md-button>
                     <div>
                       <hr class="divider"/>
-                      <h4>สินค้าที่ต้องการเคลม: {{user.productitem}} จำนวน: {{user.itemamount}} ตัว</h4>
-                      <br />
-                      <h4>ที่อยู่ที่ส่งของ {{user.addresstransport}}</h4>
+                      <!--<h4>{{user.custname }} ต้องการเคลม: {{user.productitem}} จำนวน: {{user.itemamount}} ตัว</h4>
+                      <br />-->
+                      <h4>ที่อยู่ที่ส่งของให้ลูกค้า {{user.addresstransport}}</h4>
                     </div>
                   </div>
                 </div>

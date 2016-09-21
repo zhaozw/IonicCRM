@@ -3684,7 +3684,7 @@ function getMarkingCode(id,callback){
 				a.orderBy("ivz_datemarking", false);
 				a.filter = new MobileCRM.FetchXml.Filter();
 				a.filter.where('ivz_itemid','like',id.trim()+'%');
-		var fetch = new MobileCRM.FetchXml.Fetch(a,100000000,1);
+		var fetch = new MobileCRM.FetchXml.Fetch(a,10000,1);
 				fetch.execute('array',function(data){
 					//alert(data.length);
 					var b = [];
@@ -3699,6 +3699,35 @@ function getMarkingCode(id,callback){
 						}
 					}
 					callback(b);
+				},alerterror,null);
+	} catch (e) {
+		alert('fn 3489 '+e);
+	}
+}
+
+function getMarkingCodeCount(){
+	try {
+		var a = new MobileCRM.FetchXml.Entity('ivz_makingcode');
+				a.addAttribute("ivz_makingcodeid");//0
+				a.addAttribute("ivz_name");//1
+				a.addAttribute("ivz_itemid");//2
+				a.addAttribute("ivz_datemarking");//3
+				a.orderBy("ivz_datemarking", false);
+		var fetch = new MobileCRM.FetchXml.Fetch(a,100000000,1);
+				fetch.execute('array',function(data){
+					alert('ser:'+data.length);
+					// var b = [];
+					// if(data.length > 0){
+					// 	for(var i in data){
+					// 			b.push({
+					// 				makingcodeid:data[i][0],
+					// 				name:'Y'+uu(data[i][1]),
+					// 				itemid:data[i][2],
+					// 				datemarking:data[i][3]
+					// 			});
+					// 	}
+					// }
+					// callback(b);
 				},alerterror,null);
 	} catch (e) {
 		alert('fn 3489 '+e);
@@ -3720,7 +3749,7 @@ function getMarkingCodeCar(id,callback){
 				a.orderBy("ivz_datemark", false);
 				a.filter = new MobileCRM.FetchXml.Filter();
 				a.filter.where('ivz_itemid','like',id.trim()+'%');
-		var fetch = new MobileCRM.FetchXml.Fetch(a,100000000,1);
+		var fetch = new MobileCRM.FetchXml.Fetch(a,10000,1);
 				fetch.execute('array',function(data){
 					//alert(data.length);
 					var b = [];

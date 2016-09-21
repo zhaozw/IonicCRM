@@ -1,5 +1,5 @@
 angular.module('starter.controllers', [])
-.controller('AppCtrl', function ($scope, $ionicModal, $timeout, $cookies, Data, $ionicLoading, $state, $ionicHistory, $ionicModal, DataOrder) {
+.controller('AppCtrl', function ($scope, $ionicModal, $timeout, $cookies, Data, $ionicLoading, $state, $ionicHistory,  DataOrder) {
         $state.reload();
         Data.showcart = false;
         $scope.Data = Data;
@@ -13304,6 +13304,7 @@ angular.module('starter.controllers', [])
        productplace:false,
        poductclaimid:''
     };
+    //getMarkingCodeCount();
     GetProductList(10000,1,function(data){
       var setv = setInterval(function(){
         if(data){
@@ -13455,7 +13456,8 @@ angular.module('starter.controllers', [])
      provincename:'ddd',
      districtname:'yyy',
      zipname:'12233',
-     telname:'0987864321'
+     telname:'0987864321',
+     txtr:false
   };
   $scope.listserialname = [];
   $scope.setting = {
@@ -13510,90 +13512,114 @@ angular.module('starter.controllers', [])
     }
   }
   $scope.exserail = function(txt){
-    if(txt.length > 2){
-
+    var us = (txt).toUpperCase();
+    if(txt.length > 0){
+      if( $stateParams.gettype == 3){
+        if(txt.length >= 4){
+          $scope.user.txtr = true;
+        }else{
+           $scope.user.txtr = false;
+        }
+      }//end
+      else if( $stateParams.gettype == 0 || $stateParams.gettype == 1){//top eco
+       if(txt.length >= 4){
+          $scope.user.txtr = true;
+        }else{
+           $scope.user.txtr = false;
+        }
+      }//eco
+      else if( $stateParams.gettype == 2){
+        if(txt.length >= 4){
+          $scope.user.txtr = true;
+        }else{
+           $scope.user.txtr = false;
+        }
+      }
     }
   }
   $scope.setexp = function(txt){
     $scope.user.txtpartserial = txt;
   }
-  $scope.$on('$ionicView.enter',function(){
-    $scope.Load();
-    if( $stateParams.gettype == 3 || $stateParams.gettype == '3'){
+  //load
+  if( $stateParams.gettype == 3 || $stateParams.gettype == '3'){
        getMarkingCodeCar($stateParams.productid,function(data){
-      //alert(data.length);
-      if(data.length > 0){
-        var x = 0;
-        var looparray = function(arr){
-          getpush(x,function(){
-            x++;
-            if(x < arr.length){
-              looparray(arr);
-            }else{
-              $ionicLoading.hide();
-            }
-          });
-        }
-        function getpush(i,callback){
-          if(data){
-            if(data[i].name){
-              $scope.LoadInfo('กำลังโหลดข้อมูล '+data[i].name,i);
-              $scope.listserialname.push({
-                makingcodeid:data[i].makingcodeid,
-                name:data[i].name,
-                itemid:data[i].itemid,
-                datemarking:new Date(data[i].datemarking)
-              });
-            }
-            setTimeout(function(){
-              callback();
-            },50);
-          }else{
-            callback();
+        alert(data.length);
+        if(data.length > 0){
+          var x = 0;
+          var looparray = function(arr){
+            getpush(x,function(){
+              x++;
+              if(x < arr.length){
+                looparray(arr);
+              }else{
+                $ionicLoading.hide();
+              }
+            });
           }
+          function getpush(i,callback){
+            if(data){
+              if(data[i].name){
+                $scope.LoadInfo('กำลังโหลดข้อมูล '+data[i].name,i);
+                $scope.listserialname.push({
+                  makingcodeid:data[i].makingcodeid,
+                  name:data[i].name,
+                  itemid:data[i].itemid,
+                  datemarking:new Date(data[i].datemarking)
+                });
+              }
+              setTimeout(function(){
+                callback();
+              },10);
+            }else{
+              callback();
+            }
+          }
+          looparray(data);
         }
-        looparray(data);
-      }
-      if($scope.$phase){$scope.$apply();}
-    });
+        if($scope.$phase){$scope.$apply();}
+      });
     }else{
        getMarkingCode($stateParams.productid,function(data){
-      //alert(data.length);
-      if(data.length > 0){
-        var x = 0;
-        var looparray = function(arr){
-          getpush(x,function(){
-            x++;
-            if(x < arr.length){
-              looparray(arr);
-            }else{
-              $ionicLoading.hide();
-            }
-          });
-        }
-        function getpush(i,callback){
-          if(data){
-            if(data[i].name){
-              $scope.LoadInfo('กำลังโหลดข้อมูล '+data[i].name,i);
-              $scope.listserialname.push({
-                makingcodeid:data[i].makingcodeid,
-                name:data[i].name,
-                itemid:data[i].itemid,
-                datemarking:new Date(data[i].datemarking)
-              });
-            }
-            setTimeout(function(){
-              callback();
-            },50);
-          }else{
-            callback();
+        //alert(data.length);
+        if(data.length > 0){
+          var x = 0;
+          var looparray = function(arr){
+            getpush(x,function(){
+              x++;
+              if(x < arr.length){
+                looparray(arr);
+              }else{
+                $ionicLoading.hide();
+              }
+            });
           }
+          function getpush(i,callback){
+            if(data){
+              if(data[i].name){
+                $scope.LoadInfo('กำลังโหลดข้อมูล '+data[i].name,i);
+                $scope.listserialname.push({
+                  makingcodeid:data[i].makingcodeid,
+                  name:data[i].name,
+                  itemid:data[i].itemid,
+                  datemarking:new Date(data[i].datemarking)
+                });
+              }
+              callback();
+              setTimeout(function(){
+                callback();
+              },10);
+            }else{
+              callback();
+            }
+          }
+          looparray(data);
         }
-        looparray(data);
-      }
-      if($scope.$phase){$scope.$apply();}
-    });
+        if($scope.$phase){$scope.$apply();}
+      });
     }
+  //end
+  $scope.$on('$ionicView.enter',function(){
+    $scope.Load();
     $scope.exp = function(x){
       $scope.setting.serail = x;
       if(x == true){
@@ -13979,13 +14005,12 @@ angular.module('starter.controllers', [])
     }
   }
   $scope.genNext02 = function(txtpartserial,txtclaimdate){
-      
       var n = new Date();
       var t_date = '';
       var c_date = parseInt($stateParams.gettype);//get form $stateParams $scope.getType
       if($scope.setting.serail == true){
         var gh = '';
-        if(c_date === 2){
+        if(c_date === 2){//dtg
           if(txtpartserial.length < 5){
             var sFirst = isNaN(txtpartserial.slice(1,2));
           if(sFirst == false){
@@ -14042,7 +14067,7 @@ angular.module('starter.controllers', [])
               $scope.user.txtpartserial = '';
               return;
           }
-        }else if(c_date === 3){
+        }else if(c_date === 3){//auto
           if(txtpartserial.length === 9){
             var sFirst = isNaN(txtpartserial.slice(0,2));
           if(sFirst == false){
@@ -14051,14 +14076,13 @@ angular.module('starter.controllers', [])
             return;
           }else{
             /////////////////
-
-
             var us = (txtpartserial).toUpperCase();
             var week = getMonthDTG(us.slice(1,2));
             var firstTxt = us.slice(0,1);
             var secoundTxt = us.slice(1,2);
+            var lastTxt = isNaN(us.slice(5,10));
             if(firstTxt == 'Y'){
-              if(secoundTxt == 'A'){
+              if(secoundTxt == 'A' && lastTxt == false){
                 if(week == false){
                   alert("กรุณาระบุหมายเลขซีเรียลให้ถูกต้องด้วย");
                   $scope.user.txtpartserial = '';
@@ -14119,11 +14143,14 @@ angular.module('starter.controllers', [])
               $scope.user.txtpartserial = '';
               return;
           }
-        }else{
+        }else{//eco top
           var us = (txtpartserial).toUpperCase();
           var wdate = parseInt(us.slice(2,4));
+          var firstTxt = us.slice(0,1);
+          var lastTxt = isNaN(us.slice(4,8));
+          //alert(lastTxt);
             if($scope.user.txtpartserial.length  === 8){
-              if(wdate <= 52){
+              if(wdate <= 52 && firstTxt == 'Y' && lastTxt == false){
                 gh = chkChok(txtpartserial);
                 t_date = new Date(gh);
                 if($stateParams.rduset == 0){
@@ -14212,7 +14239,7 @@ angular.module('starter.controllers', [])
       scope:$scope,
       animation:'slide-in-up'
   }).then(function(modal){
-      $scope.modalsuccess = modal;
+      $scope.modalclaim3 = modal;
   });
   $scope.listorder = [];
   try {
@@ -14252,9 +14279,9 @@ angular.module('starter.controllers', [])
       }else{
         $ionicLoading.hide();
         $scope.titlemodal = 'จากการตรวจสอบยอดขายย้อนหลัง 12 เดือนไม่มีการซื้อขาย';
-        $scope.modalsuccess.show();
+        $scope.modalclaim3.show();
         setTimeout(function(){
-          $scope.modalsuccess.hide();
+          $scope.modalclaim3.hide();
         },2000);
       }
     });
@@ -14328,7 +14355,7 @@ angular.module('starter.controllers', [])
       if($stateParams.gettype == 0 || $stateParams.gettype == 1){//check top echo
         if(data.length > 0){
           $scope.titlemodal =  'ลูกค้าเคยมีประวัติเคลมสงเสริมการขายแล้วไม่สามารถเปิดใบเคลมได้';
-          $scope.modalsuccess.show();
+         $scope.modalclaim3.show();
           $scope.closesuccess = function(){
             $scope.clicknext();
           }
@@ -14338,8 +14365,9 @@ angular.module('starter.controllers', [])
       }else if($stateParams.gettype == 2 || $stateParams.gettype == 3){//check std auto
         if(data.length > 0){
           $scope.titlemodal = 'ลูกค้าเคยมีประวัติเคลมสงเสริมการขายแล้วไม่สามารถเปิดใบเคลมได้';
-          $scope.modalsuccess.show();
+          $scope.modalclaim3.show();
           $scope.closesuccess = function(){
+            $scope.modalclaim3.hide();
             $ionicHistory.clearHistory();
             $ionicHistory.nextViewOptions({
                 disableBack: true
@@ -14386,6 +14414,7 @@ angular.module('starter.controllers', [])
     custid:$stateParams.accountid,
     custname:'',
     addressname:'',
+    appendoc:[],
     zipname:'',
     telname:'',
     telphone:'',
@@ -14437,7 +14466,11 @@ angular.module('starter.controllers', [])
           $scope.user.addressname = data[0].address1_name;
           $scope.user.zipname = data[0].address1_postalcode;
           $scope.user.telphone = data[0].telephone1;
-          $scope.user.telname = data[0].telephone1+','+data[0].telephone2;
+          if(data[0].telephone2){
+            $scope.user.telname = data[0].telephone1;
+          }else{
+            $scope.user.telname = data[0].telephone1+','+data[0].telephone2;
+          }
           $scope.user.otherphone = data[0].telephone2;
           $scope.user.provincename = data[0].ivz_addressprovince.id;
           $scope.user.districtname = data[0].ivz_addressdistrict.id;
@@ -14456,10 +14489,40 @@ angular.module('starter.controllers', [])
     } catch (e) {
       alert('12744 '+e);
     }
-    $('#filenote').change(function(){
+    $scope.clickfile = function(){
+      $('#filenote').trigger('click');
+    }
+    $scope.removeimg = function(id){
+      $scope.user.filedoc.splice(id,1);
+      pushImg();
+    }
+    var pushImg = function(){
+      try{
+        //$('.divimg').remove();
+        var html = '';
+          if($scope.user.filedoc){
+            $scope.user.appendoc.length = 0;
+              for(var i in $scope.user.filedoc){
+                  //$scope.user.txttitle = 'เพิ่มรูปภาพ'+i;
+                  $scope.user.appendoc.push({id:i,doc:'<div class="col divimg">' +
+                              '<img class="thumbnail" src="data:image/jpeg;base64,' + $scope.user.filedoc[i].docfile + '" width="150" height="150" ng-click="removeimg(' + i + ')"/>' +
+                              '</div>'});
+                  if($scope.$phase){
+                    $scope.$apply();
+                  }
+              }
+          }else{
+            $scope.user.appendoc.length = 0;
+          }
+      }catch(e){
+        alert('error 15030 '+e);
+      }
+    }
+    $('#filenote').change(function(e){
       GetAtt('#filenote', '', 'canvas01', function (data) {
           $scope.user.filedoc.push({docfile:data,title:'รูปภาพงานเคลม'});
-          pushImg('img01');
+          pushImg();
+          $state.reload();
       });
     });
   });
@@ -14484,22 +14547,22 @@ angular.module('starter.controllers', [])
   $scope.clickfile = function(){
     $('#filenote').trigger('click');
   }
-  function pushImg(dClass){
-    $('.divimg').remove();
-    if($scope.user.filedoc){
-        for(var i in $scope.user.filedoc){
-            var html =  '<div class="col divimg">' +
-                        '<img class="thumbnail" src="data:image/jpeg;base64,' + $scope.user.filedoc[i].docfile + '" width="150" height="150" ng-click="removeimg(' + i + ')"/>' +
-                        '</div>';
-            angular.element(document.getElementById(dClass)).append($compile(html)($scope));
-        }
-    }
-  }
+  // function pushImg(dClass){
+  //   $('.divimg').remove();
+  //   if($scope.user.filedoc){
+  //       for(var i in $scope.user.filedoc){
+  //           var html =  '<div class="col divimg">' +
+  //                       '<img class="thumbnail" src="data:image/jpeg;base64,' + $scope.user.filedoc[i].docfile + '" width="150" height="150" ng-click="removeimg(' + i + ')"/>' +
+  //                       '</div>';
+  //           angular.element(document.getElementById(dClass)).append($compile(html)($scope));
+  //       }
+  //   }
+  // }
 
-  $scope.removeimg = function(id){
-    $scope.user.filedoc.splice(id,1);
-    pushImg('img01');
-  }
+  // $scope.removeimg = function(id){
+  //   $scope.user.filedoc.splice(id,1);
+  //   pushImg('img01');
+  // }
   $scope.reback = function(){
     $ionicHistory.goBack(-1);
   }
@@ -14648,7 +14711,23 @@ angular.module('starter.controllers', [])
     try {
       if($scope.user.txtclaim){
         if($scope.user.filedoc.length > 0){
-          insertmaintenace(guid(),insertdetail);
+          if($scope.user.txtmantainance){
+            /////////////////////
+              $scope.modalclaim.show();
+              $scope.titlemodal = "ยืนยันการส่งซ่อม";
+              $scope.closeload = function(){
+                $scope.modalclaim.hide();
+              }
+              $scope.confirmload = function(){
+                $scope.Load();
+                insertmaintenace(guid(),insertdetail);
+                $scope.modalclaim.hide();
+              }
+            /////////////////
+          }else{
+            alert('กรุณาระบุสาเหตุที่ส่งซ่อมด้วย');
+            return;
+            }
         }else{
           alert('กรุณาระบุรูปสินค้าด้วย');
           return;
@@ -14869,7 +14948,7 @@ angular.module('starter.controllers', [])
         setTimeout(function(){
           $ionicLoading.hide();
         },3000);
-        var sd = "ไม่พบข้อมูลรูปภาพ";
+        var sd = "ไม่พบข้อมูลรูปภาพรับเคลมทุกกรณี";
         alert(sd);
       }
       if($scope.$phase){
@@ -15086,12 +15165,22 @@ angular.module('starter.controllers', [])
   }).then(function(modal){
       $scope.modalsuccess = modal;
   });
+  $ionicModal.fromTemplateUrl('templates/comment/claimdetail.html',{
+      id:5,
+      scope:$scope,
+      animation:'slide-in-up'
+  }).then(function(modal){
+      $scope.modaldetail = modal;
+  });
   $scope.listpartname = '';
   $scope.Load();
   $scope.user = {
+    txttitle:'',
     productplace:false,
     rdUserSet:0,
     txtpartname:'',
+    partitem:'',
+    itemnumber:'',
     txtclaim:'',
     filedoc:[],
     appendoc:[],
@@ -15117,7 +15206,10 @@ angular.module('starter.controllers', [])
     empid:$cookies.get('ivz_empid'),
     partprice:0,
     addresstransport:'',
-    productitem:''
+    productitem:'',
+    txtname:'',
+    txtstate:'',
+    txtcomment:''
   };
   setTimeout(function(){
     $ionicLoading.hide();
@@ -15172,6 +15264,7 @@ angular.module('starter.controllers', [])
   $scope.txt = '';
   var txt = parseInt($stateParams.gettype);
   var tatype = parseInt($stateParams.optiontype);//เช็คเปลี่ยนตัวหรือเปลี่ยน part
+  //alert('เช็คเปลี่ยนตัวหรือเปลี่ยน part :'+tatype);
   var ii = 'tatype:'+$scope.user.rduset;
   if(txt == 0 || txt == 1 || txt == 2 || txt == 3){//check type
     var proplace = parseInt($scope.user.rduset);
@@ -15185,13 +15278,24 @@ angular.module('starter.controllers', [])
         //$scope.user.itemamount = parseInt($stateParams.itemamount);
       }
     }else{
-      if(tatype == 1 || tatype == '1'){
-        $scope.txt = 'ระบบตรวจสอบจากสาเหตุการเคลม ' + $stateParams.claimtxt+' พบว่า "เปลี่ยน Part"';
-        $scope.user.getTypeHide = true;
+      if(tatype){
+        if(tatype == 1 || tatype == '1'){
+          $scope.txt = 'ระบบตรวจสอบจากสาเหตุการเคลม ' + $stateParams.claimtxt+' พบว่า "เปลี่ยน Part"';
+          $scope.user.getTypeHide = true;
+        }else{
+          $scope.txt = 'ระบบตรวจสอบจากสาเหตุการเคลม ' + $stateParams.claimtxt+' พบว่า "เปลี่ยนตัวใหม่"';
+          $scope.user.getTypeHide = false;
+          //$scope.user.itemamount = parseInt($stateParams.itemamount);
+        }
       }else{
-        $scope.txt = 'ระบบตรวจสอบจากสาเหตุการเคลม ' + $stateParams.claimtxt+' พบว่า "เปลี่ยนตัวใหม่"';
-        $scope.user.getTypeHide = false;
-        //$scope.user.itemamount = parseInt($stateParams.itemamount);
+        if(txt == 0 || txt == 1){
+          $scope.txt = 'ระบบตรวจสอบจากสาเหตุการเคลม ' + $stateParams.claimtxt+' พบว่า "เปลี่ยน Part"';
+          $scope.user.getTypeHide = true;
+        }else if(txt == 2 || txt == 3){
+          $scope.txt = 'ระบบตรวจสอบจากสาเหตุการเคลม ' + $stateParams.claimtxt+' พบว่า "เปลี่ยนตัวใหม่"';
+          $scope.user.getTypeHide = false;
+          //$scope.user.itemamount = parseInt($stateParams.itemamount);
+        }
       }
     }
     //get part
@@ -15237,6 +15341,8 @@ angular.module('starter.controllers', [])
   $scope.$on('$ionicView.enter',function(){
     GetProductListId($stateParams.productclaim,1,1,function(data){
       $scope.user.productitem = data[0].productnumber +','+data[0].name;
+      $scope.user.partitem = data[0].name;
+      $scope.user.itemnumber = data[0].productnumber;
       if($scope.$phase){
         $scope.$apply();
       }
@@ -15263,6 +15369,8 @@ angular.module('starter.controllers', [])
           $scope.user.provincename = data[0].ivz_addressprovince.id;
           $scope.user.districtname = data[0].ivz_addressdistrict.id;
           $scope.user.territoryid = data[0].territoryid.id;
+          $scope.user.txtname = data[0].name;
+          $scope.user.txtstate = data[0].territoryid.primaryName;
           setTimeout(function(){
             ///$ionicLoading.hide();
           },5000);
@@ -15281,17 +15389,27 @@ angular.module('starter.controllers', [])
     $scope.clickfile = function(){
       $('#filenote').trigger('click');
     }
+    $scope.removeimg = function(id){
+      $scope.user.filedoc.splice(id,1);
+      pushImg();
+    }
     var pushImg = function(){
       try{
-        $('.divimg').remove();
+        //$('.divimg').remove();
+        var html = '';
           if($scope.user.filedoc){
+            $scope.user.appendoc.length = 0;
               for(var i in $scope.user.filedoc){
-                  //alert('push'+i);
+                  //$scope.user.txttitle = 'เพิ่มรูปภาพ'+i;
                   $scope.user.appendoc.push({id:i,doc:'<div class="col divimg">' +
                               '<img class="thumbnail" src="data:image/jpeg;base64,' + $scope.user.filedoc[i].docfile + '" width="150" height="150" ng-click="removeimg(' + i + ')"/>' +
                               '</div>'});
-                  //angular.element(document.getElementById('img01')).append($compile(html)($scope));
+                  if($scope.$phase){
+                    $scope.$apply();
+                  }
               }
+          }else{
+            $scope.user.appendoc.length = 0;
           }
       }catch(e){
         alert('error 15030 '+e);
@@ -15301,6 +15419,7 @@ angular.module('starter.controllers', [])
       GetAtt('#filenote', '', 'canvas01', function (data) {
           $scope.user.filedoc.push({docfile:data,title:'รูปภาพงานเคลม'});
           pushImg();
+          $state.reload();
       });
     });
     setTimeout(function(){
@@ -15318,10 +15437,7 @@ angular.module('starter.controllers', [])
     $scope.user.productplace = false;
   }
 
-  $scope.removeimg = function(id){
-    $scope.user.filedoc.splice(id,1);
-    pushImg('img01');
-  }
+  
   $scope.reback = function(){
     $ionicHistory.goBack(-1);
   }
@@ -15497,35 +15613,59 @@ angular.module('starter.controllers', [])
   }
 
   $scope.saveclaim = function(){
-    $scope.Load();
-    console.log('insert claim');
-    try {
-      if($scope.user.optiontype == 1 || $scope.user.optiontype == '1'){
-        if($scope.user.txtpartname.length < 1){
-          alert('กรุณาระบุ Part ที่ต้องการเปลี่ยนด้วย');
-          $ionicLoading.hide();
-        }else if($scope.user.txtclaim.length < 1){
-          alert('กรุณาระบุหมายเลขเอกสารด้วย');
-          $ionicLoading.hide();
-        }else if($scope.user.filedoc.length < 1){
-          alert('กรุณาแนบรูปสินค้าด้วย');
-          $ionicLoading.hide();
-        }else{
-          insertmaintenace(guid(),insertdetail);
-        }
+    $scope.user.txtcomment = $scope.user.custname+' ต้องการเคลม: '+$scope.user.productitem+' จำนวน: '+$scope.user.itemamount
+    +'ตัวที่อยู่ที่ส่งของ '+$scope.user.addresstransport;
+    $scope.modaldetail.show();
+    $scope.closeModalDetail = function(){
+      $scope.modaldetail.hide();
+    }
+    $scope.confirmreject = function(){
+      $scope.modaldetail.hide();
+      if($stateParams.specailclaim == 0){
+        $scope.titlemodal = "ยืนยันการเปิดใบเคลมสินค้า";
       }else{
-        if($scope.user.txtclaim.length < 1){
-          alert('กรุณาระบุหมายเลขเอกสารด้วย');
-          $ionicLoading.hide();
-        }else if($scope.user.filedoc.length < 1){
-          alert('กรุณาแนบรูปสินค้าด้วย');
-          $ionicLoading.hide();
-        }else{
-          insertmaintenace(guid(),insertdetail);
-        }
+        $scope.titlemodal = "ยืนยันการเปิดใบเคลมส่งเสริมการขาย";
       }
-    } catch (e) {
-      alert('error 13833 :'+e);
+      $scope.closeload = function(){
+        $scope.modalclaim.hide();
+      }
+      $scope.confirmload = function(){
+        $scope.Load();
+        insertmaintenace(guid(),insertdetail);
+        $scope.modalclaim.hide();
+      }
+      console.log('insert claim');
+      try {
+        if($scope.user.optiontype == 1 || $scope.user.optiontype == '1'){
+          if($scope.user.txtpartname.length < 1){
+            alert('กรุณาระบุ Part ที่ต้องการเปลี่ยนด้วย');
+            $ionicLoading.hide();
+          }else if($scope.user.txtclaim.length < 1){
+            alert('กรุณาระบุหมายเลขเอกสารด้วย');
+            $ionicLoading.hide();
+          }else if($scope.user.filedoc.length < 1){
+            alert('กรุณาแนบรูปสินค้าด้วย');
+            $ionicLoading.hide();
+          }else{
+            $scope.modalclaim.show();
+            // insertmaintenace(guid(),insertdetail);
+          }
+        }else{
+          if($scope.user.txtclaim.length < 1){
+            alert('กรุณาระบุหมายเลขเอกสารด้วย');
+            $ionicLoading.hide();
+          }else if($scope.user.filedoc.length < 1){
+            alert('กรุณาแนบรูปสินค้าด้วย');
+            $ionicLoading.hide();
+          }else{
+            $scope.modalclaim.show();
+            // insertmaintenace(guid(),insertdetail);
+          }
+        }
+        
+      } catch (e) {
+        alert('error 13833 :'+e);
+      }
     }
     // setTimeout(function(){
     //   $ionicLoading.hide();
