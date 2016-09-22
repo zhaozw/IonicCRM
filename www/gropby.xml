@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<fetch xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1.0">
+  <entity name="ivz_yssmarkingcodecar">
+    <filter type="and">
+      <condition attribute="ivz_datemark" operator="this-year" />
+      <condition attribute="ivz_markingcode" operator="like" value="YA%" />
+    </filter>
+  </entity>
+</fetch>

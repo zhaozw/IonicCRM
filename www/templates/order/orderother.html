@@ -9,6 +9,7 @@
             ng-click="opendetail(n.productid,n.productname,n.priceperunit,n.tatol,n.quality)" ng-hide="ordertype == 4">
               <div class="md-list-item-text">
                 <h3>{{n.productname}}</h3>
+                <h4>{{n.productnumber}}</h4>
                 <h4>
                   ราคา/หน่วย:&nbsp;
                   <span class="error" style="font-weight:bold;">{{n.priceperunit |currency:''}}</span>

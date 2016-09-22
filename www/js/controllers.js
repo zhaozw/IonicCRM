@@ -2598,8 +2598,8 @@ angular.module('starter.controllers', [])
     .controller('OrderAddressCtrl', function ($scope, $stateParams, $cookies, Data, $ionicHistory, $ionicLoading, $state) {
       $scope.listorderaddress = [];
       $scope.reloaddata = function(){
+        $scope.listorderaddress.length = 0;
         GetCustomerAddres($stateParams.accountid,2,function(result){
-          $scope.listorderaddress.length = 0;
           $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล');
           if(result.length > 0){
             var u = 0;
@@ -13540,9 +13540,14 @@ angular.module('starter.controllers', [])
   $scope.setexp = function(txt){
     $scope.user.txtpartserial = txt;
   }
-  //load
+  
+  $scope.$on('$ionicView.enter',function(){
+    $scope.Load();
+
+//load
   if( $stateParams.gettype == 3 || $stateParams.gettype == '3'){
-       getMarkingCodeCar($stateParams.productid,function(data){
+    //alert($stateParams.productclaim);
+       getMarkingCodeCar($stateParams.productclaim,function(data){
         alert(data.length);
         if(data.length > 0){
           var x = 0;
@@ -13569,7 +13574,7 @@ angular.module('starter.controllers', [])
               }
               setTimeout(function(){
                 callback();
-              },10);
+              },1);
             }else{
               callback();
             }
@@ -13579,47 +13584,46 @@ angular.module('starter.controllers', [])
         if($scope.$phase){$scope.$apply();}
       });
     }else{
-       getMarkingCode($stateParams.productid,function(data){
-        //alert(data.length);
-        if(data.length > 0){
-          var x = 0;
-          var looparray = function(arr){
-            getpush(x,function(){
-              x++;
-              if(x < arr.length){
-                looparray(arr);
-              }else{
-                $ionicLoading.hide();
-              }
-            });
-          }
-          function getpush(i,callback){
-            if(data){
-              if(data[i].name){
-                $scope.LoadInfo('กำลังโหลดข้อมูล '+data[i].name,i);
-                $scope.listserialname.push({
-                  makingcodeid:data[i].makingcodeid,
-                  name:data[i].name,
-                  itemid:data[i].itemid,
-                  datemarking:new Date(data[i].datemarking)
-                });
-              }
-              callback();
-              setTimeout(function(){
-                callback();
-              },10);
-            }else{
-              callback();
-            }
-          }
-          looparray(data);
-        }
-        if($scope.$phase){$scope.$apply();}
-      });
+      //  getMarkingCode($stateParams.productid,function(data){
+      //   //alert(data.length);
+      //   if(data.length > 0){
+      //     var x = 0;
+      //     var looparray = function(arr){
+      //       getpush(x,function(){
+      //         x++;
+      //         if(x < arr.length){
+      //           looparray(arr);
+      //         }else{
+      //           $ionicLoading.hide();
+      //         }
+      //       });
+      //     }
+      //     function getpush(i,callback){
+      //       if(data){
+      //         if(data[i].name){
+      //           $scope.LoadInfo('กำลังโหลดข้อมูล '+data[i].name,i);
+      //           $scope.listserialname.push({
+      //             makingcodeid:data[i].makingcodeid,
+      //             name:data[i].name,
+      //             itemid:data[i].itemid,
+      //             datemarking:new Date(data[i].datemarking)
+      //           });
+      //         }
+      //         callback();
+      //         setTimeout(function(){
+      //           callback();
+      //         },10);
+      //       }else{
+      //         callback();
+      //       }
+      //     }
+      //     looparray(data);
+      //   }
+      //   if($scope.$phase){$scope.$apply();}
+      // });
     }
   //end
-  $scope.$on('$ionicView.enter',function(){
-    $scope.Load();
+
     $scope.exp = function(x){
       $scope.setting.serail = x;
       if(x == true){

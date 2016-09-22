@@ -25,7 +25,7 @@
               <span class="error" ng-hide="user.txtpartserial">*กรุณาระบุ SERIAL NUMBER CODE YSS ด้วย</span>
             </md-input-container>
             <hr class="divider"/>
-            <md-list ng-cloak ng-show="txtr">
+            <md-list ng-cloak ng-show="user.txtpartserial.length > 3">
               <md-list-item ng-repeat="n in listserialname | filter:{name:user.txtpartserial}" ng-click="setexp(n.name)">
                 <h3>{{ n.name}}</h3>
               </md-list-item>

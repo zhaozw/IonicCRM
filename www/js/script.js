@@ -3747,11 +3747,12 @@ function getMarkingCodeCar(id,callback){
 				a.addAttribute("ivz_itemid");//2
 				a.addAttribute("ivz_datemark");//3
 				a.orderBy("ivz_datemark", false);
-				a.filter = new MobileCRM.FetchXml.Filter();
-				a.filter.where('ivz_itemid','like',id.trim()+'%');
-		var fetch = new MobileCRM.FetchXml.Fetch(a,10000,1);
+		var 	filter = new MobileCRM.FetchXml.Filter();
+				filter.where('ivz_itemid','eq',id);
+				a.filter = filter;
+		var fetch = new MobileCRM.FetchXml.Fetch(a,10000000,1);
 				fetch.execute('array',function(data){
-					//alert(data.length);
+					//alert(id);
 					var b = [];
 					if(data.length > 0){
 						for(var i in data){
