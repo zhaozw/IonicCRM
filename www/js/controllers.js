@@ -2201,7 +2201,6 @@ angular.module('starter.controllers', [])
                 						ivz_statuscomplete:data[i].ivz_statuscomplete,
                 						ivz_remarkreject:data[i].ivz_remarkreject,
                 						ivz_taxid:data[i].ivz_taxid,
-                						customertypecode:data[i].customertypecode,
                 						ivz_statustype:data[i].ivz_statustype,
                 						ivz_doc01:data[i].ivz_doc01,
                 						ivz_doc02:data[i].ivz_doc02,
@@ -2280,7 +2279,7 @@ angular.module('starter.controllers', [])
         }
 
     })
-    .controller('PlanedDetailCtrl', function ($scope, $stateParams, $cookies, Data, $ionicHistory, $ionicLoading, $state ,$ionicModal) {
+    .controller('PlanedDetailCtrl', function ($scope, $stateParams, $cookies,DataOrderSpec, DataOrder, Data, $ionicHistory, $ionicLoading, $state ,$ionicModal) {
         $scope.Data = Data;
         Data.showcart = false;
         Data.mastertype = $stateParams.mastertype;
@@ -2336,6 +2335,21 @@ angular.module('starter.controllers', [])
                   ins.properties.ivz_visit = parseInt(1);
                     ins.properties.ivz_visitadjustment = parseInt(1);
                 } else if (type == 3 || type == '3') {
+
+                  DataOrderSpec.order.length = 0;
+                  Data.tatolmatch = 0;
+                  Data.tatolminplus = 0;
+                  Data.balancecredit = 0;
+                  DataOrder.order.length = 0;
+                  DataOrder.account.length = 0;
+                  DataOrder.tatol = 0;
+                  DataOrder.matcher = 0;
+                  DataOrder.fortuner = 0;
+                  DataOrder.allnewfortuner = 0;
+                  DataOrder.pajero = 0;
+                  DataOrder.allnewpajero = 0;
+                  DataOrder.resultallnewpajero = 0;
+
                   ins.properties.ivz_visit = parseInt(1);
                     ins.properties.ivz_visitorder = parseInt(1);
                 } else if (type == 4 || type == '4') {
