@@ -14394,6 +14394,7 @@ angular.module('starter.controllers', [])
 })
 .controller('MaintainancesCtrl',function ($scope, $stateParams,  Data, $state, $ionicLoading, $ionicHistory, $ionicModal ,$compile , $cookies) {
   $state.reload();
+  var i = 0;
   $scope.title = "กรอกข้อมูลเพื่อทำการแจ้งซ่อม";
   $ionicModal.fromTemplateUrl('templates/comment/confirmbox.html',{
               id:1,scope:$scope,animation:'slide-in-up'
@@ -14494,6 +14495,7 @@ angular.module('starter.controllers', [])
       alert('12744 '+e);
     }
     $scope.clickfile = function(){
+      i = 0;
       $('#filenote').trigger('click');
     }
     $scope.removeimg = function(id){
@@ -14523,11 +14525,15 @@ angular.module('starter.controllers', [])
       }
     }
     $('#filenote').change(function(e){
-      GetAtt('#filenote', '', 'canvas01', function (data) {
-          $scope.user.filedoc.push({docfile:data,title:'รูปภาพงานเคลม'});
-          pushImg();
-          $state.reload();
-      });
+      if(i <= 0){
+        i++;
+        GetAtt('#filenote', '', 'canvas01', function (data) {
+            $scope.user.filedoc.push({docfile:data,title:'รูปภาพงานเคลม',doc:'<div class="col divimg">' +
+                              '<img class="thumbnail" src="data:image/jpeg;base64,' + data + '" width="150" height="150"/>' +
+                              '</div>'});
+            $state.reload();
+        });
+      }
     });
   });
 
@@ -14595,6 +14601,7 @@ angular.module('starter.controllers', [])
           ins.properties.ivz_phone =  $scope.user.telname;
           ins.properties.ivz_addressid = parseInt($stateParams.intid);
           ins.properties.ivz_mobile = $scope.user.otherphone;
+          ins.properties.ivz_requesteddelivery = new Date();
           ins.save(function(er){
             if(er){
               alert('claim 13044 '+er);
@@ -15342,6 +15349,8 @@ angular.module('starter.controllers', [])
     }
 
   }
+
+  var i = 0;
   $scope.$on('$ionicView.enter',function(){
     GetProductListId($stateParams.productclaim,1,1,function(data){
       $scope.user.productitem = data[0].productnumber +','+data[0].name;
@@ -15391,8 +15400,30 @@ angular.module('starter.controllers', [])
       alert('13244 '+e);
     }
     $scope.clickfile = function(){
+      i = 0;
       $('#filenote').trigger('click');
     }
+    $('#filenote').change(function(e){
+      //alert('i:'+i);
+      $scope.user.appendoc.length = 0;
+      if(i <= 0){
+        i++;
+        GetAtt('#filenote', '', 'canvas01', function (data) {
+            if($scope.user.filedoc.length > 3){
+              $scope.user.filedoc.push({docfile:data,title:'รูปภาพงานเคลม',doc:'<div class="col divimg">' +
+                                '<img class="thumbnail" src="data:image/jpeg;base64,' + 
+                                data + '" width="150" height="150"/>' +
+                                '</div>'});
+            }else{
+              $scope.user.filedoc.push({docfile:data,title:'รูปภาพงานเคลม',doc:'<div class="col divimg">' +
+                                '<img class="thumbnail" src="data:image/jpeg;base64,' + 
+                                data + '" width="150" height="150"/>' +
+                                '</div>'});
+            }
+            $state.reload();
+        });
+      }
+    });
     $scope.removeimg = function(id){
       $scope.user.filedoc.splice(id,1);
       pushImg();
@@ -15403,11 +15434,13 @@ angular.module('starter.controllers', [])
         var html = '';
           if($scope.user.filedoc){
             $scope.user.appendoc.length = 0;
-              for(var i in $scope.user.filedoc){
-                  //$scope.user.txttitle = 'เพิ่มรูปภาพ'+i;
+              for(var i = 0;i <= $scope.user.filedoc.length;i++){
+                  alert('เพิ่มรูปภาพ'+i);
+                  $scope.user.txttitle = 'เพิ่มรูปภาพ'+i;
                   $scope.user.appendoc.push({id:i,doc:'<div class="col divimg">' +
                               '<img class="thumbnail" src="data:image/jpeg;base64,' + $scope.user.filedoc[i].docfile + '" width="150" height="150" ng-click="removeimg(' + i + ')"/>' +
                               '</div>'});
+                  $state.reload();
                   if($scope.$phase){
                     $scope.$apply();
                   }
@@ -15419,13 +15452,7 @@ angular.module('starter.controllers', [])
         alert('error 15030 '+e);
       }
     }
-    $('#filenote').change(function(e){
-      GetAtt('#filenote', '', 'canvas01', function (data) {
-          $scope.user.filedoc.push({docfile:data,title:'รูปภาพงานเคลม'});
-          pushImg();
-          $state.reload();
-      });
-    });
+    
     setTimeout(function(){
       $ionicLoading.hide();
     },10000);
@@ -15474,6 +15501,7 @@ angular.module('starter.controllers', [])
           ins.properties.ivz_phone = $scope.user.telphone;
           ins.properties.ivz_addressid = parseInt($stateParams.intid);
           ins.properties.ivz_mobile = $scope.user.otherphone;
+          ins.properties.ivz_requesteddelivery = new Date();
           ins.save(function(er){
             if(er){
               alert('claim 12835 '+er);

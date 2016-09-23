@@ -5,7 +5,7 @@
       <div class="row gallery">
         <div class="col"></div>
         <div class="col col-75">
-            <span class="primary-blue">{{txt+'  '+user.txttitle}}</span>
+            <span class="primary-blue">{{txt}}</span>
             <hr class="divider"/>
             <div ng-show="user.getTypeHide">
               <md-input-container md-no-float>
@@ -48,7 +48,7 @@
                     <hr class="divider"/>
                     <canvas id="canvas01" width="578" height="400" ng-hide="true"></canvas>
                     <div class="row" id="img01">
-                      <div class="img01 gallery" ng-repeat="n in user.appendoc" ng-bind-html ="n.doc"></div>
+                      <div class="img01 gallery" ng-repeat="n in user.filedoc" ng-bind-html ="n.doc"></div>
                     </div>
                     <br />
                     <div class="row">

@@ -1605,12 +1605,12 @@ function GetCustomerAddresByInt(byid,callback){
 			l.addAttribute('ivz_addressprovince');//9
 			l.addAttribute('ivz_addressdistrict');//10
 	  var filter = new MobileCRM.FetchXml.Filter();
-	      filter.where('ivz_integrationid','like','%'+byid+'%');
+	      filter.where('ivz_integrationid','eq',byid);
 	      n.filter = filter;
 		var fetch = new MobileCRM.FetchXml.Fetch(n);
 			fetch.execute('array',function(data){
 	      var b = [];
-		  //alert(data.length);
+		  //alert('addressid:'+data.length);
 	      for(var i in data){
 					if(data[i][7])
 					{
