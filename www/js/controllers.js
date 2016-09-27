@@ -13358,7 +13358,7 @@ angular.module('starter.controllers', [])
     $scope.reload = function(){
       $scope.Load();
       $scope.user.txtproductnumber = '';
-      $scope.user.txtTatol = 0;
+      $scope.user.txtTatol = 1;
       $scope.user.aUseGroup = false;
       $scope.user.rdUset = 1;
       $scope.user.chkfs = 0;
@@ -13562,7 +13562,7 @@ angular.module('starter.controllers', [])
   if( $stateParams.gettype == 3 || $stateParams.gettype == '3'){
     //alert($stateParams.productclaim);
        getMarkingCodeCar($stateParams.productclaim,function(data){
-        alert(data.length);
+        //alert(data.length);
         if(data.length > 0){
           var x = 0;
           var looparray = function(arr){
@@ -13682,17 +13682,17 @@ angular.module('starter.controllers', [])
     var t = 0;
     if(c_date === 3){
       t = ((365 * 1) - getDateNumber(t_date));//1 y
-      alert('วันรับประกัน auto y:'+t+' :: '+(365 * 1)+' \n dateon:'+t_date);
+      //alert('วันรับประกัน auto y:'+t+' :: '+(365 * 1)+' \n dateon:'+t_date);
     }else if(c_date === 0){
        t = ((365 * 2) - getDateNumber(t_date));//2 y
-      alert('วันรับประกัน top 2y:'+t+' :: '+(365 * 2)+' \n dateon:'+t_date);
+      //alert('วันรับประกัน top 2y:'+t+' :: '+(365 * 2)+' \n dateon:'+t_date);
     }else if(c_date === 1){
       // t = (diffDays(n, t_date) / (365 * 1));//1 y
       t = ((31 * 6) - getDateNumber(t_date));//6 M
-      alert('วันรับประกัน eco 6M:'+t+' :: '+(31 * 6)+' \n dateon:'+t_date);
+      //alert('วันรับประกัน eco 6M:'+t+' :: '+(31 * 6)+' \n dateon:'+t_date);
     }else if(c_date === 2){
       t = ((31 * 6) - getDateNumber(t_date));//6 M
-      alert('วันรับประกัน dtg 6M:'+t+' :: '+(31 * 6)+' \n dateon:'+t_date);
+      //alert('วันรับประกัน dtg 6M:'+t+' :: '+(31 * 6)+' \n dateon:'+t_date);
     }
     switch (c_date) {
       case 0:
@@ -14057,7 +14057,7 @@ angular.module('starter.controllers', [])
                 $scope.Load();
                 gh = chkChok(txtpartserial);
                 t_date = new Date(gh);
-                alert(t_date);
+                //alert(t_date);
                 if($stateParams.rduset == 0){
                   $state.go('app.claimdetail',{
                           gettype:$stateParams.gettype,
@@ -15449,8 +15449,8 @@ angular.module('starter.controllers', [])
           if($scope.user.filedoc){
             $scope.user.appendoc.length = 0;
               for(var i = 0;i <= $scope.user.filedoc.length;i++){
-                  alert('เพิ่มรูปภาพ'+i);
-                  $scope.user.txttitle = 'เพิ่มรูปภาพ'+i;
+                  //alert('เพิ่มรูปภาพ'+i);
+                  //$scope.user.txttitle = 'เพิ่มรูปภาพ'+i;
                   $scope.user.appendoc.push({id:i,doc:'<div class="col divimg">' +
                               '<img class="thumbnail" src="data:image/jpeg;base64,' + $scope.user.filedoc[i].docfile + '" width="150" height="150" ng-click="removeimg(' + i + ')"/>' +
                               '</div>'});
@@ -15503,11 +15503,15 @@ angular.module('starter.controllers', [])
           ins.properties.ivz_shiptozipcode = $scope.user.zipname;
           ins.properties.ivz_shipby = parseInt($scope.user.rdUserSet);
           ins.properties.ivz_claimreason = $stateParams.claimtxt;
-          ins.properties.ivz_statusclaim = parseInt(1);
           if($stateParams.specailclaim == 1){
             ins.properties.statuscode = parseInt(917970000);
           }else{
             ins.properties.statuscode = parseInt(917970001);
+          }
+          if($stateParams.specailclaim == 1){
+            ins.properties.ivz_statusclaim = parseInt(0);
+          }else{
+            ins.properties.ivz_statusclaim = parseInt(1);
           }
           ins.properties.ivz_typeclaim = parseInt($stateParams.specailclaim);
           ins.properties.ivz_empid = $cookies.get('ivz_empid');

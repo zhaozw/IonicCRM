@@ -354,8 +354,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
                  {id:2,orderlink:3,ordername:"ขาย 3",avator:"img/ionic.png"}],
     orderoptionspec:[{id:0,orderlink:1,ordername:"ขาย 1",avator:"img/ionic.png"},
                  {id:1,orderlink:2,ordername:"ขาย 2",avator:"img/ionic.png"},
-                 {id:2,orderlink:3,ordername:"ขาย 3",avator:"img/ionic.png"},
-                 {id:3,orderlink:4,ordername:"ขาย 4",avator:"img/ionic.png"}]
+                 {id:2,orderlink:3,ordername:"ขาย 3",avator:"img/ionic.png"}]
   }
 })
 .factory('Dtest',function(){
