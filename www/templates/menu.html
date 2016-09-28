@@ -19,7 +19,7 @@
       <h1 class="title">YSS MENU <span class="error">21/7/2016</span></h1>
     </ion-header-bar>
     <ion-content>
-      <ion-list>
+      <ion-list ng-show="Data.nametype">
         <ion-item menu-close ui-sref="app.search({mastertype:Data.mastertype, sterritory:Data.termas,nterritory:0})" class="success"
         ng-click="setdmaster(1)" ng-hide="Data.logontype">
           <!-- Sale -->
@@ -88,8 +88,17 @@
         <ion-item menu-close  class="success" ng-hide="Data.logonstatus" ng-click="clicklogout()">
           <i class="ion-power"></i>&nbsp;ออกจากระบบ
         </ion-item>
-        <ion-item menu-close  class="success" ui-sref="app.listfilter">
-          <i class="ion-power"></i>&nbsp;exlist
+      </ion-list>
+       <!--Car -->
+      <ion-list ng-hide="Data.nametype">
+        <!--<ion-item menu-close  class="success" ui-sref="app.listfilter">
+          <i class="ion-power"></i>&nbsp;บันทึก GPS ขนส่ง
+        </ion-item>-->
+        <ion-item menu-close ui-sref="app.playlists" class="success" ng-show="Data.logonstatus">
+          <i class="ion-power"></i>&nbsp;เข้าสู่ระบบ
+        </ion-item>
+        <ion-item menu-close  class="success" ng-hide="Data.logonstatus" ng-click="clicklogout()">
+          <i class="ion-power"></i>&nbsp;ออกจากระบบ
         </ion-item>
       </ion-list>
     </ion-content>

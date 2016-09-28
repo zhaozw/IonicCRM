@@ -1,0 +1,98 @@
+<ion-view view-title="บันทึกข้อมูล GPS ขนส่ง">
+  <ion-content>
+    <br />
+    <section ng-hide="user.trantxt">
+        <div class="row">
+        <div class="col"></div>
+        <div class="col col-90">
+           <md-list>
+               <md-subheader>เลือกรถขนส่ง</md-subheader>
+               <md-divider ></md-divider>
+               <md-list-item ng-repeat="n in listtransport" ng-click="setxptransport($index,n.name)">
+                   <h5>
+                      รถขนส่ง:
+                      <span class="primary-red">{{n.name}}</span>-{{n.txt}}
+                     </h5>
+                     <i class="md-secondary icon ion-chevron-right primary-red"></i>
+                      <!--<md-radio-button ng-value="n.accountid" class="md-secondary"></md-radio-button>-->
+                    </md-list-item>
+                </md-list>
+           <md-divider></md-divider>
+        </div>
+        <div class="col"></div>
+        </div>
+    </section>
+    <section ng-show="user.trantxt">
+        <div class="bar bar-header item-input-inset">
+            <label class="item-input-wrapper">
+            <i class="icon ion-ios-search placeholder-icon"></i>
+            <input type="search" placeholder="Search" ng-model="user.filtertxt">
+            </label>
+            <md-button class="md-raised button-clear md-warn"
+            aria-label="description" md-ripple-size="auto"
+            ng-click="user.filtertxt = ''" ng-if="user.filtertxt.length > 0">&nbsp;ยกเลิก&nbsp;</md-button>
+        </div>
+        <div class="row">
+        <div class="col"></div>
+        <div class="col col-90">
+                <md-list>
+                    <md-list-item ng-repeat="n in listaccount | filter:user.filtertxt" ng-click="setxp($index,n.accountid)">
+                        <h5>
+                            ชื่อขนส่ง:
+                            <span class="primary-red">{{n.transport}}</span>
+                            ลูกค้า:
+                            <span class="primary-red">{{n.name}}</span>
+                        </h5>
+                        <i class="md-secondary icon ion-pin fa-32"></i>
+                        <!--<md-radio-button ng-value="n.accountid" class="md-secondary"></md-radio-button>-->
+                    </md-list-item>
+                </md-list>
+                <md-divider></md-divider>
+        </div>
+        <div class="col"></div>
+        </div>
+    </section>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+
+
+    <script id="my-modal.html" type="text/ng-template">
+      <ion-modal-view>
+        <div class="loadermodal">
+           <div class="div-center">
+              <span class="icon ion-android-checkmark-circle fa-75 fa-success"></span>
+                <hr class="hr-clean"/>
+                <h2>บันทึกข้อมูลเสร็จแล้ว</h2>
+                <div class="row">
+                  <button class="btn-com-success-y" myclick="closeload()">ตกลง</button>
+                </div>
+            </div>
+        </div>
+      </ion-modal-view>
+    </script>
+    <script id="my-modal-loading.html" type="text/ng-template">
+      <ion-modal-view>
+        <div class="loadermodal">
+           <div class="div-center">
+              <span class="icon ion-android-checkmark-circle fa-75 fa-success"></span>
+                <hr class="hr-clean"/>
+                <h2>บันทึกข้อมูลเสร็จแล้ว</h2>
+                <div class="row">
+                  <button class="btn-com-success-y" myclick="closeload()">ตกลง</button>
+                </div>
+            </div>
+        </div>
+      </ion-modal-view>
+    </script>
+  </ion-content>
+  <div class="tabs tabs-icon-top">
+    <a class="tab-item" ng-click="reloaddata()">
+      <i class="icon ion-refresh error"></i>
+      เริ่มใหม่
+    </a>
+  </div>
+</ion-view>

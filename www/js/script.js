@@ -1207,21 +1207,21 @@ function GetAccount(ivz_leftterritory,stype,page,callback){
       			a.addAttribute('customertypecode');//8
       			a.addAttribute('statuscode');//9
       			a.addAttribute('accountnumber');//10
-						a.addAttribute('ivz_statuscomplete');//11
-						a.addAttribute('ivz_remarkreject');//12
-						a.addAttribute('ivz_taxid');//13
-						a.addAttribute('customertypecode');//14
-						a.addAttribute('ivz_statustype');//15
-						a.addAttribute('ivz_doc01');//16
-						a.addAttribute('ivz_doc02');//17
-						a.addAttribute('ivz_doc03');//18
-						a.addAttribute('ivz_dochouseholdregis');//19
-						a.addAttribute('ivz_docidcard');//20
-						a.addAttribute('ivz_satatusempid');//21
-						a.addAttribute('creditlimit');//22
-						a.addAttribute('ivz_integrationid');//23
-						a.addAttribute('address1_line1');//24
-						a.orderBy("createdon", false);
+				a.addAttribute('ivz_statuscomplete');//11
+				a.addAttribute('ivz_remarkreject');//12
+				a.addAttribute('ivz_taxid');//13
+				a.addAttribute('customertypecode');//14
+				a.addAttribute('ivz_statustype');//15
+				a.addAttribute('ivz_doc01');//16
+				a.addAttribute('ivz_doc02');//17
+				a.addAttribute('ivz_doc03');//18
+				a.addAttribute('ivz_dochouseholdregis');//19
+				a.addAttribute('ivz_docidcard');//20
+				a.addAttribute('ivz_satatusempid');//21
+				a.addAttribute('creditlimit');//22
+				a.addAttribute('ivz_integrationid');//23
+				a.addAttribute('address1_line1');//24
+				a.orderBy("createdon", false);
         var filter = new MobileCRM.FetchXml.Filter();
       		  filter.where('territoryid','eq',ivz_leftterritory);
 						a.filter = filter;
@@ -1240,30 +1240,30 @@ function GetAccount(ivz_leftterritory,stype,page,callback){
       								territoryid:data[i][7],
       								customertypecode:data[i][8],
       								statuscode:data[i][9],
-                      accountnumber:data[i][10],
-                      filtername:data[i][10]+'-'+data[i][1],
-                      ivz_customer:data[i][1],
-                      accountype:stype,
-											ivz_statuscomplete:data[i][11],
-											remarkreject:data[i][12],
-											ivz_taxid:data[i][13],
-											customertypecode:data[i][14],
-											statustype:CtoType(data[i][15]),
-					            ivz_doc01:CtoNum(data[i][16]),
-					            ivz_doc02:CtoNum(data[i][17]),
-					            ivz_doc03:CtoNum(data[i][18]),
-					            ivz_dochouseholdregis:CtoNum(data[i][19]),
-					            ivz_docidcard:CtoNum(data[i][20]),
-											matchtype:CtoChkDoc(data[i][15],
-												CtoNum(data[i][16]),
-												CtoNum(data[i][17]),
-												CtoNum(data[i][18]),
-												CtoNum(data[i][19]),
-												CtoNum(data[i][20])),
-											statusempid:data[i][21],
-											ivz_balancecredit:data[i][22],
-											ivz_integrationid:data[i][23],
-											address1_line:data[i][24]
+									accountnumber:data[i][10],
+									filtername:data[i][10]+'-'+data[i][1],
+									ivz_customer:data[i][1],
+									accountype:stype,
+									ivz_statuscomplete:data[i][11],
+									remarkreject:data[i][12],
+									ivz_taxid:data[i][13],
+									customertypecode:data[i][14],
+									statustype:CtoType(data[i][15]),
+									ivz_doc01:CtoNum(data[i][16]),
+									ivz_doc02:CtoNum(data[i][17]),
+									ivz_doc03:CtoNum(data[i][18]),
+									ivz_dochouseholdregis:CtoNum(data[i][19]),
+									ivz_docidcard:CtoNum(data[i][20]),
+									matchtype:CtoChkDoc(data[i][15],
+									CtoNum(data[i][16]),
+									CtoNum(data[i][17]),
+									CtoNum(data[i][18]),
+									CtoNum(data[i][19]),
+									CtoNum(data[i][20])),
+									statusempid:data[i][21],
+									ivz_balancecredit:data[i][22],
+									ivz_integrationid:data[i][23],
+									address1_line:data[i][24]
       							});
       					}
       					callback(b);
@@ -3915,4 +3915,40 @@ function getPartItemnumber(id,item,callback){
 	} catch (e) {
 		alert('fn 3752 '+e);
 	}
+}
+
+function GetAccountDlvMode(dlvmode,callback){
+        var a = new MobileCRM.FetchXml.Entity('account');
+      			a.addAttribute('accountid');//0
+      			a.addAttribute('name');//1
+      			a.addAttribute('ivz_dlvmode');//2
+      			a.addAttribute('ivz_gpsdeliveryla');//3
+      			a.addAttribute('ivz_gpsdeliverylong');//4
+      			a.addAttribute('ivz_transport');//5
+				a.addAttribute('ivz_transporttel');//6
+				a.orderBy("createdon", false);
+        var filter = new MobileCRM.FetchXml.Filter();
+      		  	filter.where('ivz_dlvmode','eq',dlvmode.trim());
+				a.filter = filter;
+         var fetch = new MobileCRM.FetchXml.Fetch(a,10000,1);
+        		 fetch.execute('array',function(data){
+                var b = [];
+      			for(var i in data){
+					var gtran = data[i][3];
+					if(gtran){
+						
+					}else{
+						b.push({
+							accountid:data[i][0],
+							name:data[i][1],
+							dlvmode:data[i][2],
+							gpsdeliveryla:data[i][3],
+							gpsdeliverylong:data[i][4],
+							transport:data[i][5],
+							transporttel:data[i][6]
+      					});
+					}
+      			  }
+      			 callback(b);
+        		},function(er){alert(er);},null);
 }

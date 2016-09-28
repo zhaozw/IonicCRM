@@ -189,7 +189,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     dataFri: true,
     dataSat: true,
     dataSun: false,
-    recivename:'',
+    nametype:'',
     addressname:'',
     provincename:'',
     provinceid:'',
@@ -378,7 +378,6 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
       		  fetch.execute('array',function(data){
             alert("data length:"+txtid+' == '+data.length);
             return data.length;
-            $scope.$apply();
       		},function(er){alert(er);},null);
       }
     }
@@ -1463,8 +1462,8 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   url: '/listfilter',
   views: {
     'menuContent': {
-      templateUrl: 'templates/exmpid.html',
-      controller: 'ExamplCtrl'
+      templateUrl: 'templates/gpstransport/gps.html',
+      controller: 'GPSAddressCtrl'
     }
   }
 })

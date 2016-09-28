@@ -402,7 +402,18 @@ angular.module('starter.controllers', [])
             });
         }
         var chUser = $cookies.get('ivz_empid');
+        var nametype = $cookies.get('nametype');
         if (chUser) {
+          if(nametype == 'CAR'){
+            Data.nametype = false;
+            $ionicHistory.nextViewOptions({
+                disableBack: true
+            });
+            $state.go('app.listfilter', {}, {
+                reload: true
+            });
+          }else{
+            Data.nametype = true;
             if ($cookies.get('mastertype') == 3 || $cookies.get('mastertype') == 2) {
                 Data.logontype = true;
             } else {
@@ -415,6 +426,7 @@ angular.module('starter.controllers', [])
             $state.go('app.browse', {}, {
                 reload: true
             });
+          }
         } else {
             $scope.Data = Data;
             datauser.territoryid = '';
@@ -437,111 +449,125 @@ angular.module('starter.controllers', [])
             };
             Data.logonstatus = true;
             $scope.checkuser = function (user, pwd) {
-                console.log(user + '::' + pwd);
-                if (!(user) && !(pwd)) {
-                    $scope.chk.checknull = false;
-                    $scope.user.txtname = '';
-                    $scope.user.pwdname = '';
-                    console.log('null');
-                } else {
-                    $scope.chk.checknull = true;
-                    console.log('ok');
-                    $scope.showLoadingProperTimesRegter('กำลังตรวจสอบผู้ใช้งานอยู่ .');
-                    getUserCheck(user, pwd, function (data) {
-                      //alert(data.length);
-                        if (data.length > 0) {
-                            var x = 0;
-                            var loopArray = function (arr) {
-                                chkuser(x, function () {
-                                    x++;
-                                    if (x < arr.length) {
-                                        loopArray(arr);
-                                    } else {
-                                        $scope.chk.check = true;
-                                        Data.logonstatus = false;
-                                        setTimeout(function () {
-                                            $ionicLoading.hide();
-                                            $scope.user.txtname = '';
-                                            $scope.user.pwdname = '';
-                                            $ionicHistory.nextViewOptions({
-                                                disableBack: true
-                                            });
-                                            $state.go('app.browse', {}, {
-                                                reload: true
-                                            });
-                                        }, 2000);
-                                    }
-                                });
-                            };
-                            loopArray(data);
+                if(user.toUpperCase() == 'CAR'){
+                  Data.nametype = false;
+                  Data.logonstatus = false;
+                  $ionicHistory.nextViewOptions({
+                      disableBack: true
+                  });
+                  $cookies.put('nametype','CAR');
+                  $state.go('app.listfilter', {}, {
+                      reload: true
+                  });
+                }else{
+                  console.log(user + '::' + pwd);
+                  if (!(user) && !(pwd)) {
+                      $scope.chk.checknull = false;
+                      $scope.user.txtname = '';
+                      $scope.user.pwdname = '';
+                      console.log('null');
+                  } else {
+                      $scope.chk.checknull = true;
+                      console.log('ok');
+                      $scope.showLoadingProperTimesRegter('กำลังตรวจสอบผู้ใช้งานอยู่ .');
+                      getUserCheck(user, pwd, function (data) {
+                        //alert(data.length);
+                          if (data.length > 0) {
+                              var x = 0;
+                              var loopArray = function (arr) {
+                                  chkuser(x, function () {
+                                      x++;
+                                      if (x < arr.length) {
+                                          loopArray(arr);
+                                      } else {
+                                          $scope.chk.check = true;
+                                          Data.logonstatus = false;
+                                          setTimeout(function () {
+                                              $ionicLoading.hide();
+                                              $scope.user.txtname = '';
+                                              $scope.user.pwdname = '';
+                                              $ionicHistory.nextViewOptions({
+                                                  disableBack: true
+                                              });
+                                              $state.go('app.browse', {}, {
+                                                  reload: true
+                                              });
+                                          }, 2000);
+                                      }
+                                  });
+                              };
+                              loopArray(data);
 
-                            function checkmatch(str) {
-                                if (str) {
-                                    if (str.match('SU')) {
-                                        return 3;
-                                    } else if (str.match('U')) {
-                                        return 2;
-                                    } else {
-                                        return 1;
-                                    }
-                                }
-                            }
+                              function checkmatch(str) {
+                                  if (str) {
+                                      if (str.match('SU')) {
+                                          return 3;
+                                      } else if (str.match('U')) {
+                                          return 2;
+                                      } else {
+                                          return 1;
+                                      }
+                                  }
+                              }
 
-                            function chkuser(i, callback) {
-                                $scope.showLoadingProperTimesRegter('กำลังตรวจสอบผู้ใช้งานอยู่ ..');
-                                // var dType = checkmatch(data[i].ivz_name);
-                                Data.mastertype = parseInt(data[i].ivz_statusempid);
-                                if (parseInt(data[i].ivz_statusempid) == 3 || parseInt(data[i].ivz_statusempid) == 2 || parseInt(data[i].ivz_statusempid) == 4) {
-                                    Data.logontype = true;
-                                } else {
-                                    Data.logontype = false;
-                                }
-                                try {
-                                    var d = new Date();
-                                    var exp = new Date(d.getFullYear(), d.getMonth(), d.getDate()+1);//set 24 hour
-                                    $cookies.put('mastertype', parseInt(data[i].ivz_statusempid), {'expires': exp});
-                                    Data.Empid = data[i].ivz_empid;
-                                    Data.Tername = data[i].ivz_name;
-                                    Data.termas = data[i].territoryid;
-                                    $cookies.put('territoryid', data[i].territoryid, {'expires': exp});
-                                    $cookies.put('ivz_empname', data[i].ivz_empname, {'expires': exp});
-                                    $cookies.put('ivz_empid', data[i].ivz_empid, {'expires': exp});
-                                    $cookies.put('ivz_password', data[i].ivz_password, {'expires': exp});
-                                    $cookies.put('ivz_emailcontact', data[i].ivz_emailcontact, {'expires': exp});
-                                    $cookies.put('ivz_leadermail', data[i].ivz_leadermail, {'expires': exp});
-                                    $cookies.put('ivz_ccmail', data[i].ivz_ccmail, {'expires': exp});
-                                    $cookies.put('name', data[i].ivz_name, {'expires': exp});
-                                    $cookies.put('description', data[i].ter_description, {'expires': exp});
-                                    $cookies.put('ivz_statusempid', data[i].ivz_statusempid, {'expires': exp});
-                                    getCountry(function(data){
-                                      $cookies.put('countryid', data[i].ivz_addresscountryid, {'expires': exp});
-                                      $cookies.put('countryname', data[i].ivz_name, {'expires': exp});
-                                    });
-                                    datauser.territoryid = data[i].territoryid;
-                                    datauser.ivz_empname = data[i].ivz_empname;
-                                    datauser.ivz_empid = data[i].ivz_empid;
-                                    datauser.ivz_password = data[i].ivz_password;
-                                    datauser.ivz_emailcontact = data[i].ivz_emailcontact;
-                                    datauser.ivz_leadermail = data[i].ivz_leadermail;
-                                    datauser.ivz_ccmail = data[i].ivz_ccmail;
-                                    datauser.name = data[i].ivz_name;
-                                    datauser.description = data[i].ter_description;
-                                    datauser.ivz_statusempid = parseInt(data[i].ivz_statusempid);
-                                } catch (er) {
-                                    alert('error logon ' + er);
-                                }
-                                setTimeout(function () {
-                                    $ionicLoading.hide();
-                                    $scope.showLoadingProperTimesRegter('กำลังตรวจสอบผู้ใช้งานอยู่ ...');
-                                    callback();
-                                }, 2000);
-                            }
-                        } else {
-                            $scope.chk.check = false;
-                            $ionicLoading.hide();
-                        }
-                        if($scope.$phase){$scope.$apply();}
-                    });
+                              function chkuser(i, callback) {
+                                  $scope.showLoadingProperTimesRegter('กำลังตรวจสอบผู้ใช้งานอยู่ ..');
+                                  // var dType = checkmatch(data[i].ivz_name);
+                                  Data.mastertype = parseInt(data[i].ivz_statusempid);
+                                  if (parseInt(data[i].ivz_statusempid) == 3 || parseInt(data[i].ivz_statusempid) == 2 || parseInt(data[i].ivz_statusempid) == 4) {
+                                      Data.logontype = true;
+                                  } else {
+                                      Data.logontype = false;
+                                  }
+                                  try {
+                                      var d = new Date();
+                                      var exp = new Date(d.getFullYear(), d.getMonth(), d.getDate()+1);//set 24 hour
+                                      $cookies.put('mastertype', parseInt(data[i].ivz_statusempid), {'expires': exp});
+                                      Data.Empid = data[i].ivz_empid;
+                                      Data.Tername = data[i].ivz_name;
+                                      Data.termas = data[i].territoryid;
+                                      Data.nametype = true;//'SALES';
+                                      $cookies.put('nametype','SALES');
+                                      $cookies.put('territoryid', data[i].territoryid, {'expires': exp});
+                                      $cookies.put('ivz_empname', data[i].ivz_empname, {'expires': exp});
+                                      $cookies.put('ivz_empid', data[i].ivz_empid, {'expires': exp});
+                                      $cookies.put('ivz_password', data[i].ivz_password, {'expires': exp});
+                                      $cookies.put('ivz_emailcontact', data[i].ivz_emailcontact, {'expires': exp});
+                                      $cookies.put('ivz_leadermail', data[i].ivz_leadermail, {'expires': exp});
+                                      $cookies.put('ivz_ccmail', data[i].ivz_ccmail, {'expires': exp});
+                                      $cookies.put('name', data[i].ivz_name, {'expires': exp});
+                                      $cookies.put('description', data[i].ter_description, {'expires': exp});
+                                      $cookies.put('ivz_statusempid', data[i].ivz_statusempid, {'expires': exp});
+                                      getCountry(function(data){
+                                        $cookies.put('countryid', data[i].ivz_addresscountryid, {'expires': exp});
+                                        $cookies.put('countryname', data[i].ivz_name, {'expires': exp});
+                                      });
+                                      datauser.territoryid = data[i].territoryid;
+                                      datauser.ivz_empname = data[i].ivz_empname;
+                                      datauser.ivz_empid = data[i].ivz_empid;
+                                      datauser.ivz_password = data[i].ivz_password;
+                                      datauser.ivz_emailcontact = data[i].ivz_emailcontact;
+                                      datauser.ivz_leadermail = data[i].ivz_leadermail;
+                                      datauser.ivz_ccmail = data[i].ivz_ccmail;
+                                      datauser.name = data[i].ivz_name;
+                                      datauser.description = data[i].ter_description;
+                                      datauser.ivz_statusempid = parseInt(data[i].ivz_statusempid);
+                                  } catch (er) {
+                                      alert('error logon ' + er);
+                                  }
+                                  setTimeout(function () {
+                                      $ionicLoading.hide();
+                                      $scope.showLoadingProperTimesRegter('กำลังตรวจสอบผู้ใช้งานอยู่ ...');
+                                      callback();
+                                  }, 2000);
+                              }
+                          } else {
+                              $scope.chk.check = false;
+                              $ionicLoading.hide();
+                          }
+                          if($scope.$phase){$scope.$apply();}
+                      });
+                  }
                 }
             }
         }
@@ -606,6 +632,7 @@ angular.module('starter.controllers', [])
             $ionicHistory.nextViewOptions({
                 disableBack: true
             });
+            $cookies.remove('nametype');
             $cookies.remove('territoryid');
             $cookies.remove('ivz_empname');
             $cookies.remove('ivz_empid');
@@ -17258,7 +17285,6 @@ $ionicModal.fromTemplateUrl('templates/modal-1.html', {
            loopArray(arr);
          }else{
            setTimeout(function(){
-             
              $scope.LoadCompleted('บันทึกข้อมูลเสร็จแล้ว');
              setTimeout(function(){
                $ionicLoading.hide();
@@ -17272,38 +17298,127 @@ $ionicModal.fromTemplateUrl('templates/modal-1.html', {
    }
  }
 })
-.controller('ExamplCtrl',function ($scope, $stateParams, $cookies, Data, $state, $ionicLoading, $ionicHistory, $ionicModal, DataOrder ,$compile) {
+.controller('GPSAddressCtrl',function ($scope, $stateParams, $cookies, Data, $state, $ionicLoading, $ionicHistory, $ionicModal, DataOrder ,$compile) {
   $state.reload();
-  //$scope.Load();
-  $scope.listpart = [];
+  $scope.listaccount = [];
+  $scope.listtransport = [
+    {id:0,name:"1-1",txt:"รถคันที่ 1 - 1"},
+    {id:1,name:"1-2",txt:"รถคันที่ 1 - 2"},
+    {id:2,name:"1-3",txt:"รถคันที่ 1 - 3"},
+    {id:3,name:"2-1",txt:"รถคันที่ 2 - 1"},
+    {id:4,name:"2-2",txt:"รถคันที่ 2 - 2"},
+    {id:5,name:"2-3",txt:"รถคันที่ 2 - 3"},
+    {id:6,name:"3-1",txt:"รถคันที่ 3 - 1"},
+    {id:7,name:"3-2",txt:"รถคันที่ 3 - 2"},
+    {id:8,name:"3-3",txt:"รถคันที่ 3 - 3"},
+    {id:9,name:"3-4",txt:"รถคันที่ 3 - 4"},
+    {id:10,name:"3-5",txt:"รถคันที่ 3 - 5"},
+    {id:11,name:"3-6",txt:"รถคันที่ 3 - 6"}
+  ];
   $scope.user = {
-    stateproduct:false,
-    productid:'',
-    txtproductnumber:''
+    groupid:'',
+    filtertxt:'',
+    trantxt:''
   };
-  for(var i = 0;i < 10;i++){
-    $scope.listpart.push({
-      id:i,
-      name:'AB'+i
+
+  $scope.$on('$ionicView.enter',function(){
+    $scope.user.filtertxt = '';
+    $scope.user.trantxt = '';
+    $scope.Load();
+    setTimeout(function() {
+      $ionicLoading.hide();
+    }, 3000);
+  });
+
+  /// Try to get the device's geo coordinates and show please wait window while the operation is in progress.
+  function updategps(id,index,latitude,longitude,callback){
+    $scope.Load();
+    // update accountid
+    try{
+      var ups = new MobileCRM.DynamicEntity('account',id);
+                  ups.properties.ivz_gpsdeliveryla = latitude;
+                  ups.properties.ivz_gpsdeliverylong = longitude;
+                  ups.save(function(err){
+                    if(err){
+                      alert('error 1737 '+err);
+                    }else{
+                      setTimeout(function() {
+                        $ionicLoading.hide();
+                        $scope.reloaddata();
+                        callback(index);
+                      }, 5000);
+                    }
+                  });
+    }catch(ex){
+      alert('error update 17302 '+ex);
+    }
+  }
+  var delindex = function(index){
+    $scope.listaccount.splice(index,1);
+    $scope.opensuccess();
+  }
+  $scope.setxp = function(index,id){
+    //alert(index+':::'+id);
+    $scope.Load();
+    GetGPSLocation(function(res){
+      if (res){
+        //alert(res.latitude+':::'+res.longitude);
+        $ionicLoading.hide();
+        // update data
+        updategps(id,index,res.latitude,res.longitude,delindex);
+      }
+      if($scope.$phase){
+        $scope.$apply();
+      }
     });
   }
-  $scope.setxp = function(txt){
-    if(txt){
-      $scope.user.stateproduct = true;
-    }else{
-      $scope.user.stateproduct = false;
+
+  $scope.setxptransport = function(index,txt){
+     $scope.Load();
+    try{
+      GetAccountDlvMode(txt,function(data){
+        $scope.listaccount.length = 0;
+        //alert(data.length);
+        if(data.length > 0){
+          var x = 0;
+          function arra(arr){
+            adPush(x,function(){
+              x++;
+              if(x < arr.length){
+                arra(arr);
+              }else{
+                $ionicLoading.hide();
+              }
+            });
+          }
+          var adPush = function(i,callback){
+            $scope.listaccount.push({
+                accountid:data[i].accountid,
+                name:data[i].name,
+                dlvmode:data[i].dlvmode,
+                gpsdeliveryla:data[i].gpsdeliveryla,
+                gpsdeliverylong:data[i].gpsdeliverylong,
+                transport:data[i].transport,
+                transporttel:data[i].transporttel
+            });
+            setTimeout(function() {
+              callback();
+            }, 5);
+          }
+          arra(data);
+        }
+        if($scope.$phase){
+          $scope.$apply();
+        }
+      });
+    }catch(ex){
+      alert(ex);
+    }finally{
+      $scope.user.trantxt = txt;
     }
   }
-  $scope.setexp = function(id,txt){
-    if(txt){
-      $scope.user.productid = id;
-      $scope.user.txtproductnumber = txt;
-      $scope.user.stateproduct = false;
-    }else{
-      $scope.user.productid = '';
-      $scope.user.txtproductnumber = '';
-      $scope.user.stateproduct = false;
-    }
+  $scope.reloaddata = function(){
+    $scope.user.trantxt = "";
   }
   $ionicModal.fromTemplateUrl('templates/comment/completed.html',{
     scope:$scope,
@@ -17312,7 +17427,7 @@ $ionicModal.fromTemplateUrl('templates/modal-1.html', {
     $scope.modalsuccess = modal;
   });
   $scope.opensuccess = function(){
-    $scope.titlemodal = "บันทึกข้อมูลเสร็จแล้ว";
+    $scope.titlemodal = "อัพเดตข้อมูล GPS เสร็จแล้ว";
     $scope.modalsuccess.show();
   }
   $scope.closesuccess = function(){
