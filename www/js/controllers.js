@@ -2460,12 +2460,8 @@ angular.module('starter.controllers', [])
 
                 insertactivities(3, 0, 2, null, function () {
                   GetCustomerAddres($stateParams.accountid,2,function(data){
-                   //alert(data.length);
-                    if(data.length > 1){
-                      $state.go('app.selectaddressorder',
-                                {accountid: $stateParams.accountid,mastertype: Data.mastertype,typelnk:3},
-                                {reload:true});
-                    }else if(data.length == 1){
+                   //alert('address '+data.length);
+                    if(data.length == 1){
                       $state.go('app.order', {
                               accountid: $stateParams.accountid,
                               mastertype: Data.mastertype,
@@ -2473,6 +2469,10 @@ angular.module('starter.controllers', [])
                           }, {
                               reload: true
                           });
+                    }else if(data.length > 1){
+                      $state.go('app.selectaddressorder',
+                                {accountid: $stateParams.accountid,mastertype: Data.mastertype,typelnk:3},
+                                {reload:true});
                     }else{
                       $scope.titlemodal = 'ไม่สามารถเปิดใบสั่งขายได้เนื่องจากไม่พบข้อมูลที่อยู่ของลูกค้ากรุณาเพิ่มข้อมูลที่อยู่ลูกค้าด้วย ';
                       $scope.modal.show();
@@ -2501,14 +2501,10 @@ angular.module('starter.controllers', [])
                   });
               });
             } else if (idval == 4 || idval == '4') {
-              // insertactivities(3, 0, 2, null, function () {
+               insertactivities(3, 0, 2, null, function () {
                   GetCustomerAddres($stateParams.accountid,2,function(data){
                    //alert(data.length);
-                    if(data.length > 1){
-                      $state.go('app.selectaddressorder',
-                                {accountid: $stateParams.accountid,mastertype: Data.mastertype,typelnk:4},
-                                {reload:true});
-                    }else if(data.length == 1){
+                    if(data.length == 1){
                       $state.go('app.openclaim',{
                         accountid:$stateParams.accountid,
                         specailclaim:1,
@@ -2516,6 +2512,10 @@ angular.module('starter.controllers', [])
                       },{
                         reload:true
                       });
+                    }else if(data.length > 1){
+                      $state.go('app.selectaddressorder',
+                                {accountid: $stateParams.accountid,mastertype: Data.mastertype,typelnk:4},
+                                {reload:true});
                     }else{
                       $scope.titlemodal = 'ไม่สามารถเปิดใบเคลมได้เนื่องจากไม่พบข้อมูลที่อยู่ของลูกค้ากรุณาเพิ่มข้อมูลที่อยู่ลูกค้าด้วย ';
                       $scope.modal.show();
@@ -2542,7 +2542,7 @@ angular.module('starter.controllers', [])
                     }
                     if($scope.$phase){$scope.$apply();}
                   });
-              // });
+              });
               // checkclaim($stateParams.accountid,function(data){
               //   if(data.length > 0){
               //     $state.go('app.openclaim',{accountid:$stateParams.accountid,specailclaim:1},{reload:true});
@@ -2641,6 +2641,7 @@ angular.module('starter.controllers', [])
       $scope.reloaddata = function(){
         $scope.listorderaddress.length = 0;
         GetCustomerAddres($stateParams.accountid,2,function(result){
+          //alert('address '+result.length);
           $scope.showLoadingProperTimesRegter('กำลังโหลดข้อมูล');
           if(result.length > 0){
             var u = 0;
@@ -14284,7 +14285,7 @@ angular.module('starter.controllers', [])
       scope:$scope,
       animation:'slide-in-up'
   }).then(function(modal){
-      $scope.modalclaim3 = modal;
+      $scope.modalsuccess = modal;
   });
   $scope.listorder = [];
   try {
@@ -14324,9 +14325,12 @@ angular.module('starter.controllers', [])
       }else{
         $ionicLoading.hide();
         $scope.titlemodal = 'จากการตรวจสอบยอดขายย้อนหลัง 12 เดือนไม่มีการซื้อขาย';
-        $scope.modalclaim3.show();
+        $scope.modalsuccess.show();
+        $scope.closesuccess = function(){
+           $scope.modalsuccess.hide();
+        }
         setTimeout(function(){
-          $scope.modalclaim3.hide();
+          $scope.modalsuccess.hide();
         },2000);
       }
     });
@@ -14334,6 +14338,7 @@ angular.module('starter.controllers', [])
     alert('sales ctrl 12927 '+e);
   }
   $scope.clicknext = function(){
+    $scope.modalsuccess.hide();
     if($stateParams.gettype == 2 || $stateParams.gettype == 3){//dtg auto
       $state.go('app.openclaim',{
           accountid:$stateParams.accountid,
@@ -14398,9 +14403,9 @@ angular.module('starter.controllers', [])
     //alert('claim :'+$stateParams.rduset);
     checkclaim($stateParams.accountid,function(data){
       if($stateParams.gettype == 0 || $stateParams.gettype == 1){//check top echo
-        if(data.length > 0){
+        if(data.length > 100){
           $scope.titlemodal =  'ลูกค้าเคยมีประวัติเคลมสงเสริมการขายแล้วไม่สามารถเปิดใบเคลมได้';
-         $scope.modalclaim3.show();
+         $scope.modalsuccess.show();
           $scope.closesuccess = function(){
             $scope.clicknext();
           }
@@ -14410,9 +14415,9 @@ angular.module('starter.controllers', [])
       }else if($stateParams.gettype == 2 || $stateParams.gettype == 3){//check std auto
         if(data.length > 0){
           $scope.titlemodal = 'ลูกค้าเคยมีประวัติเคลมสงเสริมการขายแล้วไม่สามารถเปิดใบเคลมได้';
-          $scope.modalclaim3.show();
+          $scope.modalsuccess.show();
           $scope.closesuccess = function(){
-            $scope.modalclaim3.hide();
+            $scope.modalsuccess.hide();
             $ionicHistory.clearHistory();
             $ionicHistory.nextViewOptions({
                 disableBack: true
@@ -15021,7 +15026,7 @@ angular.module('starter.controllers', [])
       $scope.confirmload = function(){
         $scope.modalclaim.hide();
         checkclaim($stateParams.accountid,function(data){
-          if(data.length > 0){
+          if(data.length > 100){
             $scope.titlemodal = 'ขอ อภัยไม่สามารถรับเคลมพิเศษได้เนื่องจากเคยรับเคลมพิเศษไปแล้ว';
             $scope.modalsuccess.show();
             $scope.closesuccess = function(){
@@ -15082,7 +15087,7 @@ angular.module('starter.controllers', [])
       $scope.confirmload = function(){
         $scope.modalclaim.hide();
         checkclaim($stateParams.accountid,function(data){
-          if(data.length > 0){
+          if(data.length > 100){
             $scope.titlemodal = 'ขอ อภัยไม่สามารถรับเคลมพิเศษได้เนื่องจากเคยรับเคลมพิเศษไปแล้ว';
             $scope.modalsuccess.show();
             $scope.closesuccess = function(){
@@ -15567,9 +15572,10 @@ angular.module('starter.controllers', [])
     var x = 0;
     function insAnnote(i,callback){
       try {
-        $scope.InAnnoteAttract('ivz_claimorder',g,$scope.user.filedoc[i].docfile,$scope.user.filedoc[i].title,3,function(){
-          callback();
-        });
+        // ทดสอบ เคลมพิเศษเอา comment ออกด้วย
+        // $scope.InAnnoteAttract('ivz_claimorder',g,$scope.user.filedoc[i].docfile,$scope.user.filedoc[i].title,3,function(){
+           callback();
+        // });
       } catch (e) {
         alert('error 1962 '+e);
       }
@@ -15720,10 +15726,13 @@ angular.module('starter.controllers', [])
           }else if($scope.user.txtclaim.length < 1){
             alert('กรุณาระบุหมายเลขเอกสารด้วย');
             $ionicLoading.hide();
-          }else if($scope.user.filedoc.length < 1){
+          }
+          //ทดสอบเคลมพิเศษอย่าลืมเอา comment ออกด้วย
+          else if($scope.user.filedoc.length < 1){
             alert('กรุณาแนบรูปสินค้าด้วย');
             $ionicLoading.hide();
-          }else{
+          }
+          else{
             $scope.modalclaim.show();
             // insertmaintenace(guid(),insertdetail);
           }
@@ -15731,12 +15740,15 @@ angular.module('starter.controllers', [])
           if($scope.user.txtclaim.length < 1){
             alert('กรุณาระบุหมายเลขเอกสารด้วย');
             $ionicLoading.hide();
-          }else if($scope.user.filedoc.length < 1){
+          }
+          //ทดสอบเคลมพิเศษอย่าลืมเอา comment ออกด้วย
+          else if($scope.user.filedoc.length < 1){
             alert('กรุณาแนบรูปสินค้าด้วย');
             $ionicLoading.hide();
-          }else{
+          }
+          else{
             $scope.modalclaim.show();
-            // insertmaintenace(guid(),insertdetail);
+            //insertmaintenace(guid(),insertdetail);
           }
         }
         
@@ -16082,7 +16094,7 @@ angular.module('starter.controllers', [])
             $ionicLoading.hide();
           });
         });
-      }else{//amount <= usecredit
+      }else if(amount <= 5000){//amount <= usecredit
           $scope.sendmailtosales($scope.claim.territory.id,'แจ้งผลอนุมัติเคลมส่งเสริมการขาย','อนุมัติเคลมส่งเสริมการขายร้าน '+$scope.claim.customernumber.primaryName,function(){
               setTimeout(function () {
                 //alert($scope.claim.amount+':::'+result[0].usecredit);
@@ -16092,10 +16104,11 @@ angular.module('starter.controllers', [])
                 //     updatecredit(result[0].id,$scope.claim.amount,result[0].usecredit);
                 //  });
                 getSpeClaimCreditById(result[0].id,function(res){
-                  var xyz = parseInt(res[0].usecredit) - parseInt($scope.claim.amount);
+                  var xyz = parseFloat(res[0].usecredit) - parseFloat($scope.claim.amount);
                   try {
+                    //alert('xyz:'+xyz);
                     var up = new MobileCRM.DynamicEntity('ivz_salelimitclainspecialcredit',res[0].id);
-                        up.properties.ivz_usecredit = parseInt(xyz);
+                        up.properties.ivz_usecredit = parseFloat(xyz);
                         up.save(function(er){
                           if(er){
                             alert('error 15000 '+er);
