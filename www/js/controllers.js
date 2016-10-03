@@ -9975,12 +9975,6 @@ angular.module('starter.controllers', [])
         // });
         $scope.Data = Data;
         $scope.ordertypehide = DataOrder.order[0].ordertype;
-        $scope.$on('$ionicView.enter',function(){
-          Data.showcart = false;
-        });
-        Data.remainfortuner = 0;
-        Data.remainallnewfortuner = 0;
-        Data.remainpajero = 0;
         $scope.user = {
           accountid:'',
           name:'',
@@ -9993,8 +9987,22 @@ angular.module('starter.controllers', [])
           shippingmethodcode:'',
           paymenttermscode:'',
           remark:'',
-          statustypecode:''
+          statustypecode:'',
+          addressid:''
         }
+        $scope.$on('$ionicView.enter',function(){
+          Data.showcart = false;
+          // $scope.user.addressid = DataOrder.order[0].addressid;
+          GetCustomerAddresByInt(DataOrder.order[0].addressid,function(data){
+            $scope.user.addressid = data[0].addressname+'  '+data[0].line1+'   '+data[0].city+'  '+data[0].stateorprovince+'  '+data[0].postalcode;
+            if($scope.$phase){
+              $scope.$apply();
+            }
+          });
+        });
+        Data.remainfortuner = 0;
+        Data.remainallnewfortuner = 0;
+        Data.remainpajero = 0;
         $scope.item = {
           productid:'',
           productname:'',
