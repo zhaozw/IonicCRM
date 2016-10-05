@@ -13417,48 +13417,50 @@ angular.module('starter.controllers', [])
       },3000);
     }
     $scope.genNext01 = function(txtproductnumber,txtTatol,rdUset){
-        // $scope.showLoading('กำลังตรวจสอบข้อมูล');
-        if($scope.user.txtproductnumber){
-          //alert('ok');
-          if($scope.user.txtTatol){
-                $scope.getType = checktopline(txtproductnumber);
-                $scope.title = "กรอกข้อมูลใบเคลม";
-                $scope.user.aUseGroup = true;
-                if($scope.user.rdUset === '0' || $scope.user.rdUset === 0){
-                    $scope.user.aUsedSerial = false;
-                    $scope.user.aUserUset = true;
-                     $state.go('app.openclaimserial',{
-                      gettype:$scope.getType,
-                      accountid:$stateParams.accountid,
-                      itemamount:$scope.user.txtTatol,
-                      productclaim:$scope.user.poductclaimid,
-                      productid:$scope.user.txtproductnumber,
-                      rduset:$scope.user.rdUset,
-                      intid:$stateParams.intid
-                    },{reload:true});
-                }else{
-                    $scope.user.aUserUset = false;
-                    $state.go('app.openclaimserial',{
-                      gettype:$scope.getType,
-                      accountid:$stateParams.accountid,
-                      itemamount:$scope.user.txtTatol,
-                      productclaim:$scope.user.poductclaimid,
-                      productid:$scope.user.txtproductnumber,
-                      rduset:$scope.user.rdUset,
-                      intid:$stateParams.intid
-                    },{reload:true});
-                }
-                setTimeout(function() {
-                    $ionicLoading.hide();
-                }, 3000);
+        if($scope.user.poductclaimid){
+          if($scope.user.txtproductnumber){
+            if($scope.user.txtTatol){
+                  $scope.getType = checktopline(txtproductnumber);
+                  $scope.title = "กรอกข้อมูลใบเคลม";
+                  $scope.user.aUseGroup = true;
+                  if($scope.user.rdUset === '0' || $scope.user.rdUset === 0){
+                      $scope.user.aUsedSerial = false;
+                      $scope.user.aUserUset = true;
+                      $state.go('app.openclaimserial',{
+                        gettype:$scope.getType,
+                        accountid:$stateParams.accountid,
+                        itemamount:$scope.user.txtTatol,
+                        productclaim:$scope.user.poductclaimid,
+                        productid:$scope.user.txtproductnumber,
+                        rduset:$scope.user.rdUset,
+                        intid:$stateParams.intid
+                      },{reload:true});
+                  }else{
+                      $scope.user.aUserUset = false;
+                      $state.go('app.openclaimserial',{
+                        gettype:$scope.getType,
+                        accountid:$stateParams.accountid,
+                        itemamount:$scope.user.txtTatol,
+                        productclaim:$scope.user.poductclaimid,
+                        productid:$scope.user.txtproductnumber,
+                        rduset:$scope.user.rdUset,
+                        intid:$stateParams.intid
+                      },{reload:true});
+                  }
+                  setTimeout(function() {
+                      $ionicLoading.hide();
+                  }, 3000);
+            }else{
+              setTimeout(function(){
+                $ionicLoading.hide();
+                alert('กรุณาระบุจำนวนสินค้าด้วย');
+              },3000);
+            }
           }else{
-            setTimeout(function(){
-              $ionicLoading.hide();
-              alert('กรุณาระบุจำนวนสินค้าด้วย');
-            },3000);
+            alert('กรุณาระบุรหัสสินค้าด้วย');
           }
         }else{
-          alert('กรุณาระบุรหัสสินค้าด้วย');
+          alert('กรุณากดค้นหาและเลือกสินค้าที่ต้องการเคลมด้วย');
         }
     };
     $scope.$on('$ionicView.enter',function(){
@@ -15274,7 +15276,8 @@ angular.module('starter.controllers', [])
     productitem:'',
     txtname:'',
     txtstate:'',
-    txtcomment:''
+    txtcomment:'',
+    txtremark:''
   };
   setTimeout(function(){
     $ionicLoading.hide();
@@ -15543,6 +15546,7 @@ angular.module('starter.controllers', [])
           ins.properties.ivz_shiptozipcode = $scope.user.zipname;
           ins.properties.ivz_shipby = parseInt($scope.user.rdUserSet);
           ins.properties.ivz_claimreason = $stateParams.claimtxt;
+          ins.properties.ivz_txtcomment = $scope.user.txtremark;
           if($stateParams.specailclaim == 1){
             ins.properties.statuscode = parseInt(917970000);
           }else{
@@ -15643,61 +15647,65 @@ angular.module('starter.controllers', [])
     try {
       var dd = $scope.user.itemamount+'::'+$scope.user.partprice;
       // alert(dd);
-      GetProductListId($stateParams.productclaim,1,1,function(data){
-        try {
-          var ins = new MobileCRM.DynamicEntity.createNew('ivz_claimorderdetail');
-              ins.properties.ivz_name = $stateParams.claimtxt;
-              ins.properties.ivz_claimorderid = new MobileCRM.Reference('ivz_claimorder',id);
-              ins.properties.ivz_claimproductid = new MobileCRM.Reference('product',$stateParams.productclaim);
-              ins.properties.ivz_productid = new MobileCRM.Reference('product',$stateParams.productclaim);
-              ins.properties.ivz_priceperunit = parseInt(data[0].price);
-              ins.properties.ivz_unit = new MobileCRM.Reference('uom',data[0].uomid.id);
-              if($scope.user.getTypeHide == true){
-                ins.properties.ivz_amount = rerunmatch($scope.user.itemamount,$scope.user.partprice);
-              }else{
-                ins.properties.ivz_amount = parseFloat(data[0].price);
-              }
-              ins.properties.ivz_used = parseInt($stateParams.rduset);
-              ins.properties.ivz_serialno = $stateParams.claimserial;
-              ins.properties.ivz_txtremark = $scope.user.txtpartnamecomment;
-              if($stateParams.claimserial){
-
-              }else{
-                if($stateParams.cdateby){
-                  ins.properties.ivz_datebuy = new Date($stateParams.cdateby);
-                }
-              }
-              ins.properties.ivz_partname = $scope.user.txtpartname;
-              if($scope.user.txtpartname){
-                ins.properties.ivz_typepart = parseInt(1);
-              }else{
-                ins.properties.ivz_typepart = parseInt(0);
-              }
-              ins.properties.ivz_quantity = parseInt($scope.user.itemamount);
-              if($stateParams.specailclaim == 0 || $stateParams.pecailclaim == '0'){
-                ins.properties.ivz_warranty = parseInt(1);
-              }else{
-                ins.properties.ivz_warranty = parseInt(0);
-              }
-              ins.properties.ivz_txtid = id;
-              ins.save(function(er){
-                if(er){
-                  alert('claim 13405 '+er);
+      if($stateParams.productclaim){
+        GetProductListId($stateParams.productclaim,1,1,function(data){
+          try {
+            var ins = new MobileCRM.DynamicEntity.createNew('ivz_claimorderdetail');
+                ins.properties.ivz_name = $stateParams.claimtxt;
+                ins.properties.ivz_claimorderid = new MobileCRM.Reference('ivz_claimorder',id);
+                ins.properties.ivz_claimproductid = new MobileCRM.Reference('product',$stateParams.productclaim);
+                ins.properties.ivz_productid = new MobileCRM.Reference('product',$stateParams.productclaim);
+                ins.properties.ivz_priceperunit = parseInt(data[0].price);
+                ins.properties.ivz_unit = new MobileCRM.Reference('uom',data[0].uomid.id);
+                if($scope.user.getTypeHide == true){
+                  ins.properties.ivz_amount = rerunmatch($scope.user.itemamount,$scope.user.partprice);
                 }else{
-                  try {
-                    insertannoteanooo(id);
-                  } catch (e) {
-                    alert('claim 14612 '+e);
+                  ins.properties.ivz_amount = parseFloat(data[0].price);
+                }
+                ins.properties.ivz_used = parseInt($stateParams.rduset);
+                ins.properties.ivz_serialno = $stateParams.claimserial;
+                ins.properties.ivz_txtremark = $scope.user.txtpartnamecomment;
+                if($stateParams.claimserial){
+
+                }else{
+                  if($stateParams.cdateby){
+                    ins.properties.ivz_datebuy = new Date($stateParams.cdateby);
                   }
                 }
-              });
-        } catch (e) {
-          alert('error 14616 '+e);
-        }
-        if($scope.$pharse){
-          $scope.$apply();
-        }
-      });
+                ins.properties.ivz_partname = $scope.user.txtpartname;
+                if($scope.user.txtpartname){
+                  ins.properties.ivz_typepart = parseInt(1);
+                }else{
+                  ins.properties.ivz_typepart = parseInt(0);
+                }
+                ins.properties.ivz_quantity = parseInt($scope.user.itemamount);
+                if($stateParams.specailclaim == 0 || $stateParams.pecailclaim == '0'){
+                  ins.properties.ivz_warranty = parseInt(1);
+                }else{
+                  ins.properties.ivz_warranty = parseInt(0);
+                }
+                ins.properties.ivz_txtid = id;
+                ins.save(function(er){
+                  if(er){
+                    alert('claim 13405 '+er);
+                  }else{
+                    try {
+                      insertannoteanooo(id);
+                    } catch (e) {
+                      alert('claim 14612 '+e);
+                    }
+                  }
+                });
+          } catch (e) {
+            alert('error 14616 '+e);
+          }
+          if($scope.$pharse){
+            $scope.$apply();
+          }
+        });
+      }else{
+        alert('ไม่พบข้อมูลสินค้า');
+      }
     } catch (e) {
       alert('13413 '+e);
     }
