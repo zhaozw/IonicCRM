@@ -11,7 +11,7 @@
         </md-button>
       </div>
       <md-list>
-        <md-list-item class="md-3-line" ng-repeat="n in listproduct | filter:filtertxt"
+        <md-list-item class="md-3-line" ng-repeat="n in listproduct | filter:filtertxt | orderBy : 'createdon'"
           ng-click="open1(n.productid,n.filtername,n.price,n.pricelevelid,n.uomid)">
           <img src="img/ionic.png" class="md-avatar" alt="testt" />
            <div class="md-list-item-text" layout="column">
@@ -19,6 +19,7 @@
              <h5>{{n.price | currency:''}}</h5>
              <p  ng-if="n.stockstatus.length > 9" style="color:red;font-weight:bold;">{{n.stockstatus}}</p>
              <p  ng-if="n.stockstatus.length < 9" style="color:green;font-weight:bold;">{{n.stockstatus}}</p>
+             <p>วันที่อัพเกรด:<span>{{n.createdon | date:'dd/MM/yyyy'}}</span></p>
            </div>
            <a class="md-secondary icon ion-chevron-right text-h1 text-bold error"
              ng-click="open1(n.productid,n.filtername,n.price,n.pricelevelid,n.uomid)"></a>

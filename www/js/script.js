@@ -1663,7 +1663,7 @@ function GetProductListId(id,tatol,page,callback){
 						price:data[i][3],
 						uomid:data[i][4],
 						pricelevelid:data[i][5],
-						createdon:data[i][6],
+						createdon:new Date(data[i][6]),
 				    stockstatus:data[i][7],
 						defaultuomscheduleid:data[i][8],
 						filtername:data[i][2]+','+data[i][1]
@@ -1697,7 +1697,7 @@ function GetProductListId(id,tatol,page,callback){
 								price:data[i][3],
 								uomid:data[i][4],
 								pricelevelid:data[i][5],
-								createdon:data[i][6],
+								createdon:new Date(data[i][6]),
 						    stockstatus:data[i][7],
 								defaultuomscheduleid:data[i][8],
 								filtername:data[i][2]+','+data[i][1]
@@ -1730,8 +1730,8 @@ function GetProductList(tatol,page,callback){
 						price:data[i][3],
 						uomid:data[i][4],
 						pricelevelid:data[i][5],
-						createdon:data[i][6],
-				    stockstatus:data[i][7],
+						createdon:new Date(data[i][6]),
+				    	stockstatus:data[i][7],
 						defaultuomscheduleid:data[i][8],
 						filtername:data[i][2]+','+data[i][1]
 					});
@@ -1761,7 +1761,7 @@ function GetProductList(tatol,page,callback){
 								price:data[i][3],
 								uomid:data[i][4],
 								pricelevelid:data[i][5],
-								createdon:data[i][6],
+								createdon:new Date(data[i][6]),
 						    stockstatus:data[i][7],
 								defaultuomscheduleid:data[i][8],
 								filtername:data[i][2]+','+data[i][1]
@@ -1804,7 +1804,7 @@ function GetProductListNameNumber(txtname,txtnumber,tatol,page,callback){
 						price:data[i][3],
 						uomid:data[i][4],
 						pricelevelid:data[i][5],
-						createdon:data[i][6],
+						createdon:new Date(data[i][6]),
 				    stockstatus:data[i][7],
 						defaultuomscheduleid:data[i][8],
 						filtername:data[i][2]+','+data[i][1]
@@ -1844,8 +1844,8 @@ function GetProductListNameNumber(txtname,txtnumber,tatol,page,callback){
 								price:data[i][3],
 								uomid:data[i][4],
 								pricelevelid:data[i][5],
-								createdon:data[i][6],
-						    stockstatus:data[i][7],
+								createdon:new Date(data[i][6]),
+						        stockstatus:data[i][7],
 								defaultuomscheduleid:data[i][8],
 								filtername:data[i][2]+','+data[i][1]
 							});
@@ -1881,7 +1881,7 @@ function GetProductListName(txtname,tatol,page,callback){
 						price:data[i][3],
 						uomid:data[i][4],
 						pricelevelid:data[i][5],
-						createdon:data[i][6],
+						createdon:new Date(data[i][6]),
 				    stockstatus:data[i][7],
 						defaultuomscheduleid:data[i][8],
 						filtername:data[i][2]+','+data[i][1]
@@ -1915,7 +1915,7 @@ function GetProductListName(txtname,tatol,page,callback){
 								price:data[i][3],
 								uomid:data[i][4],
 								pricelevelid:data[i][5],
-								createdon:data[i][6],
+								createdon:new Date(data[i][6]),
 						    stockstatus:data[i][7],
 								defaultuomscheduleid:data[i][8],
 								filtername:data[i][2]+','+data[i][1]
@@ -1953,7 +1953,7 @@ function GetProductListNumber(txtname,tatol,page,callback){
 						price:data[i][3],
 						uomid:data[i][4],
 						pricelevelid:data[i][5],
-						createdon:data[i][6],
+						createdon:new Date(data[i][6]),
 				    stockstatus:data[i][7],
 						defaultuomscheduleid:data[i][8],
 						filtername:data[i][2]+','+data[i][1]
@@ -1989,7 +1989,7 @@ function GetProductListNumber(txtname,tatol,page,callback){
 									price:data[i][3],
 									uomid:data[i][4],
 									pricelevelid:data[i][5],
-									createdon:data[i][6],
+									createdon:new Date(data[i][6]),
 							    stockstatus:data[i][7],
 									defaultuomscheduleid:data[i][8],
 									filtername:data[i][2]+','+data[i][1]
@@ -2719,7 +2719,7 @@ function GetInvoice(terid,callback){
 	                		ivz_sumbillingamount:data[i][3],
 	                		ivz_billingdate:data[i][4],
 	                		ivz_customername:data[i][5],
-	                		createdon:data[i][6],
+	                		createdon:new Date(data[i][6]),
 	                		ivz_customernumber:data[i][7],
 	                    ivz_addressdistrict:data[i][8],
 	                    ivz_addressprovince:data[i][9],
