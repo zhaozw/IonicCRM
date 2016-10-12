@@ -10738,7 +10738,7 @@ angular.module('starter.controllers', [])
         $scope.addpluss = function (data) {
             var m = 0;
             for (var i in $scope.listorderdetail) {
-                m += parseInt($scope.listorderdetail[i].quality) * parseInt($scope.listorderdetail[i].priceperunit);
+                m += parseInt($scope.listorderdetail[i].quality) * parseInt($scope.listorderdetail[i].price);
             }
             return m;
         }
@@ -13716,6 +13716,7 @@ angular.module('starter.controllers', [])
   }
 
   function getCheckClaim(t_date,c_date){
+    //alert(t_date+','+c_date);
     var n = new Date();
     var t = 0;
     if(c_date === 3){
@@ -14061,6 +14062,7 @@ angular.module('starter.controllers', [])
     }
   }
   $scope.genNext02 = function(txtpartserial,txtclaimdate){
+    //alert('txtclaimdate:'+txtclaimdate);
       var n = new Date();
       var t_date = '';
       var c_date = parseInt($stateParams.gettype);//get form $stateParams $scope.getType
@@ -14109,7 +14111,7 @@ angular.module('starter.controllers', [])
                           claimid:'',
                           optiontype:'',
                           claimserial:$scope.user.txtpartserial,
-                          cdateby:$scope.user.txtclaimdate,
+                          cdateby:txtclaimdate,
                           intid:$stateParams.intid
                   },{reload:true});
                 }else{
@@ -14248,7 +14250,7 @@ angular.module('starter.controllers', [])
           alert('กรุณาแนบไฟล์เอกสารด้วย');
           return;
         }else{
-          var dte = $('#txtclaimdate').val();
+          var dte = $scope.user.txtclaimdate;
           t_date = new Date(dte);
           if($stateParams.rduset == 0){
               $state.go('app.claimdetail',{
@@ -14267,7 +14269,7 @@ angular.module('starter.controllers', [])
                       intid:$stateParams.intid
               },{reload:true});
             }else{
-              getCheckClaim(new Date(gh),parseInt($stateParams.gettype));
+              getCheckClaim(t_date,parseInt($stateParams.gettype));
             } 
         }
       }
@@ -15648,6 +15650,7 @@ angular.module('starter.controllers', [])
       var dd = $scope.user.itemamount+'::'+$scope.user.partprice;
       // alert(dd);
       if($stateParams.productclaim){
+        //alert($stateParams.cdateby);
         GetProductListId($stateParams.productclaim,1,1,function(data){
           try {
             var ins = new MobileCRM.DynamicEntity.createNew('ivz_claimorderdetail');

@@ -9,7 +9,7 @@
             ng-click="opendetail(n.productid,n.productname,n.priceperunit,n.tatol,n.quality)">
               <div class="md-list-item-text">
                 <h3>{{n.productname}}</h3>
-                <h4>ราคา/หน่วย:<span class="error">{{n.priceperunit |currency:''}}</span>บาท</h4>
+                <h4>ราคา/หน่วย:<span class="error">{{n.price | currency:''}}</span>บาท</h4>
                 <p>
                   สินค้า:<span class="error">{{n.quality}}</span>&nbsp;
                   ยอดรวม:<span class="error">{{n.tatol | currency:''}}</span>
