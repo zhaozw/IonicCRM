@@ -15587,9 +15587,9 @@ angular.module('starter.controllers', [])
     function insAnnote(i,callback){
       try {
         // ทดสอบ เคลมพิเศษเอา comment ออกด้วย
-        // $scope.InAnnoteAttract('ivz_claimorder',g,$scope.user.filedoc[i].docfile,$scope.user.filedoc[i].title,3,function(){
+        $scope.InAnnoteAttract('ivz_claimorder',g,$scope.user.filedoc[i].docfile,$scope.user.filedoc[i].title,3,function(){
            callback();
-        // });
+        });
       } catch (e) {
         alert('error 1962 '+e);
       }
