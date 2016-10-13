@@ -2008,7 +2008,7 @@ function GetOrder(terid,setval,setpage,callback){
 				n.addAttribute('customerid');//1
 				n.addAttribute('name');//2
 				n.addAttribute('transactioncurrencyid');//3
-				n.addAttribute('requestdeliveryby');//4
+				n.addAttribute('new_dlvrecid');//4
 				n.addAttribute('pricelevelid');//5
 				n.addAttribute('shippingmethodcode');//6
 				n.addAttribute('paymenttermscode');//7
@@ -2029,7 +2029,7 @@ function GetOrder(terid,setval,setpage,callback){
 				n.addAttribute('ivz_resultpajero');//22
 				n.orderBy("createdon", false);
 		var a = n.addLink('account','accountid','customerid','outer');
-			  a.addAttribute('territoryid');//20
+			    a.addAttribute('territoryid');//20
 		var filter = new MobileCRM.FetchXml.Filter();
 				filter.where('ivz_territory','eq',terid);
 				n.filter = filter;

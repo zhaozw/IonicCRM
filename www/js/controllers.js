@@ -10525,7 +10525,8 @@ angular.module('starter.controllers', [])
               }
               loopArray(data);
               function getPush(i,callback){
-                $scope.listorder.push({
+                GetCustomerAddresByInt(data[i].requestdeliveryby,function(res){
+                  $scope.listorder.push({
     							salesorderid:data[i].salesorderid,
     							customerid:data[i].customerid,
     							name:data[i].name,
@@ -10545,9 +10546,14 @@ angular.module('starter.controllers', [])
     							description:data[i].description,
                   createdon:new Date(data[i].createdon),
                   ivz_ordernumber:data[i].ivz_ordernumber,
-                  ordernumber:data[i].ordernumber
+                  ordernumber:data[i].ordernumber,
+                  deliveryto:res[0].addressname+' '+res[0].line1+' '+res[0].city+' '+res[0].stateorprovince+' '+res[0].postalcode
     						});
-                callback();
+                  setTimeout(function(){
+                    callback();
+                  },10);
+                  if($scope.$phase){$scope.$apply();}
+                })
               }
             }
             if($scope.$phase){$scope.$apply();}

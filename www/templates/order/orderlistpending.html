@@ -38,6 +38,10 @@
                   รายละเอียดเพิ่มเติม:
                   <span style="color:#003171;font-weight:bold;">{{n.description}}</span>
                 </p>
+                <p>
+                  ข้อมูลการส่งต่อ:
+                  <span style="color:#003171;font-weight:bold;">{{n.deliveryto}}</span>
+                </p>
               </div>
               <md-button class="md-secondary"
               ng-click="showdetailorder(n.salesorderid,n.customerid.primaryName,n.ivz_territory.id,n.ivz_statussales,true)" ng-if="n.statuscode === 1 || n.statuscode === 2">
