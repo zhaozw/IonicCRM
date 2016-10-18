@@ -13708,7 +13708,7 @@ angular.module('starter.controllers', [])
     }
     $('#filenote').change(function(){
       GetAtt('#filenote', '', 'canvas01', function (data) {
-            $scope.user.filedoc.push({docfile:data,title:'รูปภาพงานเคลม'});
+            $scope.user.filedoc.push({docfile:data,title:'รูปภาพงานเคลมใบสั่งซื้อ '});
             pushImg('img01');
         });
     });
@@ -14067,7 +14067,31 @@ angular.module('starter.controllers', [])
               break;
     }
   }
+  function inattri(attr,callback){
+    var xx = 0;
+    function insAnnote(i,callback){
+            try {
+              $scope.InAnnoteAttract('ivz_claimorder',g,$scope.user.filedoc[i].docfile,$scope.user.filedoc[i].title,3,function(){
+                callback();
+              });
+            } catch (e) {
+              alert('error 1962 claimserail '+e);
+            }
+     }
+    var arrayA = function(arr){
+      insAnnote(xx,function(){
+        xx++;
+        if(xx < arr.length){
+          arrayA(arr);
+        }else{
+          callback();
+        }
+      });
+    }
+    arrayA(attr);
+  }
   $scope.genNext02 = function(txtpartserial,txtclaimdate){
+    
     //alert('txtclaimdate:'+txtclaimdate);
       var n = new Date();
       var t_date = '';
@@ -14256,27 +14280,29 @@ angular.module('starter.controllers', [])
           alert('กรุณาแนบไฟล์เอกสารด้วย');
           return;
         }else{
-          var dte = $scope.user.txtclaimdate;
-          t_date = new Date(dte);
-          if($stateParams.rduset == 0){
-              $state.go('app.claimdetail',{
-                      gettype:$stateParams.gettype,
-                      accountid:$stateParams.accountid,
-                      specailclaim:0,
-                      itemamount:$stateParams.itemamount,
-                      claimtxt:'',
-                      productclaim:$stateParams.productclaim,
-                      claimstatus:917970001,
-                      rduset:$stateParams.rduset,
-                      claimid:'',
-                      optiontype:'',
-                      claimserial:$scope.user.txtpartserial,
-                      cdateby:$scope.user.txtclaimdate,
-                      intid:$stateParams.intid
-              },{reload:true});
-            }else{
-              getCheckClaim(t_date,parseInt($stateParams.gettype));
-            } 
+          inattri(filename,function(){
+             var dte = $scope.user.txtclaimdate;
+              t_date = new Date(dte);
+              if($stateParams.rduset == 0){
+                  $state.go('app.claimdetail',{
+                          gettype:$stateParams.gettype,
+                          accountid:$stateParams.accountid,
+                          specailclaim:0,
+                          itemamount:$stateParams.itemamount,
+                          claimtxt:'',
+                          productclaim:$stateParams.productclaim,
+                          claimstatus:917970001,
+                          rduset:$stateParams.rduset,
+                          claimid:'',
+                          optiontype:'',
+                          claimserial:$scope.user.txtpartserial,
+                          cdateby:$scope.user.txtclaimdate,
+                          intid:$stateParams.intid
+                  },{reload:true});
+                }else{
+                  getCheckClaim(t_date,parseInt($stateParams.gettype));
+                }
+          });
         }
       }
   }
