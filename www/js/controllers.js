@@ -16108,10 +16108,10 @@ angular.module('starter.controllers', [])
     }
   }
 
-  function upclaimstatus(id,callback){
+  function upclaimstatus(id,tatol,callback){
     try {
       var up = new MobileCRM.DynamicEntity('ivz_claimorder',id);
-          up.properties.ivz_statusclaim = parseInt(0);
+          up.properties.ivz_statusclaim = parseInt(tatol);
           up.properties.statuscode = parseInt(917970001);
           up.save(function(er){
             if(er){
@@ -16138,7 +16138,7 @@ angular.module('starter.controllers', [])
       var usercredit = parseInt(result[0].usecredit);
       if(amount > 5000){//> 5000
         //mail to director
-        upclaimstatus($stateParams.claimid,function(){
+        upclaimstatus($stateParams.claimid,0,function(){
           $scope.sendmailtosup($cookies.get('territoryid'),'เคลมส่งเสริมการขาย',' ร้าน '+
           $scope.claim.customernumber.primaryName +'', function(){
             $scope.reback();
@@ -16168,9 +16168,13 @@ angular.module('starter.controllers', [])
                   } catch (e) {
                     alert('error 15000 '+er);
                   }finally{
-                     updatestatus('ivz_claimorder',id,stcode,$cookies.get('empid'),'',function(data){
-                        $scope.reback();
-                        $ionicLoading.hide();
+                    //  updatestatus('ivz_claimorder',id,stcode,$cookies.get('empid'),'',function(data){
+                    //     $scope.reback();
+                    //     $ionicLoading.hide();
+                    //  });
+                     upclaimstatus($stateParams.claimid,1,function(){
+                       $scope.reback();
+                       $ionicLoading.hide();
                      });
                   }
                   if($scope.$phase){
