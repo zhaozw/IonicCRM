@@ -49,8 +49,11 @@
               <hr class="divider">
                 <div class="row">
                   <div class="col">
-                    <md-button class="md-raised md-warn" ng-click="clickfile()">แนบรูปภาพประกอบ</md-button>
+                    <md-button class="md-raised md-warn">
+                      <input type="file" id="filenote" onchange="angular.element(this).scope().fileNameChanged(this)">
+                      แนบรูปภาพประกอบ</md-button>
                     <hr class="divider"/>
+                    <img id="idmg010" ng-hide="true">
                     <canvas id="canvas01" width="578" height="400" ng-hide="true"></canvas>
                     <div class="row" id="img01">
                       <div class="img01 gallery" ng-repeat="n in user.filedoc" ng-bind-html ="n.doc"></div>
@@ -76,7 +79,7 @@
                   </div>
                 </div>
             </div>
-            <input type="file" id="filenote" ng-hide="true">
+            
           </div>
         <div class="col"></div>
       </div>

@@ -1,17 +1,60 @@
 //////////////////////////// import script //////////////////////
-document.writeln('<script src="lib/ionic/js/ionic.bundle.js"></script>');
-document.writeln('<script src="js/jquery.js"></script>');
-document.writeln('<script src="js/JSBridge.min.js"></script>');
-document.writeln('<script src="lib/ionic/js/angular/angular-animate.min.js"></script>');
-document.writeln('<script src="lib/ionic/js/angular/angular-aria.min.js"></script>');
-document.writeln('<script src="lib/ionic/js/angular/angular-messages.min.js"></script>');
-document.writeln('<script src="lib/ionic/js/angular/angular-material.min.js"></script>');
-document.writeln('<script src="lib/ionic/js/angular/angular-cookies.min.js"></script>');
-document.writeln('<script src="lib/ionic/js/angular/angular-sanitize.min.js"></script>');
-document.writeln('<script src="lib/ionic/js/ng-cordova.min.js"></script>');
-document.writeln('<script src="lib/ionic/js/ng-cordova-mocks.min.js"></script>');
-document.writeln('<script src="js/app.js"></script>');
-document.writeln('<script src="js/controllers.js"></script>');
+var userOS;    // will either be iOS, Android or unknown
+var userOSver; // this is a string, use Number(userOSver) to convert
+
+function getOS()
+{
+  var ua = navigator.userAgent;
+  var uaindex;
+  var ipad;
+  // determine OS
+  if ( ua.match(/iPad/i) || ua.match(/iPhone/i) )
+  {
+    userOS = 'iOS';
+    uaindex = ua.indexOf( 'OS ' );
+	var x = ua.slice(26,32);
+	var y = ua.slice(26,30);
+	if(x == '10_0_2' || y == '10_1'){
+		//alert('match');
+		ipad = true;
+	}else{
+		//alert('not match');
+		ipad = false;
+	}
+  }
+  else if ( ua.match(/Android/i) )
+  {
+    userOS = 'Android';
+    uaindex = ua.indexOf( 'Android ' );
+	ipad = false;
+  }
+  else
+  {
+    userOS = 'unknown';
+	ipad = false;
+  }
+
+  // determine version
+  if ( userOS === 'iOS'  &&  uaindex > -1 )
+  {
+    userOSver = ua.substr( uaindex + 3, 3 ).replace( '_', '.' );
+	ipad = false;
+  }
+  else if ( userOS === 'Android'  &&  uaindex > -1 )
+  {
+    userOSver = ua.substr( uaindex + 8, 3 );
+	ipad = false;
+  }
+  else
+  {
+    userOSver = 'unknown';
+	ipad = false;
+  }
+  console.log(ua);
+  return ipad;
+}
+
+
 
 var alerterror = function(er){
 	alert('error function '+er);
@@ -23,13 +66,10 @@ var retername = function(tername){
 		case 'U03':
 		case 'U04':
 			return 2;
-			break;
 		case 'M01':
 			return 3;
-			break;
 		default:
 			return 1;
-			break;
 	}
 }
 /*--------------------------- Check User --------------------------*/
@@ -264,6 +304,49 @@ input = $(idAttact)[0];
 								image.src = e.target.result;
                         };
                         FR.readAsDataURL(input.files[0]);
+                    }
+                }
+                catch (ex) {
+                    alert('Base64:'+er);
+                }
+}
+function GetAttConvas(ele, idimg, canvasid, callback){
+var MAX_HEIGHT = 800;
+                try {
+                    if (ele.files && ele.files[0]) {
+                        var FR = new FileReader();
+                        FR.onload = function (e){
+                        	var imgElem = $(idimg); // document.getElementById("imgId");
+	                            imgElem.attr("style", "display=block"); //imgElem.style.display = "block";
+	                            imgElem.attr("src", e.target.result); //imgElem.setAttribute("src", e.target.result);
+	                            imgElem.attr("width", "100");
+	                            imgElem.attr("heigth", "100");
+							var image = new Image();
+								image.onload = function(){
+								var canvas = document.getElementById(canvasid);
+									if(image.height > MAX_HEIGHT) {
+										image.width *= MAX_HEIGHT / image.height;
+										image.height = MAX_HEIGHT;
+									}
+									var ctx = canvas.getContext("2d");
+									ctx.clearRect(0, 0, canvas.width, canvas.height);
+									canvas.width = image.width;
+									canvas.height = image.height;
+									ctx.drawImage(image, 0, 0, image.width, image.height);
+									sizeKB = ele.files[0].size / 1024;
+                            		fileName = ele.files[0].name;
+                            		fileType = ele.files[0].type;
+									var dataURL = canvas.toDataURL();
+									var fullQuality = canvas.toDataURL("image/jpeg", 1.0);
+									var mediumQuality = canvas.toDataURL("image/jpeg", 0.5);
+									var lowQuality = canvas.toDataURL("image/jpeg", 0.1);
+									var idbase64 = Getstringbase64(canvas.toDataURL("image/jpeg", 0.5));
+									callback(idbase64);
+									//alert('Original sizeKB:'+sizeKB+'\n fileName:'+fileName+'\n fileType:'+fileType);
+								};
+								image.src = e.target.result;
+                        };
+                        FR.readAsDataURL(ele.files[0]);
                     }
                 }
                 catch (ex) {
@@ -3063,7 +3146,7 @@ function chkChok(txt){
   var d = new Date();
   var to_y = (d.getFullYear()).toString();
   var week = us.slice(2,4)
-	var sFirst = isNaN(us.slice(1,2));
+  var sFirst = isNaN(us.slice(1,2));
   if(sFirst === true){
 	var str = us.slice(1,2);
 		//alert('str:'+str);

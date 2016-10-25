@@ -11,12 +11,15 @@
           <h2>สำเนาหนังสือรับรองการจดทะเบียนพาณิชย์</h2>
 						<div>
 							<br />
-              <md-button class="md-raised md-warn" aria-label="description" md-ripple-size="auto" ng-click="calldoc('doc001',this)">UPLOAD</md-button>
-              <canvas id="canvas01" width="578" height="400" ng-hide="true"></canvas>
+              <md-button class="md-raised md-warn" aria-label="description" md-ripple-size="auto">
+                <input type="file" id="doc001" onchange="angular.element(this).scope().fileNameChanged(this,1)"/>
+                UPLOAD</md-button>
+
               <input type="file" id="doc001" ng-hide="true"/>
+              <canvas id="canvas01" width="578" height="400" ng-hide="true"></canvas>
               <div class="row">
                 <div class="col col-75">
-                  <img  id="idcImg01" ng-click="calldoc('doc001',this)">
+                  <img  id="idcImg01"
                 </div>
               </div>
 						</div>
@@ -25,12 +28,13 @@
           <h2>ทะเบียนภาษีมูลค่าเพิ่ม( ภพ. 20)</h2>
 						<div>
 							<br />
-              <md-button class="md-raised md-warn" aria-label="description" md-ripple-size="auto" ng-click="calldoc('doc002',this)">UPLOAD</md-button>
+              <md-button class="md-raised md-warn" aria-label="description" md-ripple-size="auto">
+                <input type="file" id="doc001" onchange="angular.element(this).scope().fileNameChanged(this,2)"/>
+                UPLOAD</md-button>
               <canvas id="canvas02" width="578" height="400" ng-hide="true"></canvas>
-              <input type="file" id="doc002" ng-hide="true"/>
               <div class="row">
                 <div class="col col-75">
-                  <img  id="idcImg02" ng-click="calldoc('doc002',this)">
+                  <img  id="idcImg02">
                 </div>
               </div>
 						</div>
@@ -39,7 +43,9 @@
           <h2>หนังสือรับรองบริษัท</h2>
 						<div>
 							<br />
-              <md-button class="md-raised md-warn" aria-label="description" md-ripple-size="auto" ng-click="calldoc('doc003',this)">UPLOAD</md-button>
+              <md-button class="md-raised md-warn" aria-label="description" md-ripple-size="auto">
+                <input type="file" id="doc001" onchange="angular.element(this).scope().fileNameChanged(this,3)"/>
+                UPLOAD</md-button>
               <canvas id="canvas03" width="578" height="400" ng-hide="true"></canvas>
               <input type="file" id="doc003" ng-hide="true"/>
               <div class="row">
@@ -56,7 +62,9 @@
 					<span class="text text-danger" ng-hide="chk.doc004">* กรุณาเพิ่มสำเนาสำเนาทะเบียนบ้านด้วย</span>
 					<div>
 							<br />
-              <md-button class="md-raised md-warn" aria-label="description" md-ripple-size="auto" ng-click="calldoc('doc004',this)">UPLOAD</md-button>
+              <md-button class="md-raised md-warn" aria-label="description" md-ripple-size="auto">
+                <input type="file" id="doc001" onchange="angular.element(this).scope().fileNameChanged(this,4)"/>
+                UPLOAD</md-button>
               <canvas id="canvas04" width="578" height="400" ng-hide="true"></canvas>
               <input type="file" id="doc004" ng-hide="true"/>
               <div class="row">
@@ -70,7 +78,9 @@
 					<span class="text text-danger" ng-hide="chk.doc005">* กรุณาเพิ่มสำเนาสำเนาประจำตัวบัตรประชาชนด้วย</span>
 					<div>
 							<br />
-              <md-button class="md-raised md-warn" aria-label="description" md-ripple-size="auto" ng-click="calldoc('doc005',this)">UPLOAD</md-button>
+              <md-button class="md-raised md-warn" aria-label="description" md-ripple-size="auto">
+                <input type="file" id="doc001" onchange="angular.element(this).scope().fileNameChanged(this,5)"/>
+                UPLOAD</md-button>
               <canvas id="canvas05" width="578" height="400" ng-hide="true"></canvas>
               <input type="file" id="doc005" ng-hide="true"/>
               <div class="row">

@@ -38,10 +38,15 @@
               <input type="date" id="txtclaimdate" ng-model="user.txtclaimdate" required >
             </md-input-container>
             <br />
-            <md-button class="md-raised md-warn" ng-click="clickfile()">แนบรูปภาพใบเสร็จรับเงินของลูกค้า</md-button>
+            <!--<md-button class="md-raised md-warn" ng-click="clickfile()" ng-hide="Data.getOsVersion">
+            แนบรูปภาพใบเสร็จรับเงินของลูกค้า</md-button>-->
+            <md-button class="md-raised md-warn">
+            <input type="file" id="filenoteread" onchange="angular.element(this).scope().fileNameChanged(this)">แนบรูปภาพใบเสร็จรับเงินของลูกค้า</md-button>
+            <!--<input type="file" id="filenote"  multiple ng-hide="true">-->
             <br />
             <hr class="divider"/>
             <canvas id="canvas01" width="578" height="400" ng-hide="true"></canvas>
+            <img id="idmg01" ng-hide="true"/>
             <div class="row img01 gallery" id="img01"></div>
             <br />
             <div class="row">
@@ -49,7 +54,7 @@
                 <span class="error-bold">*กดที่รูปเพื่อลบ</span>
               </div>
             </div>
-            <input type="file" id="filenote" ng-hide="true">
+            
           </section>
         </div>
       </div>

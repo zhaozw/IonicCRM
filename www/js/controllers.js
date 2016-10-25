@@ -133,10 +133,14 @@ angular.module('starter.controllers', [])
             $ionicLoading.hide();
         }, 3000);
         $scope.showLoadingProperTimes();
-        GetGPSLocation(function (res) {
+        try{
+          GetGPSLocation(function (res) {
             Data.latitude = res.latitude;
             Data.longitude = res.longitude;
-        });
+          });
+        }catch(e){
+          console.log('error gps '+e);
+        }
         // Form data for the login modal
         $scope.loginData = {};
 
@@ -373,6 +377,7 @@ angular.module('starter.controllers', [])
     /*-------------- เข้าสู่ระบบ -------------------*/
     .controller('PlaylistsCtrl', function ($scope, $stateParams, $cookies, Data, $state, $ionicLoading, $ionicHistory, datauser, $ionicScrollDelegate, $ionicModal)  {
         $state.reload();
+        $scope.Data = Data;
         Data.showcart = false;
         $ionicHistory.clearHistory();
         $scope.scrolling = 0;
@@ -381,9 +386,12 @@ angular.module('starter.controllers', [])
         $scope.logscroll = function () {
         }
 
+        $scope.listdoc = '';
         $scope.closeload = function(){
           $ionicLoading.hide();
         }
+
+        
         $scope.$on("$ionicView.enter", function () {
             console.log('reload complete');
             $scope.Load();
@@ -391,6 +399,13 @@ angular.module('starter.controllers', [])
             setTimeout(function(){
               $ionicLoading.hide();
             },3000);
+            $scope.fileNameChanged = function (ele) {
+             GetAttConvas(ele, '#imgAvator', 'canvas01', function(data){
+                   $scope.user.bs5 = data;
+                   $scope.user.dbs5 = data;
+                   $scope.$apply();
+                });
+            }
         });
         $scope.clicknext = function () {
             $state.go('app.orderlist', {
@@ -587,7 +602,9 @@ angular.module('starter.controllers', [])
             }else{
               return  0;
             }
-            if($scope.$phase){$scope.$apply();}
+            if ($scope.$phase){
+              $scope.$apply();
+            }
           });
         }
 
@@ -693,63 +710,59 @@ angular.module('starter.controllers', [])
             alert('error get annote '+er);
           }
 
-          $scope.callfile = function(){
-            //alert('ขอ อภัย ขณะนี้อยู่ในช่วงการปรับปรุงข้อมูล');
-            $('#idfile').trigger('click');
-          }
-          $('#idfile').change(function(){
+          $scope.fileNameChanged = function (element) {
             $scope.showLoading('กำลังเปลี่ยนข้อมูลรูปภาพ');
-            GetAtt('#idfile', '', 'canvas01', function (databs64) {
-              if(databs64){
-                returngetmastername($cookies.get('territoryid'),function(req){
-                try{
-                  var n = new MobileCRM.FetchXml.Entity('annotation');
-                			n.addAttribute('annotationid');//0
-                			n.addAttribute('filename');//1
-                			n.addAttribute('subject');//2
-                			n.addAttribute('objectid');//3
-                			n.addAttribute('notetext');//4
-                			n.addAttribute('createdon');//5
-                			n.orderBy("createdon", true);
-                	var filter = new MobileCRM.FetchXml.Filter();
-                			filter.where('objectid','eq',req[0][0]);
-                			n.filter = filter;
-                	var fetch = new MobileCRM.FetchXml.Fetch(n,100000,1);
-                			fetch.execute('array',function(data){
-                        if(data.length > 0){
-                            $scope.InAnnoteAttract('ivz_territorymaster', req[0][0], databs64, 'รูปโปรไฟล์ของพนักงานขาย', 9, function(){
-                              var img = "data:image/jpeg;base64,"+databs64;
-                              $('#imgAvator').attr('src',img);
-                              setTimeout(function(){
-                                $ionicLoading.hide();
-                              },2000);
-                            });
-                        }else{
-                          //alert('$scope.user.masterterid:'+returnmastername($cookies.get('territoryid')));
-                          $scope.user.avator = data;
-                            $scope.InAnnoteAttract('ivz_territorymaster', req[0][0], databs64, 'รูปโปรไฟล์ของพนักงานขาย', 9, function(){
-                              var img = "data:image/jpeg;base64,"+databs64;
-                              $('#imgAvator').attr('src',img);
-                              setTimeout(function(){
-                                $ionicLoading.hide();
-                              },2000);
-                            });
-                        }
-                		},function(er){alert(er);},null);
-                }catch(er){
-                  alert('error get annote '+er);
-                }
+            GetAttConvas(ele, '#idmg01', 'canvas04', function(databs64){
+                   if(databs64){
+                          returngetmastername($cookies.get('territoryid'),function(req){
+                          try{
+                            var n = new MobileCRM.FetchXml.Entity('annotation');
+                                n.addAttribute('annotationid');//0
+                                n.addAttribute('filename');//1
+                                n.addAttribute('subject');//2
+                                n.addAttribute('objectid');//3
+                                n.addAttribute('notetext');//4
+                                n.addAttribute('createdon');//5
+                                n.orderBy("createdon", true);
+                            var filter = new MobileCRM.FetchXml.Filter();
+                                filter.where('objectid','eq',req[0][0]);
+                                n.filter = filter;
+                            var fetch = new MobileCRM.FetchXml.Fetch(n,100000,1);
+                                fetch.execute('array',function(data){
+                                  if(data.length > 0){
+                                      $scope.InAnnoteAttract('ivz_territorymaster', req[0][0], databs64, 'รูปโปรไฟล์ของพนักงานขาย', 9, function(){
+                                        var img = "data:image/jpeg;base64,"+databs64;
+                                        $('#imgAvator').attr('src',img);
+                                        setTimeout(function(){
+                                          $ionicLoading.hide();
+                                        },2000);
+                                      });
+                                  }else{
+                                    //alert('$scope.user.masterterid:'+returnmastername($cookies.get('territoryid')));
+                                    $scope.user.avator = data;
+                                      $scope.InAnnoteAttract('ivz_territorymaster', req[0][0], databs64, 'รูปโปรไฟล์ของพนักงานขาย', 9, function(){
+                                        var img = "data:image/jpeg;base64,"+databs64;
+                                        $('#imgAvator').attr('src',img);
+                                        setTimeout(function(){
+                                          $ionicLoading.hide();
+                                        },2000);
+                                      });
+                                  }
+                              },function(er){alert(er);},null);
+                          }catch(er){
+                            alert('error get annote '+er);
+                          }
 
-                if($scope.$phase){
-                  $scope.$apply();
-                }
-              });
+                          if($scope.$phase){
+                            $scope.$apply();
+                          }
+                        });
               }
               if($scope.$phase){
                 $scope.$apply();
               }
             });
-          });
+          }
         });
         $scope.nextgender = function(){
           $state.go('app.editprofile',{ masterterid:$cookies.get('territoryid'),
@@ -5273,43 +5286,55 @@ angular.module('starter.controllers', [])
             }
         }
     }
-    $('#doc001').change(function () {
-        GetAtt('#doc001', '#idcImg01', 'canvas01', function (data) {
-            $ionicLoading.hide();
-            $scope.chk.doc001 = true;
-            $scope.user.bs1 = data;
-            //console.log(data.length);
-        });
-    });
-    $('#doc002').change(function () {
-        GetAtt('#doc002', '#idcImg02', 'canvas02', function (data) {
-            $ionicLoading.hide();
-            $scope.chk.doc001 = true;
-            $scope.user.bs2 = data;
-            console.log(data.length);
-        });
-    });
-    $('#doc003').change(function () {
-        GetAtt('#doc003', '#idcImg03', 'canvas03', function (data) {
-            $ionicLoading.hide();
-            $scope.chk.doc001 = true;
-            $scope.user.bs3 = data;
-        });
-    });
-    $('#doc004').change(function () {
-        GetAtt('#doc004', '#idcImg04', 'canvas04', function (data) {
-            $ionicLoading.hide();
-            $scope.chk.doc004 = true;
-            $scope.user.bs4 = data;
-        });
-    });
-    $('#doc005').change(function () {
-        GetAtt('#doc005', '#idcImg05', 'canvas05', function (data) {
-            $ionicLoading.hide();
-            $scope.chk.doc005 = true;
-            $scope.user.bs5 = data;
-        });
-    });
+
+    /**
+     * แนบไฟล์
+     */
+    $scope.fileNameChanged = function (ele,type) {
+        if (type == 1 || type == '1') {
+                GetAttConvas(ele, '#idmg01', 'canvas01', function(data){
+                 $ionicLoading.hide();
+                  $scope.chk.doc001 = true;
+                  $scope.user.bs1 = data;
+                 $scope.$apply();
+                });
+        }
+        else if (type == 2 || type == '2') {
+                  GetAttConvas(ele, '#idmg02', 'canvas02', function(data){
+                    $ionicLoading.hide();
+                  $scope.chk.doc002 = true;
+                  $scope.user.bs2 = data;
+                    $scope.$apply();
+                  });
+        }
+        else if (type == 3 || type == '3') {
+                 GetAttConvas(ele, '#idmg03', 'canvas03', function(data){
+                  $ionicLoading.hide();
+                  $scope.chk.doc003 = true;
+                  $scope.user.bs3 = data;
+                  $scope.$apply();
+                 });
+        }
+        else if (type == 4 || type == '4') {
+                 GetAttConvas(ele, '#idmg04', 'canvas04', function(data){
+                  $ionicLoading.hide();
+                  $scope.chk.doc004 = true;
+                  $scope.user.bs4 = data;
+                  $scope.$apply();
+                 });
+        }
+        else if (type == 5 || type == '5') {
+                 GetAttConvas(ele, '#idmg05', 'canvas05', function(data){
+                  $ionicLoading.hide();
+                  $scope.chk.doc005 = true;
+                  $scope.user.bs5 = data;
+                  $scope.$apply();
+                  });
+       }
+    }
+
+
+
     $scope.insertaccount = function () {
         var a = $scope.user.bs1;
         var b = $scope.user.bs2;
@@ -8390,29 +8415,37 @@ angular.module('starter.controllers', [])
             accountid: $stateParams.accountid.trim(),
             txtname: $stateParams.accountname,
             bs4: '',
-            bs5: ''
+            bs5: '',
+            dbs4: '',
+            dbs5: ''
         };
         $scope.chk = {
             doc004: true,
             doc005: true
         };
-        $('#doc004').change(function () {
-            GetAtt('#doc004', '#idcImg04', 'canvas04', function (data) {
-                $ionicLoading.hide();
-                $scope.chk.doc004 = true;
-                console.log(data.length);
-                $scope.user.bs4 = data;
-                //document.getElementById('log').innerHTML = 'bs4 '+data;
-            });
-        });
-        $('#doc005').change(function () {
-            GetAtt('#doc005', '#idcImg05', 'canvas05', function (data) {
-                $ionicLoading.hide();
-                $scope.chk.doc005 = true;
-                $scope.user.bs5 = data;
-                //document.getElementById('log').innerHTML = 'bs5 '+data;
-            });
-        });
+
+       $scope.$on('$ionicView.enter',function(){
+
+         $scope.fileNameChanged = function (ele, type) {
+             if(type == 1 || type == '1'){
+               GetAttConvas(ele, '#idmg01', 'canvas04', function(data){
+                   $scope.chk.doc004 = true;
+                   $scope.user.bs4 = data;
+                   $scope.user.dbs4 = data;
+                   $scope.$apply();
+                });
+              }
+              else if(type == 2 || type == '2'){
+                GetAttConvas(ele, '#idmg02', 'canvas05', function(data){
+                   $scope.chk.doc005 = true;
+                   $scope.user.bs5 = data;
+                   $scope.user.dbs5 = data;
+                   $scope.$apply();
+                });
+              }
+        }
+
+       });
         $scope.cAdjustmentCancel = function () {
             //document.getElementById('log').innerHTML = 'Click Back';
             $ionicHistory.goBack(-1);
@@ -8481,7 +8514,7 @@ angular.module('starter.controllers', [])
                         if (data.length > 0) {
                             $scope.showLoadingProperTimesRegter('กำลังบันทึกข้อมูล');
                             var x = 'update ' + data[0].ivz_accountadjustmentid + '::' + data[0].ivz_customernumber.id;
-                            //alert(x);
+                            alert(x);
                             updateadjustment(data[0].ivz_accountadjustmentid, data[0].ivz_customernumber.id, $scope.user.txtname, $stateParams.accountname, function () {
                                 console.log('insert ad');
                                 $scope.InAnnoteAttract('ivz_accountadjustment', data[0].ivz_accountadjustmentid, $scope.user.bs4, 'สำเนาทะเบียนบ้าน(ต้องมี) เปลี่ยนแปลงข้อมูล ' + data[0].ivz_customernumber.primaryName, 3, function () {
@@ -8496,7 +8529,7 @@ angular.module('starter.controllers', [])
                             });
                         } else {
                             var x = 'insert ' + $stateParams.accountid + '::' + $stateParams.ivz_integrationid;
-                            //alert(x);
+                            alert(x);
                             var dui = guid();
                             insertadjustment(dui, $stateParams.accountid, $scope.user.txtname, $stateParams.accountname, function () {
                                 console.log('insert ad');
@@ -8750,52 +8783,39 @@ angular.module('starter.controllers', [])
               getCusAds($stateParams.addressid);
             }
 
-            $(function(){
-              $('#doc01').change(function () {
-                  GetAtt('#doc01', '#idcImg01', 'canvas01', function (data) {
-                      //alert('changer'+data.length);
-                      if (data) {
-                          $scope.user.doc01 = data;
-                      }
-                      $scope.$apply();
+            $scope.fileNameChanged = function (ele,type) {
+              if (type == 1 || type == '1') {
+                GetAttConvas(ele, '#idmg01', 'canvas01', function(data){
+                 $scope.user.doc01 = data;
+                 $scope.$apply();
+                });
+              }
+              else if (type == 2 || type == '2') {
+                  GetAttConvas(ele, '#idmg02', 'canvas02', function(data){
+                    $scope.user.doc02 = data;
+                    $scope.$apply();
                   });
-              });
-              $('#doc02').change(function () {
-                  GetAtt('#doc02', '#idcImg02', 'canvas02', function (data) {
-                      if (data) {
-
-                          $scope.user.doc02 = data;
-                      }
-                      $scope.$apply();
+              }
+              else if (type == 3 || type == '3') {
+                 GetAttConvas(ele, '#idmg03', 'canvas03', function(data){
+                  $scope.user.doc03 = data;
+                  $scope.$apply();
+                 });
+              }
+              else if (type == 4 || type == '4') {
+                 GetAttConvas(ele, '#idmg04', 'canvas04', function(data){
+                  $scope.user.doc04 = data;
+                  $scope.$apply();
+                 });
+              }
+              else if (type == 5 || type == '5') {
+                 GetAttConvas(ele, '#idmg05', 'canvas05', function(data){
+                  $scope.user.doc05 = data;
+                  $scope.$apply();
                   });
-              });
-              $('#doc03').change(function () {
-                  GetAtt('#doc03', '#idcImg03', 'canvas03', function (data) {
-                      if (data) {
-
-                          $scope.user.doc03 = data;
-                      }
-                      $scope.$apply();
-                  });
-              });
-              $('#doc04').change(function () {
-                  GetAtt('#doc04', '#idcImg04', 'canvas04', function (data) {
-                      if (data) {
-
-                          $scope.user.doc04 = data;
-                      }
-                      $scope.$apply();
-                  });
-              });
-              $('#doc05').change(function () {
-                  GetAtt('#doc05', '#idcImg05', 'canvas05', function (data) {
-                      if (data) {
-                          $scope.user.doc05 = data;
-                      }
-                      $scope.$apply();
-                  });
-              });
-            });
+               }
+            }
+                      
 
         }); //end on view
         $scope.mdSlProv = function (id) {
@@ -13423,50 +13443,68 @@ angular.module('starter.controllers', [])
       },3000);
     }
     $scope.genNext01 = function(txtproductnumber,txtTatol,rdUset){
-        if($scope.user.poductclaimid){
-          if($scope.user.txtproductnumber){
-            if($scope.user.txtTatol){
-                  $scope.getType = checktopline(txtproductnumber);
-                  $scope.title = "กรอกข้อมูลใบเคลม";
-                  $scope.user.aUseGroup = true;
-                  if($scope.user.rdUset === '0' || $scope.user.rdUset === 0){
-                      $scope.user.aUsedSerial = false;
-                      $scope.user.aUserUset = true;
-                      $state.go('app.openclaimserial',{
-                        gettype:$scope.getType,
-                        accountid:$stateParams.accountid,
-                        itemamount:$scope.user.txtTatol,
-                        productclaim:$scope.user.poductclaimid,
-                        productid:$scope.user.txtproductnumber,
-                        rduset:$scope.user.rdUset,
-                        intid:$stateParams.intid
-                      },{reload:true});
+        var id = guid();
+        if(id){
+          try{
+            //alert(id);
+            var ne = new MobileCRM.DynamicEntity.createNew('ivz_claimorder');
+                ne.properties.ivz_claimorderid = id;
+                ne.save(function(ee){
+                  if(ee){
+                    alert('error create new claim '+ee);
                   }else{
-                      $scope.user.aUserUset = false;
-                      $state.go('app.openclaimserial',{
-                        gettype:$scope.getType,
-                        accountid:$stateParams.accountid,
-                        itemamount:$scope.user.txtTatol,
-                        productclaim:$scope.user.poductclaimid,
-                        productid:$scope.user.txtproductnumber,
-                        rduset:$scope.user.rdUset,
-                        intid:$stateParams.intid
-                      },{reload:true});
+                    if($scope.user.poductclaimid){
+                      if($scope.user.txtproductnumber){
+                        if($scope.user.txtTatol){
+                              $scope.getType = checktopline(txtproductnumber);
+                              $scope.title = "กรอกข้อมูลใบเคลม";
+                              $scope.user.aUseGroup = true;
+                              if($scope.user.rdUset === '0' || $scope.user.rdUset === 0){
+                                  $scope.user.aUsedSerial = false;
+                                  $scope.user.aUserUset = true;
+                                  $state.go('app.openclaimserial',{
+                                    gettype:$scope.getType,
+                                    accountid:$stateParams.accountid,
+                                    itemamount:$scope.user.txtTatol,
+                                    productclaim:$scope.user.poductclaimid,
+                                    productid:$scope.user.txtproductnumber,
+                                    rduset:$scope.user.rdUset,
+                                    intid:$stateParams.intid,
+                                    claimnewid:id
+                                  },{reload:true});
+                              }else{
+                                  $scope.user.aUserUset = false;
+                                  $state.go('app.openclaimserial',{
+                                    gettype:$scope.getType,
+                                    accountid:$stateParams.accountid,
+                                    itemamount:$scope.user.txtTatol,
+                                    productclaim:$scope.user.poductclaimid,
+                                    productid:$scope.user.txtproductnumber,
+                                    rduset:$scope.user.rdUset,
+                                    intid:$stateParams.intid,
+                                    claimnewid:id
+                                  },{reload:true});
+                              }
+                              setTimeout(function() {
+                                  $ionicLoading.hide();
+                              }, 3000);
+                        }else{
+                          setTimeout(function(){
+                            $ionicLoading.hide();
+                            alert('กรุณาระบุจำนวนสินค้าด้วย');
+                          },3000);
+                        }
+                      }else{
+                        alert('กรุณาระบุรหัสสินค้าด้วย');
+                      }
+                    }else{
+                      alert('กรุณากดค้นหาและเลือกสินค้าที่ต้องการเคลมด้วย');
+                    }
                   }
-                  setTimeout(function() {
-                      $ionicLoading.hide();
-                  }, 3000);
-            }else{
-              setTimeout(function(){
-                $ionicLoading.hide();
-                alert('กรุณาระบุจำนวนสินค้าด้วย');
-              },3000);
-            }
-          }else{
-            alert('กรุณาระบุรหัสสินค้าด้วย');
+                });
+          }catch(er){
+            alert('error create new claim');
           }
-        }else{
-          alert('กรุณากดค้นหาและเลือกสินค้าที่ต้องการเคลมด้วย');
         }
     };
     $scope.$on('$ionicView.enter',function(){
@@ -13550,13 +13588,13 @@ angular.module('starter.controllers', [])
       $ionicHistory.goBack(-1);
     },3000);
   }
-  $scope.clickfile = function(){
-    try {
-      $('#filenote').trigger('click');
-    } catch (err) {
-      alert('12695 '+err);
-    }
-  }
+  // $scope.clickfile = function(){
+  //   try {
+  //     $('#filenote').trigger('click');
+  //   } catch (err) {
+  //     alert('12695 '+err);
+  //   }
+  // }
 
   function pushImg(dClass){
     $('.divimg').remove();
@@ -13706,12 +13744,21 @@ angular.module('starter.controllers', [])
         }
       }
     }
-    $('#filenote').change(function(){
-      GetAtt('#filenote', '', 'canvas01', function (data) {
-            $scope.user.filedoc.push({docfile:data,title:'รูปภาพงานเคลมใบสั่งซื้อ '});
-            pushImg('img01');
-        });
-    });
+
+
+    // $('#filenote').change(function(){
+    //   GetAtt('#filenote', '', 'canvas01', function (data) {
+    //         $scope.user.filedoc.push({docfile:data,title:'รูปภาพงานเคลมใบสั่งซื้อ '});
+    //         pushImg('img01');
+    //     });
+    // });
+    $scope.fileNameChanged = function (ele) {
+      GetAttConvas(ele, '#idmg01', 'canvas01', function(data){
+          $scope.user.filedoc.push({docfile:data,title:'รูปภาพงานเคลมใบสั่งซื้อ '});
+          pushImg('img01');
+          $scope.$apply();
+      });
+    }
     setTimeout(function(){
       $ionicLoading.hide();
     },5000);
@@ -13739,6 +13786,7 @@ angular.module('starter.controllers', [])
       t = ((31 * 6) - getDateNumber(t_date));//6 M
       //alert('วันรับประกัน dtg 6M:'+t+' :: '+(31 * 6)+' \n dateon:'+t_date);
     }
+    alert('วันที่รับเคลม:'+t+':::'+t_date+','+c_date);
     switch (c_date) {
       case 0:
             $ionicLoading.hide();
@@ -13765,7 +13813,8 @@ angular.module('starter.controllers', [])
                       cdateby:t_date,
                       claimid:'',
                       optiontype:'',
-                      intid:$stateParams.intid
+                      intid:$stateParams.intid,
+                      claimnewid:$stateParams.claimnewid
                     },{reload:true});
                   }
                   $scope.closeload = function(){
@@ -13785,7 +13834,8 @@ angular.module('starter.controllers', [])
                           claimserial:$scope.user.txtpartserial,
                           specailclaim:2,
                           cdateby:t_date,
-                          intid:$stateParams.intid
+                          intid:$stateParams.intid,
+                          claimnewid:$stateParams.claimnewid
                         },{reload:true});
                       }
                       $scope.closeload = function(){
@@ -13821,7 +13871,8 @@ angular.module('starter.controllers', [])
                     claimserial:$scope.user.txtpartserial,
                     specailclaim:0,
                     cdateby:t_date,
-                    intid:$stateParams.intid
+                    intid:$stateParams.intid,
+                    claimnewid:$stateParams.claimnewid
                   },{reload:true});
                 };
                 $scope.closeload = function(){
@@ -13854,7 +13905,8 @@ angular.module('starter.controllers', [])
                         cdateby:t_date,
                         claimid:'',
                         optiontype:'',
-                        intid:$stateParams.intid
+                        intid:$stateParams.intid,
+                        claimnewid:$stateParams.claimnewid
                       },{reload:true});
                     }
                     $scope.closeload = function(){
@@ -13875,7 +13927,8 @@ angular.module('starter.controllers', [])
                           claimserial:$scope.user.txtpartserial,
                           specailclaim:2,
                           cdateby:t_date,
-                          intid:$stateParams.intid
+                          intid:$stateParams.intid,
+                          claimnewid:$stateParams.claimnewid
                         },{reload:true});
                       }
                       $scope.closeload = function(){
@@ -13910,7 +13963,8 @@ angular.module('starter.controllers', [])
                         claimserial:$scope.user.txtpartserial,
                         specailclaim:0,
                         cdateby:t_date,
-                        intid:$stateParams.intid
+                        intid:$stateParams.intid,
+                        claimnewid:$stateParams.claimnewid
                       },{reload:true});
                   }
                   $scope.closeload = function(){
@@ -13943,7 +13997,8 @@ angular.module('starter.controllers', [])
                         cdateby:t_date,
                         claimid:'',
                         optiontype:'',
-                        intid:$stateParams.intid
+                        intid:$stateParams.intid,
+                        claimnewid:$stateParams.claimnewid
                       },{reload:true});
                     }
                     $scope.closeload = function(){
@@ -13978,7 +14033,8 @@ angular.module('starter.controllers', [])
                         claimserial:$scope.user.txtpartserial,
                         specailclaim:0,
                         cdateby:t_date,
-                        intid:$stateParams.intid
+                        intid:$stateParams.intid,
+                        claimnewid:$stateParams.claimnewid
                       },{reload:true});
                     }
                     $scope.closeload = function(){
@@ -14020,7 +14076,8 @@ angular.module('starter.controllers', [])
                           cdateby:t_date,
                           claimid:'',
                           optiontype:'',
-                          intid:$stateParams.intid
+                          intid:$stateParams.intid,
+                          claimnewid:$stateParams.claimnewid
                         },{reload:true});
                       }
                       $scope.closeload = function(){
@@ -14048,7 +14105,8 @@ angular.module('starter.controllers', [])
                           claimserial:$scope.user.txtpartserial,
                           specailclaim:0,
                           cdateby:t_date,
-                          intid:$stateParams.intid
+                          intid:$stateParams.intid,
+                          claimnewid:$stateParams.claimnewid
                         },{reload:true});
                       }
                       $scope.closeload = function(){
@@ -14071,7 +14129,7 @@ angular.module('starter.controllers', [])
     var xx = 0;
     function insAnnote(i,callback){
             try {
-              $scope.InAnnoteAttract('ivz_claimorder',g,$scope.user.filedoc[i].docfile,$scope.user.filedoc[i].title,3,function(){
+              $scope.InAnnoteAttract('ivz_claimorder',$stateParams.claimnewid,$scope.user.filedoc[i].docfile,$scope.user.filedoc[i].title,3,function(){
                 callback();
               });
             } catch (e) {
@@ -14142,7 +14200,8 @@ angular.module('starter.controllers', [])
                           optiontype:'',
                           claimserial:$scope.user.txtpartserial,
                           cdateby:txtclaimdate,
-                          intid:$stateParams.intid
+                          intid:$stateParams.intid,
+                          claimnewid:$stateParams.claimnewid
                   },{reload:true});
                 }else{
                   getCheckClaim(new Date(gh),parseInt($stateParams.gettype));
@@ -14203,7 +14262,8 @@ angular.module('starter.controllers', [])
                                 optiontype:'',
                                 claimserial:$scope.user.txtpartserial,
                                 cdateby:$scope.user.txtclaimdate,
-                                intid:$stateParams.intid
+                                intid:$stateParams.intid,
+                                claimnewid:$stateParams.claimnewid
                         },{reload:true});
                       }else{
                         var s = txtpartserial.slice(0,1)+txtpartserial.slice(2,9);
@@ -14255,7 +14315,8 @@ angular.module('starter.controllers', [])
                             optiontype:'',
                             claimserial:$scope.user.txtpartserial,
                             cdateby:$scope.user.txtclaimdate,
-                            intid:$stateParams.intid
+                            intid:$stateParams.intid,
+                            claimnewid:$stateParams.claimnewid
                     },{reload:true});
                   }else{
                     gh = chkChok(txtpartserial);
@@ -14297,7 +14358,8 @@ angular.module('starter.controllers', [])
                           optiontype:'',
                           claimserial:$scope.user.txtpartserial,
                           cdateby:$scope.user.txtclaimdate,
-                          intid:$stateParams.intid
+                          intid:$stateParams.intid,
+                          claimnewid:$stateParams.claimnewid
                   },{reload:true});
                 }else{
                   getCheckClaim(t_date,parseInt($stateParams.gettype));
@@ -14405,7 +14467,8 @@ angular.module('starter.controllers', [])
           claimserial:$stateParams.claimserial,
           specailclaim:2,
           cdateby:$stateParams.cdateby,
-          intid:$stateParams.intid
+          intid:$stateParams.intid,
+          claimnewid:$stateParams.claimnewid
         },{reload:true});
       }
       $scope.closeload = function(){
@@ -14440,7 +14503,8 @@ angular.module('starter.controllers', [])
       optiontype:$stateParams.optiontype,
       claimserial:$stateParams.claimserial,
       cdateby:$stateParams.cdateby,
-      intid:$stateParams.intid
+      intid:$stateParams.intid,
+      claimnewid:$stateParams.claimnewid
     },{reload:true});
   }
   $scope.genNextClaimOrder = function(){
@@ -14669,8 +14733,7 @@ angular.module('starter.controllers', [])
 
   function insertmaintenace(id,callback){
     try {
-      var ins = new MobileCRM.DynamicEntity.createNew('ivz_claimorder');
-          ins.properties.ivz_claimorderid = id;
+      var ins = new MobileCRM.DynamicEntity('ivz_claimorder',$stateParams.claimnewid);
           ins.properties.ivz_name = $scope.user.custname;
           ins.properties.ivz_claimorder = $scope.user.txtclaim;
           ins.properties.ivz_customernumber =  new MobileCRM.Reference('account',$scope.user.custid);
@@ -14712,7 +14775,7 @@ angular.module('starter.controllers', [])
         angular.forEach(data,function(val,i){
           var ins = new MobileCRM.DynamicEntity.createNew('ivz_claimorderdetail');
               ins.properties.ivz_name = $stateParams.claimtxt;
-              ins.properties.ivz_claimorderid = new MobileCRM.Reference('ivz_claimorder',id);
+              ins.properties.ivz_claimorderid = new MobileCRM.Reference('ivz_claimorder',$stateParams.claimnewid);
               ins.properties.ivz_claimproductid = new MobileCRM.Reference('product',$stateParams.productclaim);
               ins.properties.ivz_productid = new MobileCRM.Reference('product',$stateParams.productclaim);
               ins.properties.ivz_priceperunit = parseInt(val.price);
@@ -14796,7 +14859,7 @@ angular.module('starter.controllers', [])
     loopArray($scope.user.filedoc);
     function insAnnote(i,callback){
       try {
-        $scope.InAnnoteAttract('ivz_claimorder',g,$scope.user.filedoc[i].docfile,$scope.user.filedoc[i].title,3,function(){
+        $scope.InAnnoteAttract('ivz_claimorder',$stateParams.claimnewid,$scope.user.filedoc[i].docfile,$scope.user.filedoc[i].title,3,function(){
           callback();
         });
         // alert('insert annote');
@@ -14961,7 +15024,8 @@ angular.module('starter.controllers', [])
               claimserial:$stateParams.claimserial,
               specailclaim:$stateParams.specailclaim,
               cdateby:$stateParams.cdateby,
-              intid:$stateParams.intid
+              intid:$stateParams.intid,
+              claimnewid:$stateParams.claimnewid
           },{reload:true});//go to home
       }else if($stateParams.gettype == 2 || $stateParams.gettype == 3){
           $state.go('app.claimpicture',{
@@ -14977,7 +15041,8 @@ angular.module('starter.controllers', [])
               claimserial:$stateParams.claimserial,
               specailclaim:$stateParams.specailclaim,
               cdateby:$stateParams.cdateby,
-              intid:$stateParams.intid
+              intid:$stateParams.intid,
+              claimnewid:$stateParams.claimnewid
           },{reload:true});//go to home
       }
   }
@@ -15095,7 +15160,8 @@ angular.module('starter.controllers', [])
               cdateby:$stateParams.cdateby,
               claimid:$stateParams.claimid,
               optiontype:$stateParams.optiontype,
-              intid:$stateParams.intid
+              intid:$stateParams.intid,
+              claimnewid:$stateParams.claimnewid
             },{reload:true});
           }
           if($scope.$phase){
@@ -15156,7 +15222,8 @@ angular.module('starter.controllers', [])
               cdateby:$stateParams.cdateby,
               claimid:$stateParams.claimid,
               optiontype:$stateParams.optiontype,
-              intid:$stateParams.intid
+              intid:$stateParams.intid,
+              claimnewid:$stateParams.claimnewid
             },{reload:true});
           }
           if($scope.$phase){
@@ -15190,7 +15257,8 @@ angular.module('starter.controllers', [])
       claimserial:$stateParams.claimserial,
       specailclaim:2,
       cdateby:$stateParams.cdateby,
-      intid:$stateParams.intid
+      intid:$stateParams.intid,
+      claimnewid:$stateParams.claimnewid
     },{reload:true});
   }
   $scope.genNextClaimOrder = function(){
@@ -15208,7 +15276,8 @@ angular.module('starter.controllers', [])
         optiontype:$stateParams.optiontype,
         claimserial:$stateParams.claimserial,
         cdateby:$stateParams.cdateby,
-        intid:$stateParams.intid
+        intid:$stateParams.intid,
+        claimnewid:$stateParams.claimnewid
       },{reload:true});
     }else if($stateParams.gettype == 2 || $stateParams.gettype == 3){
       $state.go('app.claimdetail',{
@@ -15224,7 +15293,8 @@ angular.module('starter.controllers', [])
         optiontype:$stateParams.optiontype,
         claimserial:$stateParams.claimserial,
         cdateby:$stateParams.cdateby,
-        intid:$stateParams.intid
+        intid:$stateParams.intid,
+        claimnewid:$stateParams.claimnewid
       },{reload:true});
     }
   }
@@ -15490,35 +15560,10 @@ angular.module('starter.controllers', [])
     } catch (e) {
       alert('13244 '+e);
     }
-    $scope.clickfile = function(){
-      i = 0;
-      $('#filenote').trigger('click');
-    }
-    $('#filenote').change(function(e){
-      //alert('i:'+i);
-      $scope.user.appendoc.length = 0;
-      if(i <= 0){
-        i++;
-        GetAtt('#filenote', '', 'canvas01', function (data) {
-            if($scope.user.filedoc.length > 3){
-              $scope.user.filedoc.push({docfile:data,title:'รูปภาพงานเคลม',doc:'<div class="col divimg">' +
-                                '<img class="thumbnail" src="data:image/jpeg;base64,' + 
-                                data + '" width="150" height="150"/>' +
-                                '</div>'});
-            }else{
-              $scope.user.filedoc.push({docfile:data,title:'รูปภาพงานเคลม',doc:'<div class="col divimg">' +
-                                '<img class="thumbnail" src="data:image/jpeg;base64,' + 
-                                data + '" width="150" height="150"/>' +
-                                '</div>'});
-            }
-            $state.reload();
-        });
-      }
-    });
-    $scope.removeimg = function(id){
-      $scope.user.filedoc.splice(id,1);
-      pushImg();
-    }
+    // $scope.clickfile = function(){
+    //   i = 0;
+    //   $('#filenote').trigger('click');
+    // }
     var pushImg = function(){
       try{
         //$('.divimg').remove();
@@ -15543,7 +15588,31 @@ angular.module('starter.controllers', [])
         alert('error 15030 '+e);
       }
     }
-    
+    $scope.fileNameChanged = function (ele) {
+          i = 0;
+          GetAttConvas(ele, '#idmg010', 'canvas01', function(data){
+            $scope.user.appendoc.length = 0;
+                if(i <= 0){
+                  i++;
+                  if($scope.user.filedoc.length > 3){
+                        $scope.user.filedoc.push({docfile:data,title:'รูปภาพงานเคลม',doc:'<div class="col divimg">' +
+                                          '<img class="thumbnail" src="data:image/jpeg;base64,' + data + '" width="150" height="150"/>' +
+                                          '</div>'});
+                                          $scope.$apply();
+                  }else{
+                        $scope.user.filedoc.push({docfile:data,title:'รูปภาพงานเคลม',doc:'<div class="col divimg">' +
+                                          '<img class="thumbnail" src="data:image/jpeg;base64,' + data + '" width="150" height="150"/>' +
+                                          '</div>'});
+                                          $scope.$apply();
+                  }
+                  $state.reload();
+                }
+          });
+    }
+    $scope.removeimg = function(id){
+      $scope.user.filedoc.splice(id,1);
+      pushImg();
+    }
     setTimeout(function(){
       $ionicLoading.hide();
     },10000);
@@ -15564,10 +15633,9 @@ angular.module('starter.controllers', [])
     $ionicHistory.goBack(-1);
   }
   function insertmaintenace(id,callback){
-    //alert('empid:'+$cookies.get('empid'));
+    //alert('$stateParams.claimnewid:'+$stateParams.claimnewid);
     try {
-      var ins = new MobileCRM.DynamicEntity.createNew('ivz_claimorder');
-          ins.properties.ivz_claimorderid = id;
+      var ins = new MobileCRM.DynamicEntity('ivz_claimorder',$stateParams.claimnewid);
           ins.properties.ivz_claimorder = $scope.user.txtclaim;
           ins.properties.ivz_name = $scope.user.custname;
           ins.properties.ivz_customernumber =  new MobileCRM.Reference('account',$stateParams.accountid);
@@ -15602,7 +15670,7 @@ angular.module('starter.controllers', [])
             if(er){
               alert('claim 12835 '+er);
             }else{
-              callback(id);
+              callback($stateParams.claimnewid);
             }
           });
     } catch (e) {
@@ -15816,7 +15884,8 @@ angular.module('starter.controllers', [])
       gettype:$stateParams.gettype,
       accountid:$stateParams.accountid,
       rduset:$stateParams.rduset,
-      intid:$stateParams.intid
+      intid:$stateParams.intid,
+      claimnewid:$stateParams.claimnewid
     },{reload:true});//go to home
   }
 })

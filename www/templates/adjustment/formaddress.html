@@ -58,20 +58,21 @@
                 <hr class="divider"/>
                 <span style="color:red;font-weight:bold;" ng-hide="user.doc01 || user.doc02 || user.doc03"><br />กรุณาแนบไฟล์ตามด้านล่างนี้ด้วย</span>
                 <br />
-                <md-button class="md-raised md-warn" md-ripple-size="full" ng-click="calldoc('doc01',this)">
+                <md-button class="md-raised md-warn" md-ripple-size="full">
+                  <input type="file" id="doc01" onchange="angular.element(this).scope().fileNameChanged(this,1)"/>
                   1.แนบสำเนาหนังสือรับรองการจดทะเบียนพาณิชย์
                 </md-button>
                 <div ng-hide="chk.doc01">
                   <canvas id="canvas01" width="578" height="400" ng-hide="true"></canvas>
-                  <input type="file" id="doc01" ng-hide="true"/>
                   <div class="row">
                     <div class="col col-75">
-                      <img  id="idcImg01" ng-click="calldoc('doc01',this)">
+                      <img class="thumbnail"  id="idcImg01">
                     </div>
                   </div>
                 </div>
                 <br />
-                <md-button class="md-raised md-warn" md-ripple-size="full" ng-click="calldoc('doc02',this)">
+                <md-button class="md-raised md-warn" md-ripple-size="full">
+                  <input type="file" id="doc01" onchange="angular.element(this).scope().fileNameChanged(this,2)"/>
                   2.แนบทะเบียนภาษีมูลค่าเพิ่ม( ภพ. 20)
                 </md-button>
                 <div  ng-hide="chk.doc02">
@@ -79,18 +80,20 @@
                   <input type="file" id="doc02" ng-hide="true"/>
                   <div class="row">
                     <div class="col col-75">
-                      <img  id="idcImg02" ng-click="calldoc('doc02',this)">
+                      <img class="thumbnail"  id="idcImg02">
                     </div>
                   </div>
                 </div>
                 <br />
-                <md-button class="md-raised md-warn" md-ripple-size="full" ng-click="calldoc('doc03',this)">3.แนบหนังสือรับรองบริษัท</md-button>
+                <md-button class="md-raised md-warn" md-ripple-size="full">
+                  <input type="file" id="doc01" onchange="angular.element(this).scope().fileNameChanged(this,3)"/>
+                  3.แนบหนังสือรับรองบริษัท</md-button>
                 <div class="" ng-hide="chk.doc03">
                   <canvas id="canvas03" width="578" height="400" ng-hide="true"></canvas>
                   <input type="file" id="doc03" ng-hide="true"/>
                   <div class="row">
                     <div class="col col-75">
-                      <img  id="idcImg03" ng-click="calldoc('doc03',this)">
+                      <img class="thumbnail"  id="idcImg03">
                     </div>
                   </div>
                 </div>
@@ -98,26 +101,30 @@
               <hr class="divider"/>
               <span style="color:red;font-weight:bold;" ng-hide="user.doc04">กรุณาแนบสำเนาประจำตัวบัตรประชาชนด้วย</span>
               <p />
-              <md-button class="md-raised md-warn" md-ripple-size="full" ng-click="calldoc('doc04',this)">สำเนาประจำตัวบัตรประชาชน(ต้องมี)</md-button>
+              <md-button class="md-raised md-warn" md-ripple-size="full">
+                <input type="file" id="doc01" onchange="angular.element(this).scope().fileNameChanged(this,4)"/>
+                สำเนาประจำตัวบัตรประชาชน(ต้องมี)</md-button>
               <div class="" ng-hide="chk.doc04">
                 <canvas id="canvas04" width="578" height="400" ng-hide="true"></canvas>
                 <input type="file" id="doc04" ng-hide="true"/>
                 <div class="row">
                   <div class="col col-75">
-                    <img  id="idcImg04" ng-click="calldoc('doc04',this)">
+                    <img class="thumbnail"  id="idcImg04">
                   </div>
                 </div>
               </div>
               <br />
               <span style="color:red;font-weight:bold;" ng-hide="user.doc05">กรุณาแนบสำเนาทะเบียนบ้านด้วย</span>
               <p />
-              <md-button class="md-raised md-warn" md-ripple-size="full" ng-click="calldoc('doc05',this)">สำเนาทะเบียนบ้าน(ต้องมี)</md-button>
+              <md-button class="md-raised md-warn" md-ripple-size="full">
+                <input type="file" id="doc01" onchange="angular.element(this).scope().fileNameChanged(this,5)"/>
+                สำเนาทะเบียนบ้าน(ต้องมี)</md-button>
               <div class="" ng-hide="chk.doc05">
                 <canvas id="canvas05" width="578" height="400" ng-hide="true"></canvas>
                 <input type="file" id="doc05" ng-hide="true"/>
                 <div class="row">
                   <div class="col col-75">
-                    <img  id="idcImg05" ng-click="calldoc('doc05',this)">
+                    <img class="thumbnail"  id="idcImg05">
                   </div>
                 </div>
               </div>

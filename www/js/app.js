@@ -1,7 +1,7 @@
-angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookies','ngMessages','ngAnimate','ngSanitize'])
+angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookies','ngMessages','ng-file-model'])
 
 .run(function($ionicPlatform, $rootScope, $ionicHistory ,Data) {
-  //alert('Data:'+Data.pricelevel);
+  Data.getOsVersion = getOS();
   var setprice = setInterval(function(){
     try {
       var price = new MobileCRM.FetchXml.Entity('pricelevel');
@@ -271,7 +271,8 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
     onhandallnewfortuner:0,
     remainfortuner:0,
     remainallnewfortuner:0,
-    remainpajero:0
+    remainpajero:0,
+    getOsVersion:false
   }
 })
 .factory('Darray',function(){
@@ -392,7 +393,46 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
         });
     };
 })
+.directive('appFilereader', function($q) {
+    var slice = Array.prototype.slice;
 
+    return {
+        restrict: 'A',
+        require: '?ngModel',
+        link: function(scope, element, attrs, ngModel) {
+                if (!ngModel) return;
+
+                ngModel.$render = function() {};
+
+                element.bind('change', function(e) {
+                    var element = e.target;
+
+                    $q.all(slice.call(element.files, 0).map(readFile))
+                        .then(function(values) {
+                            if (element.multiple) ngModel.$setViewValue(values);
+                            else ngModel.$setViewValue(values.length ? values[0] : null);
+                        });
+
+                    function readFile(file) {
+                        var deferred = $q.defer();
+
+                        var reader = new FileReader();
+                        reader.onload = function(e) {
+                            deferred.resolve(e.target.result);
+                        };
+                        reader.onerror = function(e) {
+                            deferred.reject(e);
+                        };
+                        reader.readAsDataURL(file);
+
+                        return deferred.promise;
+                    }
+
+                }); //change
+
+            } //link
+    }; //return
+})
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
  .state('app', {
@@ -1387,7 +1427,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.openclaimserial', {
-  url: '/openclaimserial/:gettype/:accountid/:itemamount/:productclaim/:productname/:productid/:rduset/:intid',
+  url: '/openclaimserial/:gettype/:accountid/:itemamount/:productclaim/:productname/:productid/:rduset/:intid/:claimnewid',
   views: {
     'menuContent': {
       templateUrl: 'templates/openclaim/claimserial.html',
@@ -1396,7 +1436,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.showlistorder', {
-  url: '/showlistorder/:gettype/:accountid/:itemamount/:claimtxt/:productclaim/:claimstatus/:rduset/:claimserial/:specailclaim/:cdateby/:claimid/:optiontype/:intid',
+  url: '/showlistorder/:gettype/:accountid/:itemamount/:claimtxt/:productclaim/:claimstatus/:rduset/:claimserial/:specailclaim/:cdateby/:claimid/:optiontype/:intid/:claimnewid',
   views: {
     'menuContent': {
       templateUrl: 'templates/openclaim/showlistorder.html',
@@ -1405,7 +1445,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.addmantain', {
-  url: '/addmantain/:gettype/:accountid/:itemamount/:claimtxt/:productclaim/:claimstatus/:rduset/:claimid/:claimserial/:specailclaim/:cdateby/:intid',
+  url: '/addmantain/:gettype/:accountid/:itemamount/:claimtxt/:productclaim/:claimstatus/:rduset/:claimid/:claimserial/:specailclaim/:cdateby/:intid/:claimnewid',
   views: {
     'menuContent': {
       templateUrl: 'templates/openclaim/addmantain.html',
@@ -1414,7 +1454,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.claimoption', {
-  url: '/claimoption/:gettype/:accountid/:itemamount/:productclaim/:claimstatus/:rduset/:claimserial/:specailclaim/:cdateby/:intid',
+  url: '/claimoption/:gettype/:accountid/:itemamount/:productclaim/:claimstatus/:rduset/:claimserial/:specailclaim/:cdateby/:intid/:claimnewid',
   views: {
     'menuContent': {
       templateUrl: 'templates/openclaim/claimoption.html',
@@ -1423,7 +1463,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.claimpicture', {
-  url: '/claimpicture/:gettype/:accountid/:itemamount/:claimtxt/:productclaim/:claimstatus/:rduset/:claimid/:optiontype/:claimserial/:specailclaim/:cdateby/:intid',
+  url: '/claimpicture/:gettype/:accountid/:itemamount/:claimtxt/:productclaim/:claimstatus/:rduset/:claimid/:optiontype/:claimserial/:specailclaim/:cdateby/:intid/:claimnewid',
   views: {
     'menuContent': {
       templateUrl: 'templates/openclaim/claimpicture.html',
@@ -1432,7 +1472,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
   }
 })
 .state('app.claimdetail', {
-  url: '/claimdetail/:gettype/:accountid/:specailclaim/:itemamount/:claimtxt/:productclaim/:claimstatus/:rduset/:claimid/:optiontype/:claimserial/:cdateby/:intid',
+  url: '/claimdetail/:gettype/:accountid/:specailclaim/:itemamount/:claimtxt/:productclaim/:claimstatus/:rduset/:claimid/:optiontype/:claimserial/:cdateby/:intid/:claimnewid',
   views: {
     'menuContent': {
       templateUrl: 'templates/openclaim/claimdetail.html',
@@ -1484,10 +1524,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngMaterial','ngCookie
       controller: 'OrderItemCtrl'
     }
   }
-})
-//end claim
-;
+});
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/playlists');
-  //$urlRouterProvider.otherwise('/app/neworder/////');
 });

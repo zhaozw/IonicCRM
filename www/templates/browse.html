@@ -13,9 +13,12 @@
           <section id="contact-details">
           <!-- Begin Profile Image Section -->
           <div class="header_1">
-          <img  width="250" height="250" alt="Your Name" class="imgborder" id="imgAvator" ng-click="callfile()"/>
+          <img  width="250" height="250" alt="Your Name" class="imgborder" id="imgAvator"/>
+          <canvas id="canvas01" width="578" height="400" ng-hide="true"></canvas>
           <p>
-            <span class="error-bold">*กดที่รูปเพื่อเปลี่ยนรูปใหม่</span>
+            <span class="error-bold">
+              <input type="file" id="idfile" capture="camera" onchange="angular.element(this).scope().fileNameChanged(this)">
+              *กดที่นี้เพื่อเปลี่ยนรูปใหม่</span>
           </p>
           </div>
           <!-- End Profile Image Section -->
@@ -47,7 +50,7 @@
   </div>
   <br /><br />
   <canvas id="canvas01" width="300" height="300" ng-hide="true"></canvas>
-  <input type="file" id="idfile" ng-hide="true">
+  
 </ion-content>
 <div class="tabs tabs-icon-top">
   <a class="tab-item" ng-click="nextgender()">
