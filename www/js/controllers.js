@@ -2346,20 +2346,6 @@ angular.module('starter.controllers', [])
                   '$stateParams.province:'+$stateParams.province;
         //alert(tct);
         var getduig = guid();
-        // $scope.listactivities = [
-        //   {name:"บันทึกข้อมูลเข้าพบลูกค้า",idlnk:0,avator:"img/ionic.png"},
-        //   {name:"เปิดบัญชีลูกค้าใหม่",idlnk:1,avator:"img/ionic.png"},
-        //   {name:"แก้ไขข้อมูลลูกค้า",idlnk:2,avator:"img/ionic.png"},
-        //   {name:"เปิดใบสั่งขาย",idlnk:3,avator:"img/ionic.png"},
-        //   {name:"รับเคลมสินค้า",idlnk:4,avator:"img/ionic.png"},
-        //   {name:"บันทึกลูกค้าค้าดหวัง",idlnk:5,avator:"img/ionic.png"},
-        //   {name:"บันทึกคู่แข่ง",idlnk:7,avator:"img/ionic.png"},
-        //   {name:"เก็บเงิน/วางบิล",idlnk:8,avator:"img/ionic.png"},
-        //   {name:"บันทึกสภาพการตลาด",idlnk:12,avator:"img/ionic.png"},
-        //   {name:"นำเสนอสินค้า",idlnk:11,avator:"img/ionic.png"},
-        //   {name:"PRODUCT RECALL",idlnk:9,avator:"img/ionic.png"},
-        //   {name:"กิจกรรมทางการตลาด",idlnk:10,avator:"img/ionic.png"}
-        // ]
          $scope.listactivities = [
           {name:"บันทึกข้อมูลเข้าพบลูกค้า",idlnk:0,avator:"img/ionic.png"},
           {name:"เปิดบัญชีลูกค้าใหม่",idlnk:1,avator:"img/ionic.png"},
@@ -2372,7 +2358,8 @@ angular.module('starter.controllers', [])
           {name:"บันทึกสภาพการตลาด",idlnk:12,avator:"img/ionic.png"},
           {name:"นำเสนอสินค้า",idlnk:11,avator:"img/ionic.png"},
           {name:"PRODUCT RECALL",idlnk:9,avator:"img/ionic.png"},
-          {name:"กิจกรรมทางการตลาด",idlnk:10,avator:"img/ionic.png"}
+          {name:"กิจกรรมทางการตลาด",idlnk:10,avator:"img/ionic.png"},
+          {name:"อัพเดทข้อมูล GPS ของลูกค้า",idlnk:13,avator:"img/ionic.png"}
         ]
         var insactivities = function(type, statc, stata, typearr, latitude, longitude,callback){
           try {
@@ -2788,6 +2775,33 @@ angular.module('starter.controllers', [])
                   province:$stateParams.province,
                   distid:$stateParams.distid
                 },{reload:true});
+            }else if (idval == 13 || idval == '13') {
+                console.log('update account gps');
+                $scope.showLoadGPS();
+                GetGPSLocation(function(res){
+                  var sInter = setInterval(function(){
+                    if(res){
+                      /**
+                       * insert resual gps.
+                       */
+                      var ins = new MobileCRM.DynamicEntity("account",$stateParams.accountid);
+                          ins.properties.address1_latitude = parseFloat(res.latitude);
+                          ins.properties.address1_longitude = parseFloat(res.longitude);
+                          ins.save(function(er){
+                            if(er){
+                              alert('error visit 2806 '+er);
+                            }else{
+                              alert('บันทึกข้อมูลเสร็จแล้ว');
+                              $ionicLoading.hide();
+                            }
+                          });
+                      clearInterval(sInter);
+                    }
+                  },7000);
+                  if($scope.$phase){
+                      $scope.$apply();
+                  }
+                });
             } else {
               aterwait();
                 console.log('insert ' + idval);
@@ -14704,37 +14718,37 @@ angular.module('starter.controllers', [])
     //alert('claim :'+$stateParams.rduset);
     checkclaim($stateParams.accountid,function(data){
       if($stateParams.gettype == 0 || $stateParams.gettype == 1){//check top echo
-        if(data.length > 100){
-          $scope.titlemodal =  'ลูกค้าเคยมีประวัติเคลมสงเสริมการขายแล้วไม่สามารถเปิดใบเคลมได้';
-         $scope.modalsuccess.show();
-          $scope.closesuccess = function(){
-            $scope.clicknext();
-          }
-        }else{
+        //if(data.length > 100){
+        //   $scope.titlemodal =  'ลูกค้าเคยมีประวัติเคลมสงเสริมการขายแล้วไม่สามารถเปิดใบเคลมได้';
+        //  $scope.modalsuccess.show();
+        //   $scope.closesuccess = function(){
+        //     $scope.clicknext();
+        //   }
+        //}else{
           gonextclaim();
-        }
+        //}
       }else if($stateParams.gettype == 2 || $stateParams.gettype == 3){//check std auto
-        if(data.length > 0){
-          $scope.titlemodal = 'ลูกค้าเคยมีประวัติเคลมสงเสริมการขายแล้วไม่สามารถเปิดใบเคลมได้';
-          $scope.modalsuccess.show();
-          $scope.closesuccess = function(){
-            $scope.modalsuccess.hide();
-            $ionicHistory.clearHistory();
-            $ionicHistory.nextViewOptions({
-                disableBack: true
-            });
-            $state.go('app.openclaim',{
-              accountid:$stateParams.accountid,
-              specailclaim:0,
-              intid:$stateParams.intid
-            },{reload:true});
-          }
-        }else{
+        // if(data.length > 0){
+        //   $scope.titlemodal = 'ลูกค้าเคยมีประวัติเคลมสงเสริมการขายแล้วไม่สามารถเปิดใบเคลมได้';
+        //   $scope.modalsuccess.show();
+        //   $scope.closesuccess = function(){
+        //     $scope.modalsuccess.hide();
+        //     $ionicHistory.clearHistory();
+        //     $ionicHistory.nextViewOptions({
+        //         disableBack: true
+        //     });
+        //     $state.go('app.openclaim',{
+        //       accountid:$stateParams.accountid,
+        //       specailclaim:0,
+        //       intid:$stateParams.intid
+        //     },{reload:true});
+        //   }
+        // }else{
           gonextclaim();
-        }
-      }
-      if($scope.$phase){
-        $scope.$apply();
+      //   }
+      // }
+      // if($scope.$phase){
+      //   $scope.$apply();
       }
     });
   }
