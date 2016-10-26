@@ -2361,6 +2361,7 @@ angular.module('starter.controllers', [])
         //   {name:"กิจกรรมทางการตลาด",idlnk:10,avator:"img/ionic.png"}
         // ]
          $scope.listactivities = [
+          {name:"บันทึกข้อมูลเข้าพบลูกค้า",idlnk:0,avator:"img/ionic.png"},
           {name:"เปิดบัญชีลูกค้าใหม่",idlnk:1,avator:"img/ionic.png"},
           {name:"แก้ไขข้อมูลลูกค้า",idlnk:2,avator:"img/ionic.png"},
           {name:"เปิดใบสั่งขาย",idlnk:3,avator:"img/ionic.png"},
@@ -2567,7 +2568,37 @@ angular.module('starter.controllers', [])
         $scope.goop = function (idval) {
             var guidreg = guid();
             var terriid = $cookies.get('territoryid'); //'6C791CA7-D5E1-E511-80E1-005056A71F87';
-            if (idval == 1 || idval == '1') {
+          if (idval == 0 || idval == '0') {
+                console.log('insert visit openaccount gps');
+                $scope.showLoadGPS();
+                GetGPSLocation(function(res){
+                  var sInter = setInterval(function(){
+                    if(res){
+                      /**
+                       * insert resual gps.
+                       */
+                      var ins = MobileCRM.DynamicEntity.createNew("ivz_saleresultcontrol");
+                          ins.properties.ivz_name = $stateParams.accountname;
+                          ins.properties.ivz_customer = new MobileCRM.Reference('account', $stateParams.accountid);
+                          ins.properties.ivz_latitude = res.latitude;
+                          ins.properties.ivz_longtitude = res.longitude;
+                          ins.properties.ivz_empid = $cookies.get('ivz_empid');
+                          ins.save(function(er){
+                            if(er){
+                              alert('error visit 2587 '+er);
+                            }else{
+                              alert('บันทึกข้อมูลเสร็จแล้ว');
+                              $ionicLoading.hide();
+                            }
+                          });
+                      clearInterval(sInter);
+                    }
+                  },9000);
+                  if($scope.$phase){
+                      $scope.$apply();
+                  }
+                });
+            }else if (idval == 1 || idval == '1') {
                 console.log('insert visit openaccount');
                 insertactivities(1, 0, 2, null, function () {
                     $state.go('app.openaccount', {
@@ -5684,7 +5715,7 @@ angular.module('starter.controllers', [])
 
         $scope.user = {
             optionPayment:Data.optionPayment,
-            txtCreditlimit:Data.txtCreditlimit,
+            txtCreditlimit:0,
             optionPaymentType:Data.optionPaymentType,
             optionPaymentBank:Data.optionPaymentBank,
             txtBankAccount: Data.txtBankAccount,
@@ -5831,8 +5862,8 @@ angular.module('starter.controllers', [])
             doc:Data.doc,
             PlaceStatus1:Data.PlaceStatus1,
             PlaceStatus2:Data.PlaceStatus2,
-            tatofactory:Data.tatofactory,
-            tatolnumber:Data.tatolnumber
+            tatofactory:0,
+            tatolnumber:0
         };
         $scope.chk = {
             SalesPart1:Data.SalesPart1,
@@ -5877,27 +5908,55 @@ angular.module('starter.controllers', [])
                 }
             }
         }
-        $('#doc006').change(function () {
-            GetAtt('#doc006', '#idcImg06', 'canvas06', function (data) {
-                $('.divimg').remove();
-                // 	console.log(data.length);
-                $scope.user.doc.push(data);
-                var datapush = $scope.user.doc;
-                //console.log(datapush.length);
-                if (datapush.length > 0) {
-                    for (var i in datapush) {
-                        var html = '<div class="col col-20 divimg">' +
-                            '<img class="thumbnail" src="data:image/jpeg;base64,' + datapush[i] + '" width="100" height="100" ng-click="removeimg(' + i + ')"/>' +
+        // $('#doc006').change(function () {
+        //     GetAtt('#doc006', '#idcImg06', 'canvas06', function (data) {
+        //         $('.divimg').remove();
+        //         // 	console.log(data.length);
+        //         $scope.user.doc.push(data);
+        //         var datapush = $scope.user.doc;
+        //         //console.log(datapush.length);
+        //         if (datapush.length > 0) {
+        //             for (var i in datapush) {
+        //                 var html = '<div class="col col-20 divimg">' +
+        //                     '<img class="thumbnail" src="data:image/jpeg;base64,' + datapush[i] + '" width="100" height="100" ng-click="removeimg(' + i + ')"/>' +
+        //                     '</div>';
+        //                 angular.element(document.getElementById('divspace')).append($compile(html)($scope));
+        //             }
+        //         } else {
+        //             var html = '<div class="col col-20">' +
+        //                 '<img class="thumbnail" src="data:image/jpeg;base64,' + data + '่" width="100" height="100"  ng-click="removeimg(' + i + ')"/>' +
+        //                 '</div>';
+        //             angular.element(document.getElementById('divspace')).append($compile(html)($scope));
+        //         }
+        //     });
+        // });
+
+
+        $scope.$on('$ionicView.enter',function(){
+
+          $scope.fileNameChanged = function (ele) {
+               GetAttConvas(ele, '#imgoc006', 'canvas06', function(data){
+                    $('.divimg').remove();
+                    // 	console.log(data.length);
+                    $scope.user.doc.push(data);
+                    var datapush = $scope.user.doc;
+                    //console.log(datapush.length);
+                    if (datapush.length > 0) {
+                        for (var i in datapush) {
+                            var html = '<div class="col col-20 divimg">' +
+                                '<img class="thumbnail" src="data:image/jpeg;base64,' + datapush[i] + '" width="100" height="100" ng-click="removeimg(' + i + ')"/>' +
+                                '</div>';
+                            angular.element(document.getElementById('divspace')).append($compile(html)($scope));
+                        }
+                    } else {
+                        var html = '<div class="col col-20">' +
+                            '<img class="thumbnail" src="data:image/jpeg;base64,' + data + '" width="100" height="100"  ng-click="removeimg(' + i + ')"/>' +
                             '</div>';
                         angular.element(document.getElementById('divspace')).append($compile(html)($scope));
                     }
-                } else {
-                    var html = '<div class="col col-20">' +
-                        '<img class="thumbnail" src="data:image/jpeg;base64,' + data + '่" width="100" height="100"  ng-click="removeimg(' + i + ')"/>' +
-                        '</div>';
-                    angular.element(document.getElementById('divspace')).append($compile(html)($scope));
-                }
+                   $scope.$apply();
             });
+          }
         });
 
         $scope.chknull = function (idval, txtnull) {
@@ -6036,8 +6095,8 @@ angular.module('starter.controllers', [])
                 Data.doc = $scope.user.doc;
                 Data.PlaceStatus1 = $scope.user.PlaceStatus1;
                 Data.PlaceStatus2 = $scope.user.PlaceStatus2;
-                Data.tatofactory = $scope.user.tatofactory;
-                Data.tatolnumber = $scope.user.tatolnumber;
+                Data.tatofactory = true;
+                Data.tatolnumber = true;
                 Data.SalesPart1 = $scope.chk.SalesPart1;
                 Data.SalesPart2 = $scope.chk.SalesPart2;
                 Data.doc006 = $scope.chk.doc006;
@@ -6158,12 +6217,23 @@ angular.module('starter.controllers', [])
             $scope.contacttype = data;
         });
 
-        $('#doc081').change(function () {
-            GetAtt('#doc081', '#idcImg081', 'canvas081', function (data) {
-                $scope.user.doc = data;
-                $ionicLoading.hide();
-            });
+        $scope.$on('$ionicView.enter',function(){
+          $scope.fileNameChanged = function (ele) {
+               GetAttConvas(ele, '#idcImg081', 'canvas081', function(data){
+                   $scope.user.doc = data;
+                   $ionicLoading.hide();
+                   $scope.$apply();
+                });
+          }
         });
+
+        // $('#doc081').change(function () {
+        //     GetAtt('#doc081', '#idcImg081', 'canvas081', function (data) {
+        //         $scope.user.doc = data;
+        //         $ionicLoading.hide();
+        //     });
+        // });
+
         $scope.listcontact = $scope.user.contact;
         $scope.addcontact = function () {
             var j = $scope.user.contact;

@@ -37,12 +37,13 @@
               <br />
               <h2>รูปภาพผู้ติดต่อร้านค้า/คนสั่งของ</h2>
               <hr class="divider"/>
-                <md-button class="md-raised md-warn" aria-label="description"  md-ripple-size="auto" ng-click="calldoc('doc081',this)">UPLOAD</md-button>
+                <md-button class="md-raised md-warn" aria-label="description"  md-ripple-size="auto">
+                  <input type="file" id="doc081" onchange="angular.element(this).scope().fileNameChanged(this)">
+                  UPLOAD</md-button>
                 <canvas id="canvas081" width="578" height="400" ng-hide="true"></canvas>
-                <input type="file" id="doc081" ng-hide="true">
                 <div class="row">
                   <div class="col col-75">
-                    <img  id="idcImg081" ng-click="remove('doc081',this)">
+                    <img  id="idcImg081" class="thumbnail">
                   </div>
                 </div>
             </div>

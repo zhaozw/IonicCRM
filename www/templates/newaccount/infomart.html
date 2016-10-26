@@ -60,14 +60,16 @@
 					<hr class="divider"/>
           <div class="row">
             <div class="col">
-              <md-button class="md-raised md-warn" aria-label="description"  md-ripple-size="auto" ng-click="calldoc('doc006',this)">UPLOAD</md-button>
+              <md-button class="md-raised md-warn" aria-label="description"  md-ripple-size="auto">
+                <input type="file" onchange="angular.element(this).scope().fileNameChanged(this)">
+                UPLOAD</md-button>
             </div>
           </div>
           <div class="row">
             <div class="col">
+              <img id="imgoc006" ng-hide="true">
   						<canvas id="canvas06" width="578" height="400" ng-hide="true"></canvas>
   						<span class="text text-danger" ng-hide="false">* กดที่รูปภาพเพื่อลบออก</span>
-  						<input type="file" id="doc006" ng-hide="true"/>
               <div class="row" id ="divspace"></div>
             </div>
           </div>
