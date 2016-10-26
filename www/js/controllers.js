@@ -2346,7 +2346,21 @@ angular.module('starter.controllers', [])
                   '$stateParams.province:'+$stateParams.province;
         //alert(tct);
         var getduig = guid();
-        $scope.listactivities = [
+        // $scope.listactivities = [
+        //   {name:"บันทึกข้อมูลเข้าพบลูกค้า",idlnk:0,avator:"img/ionic.png"},
+        //   {name:"เปิดบัญชีลูกค้าใหม่",idlnk:1,avator:"img/ionic.png"},
+        //   {name:"แก้ไขข้อมูลลูกค้า",idlnk:2,avator:"img/ionic.png"},
+        //   {name:"เปิดใบสั่งขาย",idlnk:3,avator:"img/ionic.png"},
+        //   {name:"รับเคลมสินค้า",idlnk:4,avator:"img/ionic.png"},
+        //   {name:"บันทึกลูกค้าค้าดหวัง",idlnk:5,avator:"img/ionic.png"},
+        //   {name:"บันทึกคู่แข่ง",idlnk:7,avator:"img/ionic.png"},
+        //   {name:"เก็บเงิน/วางบิล",idlnk:8,avator:"img/ionic.png"},
+        //   {name:"บันทึกสภาพการตลาด",idlnk:12,avator:"img/ionic.png"},
+        //   {name:"นำเสนอสินค้า",idlnk:11,avator:"img/ionic.png"},
+        //   {name:"PRODUCT RECALL",idlnk:9,avator:"img/ionic.png"},
+        //   {name:"กิจกรรมทางการตลาด",idlnk:10,avator:"img/ionic.png"}
+        // ]
+         $scope.listactivities = [
           {name:"เปิดบัญชีลูกค้าใหม่",idlnk:1,avator:"img/ionic.png"},
           {name:"แก้ไขข้อมูลลูกค้า",idlnk:2,avator:"img/ionic.png"},
           {name:"เปิดใบสั่งขาย",idlnk:3,avator:"img/ionic.png"},
@@ -2359,9 +2373,8 @@ angular.module('starter.controllers', [])
           {name:"PRODUCT RECALL",idlnk:9,avator:"img/ionic.png"},
           {name:"กิจกรรมทางการตลาด",idlnk:10,avator:"img/ionic.png"}
         ]
-
-        function insertactivities(type, statc, stata, typearr, callback) {
-            try {
+        var insactivities = function(type, statc, stata, typearr, latitude, longitude,callback){
+          try {
                 var ins = MobileCRM.DynamicEntity.createNew("ivz_resultappoint");
                 ins.properties.ivz_resultappointid = getduig;
                 ins.properties.ivz_resultname = $stateParams.accountname;
@@ -2443,6 +2456,109 @@ angular.module('starter.controllers', [])
             } catch (er) {
                 alert('error 846 ' + er);
             }
+        }
+
+        function insertactivities(type, statc, stata, typearr, callback) {
+          try{
+            $scope.showLoadGPS();
+            GetGPSLocation(function(res){
+              var sInterval = setInterval(function(){
+                 if(res){
+                   //alert(res.latitude+'::'+res.longitude);
+                   //callback(type, statc, stata,typearr,res.latitude,res.longitude);
+                   try {
+                        var ins = MobileCRM.DynamicEntity.createNew("ivz_resultappoint");
+                            ins.properties.ivz_resultappointid = getduig;
+                            ins.properties.ivz_resultname = $stateParams.accountname;
+                            if($stateParams.accountid){
+                              ins.properties.ivz_customer = new MobileCRM.Reference('account', $stateParams.accountid);
+                            }
+                            if (type == 1 || type == '1') {
+                                ins.properties.ivz_visit = parseInt(1);
+                                ins.properties.ivz_visitopenaccount = parseInt(1);
+                            } else if (type == 2 || type == '2') {
+                              ins.properties.ivz_visit = parseInt(1);
+                                ins.properties.ivz_visitadjustment = parseInt(1);
+                            } else if (type == 3 || type == '3') {
+
+                              DataOrderSpec.order.length = 0;
+                              Data.tatolmatch = 0;
+                              Data.tatolminplus = 0;
+                              Data.balancecredit = 0;
+                              DataOrder.order.length = 0;
+                              DataOrder.account.length = 0;
+                              DataOrder.tatol = 0;
+                              DataOrder.matcher = 0;
+                              DataOrder.fortuner = 0;
+                              DataOrder.allnewfortuner = 0;
+                              DataOrder.pajero = 0;
+                              DataOrder.allnewpajero = 0;
+                              DataOrder.resultallnewpajero = 0;
+
+                              ins.properties.ivz_visit = parseInt(1);
+                                ins.properties.ivz_visitorder = parseInt(1);
+                            } else if (type == 4 || type == '4') {
+                              ins.properties.ivz_visit = parseInt(1);
+                                ins.properties.ivz_visitclaimorder = parseInt(1);
+                            } else if (type == 5 || type == '5') {
+                              ins.properties.ivz_visit = parseInt(1);
+                                ins.properties.ivz_visitprospect = parseInt(1);
+                            } else if (type == 6 || type == '6') {
+                                ins.properties.ivz_visit = parseInt(1);
+                                ins.properties.ivz_visitmarket = parseInt(1);
+                            } else if (type == 7 || type == '7') {
+                                ins.properties.ivz_visit = parseInt(1);
+                                ins.properties.ivz_visitcompetitor = parseInt(1);
+                            } else if (type == 8 || type == '8') {
+                                ins.properties.ivz_visit = parseInt(1);
+                                ins.properties.ivz_visitbilling = parseInt(1);
+                            } else if (type == 9 || type == '9') {
+                                ins.properties.ivz_visit = parseInt(1);
+                                ins.properties.ivz_visitproductrecall = parseInt(1);
+                            } else if (type == 10 || type == '10') {
+                                //ins.properties.ivz_visitactivities = typearr.toString();
+                            }else if (type == 11 || type == '11') {
+                                ins.properties.ivz_visit = parseInt(1);
+                                ins.properties.ivz_visitsuggest = parseInt(1);
+                            }
+                            ins.properties.ivz_latitude = res.latitude;
+                            ins.properties.ivz_longtitude = res.longitude;
+                            ins.properties.ivz_shedulestart = new Date();
+                            ins.properties.ivz_sheduleend = new Date();
+                            ins.properties.ivz_resultstatus = parseInt(statc);
+                            ins.properties.ivz_statuscomplete = parseInt(stata);
+                            if($stateParams.terid){
+                              ins.properties.ivz_territory = new MobileCRM.Reference('territory', $stateParams.terid);
+                            }
+                            if($stateParams.distid){
+                              ins.properties.ivz_addressdistrict = new MobileCRM.Reference('ivz_addressdistrict', $stateParams.distid);
+                            }
+                            if($stateParams.province){
+                              ins.properties.ivz_addressprovince = new MobileCRM.Reference('ivz_addressprovince', $stateParams.province);
+                            }
+                            ins.properties.ivz_empid = $cookies.get('ivz_empid');
+                            ins.save(function (er) {
+                                // if (er) {
+                                //     alert(er);
+                                // } else {
+                                //   callback();
+                                // }
+                                callback();
+                            });
+                    } catch (er) {
+                        alert('error 846 ' + er);
+                    }
+                   $ionicLoading.hide();
+                   clearInterval(sInterval);
+                 }
+              },9000);
+              if($scope.$phase){
+                $scope.$apply();
+              }
+            });
+          }catch(er){
+            alert('error gps '+er);
+          }
         }
         function aterwait(){
           alert('ขอ อภัย ในความไม่สะดวกขณะนี้ยังอยู่ในช่วงการพัฒนา');
@@ -4241,9 +4357,10 @@ angular.module('starter.controllers', [])
         // $scope.DataRegistry = DataRegistry;
         Data.showcart = false;
         Data.mastertype = $stateParams.mastertype;
-        Data.dataguid = $stateParams.getguid;
-        if (!$stateParams.getguid) {
-            $stateParams.getguid = guid();
+        if ($stateParams.getguid) {
+            Data.dataguid = $stateParams.getguid;
+        }else{
+            Data.dataguid = guid();
         }
         if (Data.getparaaccount) {
             Data.getguid = Data.getparaaccount;
@@ -4358,16 +4475,16 @@ angular.module('starter.controllers', [])
                     var a = new MobileCRM.FetchXml.Entity('account');
                     a.addAttribute('accountid'); //0
                     var filter = new MobileCRM.FetchXml.Filter();
-                    filter.where('accountid', 'eq', $stateParams.getguid);
+                    filter.where('accountid', 'eq', Data.dataguid);
                     a.filter = filter;
                     var fetch = new MobileCRM.FetchXml.Fetch(a);
                     fetch.execute('array', function (data) {
-                        Data.gid = $stateParams.getguid;
+                        Data.gid = Data.dataguid;
                         Data.taxid = $scope.user.txtid;
                         Data.cusname = $scope.user.txtname;
                         Data.bracher = $scope.user.txtbrancher;
                         if (data.length > 0) {
-                            var ins = new MobileCRM.DynamicEntity("account", $stateParams.getguid);
+                            var ins = new MobileCRM.DynamicEntity("account", Data.dataguid);
                             ins.properties.ivz_taxid = $scope.user.txtid;
                             ins.properties.name = $scope.user.txtname;
                             ins.properties.ivz_branch = parseInt($scope.user.branchselect);
@@ -4392,12 +4509,18 @@ angular.module('starter.controllers', [])
                                 if (er) {
                                     alert('error ac 902 ' + er);
                                 } else {
-                                    window.location.href = "#/app/accountcontact/" + $stateParams.getguid.trim();
+                                    window.location.href = "#/app/accountcontact/" + Data.dataguid.trim();
                                 }
                             });
                         } else {
+                        //   territoryid: Data.termas,
+                        // mastertype: Data.mastertype,
+                        // getguid: guid(),
+                        // pricelevel: Data.pricelevel,
+                        // transactioncurrency: Data.transactioncurrency
+                          //alert(Data.dataguid +'\n tran:'+Data.transactioncurrency+'\n price:'+Data.pricelevel+'\n ter:'+Data.termas);
                             var ins = new MobileCRM.DynamicEntity.createNew("account");
-                            ins.properties.accountid = $stateParams.getguid.trim();
+                            ins.properties.accountid = Data.dataguid;
                             ins.properties.ivz_taxid = $scope.user.txtid;
                             ins.properties.name = $scope.user.txtname;
                             ins.properties.ivz_branch = parseInt($scope.user.branchselect);
@@ -4410,9 +4533,9 @@ angular.module('starter.controllers', [])
                             }
                             ins.properties.ivz_empid = $cookies.get('ivz_empid'); ///get cookies
                             ins.properties.ivz_satatusempid = parseInt($stateParams.mastertype);
-                            ins.properties.territoryid = new MobileCRM.Reference('territory', $stateParams.territoryid); //A02
-                            ins.properties.transactioncurrencyid = new MobileCRM.Reference('transactioncurrency', $stateParams.transactioncurrency); //บาท
-                            ins.properties.defaultpricelevelid = new MobileCRM.Reference('pricelevel', $stateParams.pricelevel); //บาท
+                            ins.properties.territoryid = new MobileCRM.Reference('territory', Data.termas); //A02
+                            ins.properties.transactioncurrencyid = new MobileCRM.Reference('transactioncurrency', 'EB87A95C-0D05-E511-80C5-005056A71F87'); //บาท
+                            ins.properties.defaultpricelevelid = new MobileCRM.Reference('pricelevel', Data.pricelevel); //บาท
                             ins.properties.ivz_addresscountry = new MobileCRM.Reference('ivz_addresscountry', Data.countrymaster); //th
                             ins.properties.customertypecode = parseInt(2);
                             ins.properties.accountcategorycode = parseInt(100000001);
@@ -4422,7 +4545,7 @@ angular.module('starter.controllers', [])
                                 if (er) {
                                     alert('error ac 903 ' + er);
                                 } else {
-                                    window.location.href = "#/app/accountcontact/" + $stateParams.getguid;
+                                    window.location.href = "#/app/accountcontact/" + Data.dataguid;
                                 }
                             });
                         };
@@ -5292,7 +5415,7 @@ angular.module('starter.controllers', [])
      */
     $scope.fileNameChanged = function (ele,type) {
         if (type == 1 || type == '1') {
-                GetAttConvas(ele, '#idmg01', 'canvas01', function(data){
+                GetAttConvas(ele, '#idcImg01', 'canvas01', function(data){
                  $ionicLoading.hide();
                   $scope.chk.doc001 = true;
                   $scope.user.bs1 = data;
@@ -5300,7 +5423,7 @@ angular.module('starter.controllers', [])
                 });
         }
         else if (type == 2 || type == '2') {
-                  GetAttConvas(ele, '#idmg02', 'canvas02', function(data){
+                  GetAttConvas(ele, '#idcImg02', 'canvas02', function(data){
                     $ionicLoading.hide();
                   $scope.chk.doc002 = true;
                   $scope.user.bs2 = data;
@@ -5308,7 +5431,7 @@ angular.module('starter.controllers', [])
                   });
         }
         else if (type == 3 || type == '3') {
-                 GetAttConvas(ele, '#idmg03', 'canvas03', function(data){
+                 GetAttConvas(ele, '#idcImg03', 'canvas03', function(data){
                   $ionicLoading.hide();
                   $scope.chk.doc003 = true;
                   $scope.user.bs3 = data;
@@ -5316,7 +5439,7 @@ angular.module('starter.controllers', [])
                  });
         }
         else if (type == 4 || type == '4') {
-                 GetAttConvas(ele, '#idmg04', 'canvas04', function(data){
+                 GetAttConvas(ele, '#idcImg04', 'canvas04', function(data){
                   $ionicLoading.hide();
                   $scope.chk.doc004 = true;
                   $scope.user.bs4 = data;
@@ -5324,7 +5447,7 @@ angular.module('starter.controllers', [])
                  });
         }
         else if (type == 5 || type == '5') {
-                 GetAttConvas(ele, '#idmg05', 'canvas05', function(data){
+                 GetAttConvas(ele, '#idcImg05', 'canvas05', function(data){
                   $ionicLoading.hide();
                   $scope.chk.doc005 = true;
                   $scope.user.bs5 = data;
