@@ -7,7 +7,7 @@ angular.module('starter.controllers', [])
         var chUser = $cookies.get('name');
         if (chUser) {
             console.log('logon true');
-            if ($cookies.get('mastertype') == 3 || $cookies.get('mastertype') == 2) {
+            if ($cookies.get('mastertype') == 4 || $cookies.get('mastertype') == 3 || $cookies.get('mastertype') == 2) {
                 Data.logontype = true;
             } else {
                 Data.logontype = false;
@@ -2016,7 +2016,7 @@ angular.module('starter.controllers', [])
                 $scope.showLoading('กำลังบันทึกข้อมูล');
                 try {
                       if(data[i].activityid){
-                        if(data[i].activityid == 1 || data[i].activityid == '1'){
+                        if(data[i].ivz_planningstatus == 1 || data[i].ivz_planningstatus == '1'){
                           var ins = new MobileCRM.DynamicEntity('appointment', data[i].activityid);
                             ins.properties.ivz_planningstatus = parseInt(2);
                             ins.save(function (er) {
