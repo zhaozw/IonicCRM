@@ -849,7 +849,7 @@ angular.module('starter.controllers', [])
         }, 3000);
     })
     ////////////// Calendar ///////////////////////////
-    .controller('PlanCtrl', function ($scope, $stateParams, $cookies, $location, Data, $state, $ionicLoading) {
+    .controller('PlanCtrl', function ($scope, $stateParams, $cookies, $location, Data, $state, $ionicLoading,$ionicModal) {
         $state.reload();
         $scope.Data = Data;
         //alert($stateParams.sterritory);
@@ -857,6 +857,33 @@ angular.module('starter.controllers', [])
         Data.showcart = false;
         $scope.dvTodos = true;
         $scope.todos = [];
+        $scope.group = {
+          filter:0
+        }
+        $ionicModal.fromTemplateUrl('templates/comment/filterplan.html', {
+          scope: $scope,
+          animation: 'slide-in-up'
+        }).then(function(modal) {
+          $scope.modal = modal;
+        });
+        $scope.openModal = function() {
+          $scope.modal.show();
+        };
+        $scope.closemodal = function() {
+          $scope.modal.hide();
+        };
+        // Cleanup the modal when we're done with it!
+        $scope.$on('$destroy', function() {
+          $scope.modal.remove();
+        });
+        // Execute action on hide modal
+        $scope.$on('modal.hidden', function() {
+          // Execute action
+        });
+        // Execute action on remove modal
+        $scope.$on('modal.removed', function() {
+          // Execute action
+        });
         $scope.$on('$ionicView.enter',function(){
           $scope.reloaddata(0);
         });
@@ -950,25 +977,41 @@ angular.module('starter.controllers', [])
                 function getInsert(i,callback){
                   var data = $scope.todos;
                       if (data[i].ivz_employeeposition == Data.mastertype) {
-                          var ins = new MobileCRM.DynamicEntity('appointment', data[i].activityid);
-                          ins.properties.ivz_planningstatus = parseInt(1);
-                          ins.save(function (err) {
-                              if (err) {
-                                  alert("ex insert " + err);
-                              }else{
-                                callback()
-                              }
-                          });
-                      }else{
-                        var ins = new MobileCRM.DynamicEntity('appointment', data[i].activityid);
-                        ins.properties.ivz_planningstatus = parseInt(1);
-                        ins.save(function (err) {
-                            if (err) {
-                                alert("ex insert " + err);
+                          if(data[i].activityid){
+                            if(data[i].ivz_planningstatus == 0 || data[i].ivz_planningstatus == '0'){
+                              var ins = new MobileCRM.DynamicEntity('appointment', data[i].activityid);
+                                  ins.properties.ivz_planningstatus = parseInt(1);
+                                  ins.save(function (err) {
+                                      if (err) {
+                                          alert("ex insert " + err);
+                                      }else{
+                                        callback()
+                                      }
+                                  });
                             }else{
-                              callback()
+                              callback();
                             }
-                        });
+                          }else{
+                            callback();
+                          }
+                      }else{
+                        if(data[i].activityid){
+                          if(data[i].ivz_planningstatus == 0 || data[i].ivz_planningstatus == '0'){
+                            var ins = new MobileCRM.DynamicEntity('appointment', data[i].activityid);
+                                ins.properties.ivz_planningstatus = parseInt(1);
+                                ins.save(function (err) {
+                                    if (err) {
+                                        alert("ex insert " + err);
+                                    }else{
+                                      callback()
+                                    }
+                                });
+                          }else{
+                            callback();
+                          }
+                        }else{
+                          callback();
+                        }
                       }
                 }
                 var loopArray = function(arr){
@@ -1699,12 +1742,41 @@ angular.module('starter.controllers', [])
           $scope.loaddata();
         });
     })
-    .controller('PlanListApproveCtrl', function ($scope, $stateParams, $cookies, Data, $ionicHistory, $state,$ionicLoading) {
+    .controller('PlanListApproveCtrl', function ($scope, $stateParams, $cookies, Data, $ionicHistory, $state,$ionicLoading,$ionicModal) {
         $state.reload();
         $scope.Data = Data;
         Data.showcart = false;
         Data.sterritory = $stateParams.territoryid;
         $scope.vCheckAll = 0;
+        $scope.group = {
+          filter:1
+        }
+
+        $ionicModal.fromTemplateUrl('templates/comment/filterplan.html', {
+          scope: $scope,
+          animation: 'slide-in-up'
+        }).then(function(modal) {
+          $scope.modal = modal;
+        });
+        $scope.openModal = function() {
+          $scope.modal.show();
+        };
+        $scope.closemodal = function() {
+          $scope.modal.hide();
+        };
+        // Cleanup the modal when we're done with it!
+        $scope.$on('$destroy', function() {
+          $scope.modal.remove();
+        });
+        // Execute action on hide modal
+        $scope.$on('modal.hidden', function() {
+          // Execute action
+        });
+        // Execute action on remove modal
+        $scope.$on('modal.removed', function() {
+          // Execute action
+        });
+
         // $scope.reloaddata();
         function getretype(tyid){
           var p = parseInt(tyid)
@@ -1719,6 +1791,7 @@ angular.module('starter.controllers', [])
                   return 1;
           }
         }
+
         $scope.reloaddata = function () {
           if(getretype(Data.mastertype) === 2){
             GetAppointUStatus($stateParams.territoryid, 1,getretype(Data.mastertype), function (data) {
@@ -1942,17 +2015,25 @@ angular.module('starter.controllers', [])
               function getIns(i,callback){
                 $scope.showLoading('กำลังบันทึกข้อมูล');
                 try {
-                        var ins = new MobileCRM.DynamicEntity('appointment', data[i].activityid);
-                        ins.properties.ivz_planningstatus = parseInt(2);
-                        ins.save(function (er) {
-                            if (er) {
-                                alert(er);
-                            }else{
-                              setTimeout(function () {
-                                  callback();
-                              }, 500);
-                            }
-                        });
+                      if(data[i].activityid){
+                        if(data[i].activityid == 1 || data[i].activityid == '1'){
+                          var ins = new MobileCRM.DynamicEntity('appointment', data[i].activityid);
+                            ins.properties.ivz_planningstatus = parseInt(2);
+                            ins.save(function (er) {
+                                if (er) {
+                                    alert(er);
+                                }else{
+                                  setTimeout(function () {
+                                      callback();
+                                  }, 500);
+                                }
+                            });
+                        }else{
+                          callback();
+                        }
+                      }else{
+                        callback();
+                      }
                     } catch (er) {
                         alert("เกิดข้อผิดพลาดรหัส 695 " + er);
                     }
@@ -2776,6 +2857,23 @@ angular.module('starter.controllers', [])
                   distid:$stateParams.distid
                 },{reload:true});
             }else if (idval == 13 || idval == '13') {
+                  function updateGPS(accountid, latitude, longitude) {
+                      var account = new MobileCRM.DynamicEntity("account", accountid);
+                      var props = account.properties;
+                      props.address1_latitude = latitude;
+                      props.address1_longitude = longitude;
+                      account.save(
+                        function (error) {
+                          if (error)
+                            MobileCRM.bridge.alert("An error occurred: " + error);
+                          else {
+                            // callback is called in scope of newly created MobileCRM.DynamicEntity object; thus we can access the data using "this" keyword
+                            //logModification(this.id, this.primaryName);
+                            alert('บันทึกข้อมูลเสร็จแล้ว');
+                            $ionicLoading.hide();
+                          }
+                        });
+                  }
                 console.log('update account gps');
                 $scope.showLoadGPS();
                 GetGPSLocation(function(res){
@@ -2784,17 +2882,8 @@ angular.module('starter.controllers', [])
                       /**
                        * insert resual gps.
                        */
-                      var ins = new MobileCRM.DynamicEntity("account",$stateParams.accountid);
-                          ins.properties.address1_latitude = parseFloat(res.latitude);
-                          ins.properties.address1_longitude = parseFloat(res.longitude);
-                          ins.save(function(er){
-                            if(er){
-                              alert('error visit 2806 '+er);
-                            }else{
-                              alert('บันทึกข้อมูลเสร็จแล้ว');
-                              $ionicLoading.hide();
-                            }
-                          });
+                      //alert($stateParams.accountid);
+                      updateGPS($stateParams.accountid, res.latitude, res.longitude);
                       clearInterval(sInter);
                     }
                   },7000);

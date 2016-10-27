@@ -594,36 +594,36 @@ var returngetmastername = function(id,callback){
 function gettername(tername,callback){
   try{
     var n = new MobileCRM.FetchXml.Entity('ivz_territorymaster');
-				n.addAttribute('ivz_territorymasterid');//0
-				n.addAttribute('ivz_mastername');//1
-				n.addAttribute('ivz_leftterritory');//2
+		n.addAttribute('ivz_territorymasterid');//0
+		n.addAttribute('ivz_mastername');//1
+		n.addAttribute('ivz_leftterritory');//2
     var filter = new MobileCRM.FetchXml.Filter();
         filter.where('ivz_mastername','eq',tername);
         n.filter = filter;
     var l = n.addLink('territory','territoryid','ivz_leftterritory','outer');
-    	  l.addAttribute('ivz_emailcontact');//3
-		    l.addAttribute('ivz_leadermail');//4
-		    l.addAttribute('ivz_ccmail');//5
-				l.addAttribute('ivz_empid');//6
-				l.addAttribute('ivz_empname');//7
-				l.addAttribute('ivz_statusempid');//8
-				l.addAttribute('description');//9
+    	l.addAttribute('ivz_emailcontact');//3
+		l.addAttribute('ivz_leadermail');//4
+		l.addAttribute('ivz_ccmail');//5
+		l.addAttribute('ivz_empid');//6
+		l.addAttribute('ivz_empname');//7
+		l.addAttribute('ivz_statusempid');//8
+		l.addAttribute('description');//9
     var fetch = new MobileCRM.FetchXml.Fetch(n);
-		    fetch.execute('array',function(data){
-		var b = [];
+		fetch.execute('array',function(data){
+	var b = [];
 			for (var i in data) {
               b.push({
                       ivz_territorymasterid:data[i][0],
-              				ivz_mastername:data[i][1],
-              				ivz_leftterritory:data[i][2],
+              		  ivz_mastername:data[i][1],
+              		  ivz_leftterritory:data[i][2],
                       ivz_emailcontact:data[i][3],
-              		    ivz_leadermail:data[i][4],
-              		    ivz_ccmail:data[i][5],
-											ivz_empid:data[i][6],
-											ivz_empname:data[i][7],
-											ivz_statusempid:data[i][8],
-											description:data[i][9]
-          				});
+              		  ivz_leadermail:data[i][4],
+              		  ivz_ccmail:data[i][5],
+					  ivz_empid:data[i][6],
+					  ivz_empname:data[i][7],
+					  ivz_statusempid:data[i][8],
+					  description:data[i][9]
+          			});
 			}
 			callback(b);
 		},function(er){alert(er);},null);
@@ -815,7 +815,7 @@ function GetAppointStatus(ivz_leftterritory,ist,typ,callback){
       fetch.execute('array',function(data){
         var b = [];
         for(var i in data){
-              if(data[i][23] == ist){
+              //if(data[i][23] == ist){
 								if(data[i][24] == typ){
 									b.push({
 													activityid:data[i][0],
@@ -856,7 +856,7 @@ function GetAppointStatus(ivz_leftterritory,ist,typ,callback){
 													ivz_taxid:data[i][30]
 												});
 								}
-            }
+            //}
         }
         callback(b);
       },function(er){alert(er);},null);
@@ -909,7 +909,7 @@ function GetAppointUStatus(ivz_leftterritory,ist,typ,callback){
 				//alert(data[0][24]+'::::'+data[0][23]);
         var b = [];
         for(var i in data){
-              if(data[i][23] == ist){
+              //if(data[i][23] == ist){
 								if(data[i][24] == 1 || data[i][24] == 2){
 									b.push({
 													activityid:data[i][0],
@@ -950,7 +950,7 @@ function GetAppointUStatus(ivz_leftterritory,ist,typ,callback){
 													ivz_taxid:data[i][30]
 												});
 								}
-            }
+            //}
         }
         callback(b);
       },function(er){alert(er);},null);
@@ -1003,7 +1003,7 @@ function GetAppointMStatus(ivz_leftterritory,ist,typ,callback){
 				//alert(data[0][24]+'::::'+data[0][23]);
         var b = [];
         for(var i in data){
-              if(data[i][23] == ist){
+              //if(data[i][23] == ist){
 								if(data[i][24] == 1 || data[i][24] == 2 || data[i][24] == 3){
 									b.push({
 													activityid:data[i][0],
@@ -1044,7 +1044,7 @@ function GetAppointMStatus(ivz_leftterritory,ist,typ,callback){
 													ivz_taxid:data[i][30]
 												});
 								}
-            }
+           // }
         }
         callback(b);
       },function(er){alert(er);},null);

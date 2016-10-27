@@ -1,0 +1,40 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">รูปแบบกรองข้อมูล</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closemodal()">
+        <i class="ion-close error"></i>
+      </button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+      <div class="row">
+        <div class="col">
+          <md-radio-group  ng-model="group.filter">
+            <md-list>
+              <md-list-item>
+                 <md-radio-button class="md-primary" ng-value="" ng-click="closemodal()">All || ทั้งหมด</md-radio-button>
+                 <md-divider></md-divider>
+              </md-list-item>
+              <md-list-item>
+                 <md-radio-button  ng-value="1" ng-click="closemodal()" class="md-warn">Wait || รอดำเนินการ</md-radio-button>
+                 <md-divider></md-divider>
+              </md-list-item>
+              <md-list-item>
+                 <md-radio-button class="md-primary" ng-value="2" ng-click="closemodal()">Approved || อนุมัติแล้ว</md-radio-button>
+                 <md-divider></md-divider>
+              </md-list-item>
+              <!--<md-list-item>
+                 <md-radio-button ng-value="3" ng-click="closemodal(1)">New || ถูกเลิก</md-radio-button>
+                 <md-divider></md-divider>
+              </md-list-item>-->
+              <md-list-item>
+                 <md-radio-button  ng-value="3" ng-click="closemodal()">Deleted || รายการที่ถูกลบแล้ว</md-radio-button>
+                 <md-divider></md-divider>
+              </md-list-item>
+            </md-list>
+          </md-radio-group>
+        </div>
+      </div>
+  </ion-content>
+</ion-modal-view>

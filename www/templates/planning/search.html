@@ -14,7 +14,7 @@
         <md-list has-header="true"  padding="true" on-infinite-scroll="addMoreItem">
           <!-- <md-list-item class="md-3-line" ng-repeat="item in todos|filter:txtcustomer"> -->
           <!-- <md-list-item class="md-3-line" ng-repeat="item in todos|filter:txtcustomer" ng-if="item.ivz_employeeposition == Data.mastertype"> -->
-          <md-list-item class="md-3-line" ng-repeat="item in todos|filter:txtcustomer">
+          <md-list-item class="md-3-line" ng-repeat="item in todos|filter:{filtername:txtcustomer,ivz_planningstatus:group.filter}">
             <!-- \filter data.mastertype -->
              <img src="img/d06.png" class="md-avatar" />
              <div class="md-list-item-text" layout="column">
@@ -70,6 +70,10 @@
     <a class="tab-item warn" ng-click="mailreport()">
       <i class="icon ion-android-mail"></i>
       ส่งแผน
+    </a>
+    <a class="tab-item  primary" ng-click="openModal()">
+      <i class="icon ion-navicon"></i>
+      กรองข้อมูล
     </a>
   </div>
 </ion-view>
